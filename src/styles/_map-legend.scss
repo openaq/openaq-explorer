@@ -1,0 +1,54 @@
+.map-legend {
+  background: #ffffff;
+  box-shadow: 0px 7px 20px rgba(0, 0, 0, 0.15);
+  border-radius: 16px;
+  position: absolute;
+  width: 400px;
+  height: 90px;
+  bottom: 36px;
+  left: calc(50% - 200px);
+
+  &__body {
+    display: flex;
+    height: 100%;
+    align-items: center;
+  }
+}
+
+.legend-section {
+  margin: 6px 18px;
+
+  .legend-bar {
+    width: 297px;
+    margin: 6px 0;
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+    height: 16px;
+  }
+
+  .map-legend-title {
+    color: #a9b0bb;
+    font-size: 14px;
+  }
+
+  .legend-bar-labels {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 18px;
+  }
+}
+
+.legend-help-section {
+  display: flex;
+  flex-direction: column;
+  border-left: 1px dashed #e5e6eb;
+  width: 66px;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+
+  span {
+    padding: 4px;
+  }
+}

@@ -1,0 +1,88 @@
+@import 'variables';
+@import 'typography';
+
+@mixin btn-reset {
+  text-decoration: none;
+}
+
+@mixin btn-mixin {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 16px;
+  border-radius: 100px;
+  font-size: 14px;
+  height: 40px;
+  line-height: 40px;
+  border: none;
+}
+
+.btn {
+  @include button1;
+  @include btn-reset;
+  @include btn-mixin;
+
+  &-primary {
+    background-color: $ocean120;
+    font-weight: 700;
+    color: white;
+
+    &--disabled {
+      background-color: #d4d8dd;
+      pointer-events: none;
+    }
+
+    &:hover {
+      background-color: $ocean100;
+    }
+
+    &:active {
+      border: 1px solid $ocean120;
+    }
+  }
+
+  &-secondary {
+    background-color: $ocean10;
+    font-weight: 700;
+    color: #33a3a1;
+    border: 1px solid #b0e8e6;
+
+    &:hover {
+      background: #b0e8e6;
+    }
+
+    &:active {
+      background: #b0e8e6;
+      border: 1px solid #3fc2c0;
+    }
+  }
+
+  &-tertiary {
+    background-color: white;
+    font-weight: 700;
+    border: 1px solid #d4d8dd;
+    color: #5a6672;
+
+    &:hover {
+      background: #e8ebed;
+      border: 1px solid #a9b0bb;
+    }
+
+    &:active {
+      background: #e8ebed;
+      border: 1px solid #3fc2c0;
+    }
+  }
+}
+
+.icon-btn {
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.close-btn {
+  @include btn-reset;
+  background-color: transparent;
+  border: none;
+}

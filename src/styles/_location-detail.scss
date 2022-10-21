@@ -1,0 +1,57 @@
+@import 'typography';
+
+.section-card {
+  background: #ffffff;
+  border: 1px solid #dbdae1;
+  border-radius: 12px;
+}
+
+.overview__body {
+  display: flex;
+  margin: 50px;
+}
+
+.overview {
+  margin: 50px;
+  border: 1px solid #dbdae1;
+  border-radius: 22px;
+  overflow: hidden;
+}
+
+.overview__header {
+  display: flex;
+  justify-content: space-between;
+  background-color: #eef7ff;
+  padding: 50px;
+}
+
+.location-detail-title {
+  @include display1;
+  margin: 0;
+  color: #636c77;
+}
+
+.location-breadcrumb {
+  @include subtitle3;
+  color: #636c77;
+}
+
+.detail-section-title {
+  font-weight: 700;
+  font-size: 32px;
+  color: #636c77;
+  margin: 0;
+}
+
+.detail-charts {
+  background: #ffffff;
+  border: 1px solid #dbdae1;
+  border-radius: 12px;
+  margin: 50px;
+  overflow: hidden;
+
+  &__section {
+    border-bottom: 1px dashed #dbdae1;
+    padding: 50px;
+  }
+}

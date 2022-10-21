@@ -1,0 +1,15 @@
+@import 'typography';
+
+.mapboxgl-ctrl-top-left {
+  width: 50% !important;
+}
+
+.mapboxgl-ctrl-geocoder {
+  width: 100% !important;
+  max-width: 500px !important;
+  border-radius: 14px !important;
+}
+
+mapboxgl-ctrl-geocoder--input::placeholder {
+  @include body2;
+}

@@ -1,0 +1,32 @@
+@import 'typography';
+
+.help-panel {
+  padding: 16px;
+
+  hr {
+    border-top: 1px dashed #d4d8dd;
+  }
+
+  h1 {
+    @include subtitle3;
+    color: #5a6672;
+    font-weight: 700;
+    font-size: 14px;
+  }
+
+  p {
+    @include body1;
+    color: #5a6672;
+    font-weight: 400;
+    font-size: 14px;
+  }
+
+  ul {
+    li {
+      @include body1;
+      color: #5a6672;
+      font-weight: 400;
+      font-size: 14px;
+    }
+  }
+}

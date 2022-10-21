@@ -1,0 +1,151 @@
+@mixin display1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 48px;
+}
+
+@mixin heading1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 32px;
+}
+
+@mixin heading2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 21px;
+}
+
+@mixin heading3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+@mixin subtitle1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+}
+
+@mixin subtitle2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+@mixin subtitle3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+@mixin body1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+}
+
+@mixin body2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+@mixin body3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+@mixin body4 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+}
+
+@mixin body5 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+@mixin link1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  text-decoration-line: underline;
+}
+
+@mixin link2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  text-decoration-line: underline;
+}
+
+@mixin link3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration-line: underline;
+}
+
+@mixin link4 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  text-decoration-line: underline;
+}
+
+@mixin link5 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 12px;
+  text-decoration-line: underline;
+}
+
+@mixin button1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+@mixin button2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+@mixin navigation1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+@mixin navigation2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+}
