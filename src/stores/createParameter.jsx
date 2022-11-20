@@ -8,7 +8,11 @@ export default function createParameter(
   setState
 ) {
   //const [parameterId, setParameter] = createSignal(2);
-  const [parameter, setParameter] = createStore({ id: 2 });
+  const [parameter, setParameter] = createStore({
+    id: 2,
+    parameterName: 'PM 2.5',
+    unit: 'µg/m³',
+  });
   /*
   let [parameter] = createResource(
     parameterId,
@@ -18,7 +22,14 @@ export default function createParameter(
 
   Object.assign(actions, {
     loadParameter(id) {
-      setParameter({ id: id });
+      const parameter = state
+        .parameters()
+        .find((x) => x.id === parseInt(id));
+      setParameter({
+        id: id,
+        parameterName: parameter.displayName,
+        unit: parameter.preferredUnit,
+      });
     },
   });
 

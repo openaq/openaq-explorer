@@ -27,13 +27,6 @@
   fill: url(#area-gradient);
 }
 
-.line-chart-grid {
-  .tick {
-    stroke-width: 1px;
-    stroke-dasharray: 4 1;
-  }
-}
-
 .line-chart-point {
   cursor: pointer;
   fill: #b3aaf0;

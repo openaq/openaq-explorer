@@ -108,7 +108,7 @@ export default function LineChart(props) {
             />
           </filter>
           <g
-            className="line-chart-grid"
+            className="chart-grid line-chart-grid"
             transform={`translate(${props.margin / 2} ${
               props.margin / 2
             } )`}

@@ -1,5 +1,5 @@
 import { useStore } from '../../stores';
-
+import { parametersBins } from '.';
 export default function MapLegend() {
   const [store, { toggleHelp, loadContent }] = useStore();
 
@@ -14,7 +14,7 @@ export default function MapLegend() {
       <div className="map-legend__body">
         <div className="legend-section">
           <div>
-            <span>
+            <span className="parameter-title">
               {store.parameter.parameterName} ({store.parameter.unit})
             </span>
             <span class="map-legend-title">
@@ -30,10 +30,18 @@ export default function MapLegend() {
             <div style="flex: 1; background-color: #584DAE;"></div>
             <div style="flex: 1; background-color: #241050;"></div>
           </div>
-          <div className="legend-bar-labels">
-            <span>0</span>
-            <span>50</span>
-            <span>500</span>
+          <div
+            className="legend-bar-labels"
+            style="display:flex; font-size:8px; margin:0;"
+          >
+            <For each={parametersBins[store.parameter.id]}>
+              {(value, i, values) => (
+                <span style="flex:1;">
+                  {value} -
+                  {parametersBins[store.parameter.id][i() + 1]}
+                </span>
+              )}
+            </For>
           </div>
         </div>
         <div className="legend-help-section">

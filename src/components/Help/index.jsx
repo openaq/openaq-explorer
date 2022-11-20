@@ -21,7 +21,7 @@ export default function HelpCard(props) {
       <header class="map-card__header">
         <h3>Help</h3>
         <button class="close-btn" onClick={() => toggleHelp(false)}>
-          <span class="material-symbols-outlined icon white">
+          <span class="material-symbols-outlined clickable-icon white">
             close
           </span>
         </button>

@@ -43,15 +43,36 @@ export default function createClient([state, actions]) {
     getAll: () => send('get', `/v2/parameters`, undefined, 'results'),
   };
 
+  const Providers = {
+    getAll: () =>
+      send('get', `/v2/sources?limit=1000`, undefined, 'results'),
+  };
+
   const Measurements = {
-    getRecent: ({ locationId, parameter }) =>
-      send(
+    getRecent: (locationId, parameter) => {
+      console.log(locationId);
+      return send(
         'get',
-        `/v2/measurements?location_id${locationId}&parameter=${parameter}&limit=24&order=desc`,
+        `/v2/measurements?location_id=${locationId}&parameter=${parameter}&limit=24&order=desc`,
         undefined,
         'results',
         0
-      ),
+      );
+    },
+    getLocationMeasurements: ({ locationId, parameters }) => {
+      console.log(locationId, parameters);
+      return Promise.all(
+        parameters?.map((parameter) =>
+          send(
+            'get',
+            `/v2/measurements?location_id=${locationId}&parameter=${parameter}&limit=24&order=desc`,
+            undefined,
+            'results',
+            0
+          )
+        )
+      );
+    },
   };
 
   return {
@@ -59,5 +80,6 @@ export default function createClient([state, actions]) {
     Locations,
     Measurements,
     Parameters,
+    Providers,
   };
 }

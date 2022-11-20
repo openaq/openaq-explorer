@@ -1,12 +1,11 @@
-
-
 export default function Badge(props) {
+  const badgeType = props.type;
 
-    const badgeType = props.type;
-
-    return(
-        <div className={`badge ${badgeType ? `badge--${badgeType}` : ""}`}>
-            {props.children}
-        </div>
-    ) 
+  return (
+    <div
+      className={`badge ${badgeType ? `badge--${badgeType}` : ''}`}
+    >
+      {props.children}
+    </div>
+  );
 }

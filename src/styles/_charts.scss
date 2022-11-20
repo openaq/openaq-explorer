@@ -3,3 +3,10 @@
   color: $smoke120;
   cursor: pointer;
 }
+
+.chart-grid {
+  .tick {
+    stroke-width: 1px;
+    stroke-dasharray: 4 1;
+  }
+}

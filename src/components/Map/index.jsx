@@ -2,53 +2,66 @@ import MapGL, { Source, Layer, Control } from 'solid-map-gl';
 import Geocoder from '../Geocoder';
 import { createSignal } from 'solid-js';
 import { useStore } from '../../stores';
-import * as d3 from 'd3';
 
 function calculateFlyToDuration(zoom) {
   return 2500 / (zoom / 5);
 }
-const hexValues = [
-  '#DEDAFB',
+export const hexValues = [
   '#CEC7FF',
-  '#BCB2FE',
-  '#A597FD',
-  '#8576ED',
+  '#A497FD',
+  '#8F81EE',
   '#7867EB',
   '#6A5CD8',
   '#584DAE',
   '#241050',
 ];
 
-export default function Map() {
-  const [store, { setViewport, set, loadLocation, setLocationId }] =
+export const aqiHexValues = [
+  'green',
+  'yellow',
+  'orange',
+  'red',
+  'purple',
+  'maroon',
+];
+
+export const parametersBins = {
+  1: [0, 55, 155, 255, 355, 425, 605], //pm10
+  2: [0, 12.1, 35.5, 55.5, 150.5, 250.5, 501], //pm25
+  3: [0, 12.1, 35.5, 55.5, 150.5, 250], // o3 mass
+  4: [0, 4.5, 9.5, 12.5, 15.5, 30.5, 50.5], // co mass
+  5: [0, 54, 101, 361, 650, 1250, 2050], //no2 mass
+  6: [0, 12.1, 35.5, 55.5, 150.5],
+  7: [0, 54, 101, 361, 650, 1250, 2050], // no2 ppb
+  8: [0, 4.5, 9.5, 12.5, 15.5, 30.5, 50.5], // co ppm
+  9: [0, 12.1, 35.5, 55.5, 150.5],
+  10: [0, 12.1, 35.5, 55.5, 150.5],
+  11: [0, 12.1, 35.5, 55.5, 150.5],
+};
+
+export function Map() {
+  const [store, { setViewport, loadLocation, setLocationId }] =
     useStore();
-  console.log(JSON.stringify(store.viewport));
-  console.log(JSON.stringify(store.overlay.parameter));
   const [cursorStyle, setCursorStyle] = createSignal('');
 
   function getFeature(e) {
     const features = e.target.queryRenderedFeatures(e.point);
     const locationId = features[0].properties.locationId;
     loadLocation(locationId);
+    return features[0].geometry.coordinates;
   }
 
-  function calculateColorScale(max, hexValues) {
-    const color = d3
-      .scaleQuantize()
-      .domain([0, max])
-      .range(hexValues);
-    const bins = hexValues.map((c) => [color.invertExtent(c)[0], c]);
+  function colorScale(parameter) {
+    const bins = hexValues.map((c, i) => [
+      parametersBins[parameter][i],
+      c,
+    ]);
     return bins;
   }
-
-  function getActiveParameter() {}
-
-  console.log(store.overlay);
 
   return (
     <MapGL
       class="map"
-      style={{ top: '80px' }}
       options={{
         accessToken: import.meta.env.VITE_MAPBOX_ACCESS_TOKEN,
         style: import.meta.env.VITE_MAPBOX_STYLE,
@@ -146,9 +159,9 @@ export default function Map() {
         <Layer
           id="locations"
           onClick={(e) => {
-            getFeature(e);
+            const coordinates = getFeature(e);
             e.target.flyTo({
-              center: [e.lngLat.lng, e.lngLat.lat],
+              center: coordinates,
               zoom: e.target.getZoom() > 12 ? e.target.getZoom() : 12,
               duration: calculateFlyToDuration(e.target.getZoom()),
               essential: true,
@@ -165,26 +178,7 @@ export default function Map() {
                 ['number', ['get', 'lastValue']],
                 -1,
                 '#ddd',
-                ...calculateColorScale(100, hexValues).flat() /*
-                0,
-                '#ddd9fa',
-                5.55555555555556,
-                '#cdc6ff',
-                11.11111111111111,
-                '#bbb1fe',
-                33.66666666666666,
-                '#a497fc',
-                44.22222222222223,
-                '#8476ed',
-                55.77777777777777,
-                '#7767ea',
-                77.3333333333333,
-                '#6a5cd8',
-                88.8888888888889,
-                '#574cad',
-                100.44444444444446,
-                '#231050',
-                */,
+                ...colorScale(store.parameter.id).flat(),
               ],
               'circle-stroke-color': [
                 'match',
@@ -193,7 +187,7 @@ export default function Map() {
                 'grey',
                 'reference grade',
                 'white',
-                'black',
+                'grey',
               ],
               'circle-stroke-width': [
                 'interpolate',
@@ -207,7 +201,7 @@ export default function Map() {
                   0.25,
                   'reference grade',
                   1,
-                  1,
+                  0.25,
                 ],
                 14,
                 [
@@ -217,7 +211,7 @@ export default function Map() {
                   0,
                   'reference grade',
                   6,
-                  2,
+                  0,
                 ],
               ],
               'circle-opacity': 1,
@@ -233,7 +227,7 @@ export default function Map() {
                   2,
                   'reference grade',
                   3,
-                  0,
+                  2,
                 ],
                 14,
                 [
@@ -243,7 +237,7 @@ export default function Map() {
                   13, //13,
                   'reference grade',
                   22, //19,
-                  0,
+                  13,
                 ],
               ],
             },
@@ -294,7 +288,7 @@ export default function Map() {
                   17,
                   'reference grade',
                   25,
-                  0,
+                  17,
                 ],
               ],
             },
@@ -318,7 +312,7 @@ export default function Map() {
                 ['number', ['get', 'lastValue']],
                 -1,
                 '#ddd',
-                ...calculateColorScale(500, hexValues).flat(),
+                ...colorScale(store.parameter.id).flat(),
               ],
               'circle-opacity': 1,
               'circle-radius': [
@@ -333,7 +327,7 @@ export default function Map() {
                   2,
                   'reference grade',
                   3,
-                  0,
+                  2,
                 ],
                 14,
                 [
@@ -343,7 +337,7 @@ export default function Map() {
                   13, //13,
                   'reference grade',
                   22, //19,
-                  0,
+                  13,
                 ],
               ],
               'circle-stroke-width': [
@@ -368,7 +362,7 @@ export default function Map() {
                   4,
                   'reference grade',
                   6,
-                  2,
+                  4,
                 ],
               ],
               'circle-stroke-color': '#85DBD9',
@@ -381,11 +375,14 @@ export default function Map() {
             type: 'symbol',
             source: 'locations',
             minzoom: 10,
-            maxzoom: 24,
+            maxzoom: 10,
             'source-layer': 'default',
             layout: {
               'text-field': ['get', 'lastValue'],
-              'text-font': ['Space Grotesk', 'Arial Unicode MS Bold'],
+              'text-font': [
+                'Space Grotesk Regular',
+                'Arial Unicode MS Regular',
+              ],
               'text-size': [
                 'interpolate',
                 ['linear'],

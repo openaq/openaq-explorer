@@ -1,50 +1,78 @@
 import { For } from 'solid-js';
 import { createSignal } from 'solid-js';
+import { useStore } from '../../stores';
+
+function ProviderSearch(providers, setProviders) {}
 
 export default function SourcesCard() {
-  const [sources, setSources] = createSignal([
-    { name: 'PurpleAir', id: 42 },
-  ]);
+  const [store, { toggleProviderList }] = useStore();
+
+  const [providers, setProviders] = createSignal(store.providers());
+
+  const [activeProviders, setActiveProviders] = createSignal(
+    store.providers()
+  );
+
+  const onProviderClick = (e) => {};
 
   return (
-    <article className="dismissable-card map-card dismissable-card--translate">
+    <article
+      className={`dismissable-card map-card ${
+        store.providerListActive ? '' : 'dismissable-card--translate'
+      }`}
+    >
       <header className="map-card__header">
         <div style="display:flex;">
-          <button className="close-btn" onClick={() => ''}>
-            <span class="material-symbols-outlined white">
+          <button
+            className="close-btn"
+            onClick={() => toggleProviderList(false)}
+          >
+            <span class="material-symbols-outlined white clickable-icon">
               arrow_back
             </span>
           </button>
-          <h3 className="map-card-title">Data Sources</h3>
+          <h3 className="map-card-title">Data Providers</h3>
         </div>
       </header>
       <div className="map-card__body">
         <section className="map-card-section">
-          <span>Show all {sources().length} data sources</span>
-          <input
-            type="checkbox"
-            name="show-all-data-sources"
-            id="show-all-data-source"
-            checked
-          />
+          <div class="providers-list-subtitle">
+            <span class="providers-list-count">
+              Show all{' '}
+              <span class="providers-list-count__number">
+                {providers()?.length}
+              </span>{' '}
+              data providers
+            </span>
+            <input
+              type="checkbox"
+              name="show-all-data-sources"
+              id="show-all-data-source"
+              className="checkbox"
+              checked
+            />
+          </div>
         </section>
         <section className="map-card-section">
-          <div className="search-input-wrapper">
+          <div className="search-input -wrapper">
             <input type="text" className="search-input" />
             <span class="material-symbols-outlined search-icon">
               search
             </span>
           </div>
 
-          <ul className="sources-list">
-            <For each={sources()}>
-              {(source, i) => (
-                <li className="sources-list__item">
-                  <span>{source.name}</span>
+          <ul className="providers-list">
+            <For each={providers()}>
+              {(provider, i) => (
+                <li className="providers-list__item">
+                  <span class="provider-name">
+                    {provider.sourceName}
+                  </span>
                   <input
                     type="checkbox"
-                    name={`source-${source.id}`}
-                    id={`source-${source.id}`}
+                    name={`source-${provider.id}`}
+                    id={`source-${provider.id}`}
+                    className="checkbox"
                     checked
                   />
                 </li>
@@ -52,10 +80,10 @@ export default function SourcesCard() {
             </For>
           </ul>
         </section>
-        <section className="map-card-section">
-          <button className="btn btn-primary">Update</button>
-        </section>
       </div>
+      <footer className="map-card__footer">
+        <button className="btn btn-primary">Update</button>
+      </footer>
     </article>
   );
 }

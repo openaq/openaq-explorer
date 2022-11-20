@@ -7,33 +7,36 @@ export default function BoxPlot({
   height,
   margin,
   data,
-  styles = {
-    whiskerStrokeWidth: 4,
-    whiskerStroke: '#ccc',
-  },
 }) {
-  const boxWidth = width / data.periods.length - 10;
-  const x = d3.scaleBand().range([0, width]).domain(data.periods);
+  const periods = data.summaries.map((o) => o.period);
+  const boxWidth = width / periods.length - 5;
+  const x = d3.scaleBand().range([0, width]).domain(periods);
 
   const y = d3
     .scaleLinear()
     .range([height, 0])
     .domain([
       d3.min(data.summaries, (d) => d.min),
-      d3.max(data.summaries, (d) => d.max),
+      d3.max(data.summaries, (d) => Math.ceil(d.max / 5) * 5),
     ]);
 
-  const yAxis = d3.axisLeft(y).ticks(5);
+  const ticksValues =
+    periods.length > 12
+      ? x.domain().filter((e, i) => i % 3 == 0)
+      : periods;
+
+  const yAxis = d3.axisLeft(y).ticks(6);
   const yAxisGrid = d3
     .axisLeft(y)
     .tickSize(-width)
     .tickFormat('')
-    .ticks(5);
+    .ticks(6);
+  const xAxis = d3.axisBottom(x).tickValues(ticksValues);
 
   createEffect(() => {
-    d3.select(`.box-plot-x-axis-${name}`).call(d3.axisBottom(x));
+    d3.select(`.box-plot-x-axis-${name}`).call(xAxis);
     d3.select(`.box-plot-y-axis-${name}`).call(yAxis);
-    d3.select(`line-chart-grid-${name}`)
+    d3.select(`.box-plot-grid-${name}`)
       .call(yAxisGrid)
       .selectAll('line,path')
       .style('stroke', '#d4d8dd');
@@ -46,16 +49,20 @@ export default function BoxPlot({
         height={`${height + margin}px`}
       >
         <g
-          className={`line-chart-grid line-chart-grid-${name}`}
+          className={`chart-grid box-plot-grid-${name}`}
           transform={`translate(${margin / 2} ${margin / 2} )`}
         ></g>
-        <g transform={`translate(${margin + 4} ${margin / 2})`}>
+        <g
+          transform={`translate(${margin / 1.8 + boxWidth / 2} ${
+            margin / 2
+          })`}
+        >
           <For each={data.summaries}>
             {(d) => {
               return (
                 <>
                   <line
-                    stroke-width={4}
+                    stroke-width={2}
                     stroke="#CCCCCC"
                     className="whiskers"
                     x1={x(d.period)}

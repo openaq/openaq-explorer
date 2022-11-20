@@ -6,7 +6,9 @@ import {
   NoRecentUpdateMarker,
   ReferenceGradeMarker,
 } from '../LocationMarker';
+import Accordion from './Accordion';
 
+/*
 function AccordionHelp({ contentKey, open }) {
   const [store, { toggleHelp, loadContent }] = useStore();
 
@@ -51,11 +53,13 @@ function Accordion(props) {
             <Badge type={'active'}>
               <span>Active</span>
               <span class="material-symbols-outlined white">
-                check
+                visibility
               </span>
             </Badge>
           ) : (
-            ''
+            <span class="material-symbols-outlined smoke120">
+              visibility_off
+            </span>
           )}
         </div>
       </header>
@@ -69,6 +73,7 @@ function Accordion(props) {
     </section>
   );
 }
+*/
 
 export function ExpandableCard(props) {
   const [open, setOpen] = createSignal(props.open || false);
@@ -91,7 +96,7 @@ export function ExpandableCard(props) {
             {open() ? 'Overlay' : 'Overlay & Filters'}
           </h2>
         </div>
-        <span class="material-symbols-outlined icon white">
+        <span class="material-symbols-outlined clickable-icon white">
           {open() ? 'expand_less' : 'expand_more'}
         </span>
       </div>
@@ -109,83 +114,13 @@ export function ExpandableCard(props) {
 }
 
 export default function FilterOverlayCard() {
-  const [store, { loadParameter }] = useStore();
+  const [store, { loadParameter, toggleProviderList }] = useStore();
 
   return (
     <ExpandableCard open={true}>
       <div>
         <section>
-          <Accordion
-            title="Pollutant"
-            contentKey="pollutants"
-            active={true}
-            open={true}
-          >
-            <select
-              name=""
-              id=""
-              className="select"
-              onChange={(e) => loadParameter(e.target.value)}
-            >
-              <For each={store.parameters()}>
-                {(parameter, idx) => (
-                  <option
-                    value={parameter.id}
-                    selected={parameter.id == store.parameter.id}
-                  >
-                    {parameter.displayName} {parameter.preferredUnit}
-                  </option>
-                )}
-              </For>
-            </select>
-          </Accordion>
-          <Accordion title="Air Quality Index" contentKey="aqi">
-            <select
-              name="aqi"
-              id="aqi"
-              className="select"
-              onChange={(e) => loadParameterId(e.target.value)}
-            >
-              <option value="nowcast">US EPA NowCast</option>
-            </select>
-          </Accordion>
-          <Accordion title="Thresholds" contentKey="thresholds">
-            <div>
-              <select
-                name=""
-                id=""
-                className="select"
-                onChange={(e) => loadOverlay(e.target.value)}
-              >
-                <option value="2" selected>
-                  PM 2.5
-                </option>
-                <option value="1">PM 10</option>
-                <option value="3">O&#8323;</option>
-              </select>
-            </div>
-            <div>
-              <span>Above</span>{' '}
-              <select name="" id="" className="select">
-                <option value="">100</option>
-              </select>
-              <span></span>{' '}
-            </div>
-            <div>
-              <select
-                name=""
-                id=""
-                className="select"
-                onChange={(e) => loadOverlay(e.target.value)}
-              >
-                <option value="1" selected>
-                  Last 7 days
-                </option>
-                <option value="2">Last 30 days</option>
-                <option value="3">last 90 days</option>
-              </select>
-            </div>
-          </Accordion>
+          <Accordion />
         </section>
         <section className="filters-section">
           <header className="expandable-card__header">
@@ -209,6 +144,7 @@ export default function FilterOverlayCard() {
                   type="checkbox"
                   name="reference-grade"
                   id="reference-grade"
+                  className="checkbox"
                   checked
                 />
               </div>
@@ -222,6 +158,7 @@ export default function FilterOverlayCard() {
                   type="checkbox"
                   name="low-cost-sensor"
                   id="low-cost-sensor"
+                  className="checkbox"
                   checked
                 />
               </div>
@@ -235,6 +172,7 @@ export default function FilterOverlayCard() {
                   type="checkbox"
                   name="no-recent-updates"
                   id="no-recent-updates"
+                  className="checkbox"
                   checked
                 />
               </div>
@@ -248,27 +186,27 @@ export default function FilterOverlayCard() {
                   type="checkbox"
                   name="poor-data-coverage"
                   id="poor-data-coverage"
+                  className="checkbox"
                   checked
                 />
               </div>
             </div>
-            <select
-              name=""
-              id=""
-              className="select"
-              onChange={(e) => loadOverlay(e.target.value)}
-            >
-              <option value="1" selected>
-                Show all data sources
-              </option>
-              <option value="2">US EPA Airnow</option>
-              <option value="3">PurpleAir</option>
-              <option value="2">Clarity</option>
-              <option value="3">
-                Breathe London Stationary Analysis
-              </option>
-              <option value="2">Arpalazio</option>
-            </select>
+          </div>
+          <div>
+            <div>
+              <span>Showing data from {} providers</span>
+            </div>
+            <div>
+              <button
+                className="btn btn-secondary icon-btn"
+                onClick={() => toggleProviderList(true)}
+              >
+                Choose data providers
+                <span class="material-symbols-outlined green">
+                  tune
+                </span>
+              </button>
+            </div>
           </div>
         </section>
       </div>

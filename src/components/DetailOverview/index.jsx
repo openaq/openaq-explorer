@@ -5,19 +5,72 @@ import Progress from '../Charts/Progress';
 import { Link } from '@solidjs/router';
 import img from '../../assets/demo.png';
 import { useStore } from '../../stores';
+import {
+  LowCostSensorMarker,
+  ReferenceGradeMarker,
+} from '../LocationMarker';
 
 dayjs.extend(relativeTime);
+
+function DetailMap() {
+  const [store] = useStore();
+
+  return (
+    <div className="detail-map">
+      <div className="detail-map-overlay">
+        <div style="margin: 20px 16px;">
+          <div className="detail-map-overlay__title">
+            <h5 className="subtitle3">LOCATION</h5>
+            <a
+              href={`https://openstreetmap.org?mlat=${store.location?.coordinates.latitude}&mlon=${store.location?.coordinates.longitude}&zoom=16`}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <span class="material-symbols-outlined green">
+                open_in_new
+              </span>
+            </a>
+          </div>
+          <div className="detail-map-overlay__coordinates">
+            <span>{store.location?.coordinates.latitude}</span>
+            <span>{store.location?.coordinates.longitude}</span>
+          </div>
+        </div>
+      </div>
+      <div className="detail-map__attribution">
+        © <a href="https://www.mapbox.com/about/maps/">Mapbox</a> ©{' '}
+        <a href="http://www.openstreetmap.org/copyright">
+          OpenStreetMap
+        </a>{' '}
+        <strong>
+          <a
+            href="https://www.mapbox.com/map-feedback/"
+            target="_blank"
+          >
+            Improve this map
+          </a>
+        </strong>
+      </div>
+      <img className="detail-map__image" src={img} alt="" />
+    </div>
+  );
+}
 
 export default function DetailOverview() {
   const [store, { loadLocation, checkForUpdate }] = useStore();
 
-  const firstUpdated = dayjs(store.location?.firstUpdated);
-  const lastUpdated = dayjs(store.location?.lastUpdated);
+  function timeFromNow(lastUpdated) {
+    return `Updated ${dayjs(lastUpdated).fromNow()}`;
+  }
+
+  function since(lastUpdated) {
+    return `Since ${dayjs(lastUpdated).format('DD/MM/YYYY')}`;
+  }
 
   setInterval(() => checkForUpdate(), 1000 * 5);
 
   return (
-    <div className={`${style.overview} ${style['section-card']}`}>
+    <div className={`${style.overview} section-card`}>
       <div className={style['overview__header']}>
         <div>
           <div class="location-breadcrumb">
@@ -35,7 +88,10 @@ export default function DetailOverview() {
               sim_card_download
             </span>
           </button>
-          <Link href="/" class="btn btn-tertiary  icon-btn">
+          <Link
+            href="#download-card"
+            class="btn btn-tertiary  icon-btn"
+          >
             <span>Download data </span>
 
             <span class="material-symbols-rounded">
@@ -56,14 +112,24 @@ export default function DetailOverview() {
             <div>Type</div>
             <div>
               {' '}
-              <div>{store.location?.sensorType}</div>{' '}
+              <div>
+                {store.location?.sensorType}{' '}
+                <Show
+                  when={
+                    store.location?.sensorType == 'reference grade'
+                  }
+                  fallback={<LowCostSensorMarker />}
+                >
+                  <ReferenceGradeMarker />
+                </Show>
+              </div>{' '}
               <div>
                 {store.location?.isMobile ? 'Mobile' : 'Stationary'}
               </div>{' '}
             </div>
             <div>Owner</div>
             <div>{store.location?.entity}</div>
-            <div>Parameters</div>
+            <div>Measures</div>
             <div>
               {store.location?.parameters
                 .map((o) => `${o.displayName} (${o.unit})`)
@@ -73,12 +139,12 @@ export default function DetailOverview() {
             <div>{store.location?.name}</div>
             <div>Reporting</div>
             <div>
-              {dayjs(lastUpdated).fromNow()}
+              {timeFromNow(store.location?.lastUpdated)}
               <div>
-                {' '}
-                Since : {firstUpdated.format('DD/MM/YYYY')}
-              </div>{' '}
-              <div></div>
+                <span class="body4 smoke120">
+                  {since(store.location?.firstUpdated)}
+                </span>
+              </div>
             </div>
             <div>Source(s)</div>
             <div>
@@ -128,45 +194,7 @@ export default function DetailOverview() {
           </div>
         </section>
         <section style="flex: 1;">
-          <div className="detail-map">
-            <div className="detail-map-overlay">
-              <div style="margin: 20px 16px;">
-                <div className="detail-map-overlay__title">
-                  <h5 className="subtitle3">LOCATION</h5>
-                  <a
-                    href={`https://openstreetmap.org?mlat=${store.location?.coordinates.latitude}&mlon=${store.location?.coordinates.longitude}&zoom=16`}
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
-                    <span class="material-symbols-outlined green">
-                      open_in_new
-                    </span>
-                  </a>
-                </div>
-                <div className="detail-map-overlay__coordinates">
-                  <span>{store.location?.coordinates.latitude}</span>
-                  <span>{store.location?.coordinates.longitude}</span>
-                </div>
-              </div>
-            </div>
-            <div className="detail-map__attribution">
-              ©{' '}
-              <a href="https://www.mapbox.com/about/maps/">Mapbox</a>{' '}
-              ©{' '}
-              <a href="http://www.openstreetmap.org/copyright">
-                OpenStreetMap
-              </a>{' '}
-              <strong>
-                <a
-                  href="https://www.mapbox.com/map-feedback/"
-                  target="_blank"
-                >
-                  Improve this map
-                </a>
-              </strong>
-            </div>
-            <img className="detail-map__image" src={img} alt="" />
-          </div>
+          <DetailMap />
         </section>
       </div>
     </div>

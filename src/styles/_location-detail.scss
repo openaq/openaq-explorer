@@ -1,9 +1,25 @@
 @import 'typography';
+@import 'variables';
+@import 'utils';
 
 .section-card {
   background: #ffffff;
   border: 1px solid #dbdae1;
   border-radius: 12px;
+  @include body2;
+  color: $smoke120;
+}
+
+.detail-card {
+  background: #ffffff;
+  border: 1px solid #dbdae1;
+  border-radius: 12px;
+  margin: 50px;
+
+  &__section {
+    border-bottom: 1px dashed #dbdae1;
+    padding: 50px;
+  }
 }
 
 .overview__body {

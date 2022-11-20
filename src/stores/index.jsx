@@ -9,6 +9,8 @@ import createViewport from './createViewport';
 import createHelp from './createHelp';
 import createParameter from './createParameter';
 import createParameters from './createParameters';
+import createProviders from './createProviders';
+import createMeasurements from './createMeasurements';
 
 const StoreContext = createContext();
 
@@ -16,8 +18,10 @@ export function Provider(props) {
   let location;
   let overlay;
   let viewport;
+  let measurements;
   let parameter;
   let parameters;
+  let providers;
   let help;
   const [state, setState] = createStore({
     get location() {
@@ -26,6 +30,9 @@ export function Provider(props) {
     get overlay() {
       return overlay;
     },
+    get measurements() {
+      return measurements;
+    },
     get parameter() {
       return parameter;
     },
@@ -33,11 +40,15 @@ export function Provider(props) {
     get parameters() {
       return parameters;
     },
+    get providers() {
+      return providers;
+    },
 
     viewport: {
       zoom: 2,
       center: [0, 20],
     },
+    providerListActive: false,
     get help() {
       return help;
     },
@@ -55,6 +66,8 @@ export function Provider(props) {
   parameter = createParameter(client, actions, state, setState);
   help = createHelp(client, actions, state, setState);
   parameters = createParameters(client, actions, state, setState);
+  providers = createProviders(client, actions, state, setState);
+  measurements = createMeasurements(client, actions, state, setState);
   //currentUser = createAuth(agent, actions, setState);
 
   return (

@@ -1,27 +1,24 @@
+@use 'openaq-design-system/scss/variables';
+@use 'openaq-design-system/scss/badges';
+@use 'openaq-design-system/scss/buttons';
+@use 'openaq-design-system/scss/inputs';
+@use 'openaq-design-system/scss/resets';
 @import 'header';
 @import 'map-card';
-@import 'badges';
 @import 'progress-bar';
-@import 'selects';
-@import 'buttons';
 @import 'tooltips';
 @import 'map-legend';
 @import 'line-chart';
 @import 'location-detail';
 @import 'help';
 @import 'mapbox';
-@import 'inputs';
 @import 'charts';
 @import 'typography';
-@import 'variables';
 @import 'map';
 @import 'detail-map';
 @import 'utils';
 @import 'markers';
 
-* {
-  box-sizing: border-box;
-}
 .header-section {
   display: flex;
 }

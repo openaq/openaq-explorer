@@ -1,3 +1,6 @@
+@import 'typography';
+@import 'variables';
+
 .map-legend {
   background: #ffffff;
   box-shadow: 0px 7px 20px rgba(0, 0, 0, 0.15);
@@ -15,6 +18,12 @@
   }
 }
 
+.parameter-title {
+  @include subtitle3;
+  color: $smoke120;
+  margin-right: 10px;
+}
+
 .legend-section {
   margin: 6px 18px;
 
@@ -28,8 +37,8 @@
   }
 
   .map-legend-title {
-    color: #a9b0bb;
-    font-size: 14px;
+    @include subtitle3;
+    color: $smoke60;
   }
 
   .legend-bar-labels {

@@ -2,10 +2,15 @@ import { Link } from '@solidjs/router';
 import Sparkline from '../Charts/Sparkline';
 import { useStore } from '../../stores';
 import Progress from '../Charts/Progress';
-import { For } from 'solid-js';
+import { createEffect, For } from 'solid-js';
+import {
+  LowCostSensorMarker,
+  ReferenceGradeMarker,
+} from '../LocationMarker';
 
 export default function LocationDetailCard() {
-  const [store, { clearLocation }] = useStore();
+  const [store, { clearLocation, loadMeasurementsSource }] =
+    useStore();
 
   const series = [
     {
@@ -207,7 +212,7 @@ export default function LocationDetailCard() {
           {store.location ? store.location?.name : 'Loading...'}
         </h3>
         <button className="close-btn" onClick={() => clearLocation()}>
-          <span class="material-symbols-outlined icon white">
+          <span class="material-symbols-outlined clickable-icon white">
             close
           </span>
         </button>
@@ -232,7 +237,15 @@ export default function LocationDetailCard() {
     grid-template-columns: 1fr 2fr;"
           >
             <div>Type:</div>
-            <div>{store.location?.sensorType}</div>
+            <div>
+              {store.location?.sensorType}{' '}
+              <Show
+                when={store.location?.sensorType == 'reference grade'}
+                fallback={<LowCostSensorMarker />}
+              >
+                <ReferenceGradeMarker />
+              </Show>{' '}
+            </div>
             <div>Measures:</div>
             <div>
               <For each={store.location?.parameters}>

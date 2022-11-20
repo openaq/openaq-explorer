@@ -1,7 +1,38 @@
-import { createSignal } from 'solid-js';
+import {
+  createSignal,
+  createContext,
+  useContext,
+  createEffect,
+} from 'solid-js';
+import { createStore } from 'solid-js/store';
 import { useStore } from '../../stores';
 import Badge from '../Badge';
-import ExpandableCard from './ExpandableCard';
+
+const AccordionContext = createContext();
+
+function AccordionProvider(props) {
+  const [activePanel, setActivePanel] = createStore({
+      name: 'pollutants',
+    }),
+    accordion = [
+      activePanel,
+      {
+        togglePanel(panel) {
+          setActivePanel({ name: panel });
+        },
+      },
+    ];
+
+  return (
+    <AccordionContext.Provider value={accordion}>
+      {props.children}
+    </AccordionContext.Provider>
+  );
+}
+
+function useAccordion() {
+  return useContext(AccordionContext);
+}
 
 function AccordionHelp({ contentKey, open }) {
   const [store, { toggleHelp, loadContent }] = useStore();
@@ -22,39 +53,44 @@ function AccordionHelp({ contentKey, open }) {
   );
 }
 
-function Accordion(props) {
-  const [active, setActive] = createSignal(props.active || false);
-  const [open, setOpen] = createSignal(props.open || false);
+function AccordionPanel(props) {
+  const [activePanel, { togglePanel }] = useAccordion();
 
-  const toggleOpen = () => {
-    setOpen(!open());
-  };
+  const open = () => activePanel.name == props.name;
 
   return (
     <section className="accordion">
-      <div
+      <header
         className={`accordion__header ${
           open() ? 'accordion__header--open' : ''
         }`}
-        onClick={toggleOpen}
+        onClick={() => {
+          togglePanel(props.name);
+        }}
       >
         <div className="header-section">
           <h3 className="accordion__header-title">{props.title}</h3>
           <AccordionHelp contentKey={props.contentKey} open={open} />
         </div>
         <div className="header-section">
-          {active() ? (
+          {props.active ? (
             <Badge type={'status-ok'}>
-              Active " "
-              <span class="material-symbols-outlined white">
-                check
+              Active
+              <span class={`material-symbols-outlined white`}>
+                visibility
               </span>
             </Badge>
           ) : (
-            ''
+            <span
+              class={`material-symbols-outlined ${
+                open() ? 'white' : 'smoke120'
+              }`}
+            >
+              visibility_off
+            </span>
           )}
         </div>
-      </div>
+      </header>
       <div
         className={`accordion__body ${
           open() ? 'accordion__body--open' : ''
@@ -66,12 +102,13 @@ function Accordion(props) {
   );
 }
 
-export default function OverlayCard() {
+export default function Accordion() {
   const [store, { loadParameter }] = useStore();
 
   return (
-    <ExpandableCard title={'Overlay'} open={true}>
-      <Accordion
+    <AccordionProvider>
+      <AccordionPanel
+        name="pollutants"
         title="Pollutant"
         contentKey="pollutants"
         active={true}
@@ -83,32 +120,45 @@ export default function OverlayCard() {
           className="select"
           onChange={(e) => loadParameter(e.target.value)}
         >
-          <For each={store.parameters}>
+          <For each={store.parameters()}>
             {(parameter, idx) => (
-              <option value="2" selected>
-                {parameter.displayName}
+              <option
+                value={parameter.id}
+                selected={parameter.id == store.parameter.id}
+              >
+                {parameter.displayName} {parameter.preferredUnit}
               </option>
             )}
           </For>
         </select>
-      </Accordion>
-      <Accordion title="Air Quality Index" contentKey="aqi">
+        <button className="btn btn-secondary">Update</button>
+      </AccordionPanel>
+      <AccordionPanel
+        name="aqi"
+        title="Air Quality Index"
+        contentKey="aqi"
+      >
         <select
           name="aqi"
           id="aqi"
           className="select"
-          onChange={(e) => loadParameter(e.target.value)}
+          onChange={(e) => loadParameterId(e.target.value)}
         >
           <option value="nowcast">US EPA NowCast</option>
         </select>
-      </Accordion>
-      <Accordion title="Thresholds" contentKey="thresholds">
+        <button className="btn btn-secondary">Update</button>
+      </AccordionPanel>
+      <AccordionPanel
+        name="thresholds"
+        title="Thresholds"
+        contentKey="thresholds"
+      >
         <div>
           <select
             name=""
             id=""
             className="select"
-            onChange={(e) => loadParameter(e.target.value)}
+            onChange={(e) => loadOverlay(e.target.value)}
           >
             <option value="2" selected>
               PM 2.5
@@ -129,7 +179,7 @@ export default function OverlayCard() {
             name=""
             id=""
             className="select"
-            onChange={(e) => loadParameter(e.target.value)}
+            onChange={(e) => loadOverlay(e.target.value)}
           >
             <option value="1" selected>
               Last 7 days
@@ -137,8 +187,9 @@ export default function OverlayCard() {
             <option value="2">Last 30 days</option>
             <option value="3">last 90 days</option>
           </select>
+          <button className="btn btn-secondary">Update</button>
         </div>
-      </Accordion>
-    </ExpandableCard>
+      </AccordionPanel>
+    </AccordionProvider>
   );
 }

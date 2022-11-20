@@ -1,17 +1,5 @@
 import { createResource, createSignal } from 'solid-js';
-
-function foo(parameters) {
-  let measurements = [];
-  for (const parameter of parameters) {
-    const [measurementSource, setMeasurementSource] = createSignal(
-      {}
-    );
-    measurements.push(
-      createResource(measurementSource, client.Measurements.getRecent)
-    );
-  }
-  return measurements;
-}
+import { createStore } from 'solid-js/store';
 
 export default function createMeasurements(
   client,
@@ -19,22 +7,32 @@ export default function createMeasurements(
   state,
   setState
 ) {
-  const [measurementSource, setMeasurementSource] = createSignal({});
-  let measurements = createResource(
-    measurementSource,
-    client.Measurements.getRecent
-  );
+  const [locationSource, setLocationSource] = createStore({});
 
+  const [measurements] = createResource(
+    () => locationSource,
+    client.Measurements.getLocationMeasurements
+  );
+  /*
+  const [measurementsSource, setMeasurementsSource] = createSignal({
+    locationId: state.location?.id,
+    parameters: state.location?.parameters.map((o) => o.id),
+  });
+  let measurements = createResource(
+    () => {  },
+    client.Measurements.getLocationMeasurements
+  );
+    */
   Object.assign(actions, {
-    loadLocation(id) {
-      setState({ id });
-      setLocationSource([id]);
-    },
-    clearLocation() {
-      setState({ id: null });
-      location = null;
+    loadMeasurementsSource(locationId, parameters) {
+      //setState({ locationId, parameters });
+      //setLocationSource({
+      //  locationId,
+      //  parameters,
+      //});
+      //console.log(locationSource.locationId);
     },
   });
 
-  return location;
+  return measurements;
 }
