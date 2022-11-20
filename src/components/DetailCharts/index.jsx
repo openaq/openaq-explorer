@@ -1,4 +1,5 @@
 import LineChart from '../Charts/LineChart';
+import AqiChart from '../Charts/AqiChart';
 import { useStore } from '../../stores';
 import BoxPlot from '../Charts/BoxPlot';
 import { For } from 'solid-js';
@@ -156,7 +157,12 @@ export default function DetailCharts() {
           </span>
         </div>
         <div>
-          <svg height="250"></svg>
+          <AqiChart
+            width={1200}
+            height={250}
+            margin={60}
+            data={recentMeasurements}
+          />
         </div>
       </section>
     </div>

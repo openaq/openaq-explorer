@@ -1,3 +1,5 @@
+@use 'openaq-design-system/scss/variables';
+
 .chart-help {
   @include link2;
   color: $smoke120;
@@ -9,4 +11,26 @@
     stroke-width: 1px;
     stroke-dasharray: 4 1;
   }
+}
+
+.aqi-good-chart-point {
+  fill: lighten(variables.$us-epa-green, 30%);
+}
+.aqi-moderate-chart-point {
+  fill: lighten(variables.$us-epa-yellow, 30%);
+}
+.aqi-sensitive-chart-point {
+  fill: variables.$us-epa-orange;
+}
+
+.aqi-unhealthy-chart-point {
+  fill: variables.$us-epa-red;
+}
+
+.aqi-very-unhealthy-chart-point {
+  fill: lighten(variables.$us-epa-purple, 30%);
+}
+
+.aqi-hazardous-chart-point {
+  fill: lighten(variables.$us-epa-maroon, 30%);
 }

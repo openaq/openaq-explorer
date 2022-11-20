@@ -70,132 +70,142 @@ export default function DetailOverview() {
   setInterval(() => checkForUpdate(), 1000 * 5);
 
   return (
-    <div className={`${style.overview} section-card`}>
-      <div className={style['overview__header']}>
-        <div>
-          <div class="location-breadcrumb">
-            {store.location?.country}{' '}
-            {store.location?.city ? '/' : ''} {store.location?.city}
+    <div style="position:relative;">
+      <div
+        className="bubble-lg"
+        style="position:absolute; top: -46px; right: -120px; z-index:-1;"
+      ></div>
+      <div
+        className="bubble-sm"
+        style="position:absolute; top: 220px; right: 30px; z-index:-1;"
+      ></div>
+      <div className={`${style.overview} section-card`}>
+        <div className={style['overview__header']}>
+          <div>
+            <div class="location-breadcrumb">
+              {store.location?.country}{' '}
+              {store.location?.city ? '/' : ''} {store.location?.city}
+            </div>
+            <h2 className="location-detail-title">
+              {store.location?.name}
+            </h2>
           </div>
-          <h2 className="location-detail-title">
-            {store.location?.name}
-          </h2>
-        </div>
-        <div style="display:flex; height:40px">
-          <button class="btn btn-tertiary icon-btn">
-            <span>Download webpage (PDF)</span>
-            <span class="material-symbols-rounded">
-              sim_card_download
-            </span>
-          </button>
-          <Link
-            href="#download-card"
-            class="btn btn-tertiary  icon-btn"
-          >
-            <span>Download data </span>
+          <div style="display:flex; height:40px">
+            <button class="btn btn-tertiary icon-btn">
+              <span>Download webpage (PDF)</span>
+              <span class="material-symbols-rounded">
+                sim_card_download
+              </span>
+            </button>
+            <Link
+              href="#download-card"
+              class="btn btn-tertiary  icon-btn"
+            >
+              <span>Download data </span>
 
-            <span class="material-symbols-rounded">
-              cloud_download
-            </span>
-          </Link>
-          <button className="btn btn-tertiary icon-btn">
-            <span>Add to Favorites</span>
+              <span class="material-symbols-rounded">
+                cloud_download
+              </span>
+            </Link>
+            <button className="btn btn-tertiary icon-btn">
+              <span>Add to Favorites</span>
 
-            <span class="material-symbols-rounded">star</span>
-          </button>
+              <span class="material-symbols-rounded">star</span>
+            </button>
+          </div>
         </div>
-      </div>
-      <div className={style['overview__body']}>
-        <section style="flex: 1;">
-          <h4>CHARACTERISTICS</h4>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; row-gap: 16px;">
-            <div>Type</div>
-            <div>
-              {' '}
+        <div className={style['overview__body']}>
+          <section style="flex: 1;">
+            <h4>CHARACTERISTICS</h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; row-gap: 16px;">
+              <div>Type</div>
               <div>
-                {store.location?.sensorType}{' '}
-                <Show
-                  when={
-                    store.location?.sensorType == 'reference grade'
-                  }
-                  fallback={<LowCostSensorMarker />}
-                >
-                  <ReferenceGradeMarker />
-                </Show>
-              </div>{' '}
+                {' '}
+                <div>
+                  {store.location?.sensorType}{' '}
+                  <Show
+                    when={
+                      store.location?.sensorType == 'reference grade'
+                    }
+                    fallback={<LowCostSensorMarker />}
+                  >
+                    <ReferenceGradeMarker />
+                  </Show>
+                </div>{' '}
+                <div>
+                  {store.location?.isMobile ? 'Mobile' : 'Stationary'}
+                </div>{' '}
+              </div>
+              <div>Owner</div>
+              <div>{store.location?.entity}</div>
+              <div>Measures</div>
               <div>
-                {store.location?.isMobile ? 'Mobile' : 'Stationary'}
-              </div>{' '}
-            </div>
-            <div>Owner</div>
-            <div>{store.location?.entity}</div>
-            <div>Measures</div>
-            <div>
-              {store.location?.parameters
-                .map((o) => `${o.displayName} (${o.unit})`)
-                .join(', ')}
-            </div>
-            <div>Name</div>
-            <div>{store.location?.name}</div>
-            <div>Reporting</div>
-            <div>
-              {timeFromNow(store.location?.lastUpdated)}
+                {store.location?.parameters
+                  .map((o) => `${o.displayName} (${o.unit})`)
+                  .join(', ')}
+              </div>
+              <div>Name</div>
+              <div>{store.location?.name}</div>
+              <div>Reporting</div>
               <div>
-                <span class="body4 smoke120">
-                  {since(store.location?.firstUpdated)}
-                </span>
+                {timeFromNow(store.location?.lastUpdated)}
+                <div>
+                  <span class="body4 smoke120">
+                    {since(store.location?.firstUpdated)}
+                  </span>
+                </div>
+              </div>
+              <div>Source(s)</div>
+              <div>
+                <For each={store.location?.sources}>
+                  {(source, i) => {
+                    return source.url ? (
+                      <a
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        href={source.url}
+                      >
+                        {source.name}
+                      </a>
+                    ) : (
+                      <span>{source.name}</span>
+                    );
+                  }}
+                </For>
               </div>
             </div>
-            <div>Source(s)</div>
-            <div>
-              <For each={store.location?.sources}>
-                {(source, i) => {
-                  return source.url ? (
-                    <a
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      href={source.url}
-                    >
-                      {source.name}
-                    </a>
-                  ) : (
-                    <span>{source.name}</span>
-                  );
-                }}
-              </For>
+          </section>
+          <section style="flex: 1;">
+            <h4>DATA COVERAGE</h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; row-gap: 28px;">
+              <span>Last 7 days</span>
+              <Progress
+                width={156}
+                height={15}
+                margin={{ top: 10, right: 10, bottom: 0, left: 10 }}
+                percent={0.15}
+              />
+              <span>Last 30 days</span>
+              <Progress
+                width={156}
+                height={15}
+                margin={{ top: 10, right: 10, bottom: 0, left: 10 }}
+                percent={0.65}
+              />
+              <span>Last 90 days</span>
+              <Progress
+                width={156}
+                height={15}
+                margin={{ top: 10, right: 10, bottom: 30, left: 10 }}
+                percent={0.42}
+                legend={true}
+              />
             </div>
-          </div>
-        </section>
-        <section style="flex: 1;">
-          <h4>DATA COVERAGE</h4>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; row-gap: 28px;">
-            <span>Last 7 days</span>
-            <Progress
-              width={156}
-              height={15}
-              margin={{ top: 10, right: 10, bottom: 0, left: 10 }}
-              percent={0.15}
-            />
-            <span>Last 30 days</span>
-            <Progress
-              width={156}
-              height={15}
-              margin={{ top: 10, right: 10, bottom: 0, left: 10 }}
-              percent={0.65}
-            />
-            <span>Last 90 days</span>
-            <Progress
-              width={156}
-              height={15}
-              margin={{ top: 10, right: 10, bottom: 30, left: 10 }}
-              percent={0.42}
-              legend={true}
-            />
-          </div>
-        </section>
-        <section style="flex: 1;">
-          <DetailMap />
-        </section>
+          </section>
+          <section style="flex: 1;">
+            <DetailMap />
+          </section>
+        </div>
       </div>
     </div>
   );
