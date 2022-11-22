@@ -1,14 +1,34 @@
 import * as d3 from 'd3';
 import { createEffect, createSignal } from 'solid-js';
 
-export default function LineChart(props) {
+function aqiValue(value) {
+  if (value < 50) {
+    return 'good';
+  }
+  if (value < 100) {
+    return 'moderate';
+  }
+  if (value < 150) {
+    return 'sensitive';
+  }
+  if (value < 200) {
+    return 'unhealthy';
+  }
+  if (value < 300) {
+    return 'very-unhealthy';
+  } else {
+    return 'hazardous';
+  }
+}
+
+export default function AqiChart2(props) {
   const [tooltipValue, setTooltipValue] = createSignal();
 
   const x = d3.scaleTime().range([0, props.width]);
   x.domain(d3.extent(props.data, (d) => new Date(d.date.local)));
 
   const y = d3.scaleLinear().range([props.height, 0]);
-
+  y.domain([0, 500]);
   const yAxis = d3.axisLeft(y).ticks(5);
   const yAxisGrid = d3
     .axisLeft(y)
@@ -16,28 +36,18 @@ export default function LineChart(props) {
     .tickFormat('')
     .ticks(5);
 
-  y.domain([
-    d3.min(props.data, (d) => d.value),
-    Math.ceil(
-      d3.max(
-        props.data,
-        (d) => d.value + d3.max(props.data, (d) => d.value) / 5
-      ) / 5
-    ) * 5,
-  ]);
-
   const points = props.data.map((o) => {
     return {
       value: o.value,
       cx: x(new Date(o.date.local)),
-      cy: y(o.value),
+      cy: y(o.value * 20),
       unit: o.unit,
     };
   });
   const line = d3
     .line()
     .x((d) => x(new Date(d.date.local)))
-    .y((d) => y(d.value));
+    .y((d) => y(d.value * 20));
 
   const area = d3
     .area()
@@ -46,9 +56,9 @@ export default function LineChart(props) {
     .y1((d) => y(d.value));
 
   createEffect(() => {
-    d3.select('.x-axis').call(d3.axisBottom(x));
-    d3.select('.y-axis').call(yAxis);
-    d3.select('.line-chart-grid')
+    d3.select('.x-aqi-axis').call(d3.axisBottom(x));
+    d3.select('.y-aqi-axis').call(yAxis);
+    d3.select('.aqi-chart-grid')
       .call(yAxisGrid)
       .selectAll('line,path')
       .style('stroke', '#d4d8dd');
@@ -58,7 +68,7 @@ export default function LineChart(props) {
     <>
       <div style="position:relative;">
         <div
-          className="line-chart-tooltip"
+          className="aqi-chart-tooltip"
           style={`${
             tooltipValue()?.visible
               ? 'display:flex;'
@@ -67,10 +77,10 @@ export default function LineChart(props) {
             tooltipValue()?.y - 25
           }px;`}
         >
-          <span className="line-chart-tooltip__value">
+          <span className="aqi-chart-tooltip__value">
             {tooltipValue()?.value}
           </span>{' '}
-          <span className="line-chart-tooltip__unit">
+          <span className="aqi-chart-tooltip__unit">
             {tooltipValue()?.unit}
           </span>
         </div>
@@ -78,62 +88,33 @@ export default function LineChart(props) {
           width={`${props.width + props.margin}px`}
           height={`${props.height + props.margin}px`}
         >
-          <defs>
-            <linearGradient
-              id="area-gradient"
-              gradientUnits="userSpaceOnUse"
-              x1="0%"
-              y1="0%"
-              x2="0%"
-              y2="100%"
-            >
-              <stop
-                offset="0%"
-                stop-color="#d4cdf9"
-                stop-opacity="0.7"
-              />
-              <stop
-                offset="95%"
-                stop-color="white"
-                stop-opacity="0.7"
-              />
-            </linearGradient>
-          </defs>
-          <filter id="shadow" color-interpolation-filters="sRGB">
-            <feDropShadow
-              dx="10"
-              dy="10"
-              stdDeviation="3"
-              flood-opacity="0.5"
-            />
-          </filter>
+          <g
+            className="chart-grid aqi-chart-grid"
+            transform={`translate(${props.margin / 2} ${
+              props.margin / 2
+            } )`}
+          ></g>
 
           <g
             transform={`translate(${props.margin / 2} ${
               props.margin / 2
             })`}
           >
-            <path className="line-chart-area" d={area(props.data)} />
-          </g>
-          <g
-            className="chart-grid line-chart-grid"
-            transform={`translate(${props.margin / 2} ${
-              props.margin / 2
-            } )`}
-          ></g>
-          <g
-            transform={`translate(${props.margin / 2} ${
-              props.margin / 2
-            })`}
-          >
-            <path className="line-chart-line" d={line(props.data)} />
+            <path
+              id="aqiLine"
+              className="aqi-chart-line"
+              stroke-linejoin="round"
+              d={line(props.data)}
+            />
             <For each={points}>
               {(item) => (
                 <circle
-                  className="line-chart-point"
+                  className={`aqi-${aqiValue(
+                    item.value * 20
+                  )}-chart-point`}
                   cx={item.cx}
                   cy={item.cy}
-                  r={3}
+                  r={5}
                   onMouseEnter={(e) =>
                     setTooltipValue({
                       visible: true,
@@ -151,13 +132,13 @@ export default function LineChart(props) {
             </For>
           </g>
           <g
-            class="y-axis"
+            class="y-aqi-axis"
             transform={`translate(${props.margin / 2} ${
               props.margin / 2
             })`}
           ></g>
           <g
-            class="x-axis"
+            class="x-aqi-axis"
             transform={`translate(${props.margin / 2} ${
               props.height + props.margin / 2
             })`}

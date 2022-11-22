@@ -99,7 +99,8 @@ export default function OverlayCard() {
           className="select"
           onChange={(e) => loadParameter(e.target.value)}
         >
-          <option value="nowcast">US EPA NowCast</option>
+          <option value="nowcast">US EPA PM NowCast</option>
+          <option value="nowcast">US EPA Ozone NowCast</option>
         </select>
       </Accordion>
       <Accordion title="Thresholds" contentKey="thresholds">

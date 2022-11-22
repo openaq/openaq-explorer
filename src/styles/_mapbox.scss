@@ -10,6 +10,16 @@
   border-radius: 14px !important;
 }
 
-mapboxgl-ctrl-geocoder--input::placeholder {
+.mapboxgl-ctrl-geocoder--input::placeholder {
   @include body2;
+}
+
+.mapboxgl-ctrl-geocoder--icon-search {
+  right: 12px !important;
+}
+
+@media screen and (min-width: 640px) {
+  .mapboxgl-ctrl-geocoder--icon-search {
+    right: 12px !important;
+  }
 }

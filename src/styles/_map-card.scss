@@ -1,5 +1,7 @@
+@use 'openaq-design-system/scss/variables';
+@use 'openaq-design-system/scss/utilities';
+
 @import 'typography';
-@import 'variables';
 @import 'cards';
 
 .expandable-card {
@@ -25,11 +27,6 @@
     background: #1e64ab;
     padding: 0 20px;
     cursor: pointer;
-
-    &-title {
-      @include heading3;
-      color: $white;
-    }
   }
 
   &__body {
@@ -42,6 +39,14 @@
       overflow-y: auto;
       transition: max-height 0.5s ease-in;
     }
+  }
+
+  &__footer {
+    border-top: 1px solid variables.$smoke10;
+    padding: 24px 15px 15px 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
   }
 }
 
@@ -70,6 +75,9 @@
   }
 
   &__body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
     max-height: 0;
     overflow: hidden;
     margin: 0;

@@ -28,13 +28,13 @@ export const aqiHexValues = [
 export const parametersBins = {
   1: [0, 55, 155, 255, 355, 425, 605], //pm10
   2: [0, 12.1, 35.5, 55.5, 150.5, 250.5, 501], //pm25
-  3: [0, 12.1, 35.5, 55.5, 150.5, 250], // o3 mass
+  3: [0, 12.1, 35.5, 55.5, 150.5, 250, 501], // o3 mass
   4: [0, 4.5, 9.5, 12.5, 15.5, 30.5, 50.5], // co mass
   5: [0, 54, 101, 361, 650, 1250, 2050], //no2 mass
   6: [0, 12.1, 35.5, 55.5, 150.5],
-  7: [0, 54, 101, 361, 650, 1250, 2050], // no2 ppb
+  7: [0, 0.054, 0.101, 0.361, 0.65, 1.25, 2.05], // no2 ppm
   8: [0, 4.5, 9.5, 12.5, 15.5, 30.5, 50.5], // co ppm
-  9: [0, 12.1, 35.5, 55.5, 150.5],
+  9: [0, 0.035, 0.075, 0.185, 0.305, 0.605, 1.004], // so2 ppm
   10: [0, 12.1, 35.5, 55.5, 150.5],
   11: [0, 12.1, 35.5, 55.5, 150.5],
 };
@@ -92,9 +92,7 @@ export function Map() {
           tiles: [
             `${
               import.meta.env.VITE_API_BASE_URL
-            }/v2/locations/tiles/{z}/{x}/{y}.pbf?parameter=${
-              store.parameter?.id
-            }`,
+            }/v2/locations/tiles/{z}/{x}/{y}.pbf?parameter=${store.parameter?.id()}`,
           ],
           minzoom: 1,
           maxzoom: 24,
@@ -137,7 +135,7 @@ export function Map() {
                   'match',
                   ['get', 'sensorType'],
                   'low-cost sensor',
-                  3,
+                  2,
                   'reference grade',
                   4,
                   0,
@@ -374,8 +372,8 @@ export function Map() {
           style={{
             type: 'symbol',
             source: 'locations',
-            minzoom: 10,
-            maxzoom: 10,
+            minzoom: 17,
+            maxzoom: 24,
             'source-layer': 'default',
             layout: {
               'text-field': ['get', 'lastValue'],
@@ -398,7 +396,8 @@ export function Map() {
               'text-offset': [0, 0],
             },
             paint: {
-              'text-color': [
+              'text-color': 'white',
+              /*
                 'interpolate',
                 ['linear'],
                 ['number', ['get', 'lastValue']],
@@ -422,7 +421,7 @@ export function Map() {
                 '#fff',
                 100.44444444444446,
                 '#fff',
-              ],
+                */
             },
           }}
         />

@@ -70,7 +70,7 @@ export default function DetailOverview() {
   setInterval(() => checkForUpdate(), 1000 * 5);
 
   return (
-    <div style="position:relative;">
+    <div style="position:relative; top: -10px;">
       <div
         className="bubble-lg"
         style="position:absolute; top: -46px; right: -120px; z-index:-1;"
@@ -83,10 +83,13 @@ export default function DetailOverview() {
         <div className={style['overview__header']}>
           <div>
             <div class="location-breadcrumb">
-              {store.location?.country}{' '}
-              {store.location?.city ? '/' : ''} {store.location?.city}
+              <span className="type-subtitle-3">
+                {store.location?.country}{' '}
+                {store.location?.city ? '/' : ''}{' '}
+                {store.location?.city}
+              </span>
             </div>
-            <h2 className="location-detail-title">
+            <h2 className="type-display-1 text-sky-120">
               {store.location?.name}
             </h2>
           </div>
@@ -160,15 +163,25 @@ export default function DetailOverview() {
                 <For each={store.location?.sources}>
                   {(source, i) => {
                     return source.url ? (
-                      <a
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        href={source.url}
-                      >
-                        {source.name}
-                      </a>
+                      <>
+                        <span className="type-body-1">
+                          {source.name}
+                        </span>
+                        <a
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          href={source.url}
+                          class=""
+                        >
+                          <span class="material-symbols-outlined type-color-ocean-120">
+                            open_in_new
+                          </span>
+                        </a>
+                      </>
                     ) : (
-                      <span>{source.name}</span>
+                      <span className="type-body-1">
+                        {source.name}
+                      </span>
                     );
                   }}
                 </For>

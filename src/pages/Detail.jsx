@@ -1,5 +1,6 @@
 import { useParams } from '@solidjs/router';
 import { createComputed } from 'solid-js';
+import Breadcrumb from '../components/Breadcrumb';
 import DetailCharts from '../components/DetailCharts';
 import DetailOverview from '../components/DetailOverview';
 import DownloadCard from '../components/Download';
@@ -14,6 +15,7 @@ function Detail() {
 
   return (
     <>
+      <Breadcrumb />
       <DetailOverview />
       <DetailCharts />
       <DownloadCard />

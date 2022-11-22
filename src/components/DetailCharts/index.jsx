@@ -1,7 +1,7 @@
 import LineChart from '../Charts/LineChart';
-import AqiChart from '../Charts/AqiChart';
+import AqiChart3 from '../Charts/AqiChart3';
 import { useStore } from '../../stores';
-import BoxPlot from '../Charts/BoxPlot';
+import { BoxPlot, BoxPlotTooltip } from '../Charts/BoxPlot';
 import { For } from 'solid-js';
 
 import {
@@ -19,15 +19,17 @@ export default function DetailCharts() {
   return (
     <div className="detail-charts">
       <section className="detail-charts__section">
-        <div style="display:flex; justify-content: space-between;">
-          <div className="header-section">
-            <h3 className="detail-section-title">Latest Readings</h3>
-            <span class="material-symbols-outlined green">help</span>
-          </div>
+        <div style="display:flex; align-items: center; margin: 24px 0; gap:12px;">
+          <h1 className="type-heading-1 text-sky-120">
+            Latest Readings
+          </h1>
+          <span class="material-symbols-outlined text-ocean-120">
+            help
+          </span>
         </div>
 
         <div style="display:flex; justify-content: space-between;">
-          <div style="display:flex;">
+          <div style="display:flex; gap:12px; align-items: center;">
             <select name="" id="" className="select">
               <For each={store.location?.parameters}>
                 {(parameter, i) => (
@@ -57,12 +59,15 @@ export default function DetailCharts() {
       </section>
       <section className="detail-charts__section">
         <div class="patterns-container" style="display: grid: "></div>
-        <div style="display:flex; justify-content: space-between;">
-          <h3 className="detail-section-title">Patterns</h3>
+        <div style="display:flex; align-items: center; margin: 24px 0; gap:12px;">
+          <h1 className="type-heading-1 text-sky-120">Patterns</h1>
+          <span class="material-symbols-outlined text-ocean-120">
+            help
+          </span>
         </div>
 
         <div style="display:flex; justify-content: space-between;">
-          <div style="display:flex;">
+          <div style="display:flex; gap:12px; align-items: center;">
             <select name="" id="" className="select">
               <For each={store.location?.parameters}>
                 {(parameter, i) => (
@@ -72,14 +77,17 @@ export default function DetailCharts() {
                 )}
               </For>
             </select>
-            <select name="" id="" className="select"></select>
+            <select name="" id="" className="select">
+              <option value="">All time</option>
+            </select>
             <button className="btn btn-secondary">Update</button>
           </div>
           <span className="chart-help">
             How was this chart calculated?
           </span>
         </div>
-        <div>
+        <div style="position:relative;">
+          <BoxPlotTooltip />
           <BoxPlot
             name={'time-of-day'}
             width={350}
@@ -104,12 +112,15 @@ export default function DetailCharts() {
         </div>
       </section>
       <section className="detail-charts__section">
-        <div style="display:flex; justify-content: space-between;">
-          <h3 className="detail-section-title">Thresholds</h3>
+        <div style="display:flex; align-items: center; margin: 24px 0; gap:12px;">
+          <h1 className="type-heading-1 text-sky-120">Thresholds</h1>
+          <span class="material-symbols-outlined text-ocean-120">
+            help
+          </span>
         </div>
 
         <div style="display:flex; justify-content: space-between;">
-          <div style="display:flex;">
+          <div style="display:flex; gap:12px; align-items: center;">
             <select name="" id="" className="select">
               <For each={store.location?.parameters}>
                 {(parameter, i) => (
@@ -140,8 +151,13 @@ export default function DetailCharts() {
         </div>
       </section>
       <section className="detail-charts__section">
-        <div style="display:flex; justify-content: space-between;">
-          <h3 className="detail-section-title">Air Quality Index</h3>
+        <div style="display:flex; align-items: center; margin: 24px 0; gap:12px;">
+          <h1 className="type-heading-1 text-sky-120">
+            Air Quality Index
+          </h1>
+          <span class="material-symbols-outlined text-ocean-120">
+            help
+          </span>
         </div>
 
         <div style="display:flex; justify-content: space-between;">
@@ -157,7 +173,7 @@ export default function DetailCharts() {
           </span>
         </div>
         <div>
-          <AqiChart
+          <AqiChart3
             width={1200}
             height={250}
             margin={60}

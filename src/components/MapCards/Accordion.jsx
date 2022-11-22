@@ -118,7 +118,10 @@ export default function Accordion() {
           name=""
           id=""
           className="select"
-          onChange={(e) => loadParameter(e.target.value)}
+          onChange={(e) => {
+            console.log(store);
+            loadParameter(e.target.value);
+          }}
         >
           <For each={store.parameters()}>
             {(parameter, idx) => (
@@ -144,7 +147,8 @@ export default function Accordion() {
           className="select"
           onChange={(e) => loadParameterId(e.target.value)}
         >
-          <option value="nowcast">US EPA NowCast</option>
+          <option value="nowcast">US EPA PM NowCast</option>
+          <option value="nowcast">US EPA Ozone NowCast</option>
         </select>
         <button className="btn btn-secondary">Update</button>
       </AccordionPanel>

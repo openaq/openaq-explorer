@@ -20,6 +20,17 @@ export function NoRecentUpdateMarker() {
     <div className="no-recent-data-marker">
       <div className="no-recent-data-marker__border"></div>
       <div className="no-recent-data-marker__fill"></div>
+      <div className="no-recent-data-marker__dot"></div>
+    </div>
+  );
+}
+
+export function PoorCoverageMarker() {
+  return (
+    <div className="poor-coverage-marker">
+      <div className="poor-coverage-marker__border"></div>
+      <div className="poor-coverage-marker__fill"></div>
+      <div className="poor-coverage-marker__dot"></div>
     </div>
   );
 }

@@ -4,6 +4,7 @@ import Badge from '../Badge';
 import {
   LowCostSensorMarker,
   NoRecentUpdateMarker,
+  PoorCoverageMarker,
   ReferenceGradeMarker,
 } from '../LocationMarker';
 import Accordion from './Accordion';
@@ -92,9 +93,9 @@ export function ExpandableCard(props) {
       <div className="expandable-card__header" onClick={toggleOpen}>
         <div style="display:flex; align-items:center;">
           <span class="material-symbols-outlined white">layers</span>
-          <h2 className="expandable-card__header-title">
+          <h3 className="type-heading3 text-white">
             {open() ? 'Overlay' : 'Overlay & Filters'}
-          </h2>
+          </h3>
         </div>
         <span class="material-symbols-outlined clickable-icon white">
           {open() ? 'expand_less' : 'expand_more'}
@@ -128,9 +129,7 @@ export default function FilterOverlayCard() {
               <span class="material-symbols-rounded white">
                 filter_alt
               </span>
-              <h2 className="expandable-card__header-title">
-                Filters
-              </h2>
+              <h3 className="type-heading3 text-white">Filters</h3>
             </div>
           </header>
           <div style="margin: 16px 15px;">
@@ -176,7 +175,7 @@ export default function FilterOverlayCard() {
                   checked
                 />
               </div>
-              <div style="background: #6A5CD8; height: 20px; width:20px; border-radius: 50%; margin:5px;"></div>
+              <PoorCoverageMarker />
               <label htmlFor="poor-data-coverage">
                 Show locations with Poor data coverage
               </label>
@@ -192,21 +191,19 @@ export default function FilterOverlayCard() {
               </div>
             </div>
           </div>
-          <div>
+          <div className="expandable-card__footer">
             <div>
               <span>Showing data from {} providers</span>
             </div>
-            <div>
-              <button
-                className="btn btn-secondary icon-btn"
-                onClick={() => toggleProviderList(true)}
-              >
-                Choose data providers
-                <span class="material-symbols-outlined green">
-                  tune
-                </span>
-              </button>
-            </div>
+            <button
+              className="btn btn-secondary icon-btn"
+              onClick={() => toggleProviderList(true)}
+            >
+              Choose data providers
+              <span class="material-symbols-outlined green">
+                tune
+              </span>
+            </button>
           </div>
         </section>
       </div>

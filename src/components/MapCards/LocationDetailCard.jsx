@@ -344,16 +344,16 @@ grid-template-columns: 1fr 2fr;"
       >
         <Link
           disabled
-          className={`btn btn-primary icon-btn ${
+          className={`icon-btn btn-primary ${
             store.location ? '' : ' btn-primary--disabled'
           }`}
           href={
             store.location ? `/locations/${store.location.id}` : ''
           }
         >
-          <span>Show Details</span>
+          Show Details
           <span class="material-symbols-outlined white">
-            chevron_right
+            arrow_right_alt
           </span>
         </Link>
       </footer>

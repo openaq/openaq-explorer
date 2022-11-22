@@ -13,11 +13,17 @@
   }
 }
 
+.aqi-chart-line {
+  stroke: variables.$smoke60;
+  fill: none;
+  stroke-width: 6;
+}
+
 .aqi-good-chart-point {
-  fill: lighten(variables.$us-epa-green, 30%);
+  fill: variables.$us-epa-green;
 }
 .aqi-moderate-chart-point {
-  fill: lighten(variables.$us-epa-yellow, 30%);
+  fill: variables.$us-epa-yellow;
 }
 .aqi-sensitive-chart-point {
   fill: variables.$us-epa-orange;
@@ -28,9 +34,9 @@
 }
 
 .aqi-very-unhealthy-chart-point {
-  fill: lighten(variables.$us-epa-purple, 30%);
+  fill: variables.$us-epa-purple;
 }
 
 .aqi-hazardous-chart-point {
-  fill: lighten(variables.$us-epa-maroon, 30%);
+  fill: variables.$us-epa-maroon;
 }

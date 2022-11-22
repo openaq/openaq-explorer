@@ -4,6 +4,7 @@
 @use 'openaq-design-system/scss/inputs';
 @use 'openaq-design-system/scss/resets';
 @use 'openaq-design-system/scss/bubbles';
+@use 'openaq-design-system/scss/utilities';
 @import 'header';
 @import 'map-card';
 @import 'progress-bar';
@@ -20,6 +21,11 @@
 @import 'utils';
 @import 'markers';
 
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
 .header-section {
   display: flex;
 }
@@ -27,4 +33,8 @@
 .subtitle3 {
   @include subtitle3;
   margin: 0;
+}
+
+.text-white {
+  color: white;
 }
