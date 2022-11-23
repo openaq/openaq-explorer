@@ -94,12 +94,6 @@ export default function DetailOverview() {
             </h2>
           </div>
           <div style="display:flex; height:40px">
-            <button class="btn btn-tertiary icon-btn">
-              <span>Download webpage (PDF)</span>
-              <span class="material-symbols-rounded">
-                sim_card_download
-              </span>
-            </button>
             <Link
               href="#download-card"
               class="btn btn-tertiary  icon-btn"
@@ -110,11 +104,6 @@ export default function DetailOverview() {
                 cloud_download
               </span>
             </Link>
-            <button className="btn btn-tertiary icon-btn">
-              <span>Add to Favorites</span>
-
-              <span class="material-symbols-rounded">star</span>
-            </button>
           </div>
         </div>
         <div className={style['overview__body']}>
@@ -124,8 +113,9 @@ export default function DetailOverview() {
               <div>Type</div>
               <div>
                 {' '}
-                <div>
-                  {store.location?.sensorType}{' '}
+                <div style="display:flex; gap: 10px; align-items:center;">
+                  {store.location?.sensorType[0].toUpperCase() +
+                    store.location?.sensorType.substring(1)}{' '}
                   <Show
                     when={
                       store.location?.sensorType == 'reference grade'
@@ -139,7 +129,7 @@ export default function DetailOverview() {
                   {store.location?.isMobile ? 'Mobile' : 'Stationary'}
                 </div>{' '}
               </div>
-              <div>Owner</div>
+              <div>Entity</div>
               <div>{store.location?.entity}</div>
               <div>Measures</div>
               <div>
@@ -158,7 +148,7 @@ export default function DetailOverview() {
                   </span>
                 </div>
               </div>
-              <div>Source(s)</div>
+              <div>Provider</div>
               <div>
                 <For each={store.location?.sources}>
                   {(source, i) => {

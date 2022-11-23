@@ -157,42 +157,42 @@ export default function Accordion() {
         title="Thresholds"
         contentKey="thresholds"
       >
-        <div>
+        <select
+          name=""
+          id=""
+          className="select"
+          onChange={(e) => loadOverlay(e.target.value)}
+        >
+          <option value="2" selected>
+            PM 2.5
+          </option>
+          <option value="1">PM 10</option>
+          <option value="3">O&#8323;</option>
+        </select>
+        <div className="thresholds-controls">
+          <span className="thresholds-controls__item">Above</span>
           <select
             name=""
             id=""
-            className="select"
-            onChange={(e) => loadOverlay(e.target.value)}
+            className="select thresholds-controls__item"
           >
-            <option value="2" selected>
-              PM 2.5
-            </option>
-            <option value="1">PM 10</option>
-            <option value="3">O&#8323;</option>
-          </select>
-        </div>
-        <div>
-          <span>Above</span>{' '}
-          <select name="" id="" className="select">
             <option value="">100</option>
           </select>
-          <span></span>{' '}
+          <span className="thresholds-controls__item">µg/m³</span>
         </div>
-        <div>
-          <select
-            name=""
-            id=""
-            className="select"
-            onChange={(e) => loadOverlay(e.target.value)}
-          >
-            <option value="1" selected>
-              Last 7 days
-            </option>
-            <option value="2">Last 30 days</option>
-            <option value="3">last 90 days</option>
-          </select>
-          <button className="btn btn-secondary">Update</button>
-        </div>
+        <select
+          name=""
+          id=""
+          className="select"
+          onChange={(e) => loadOverlay(e.target.value)}
+        >
+          <option value="1" selected>
+            Last 7 days
+          </option>
+          <option value="2">Last 30 days</option>
+          <option value="3">last 90 days</option>
+        </select>
+        <button className="btn btn-secondary">Update</button>
       </AccordionPanel>
     </AccordionProvider>
   );

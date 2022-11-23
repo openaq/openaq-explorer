@@ -4,7 +4,7 @@ import MapLegend from '../components/Map/MapLegend';
 import HelpCard from '../components/Help';
 import LocationDetailCard from '../components/MapCards/LocationDetailCard';
 import FilterOverlayCard from '../components/MapCards/ExpandableCard';
-import SourcesCard from '../components/MapCards/SourcesCard';
+import ProvidersCard from '../components/MapCards/ProvidersCard';
 
 export default function Explore() {
   return (
@@ -14,7 +14,7 @@ export default function Explore() {
       <FilterOverlayCard />
       <LocationDetailCard />
       <HelpCard />
-      <SourcesCard />
+      <ProvidersCard />
     </>
   );
 }

@@ -4,7 +4,7 @@ import { useStore } from '../../stores';
 
 function ProviderSearch(providers, setProviders) {}
 
-export default function SourcesCard() {
+export default function ProvidersCard() {
   const [store, { toggleProviderList }] = useStore();
 
   const [providers, setProviders] = createSignal(store.providers());
@@ -54,12 +54,7 @@ export default function SourcesCard() {
           </div>
         </section>
         <section className="map-card-section">
-          <div className="search-input -wrapper">
-            <input type="text" className="search-input" />
-            <span class="material-symbols-outlined search-icon">
-              search
-            </span>
-          </div>
+          <input type="text" className="search-input" />
 
           <ul className="providers-list">
             <For each={providers()}>

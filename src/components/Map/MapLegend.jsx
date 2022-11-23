@@ -12,16 +12,16 @@ export default function MapLegend() {
   return (
     <div className="map-legend">
       <div className="map-legend__body">
-        <div className="legend-section">
-          <div>
-            <span className="parameter-title">
+        <div className="map-legend-section">
+          <div className="map-legend-title">
+            <span className="type-subtitle-3 text-smoke-120">
               {store.parameter.parameterName} ({store.parameter.unit})
             </span>
-            <span class="map-legend-title">
+            <span className="type-subtitle-3 text-smoke-60">
               Most recent measurements
             </span>
           </div>
-          <div className="legend-bar">
+          <div className="map-legend-bar">
             <div style="flex: 1; background-color: #CEC7FF;"></div>
             <div style="flex: 1; background-color: #A497FD;"></div>
             <div style="flex: 1; background-color: #8F81EE;"></div>
@@ -31,14 +31,17 @@ export default function MapLegend() {
             <div style="flex: 1; background-color: #241050;"></div>
           </div>
           <div
-            className="legend-bar-labels"
-            style="display:flex; font-size:8px; margin:0;"
+            className="map-legend-bar-labels"
+            style="display:flex; margin:0;"
           >
             <For each={parametersBins[store.parameter.id]}>
-              {(value, i, values) => (
-                <span style="flex:1;">
-                  {value} -
-                  {parametersBins[store.parameter.id][i() + 1]}
+              {(value, i) => (
+                <span className="type-body-4" style="flex:1;">
+                  {value}
+                  {i() + 1 ==
+                  parametersBins[store.parameter.id].length
+                    ? '+'
+                    : ''}
                 </span>
               )}
             </For>

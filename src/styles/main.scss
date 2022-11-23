@@ -38,3 +38,9 @@ body {
 .text-white {
   color: white;
 }
+
+hr {
+  margin: 0;
+  border: 0;
+  border-bottom: 1px dashed variables.$smoke30;
+}

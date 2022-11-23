@@ -18,16 +18,15 @@
   }
 }
 
-.parameter-title {
-  @include subtitle3;
-  color: $smoke120;
-  margin-right: 10px;
+.map-legend-title {
+  display: flex;
+  gap: 10px;
 }
 
-.legend-section {
+.map-legend-section {
   margin: 6px 18px;
 
-  .legend-bar {
+  .map-legend-bar {
     width: 297px;
     margin: 6px 0;
     border-radius: 4px;
@@ -36,12 +35,7 @@
     height: 16px;
   }
 
-  .map-legend-title {
-    @include subtitle3;
-    color: $smoke60;
-  }
-
-  .legend-bar-labels {
+  .map-legend-bar-labels {
     display: flex;
     justify-content: space-between;
     margin: 0 18px;

@@ -1,23 +1,79 @@
 import * as d3 from 'd3';
 import { createEffect, createSignal } from 'solid-js';
+import { createStore } from 'solid-js/store';
+import { useContext } from 'solid-js';
+import { createContext } from 'solid-js';
+
+const ChartContext = createContext();
+
+export function ChartProvider(props) {
+  const [store, setStore] = createStore({
+      values: {
+        max: 0,
+      },
+      style: {
+        display: 'none',
+        top: 0,
+        left: 0,
+      },
+    }),
+    setTooltip = [
+      store,
+      {
+        setTooltip: (props) => {
+          setStore({
+            period: props.period,
+            values: {
+              max: props.values?.max,
+              interquartileTop: props.values?.interquartileTop,
+              median: props.values?.median,
+              interquartileBottom: props.values?.interquartileBottom,
+              min: props.values?.min,
+            },
+            style: {
+              display: props.style.display,
+              y: props.style.y,
+              x: props.style.x,
+            },
+          });
+        },
+      },
+    ];
+
+  return (
+    <ChartContext.Provider value={setTooltip}>
+      {props.children}
+    </ChartContext.Provider>
+  );
+}
+
+export function useChart() {
+  return useContext(ChartContext);
+}
 
 export function BoxPlotTooltip(props) {
+  const [tooltip] = useChart();
+
   return (
     <div
-      style={`left:${props.style?.left || 0}; top:${
-        props.style?.top || 0
-      }; display:${props.style?.display || 'none'}`}
+      style={`
+      position:absolute;
+      top:${tooltip.style.y}px;
+      left:${tooltip.style.x}px; 
+      display:${tooltip.style?.display || 'none'}`}
       className="box-plot-tooltip"
       role="tooltip"
     >
       <div className="box-plot-tooltip__head">
-        <span className="type-body3 text-white">Monday</span>
+        <span className="type-body3 text-white">
+          {tooltip.period}
+        </span>
       </div>
       <div className="box-plot-tooltip__body">
         <div className="box-plot-legend-item">
           <div className="bg-smoke-10 box-plot-legend-color"></div>
           <div>
-            <span className="type-body-3">123 </span>
+            <span className="type-body-3">{tooltip.values?.max}</span>
             <span className="type-body-1">µg/m³</span>
           </div>
           <div className="box-plot-legend-item-label">
@@ -29,7 +85,9 @@ export function BoxPlotTooltip(props) {
         <div className="box-plot-legend-item">
           <div className="bg-lavender-100 box-plot-legend-color"></div>
           <div>
-            <span className="type-body-3">123 </span>
+            <span className="type-body-3">
+              {tooltip.values?.interquartileTop}
+            </span>
             <span className="type-body-1">µg/m³</span>
           </div>
           <div className="box-plot-legend-item-label">
@@ -41,7 +99,9 @@ export function BoxPlotTooltip(props) {
         <div className="box-plot-legend-item bg-sky-10">
           <div className="bg-lavender-120 box-plot-legend-color"></div>
           <div>
-            <span className="type-body-3">123 </span>
+            <span className="type-body-3">
+              {tooltip.values?.median}{' '}
+            </span>
             <span className="type-body-1">µg/m³</span>
           </div>
           <div className="box-plot-legend-item-label">
@@ -51,7 +111,9 @@ export function BoxPlotTooltip(props) {
         <div className="box-plot-legend-item">
           <div className="bg-lavender-100 box-plot-legend-color"></div>
           <div>
-            <span className="type-body-3">123 </span>
+            <span className="type-body-3">
+              {tooltip.values?.interquartileBottom}{' '}
+            </span>
             <span className="type-body-1">µg/m³</span>
           </div>
           <div className="box-plot-legend-item-label">
@@ -63,7 +125,9 @@ export function BoxPlotTooltip(props) {
         <div className="box-plot-legend-item">
           <div className="bg-smoke-10 box-plot-legend-color"></div>
           <div>
-            <span className="type-body-3">123 </span>
+            <span className="type-body-3">
+              {tooltip.values?.min}{' '}
+            </span>
             <span className="type-body-1">µg/m³</span>
           </div>
           <div className="box-plot-legend-item-label">
@@ -78,7 +142,7 @@ export function BoxPlotTooltip(props) {
 }
 
 export function BoxPlot({ name, width, height, margin, data }) {
-  const [tooltipValue, setTooltipValue] = createSignal();
+  const [tooltip, { setTooltip }] = useChart();
 
   const periods = data.summaries.map((o) => o.period);
   const boxWidth = width / periods.length - 5;
@@ -132,7 +196,34 @@ export function BoxPlot({ name, width, height, margin, data }) {
           <For each={data.summaries}>
             {(d) => {
               return (
-                <>
+                <g
+                  onMouseEnter={(e) => {
+                    setTooltip({
+                      period: d.period,
+                      values: {
+                        max: d.max,
+                        interquartileTop: d.q3,
+                        median: d.median,
+                        interquartileBottom: d.q1,
+                        min: d.min,
+                      },
+                      style: {
+                        display: 'block',
+                        x: e.clientX - 220,
+                        y: e.clientY - 400,
+                      },
+                    });
+                  }}
+                  onMouseLeave={(e) =>
+                    setTooltip({
+                      style: {
+                        display: 'none',
+                        y: 0,
+                        x: 0,
+                      },
+                    })
+                  }
+                >
                   <line
                     stroke-width={2}
                     stroke="#CCCCCC"
@@ -178,7 +269,7 @@ export function BoxPlot({ name, width, height, margin, data }) {
                     y1={y(d.median)}
                     y2={y(d.median)}
                   />
-                </>
+                </g>
               );
             }}
           </For>

@@ -1,16 +1,29 @@
 import { Link } from '@solidjs/router';
 import Sparkline from '../Charts/Sparkline';
 import { useStore } from '../../stores';
+import dayjs from 'dayjs/esm/index.js';
+
 import Progress from '../Charts/Progress';
-import { createEffect, For } from 'solid-js';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import { For } from 'solid-js';
 import {
   LowCostSensorMarker,
   ReferenceGradeMarker,
 } from '../LocationMarker';
 
+dayjs.extend(relativeTime);
+
 export default function LocationDetailCard() {
   const [store, { clearLocation, loadMeasurementsSource }] =
     useStore();
+
+  function timeFromNow(lastUpdated) {
+    return `Updated ${dayjs(lastUpdated).fromNow()}`;
+  }
+
+  function since(lastUpdated) {
+    return `Since ${dayjs(lastUpdated).format('DD/MM/YYYY')}`;
+  }
 
   const series = [
     {
@@ -197,17 +210,13 @@ export default function LocationDetailCard() {
 
   return (
     <article
-      className={`dismissable-card map-card ${
+      className={`dismissable-card location-detail-card ${
         !store.id || store.help.active
           ? 'dismissable-card--translate'
           : ''
       }`}
     >
-      <header
-        className={`map-card__header ${
-          store.location ? '' : 'header-loading-shimmer'
-        }`}
-      >
+      <header className="location-detail-card__header">
         <h3 className="map-card-title">
           {store.location ? store.location?.name : 'Loading...'}
         </h3>
@@ -223,14 +232,17 @@ export default function LocationDetailCard() {
         }`}
       >
         <section className="map-card-section">
-          {store.location
-            ? `${
-                store.location?.city
-                  ? store.location?.city
-                  : 'No city listed'
-              }, ${store.location?.country}`
-            : ''}
+          <span className="type-body-2">
+            {store.location?.city
+              ? store.location?.city
+              : 'No city listed'}
+            ,
+          </span>{' '}
+          <span className="type-body-3">
+            {store.location?.country}
+          </span>
         </section>
+        <hr className="hr" />
         <section className="map-card-section">
           <div
             style="display: grid; row-gap: 10px; column-gap: 10px;
@@ -250,18 +262,21 @@ export default function LocationDetailCard() {
             <div>
               <For each={store.location?.parameters}>
                 {(parameter, i) => (
-                  <span>{parameter.displayName},</span>
+                  <span className="parameter-label type-body-1">
+                    {parameter.displayName} ({parameter.unit}),
+                  </span>
                 )}
               </For>
             </div>
           </div>
         </section>
+        <hr className="hr" />
         <section className="map-card-section">
           <div
             style="display: grid; row-gap: 10px; column-gap: 10px;
 grid-template-columns: 1fr 2fr;"
           >
-            <div>Sources:</div>{' '}
+            <div>Provider:</div>{' '}
             <div>
               <For each={store.location?.sources}>
                 {(source, i) => {
@@ -280,15 +295,23 @@ grid-template-columns: 1fr 2fr;"
               </For>
             </div>
             <div>Reporting: </div>
-            <div> updated {store.location?.lastUpdated}</div>
+            <div>
+              {timeFromNow(store.location?.lastUpdated)}
+              <div>
+                <span class="body4 smoke120">
+                  {since(store.location?.firstUpdated)}
+                </span>
+              </div>
+            </div>
           </div>
         </section>
+        <hr className="hr" />
         <section className="map-card-section">
           <div style="display: grid; grid-template-columns: 1fr 2fr; row-gap: 10px; column-gap: 10px;">
             <div>Data Coverage </div>
             <div>
               <Progress
-                width={170}
+                width={150}
                 height={10}
                 margin={{ top: 10, right: 10, bottom: 20, left: 10 }}
                 percent={0.5}
@@ -297,12 +320,13 @@ grid-template-columns: 1fr 2fr;"
             </div>
           </div>
         </section>
+        <hr className="hr" />
         <section className="map-card-section">
           <div className="location-detail-card-section-heading">
             {' '}
             Latest Readings{' '}
           </div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; row-gap: 18px;">
+          <div style="display: grid; grid-template-columns: 0.5fr 1fr 1fr; row-gap: 18px;">
             <For each={store.location?.parameters}>
               {(parameter, i) => {
                 return (
@@ -337,11 +361,7 @@ grid-template-columns: 1fr 2fr;"
           </div>
         </section>
       </div>
-      <footer
-        className={`location-detail-card__footer ${
-          store.location ? '' : 'loading-shimmer'
-        }`}
-      >
+      <footer className="location-detail-card__footer">
         <Link
           disabled
           className={`icon-btn btn-primary ${

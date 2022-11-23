@@ -1,6 +1,5 @@
 import { createSignal } from 'solid-js';
 import { useStore } from '../../stores';
-import Badge from '../Badge';
 import {
   LowCostSensorMarker,
   NoRecentUpdateMarker,
@@ -8,73 +7,6 @@ import {
   ReferenceGradeMarker,
 } from '../LocationMarker';
 import Accordion from './Accordion';
-
-/*
-function AccordionHelp({ contentKey, open }) {
-  const [store, { toggleHelp, loadContent }] = useStore();
-
-  const showHelp = (e) => {
-    toggleHelp(true);
-    loadContent(contentKey);
-    e.stopPropagation();
-  };
-
-  return (
-    <span
-      class={`material-symbols-outlined ${open() ? 'white' : 'grey'}`}
-      onClick={(e) => showHelp(e)}
-    >
-      help
-    </span>
-  );
-}
-
-function Accordion(props) {
-  const [active, setActive] = createSignal(props.active || false);
-  const [open, setOpen] = createSignal(props.open || false);
-
-  const toggleOpen = () => {
-    setOpen(!open());
-  };
-
-  return (
-    <section className="accordion">
-      <header
-        className={`accordion__header ${
-          open() ? 'accordion__header--open' : ''
-        }`}
-        onClick={toggleOpen}
-      >
-        <div className="header-section">
-          <h3 className="accordion__header-title">{props.title}</h3>
-          <AccordionHelp contentKey={props.contentKey} open={open} />
-        </div>
-        <div className="header-section">
-          {active() ? (
-            <Badge type={'active'}>
-              <span>Active</span>
-              <span class="material-symbols-outlined white">
-                visibility
-              </span>
-            </Badge>
-          ) : (
-            <span class="material-symbols-outlined smoke120">
-              visibility_off
-            </span>
-          )}
-        </div>
-      </header>
-      <div
-        className={`accordion__body ${
-          open() ? 'accordion__body--open' : ''
-        }`}
-      >
-        {props.children}
-      </div>
-    </section>
-  );
-}
-*/
 
 export function ExpandableCard(props) {
   const [open, setOpen] = createSignal(props.open || false);
