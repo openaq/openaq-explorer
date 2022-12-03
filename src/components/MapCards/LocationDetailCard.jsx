@@ -25,6 +25,10 @@ export default function LocationDetailCard() {
     return `Since ${dayjs(lastUpdated).format('DD/MM/YYYY')}`;
   }
 
+  function latestMeasurementTime(lastUpdated) {
+    return dayjs(lastUpdated).format('HH:mm');
+  }
+
   const series = [
     {
       locationId: 2178,
@@ -323,20 +327,28 @@ grid-template-columns: 1fr 2fr;"
         <hr className="hr" />
         <section className="map-card-section">
           <div className="location-detail-card-section-heading">
-            {' '}
-            Latest Readings{' '}
+            <span className="type-subtitle-3">Latest Readings</span>
+            <span class="type-body-2 text-smoke-100">
+              {`${latestMeasurementTime(
+                store.location?.lastUpdated
+              )} (local time)`}
+            </span>
           </div>
           <div style="display: grid; grid-template-columns: 0.5fr 1fr 1fr; row-gap: 18px;">
             <For each={store.location?.parameters}>
               {(parameter, i) => {
                 return (
                   <>
-                    <span>{parameter.displayName}</span>
+                    <span className="type-subtitle-3">
+                      {parameter.displayName}
+                    </span>
                     <div>
-                      <span style="color: #8576ED; font-weight: 700;">
+                      <span className="type-body-3 text-lavender-100">
                         {parameter.lastValue}
                       </span>{' '}
-                      {parameter.unit}
+                      <span className="type-body-1">
+                        {parameter.unit}
+                      </span>
                     </div>
                     <Sparkline
                       series={series}

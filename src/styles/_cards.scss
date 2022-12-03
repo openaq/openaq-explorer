@@ -22,10 +22,15 @@
   }
 }
 
-.map-card {
+.explore-card {
+  width: 300px;
   position: absolute;
   top: 100px;
   right: 48px;
+}
+
+.map-card {
+  background-color: white;
   height: calc(100vh - 80px - 80px);
 
   &__header {

@@ -17,8 +17,8 @@ export default function ProvidersCard() {
 
   return (
     <article
-      className={`dismissable-card map-card ${
-        store.providerListActive ? '' : 'dismissable-card--translate'
+      className={`card map-card ${
+        store.providerListActive ? '' : ''
       }`}
     >
       <header className="map-card__header">

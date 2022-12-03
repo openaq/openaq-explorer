@@ -14,7 +14,7 @@ export default function HelpCard(props) {
 
   return (
     <article
-      class={`dismissable-card map-card ${
+      class={`dismissable-card map-card explore-card ${
         store.help.active ? '' : 'dismissable-card--translate'
       }`}
     >

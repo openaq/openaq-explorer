@@ -1,6 +1,5 @@
-import FilterCard from './FilterCard';
-import LocationDetailCard from './LocationDetailCard';
-import OverlayCard from './OverlayCard';
+import FilterOverlayCard from './ExpandableCard';
+import ProvidersCard from './ProvidersCard';
 import { useStore } from '../../stores';
 
 export default function MapCards() {
@@ -8,13 +7,18 @@ export default function MapCards() {
 
   return (
     <div
-      className={`map-cards ${
-        store.help.active ? 'map-cards--translate' : ''
+      className={`flip-card explore-card ${
+        store.providerListActive ? 'flip-card--active' : ''
       }`}
     >
-      <OverlayCard />
-      <FilterCard />
-      <LocationDetailCard name={store.location?.name} />
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <FilterOverlayCard />
+        </div>
+        <div class="flip-card-back">
+          <ProvidersCard />
+        </div>
+      </div>
     </div>
   );
 }
