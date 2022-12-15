@@ -62,7 +62,6 @@ export function Map() {
   return (
     <MapGL
       class="map"
-      style={{ top: '80px' }}
       options={{
         accessToken: import.meta.env.VITE_MAPBOX_ACCESS_TOKEN,
         style: import.meta.env.VITE_MAPBOX_STYLE,
