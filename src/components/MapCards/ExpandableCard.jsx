@@ -36,7 +36,7 @@ export function ExpandableCard(props) {
       <div
         className={
           open()
-            ? 'expandable-card__body--open'
+            ? 'expandable-card__body expandable-card__body--open'
             : 'expandable-card__body'
         }
       >

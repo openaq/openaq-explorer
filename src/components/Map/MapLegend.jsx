@@ -49,7 +49,7 @@ export default function MapLegend() {
         </div>
         <div className="legend-help-section">
           <span
-            class="material-symbols-outlined clickable-icon"
+            class="legend-help material-symbols-outlined clickable-icon"
             onClick={(e) => showHelp(e)}
           >
             help
