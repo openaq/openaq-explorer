@@ -11,6 +11,7 @@ test.describe('explore page', () => {
   test('homepage naivgates', async ({
     page,
   }) => {
+    await page.goto('/');
     await expect(page).toHaveURL('/#/');
   });
 
@@ -51,7 +52,7 @@ test.describe('explore page', () => {
     await page.waitForTimeout(300); // wait for animation to finish
     expect(
       await helpCard.evaluate(
-        (node) => node.getBoundingClientRect().x 
+        (node) => node.getBoundingClientRect().x
       )
     ).toBeLessThan(await page.evaluate(() => window.screen.width));
   });

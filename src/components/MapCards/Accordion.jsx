@@ -45,7 +45,9 @@ function AccordionHelp({ contentKey, open }) {
 
   return (
     <span
-      class={`material-symbols-outlined ${open() ? 'white' : 'grey'}`}
+      class={`${contentKey}-help-btn material-symbols-outlined ${
+        open() ? 'white' : 'grey'
+      }`}
       onClick={(e) => showHelp(e)}
     >
       help
