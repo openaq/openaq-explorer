@@ -51,7 +51,7 @@ test.describe('explore page', () => {
     await page.waitForTimeout(300); // wait for animation to finish
     expect(
       await helpCard.evaluate(
-        (node) => node.getBoundingClientRect().x
+        (node) => node.getBoundingClientRect().x 
       )
     ).toBeLessThan(await page.evaluate(() => window.screen.width));
   });
