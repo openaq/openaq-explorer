@@ -84,7 +84,12 @@ test.describe('explore page', () => {
     expect(cardBack).toBeVisible({ visible: false });
     await page.getByRole('button', { name: 'Choose data providers tune' }).click();
     expect(cardBack).toBeVisible({ visible: true });
+  });
 
+  test('status badge changes' , async ({ page }) => {
+    const statusDiv = await page.locator('body > div.flip-card.explore-card > div > div.flip-card-front > div > div.expandable-card__body.expandable-card__body--open > div > section:nth-child(1) > section:nth-child(2) > header > div:nth-child(2)');
+    await page.getByText('Thresholdshelpvisibility_off').click();
+    expect(statusDiv).toHaveClass('badge--status-ok'); // this should NOT pass right now
   });
 
 });
