@@ -56,4 +56,35 @@ test.describe('explore page', () => {
       )
     ).toBeLessThan(await page.evaluate(() => window.screen.width));
   });
+
+  test('navigate to north valley location with search bar', async ({ page }) => {
+    await page.getByPlaceholder('Search').click();
+    await page.getByPlaceholder('Search').fill('albuquerque');
+    await page.getByPlaceholder('Search').press('Enter');
+    await page.waitForTimeout(3000); 
+    await page.getByRole('region', { name: 'Map' }).click({
+      position: {
+        x: 842,
+        y: 135
+      }
+    });
+    await page.waitForTimeout(1000); 
+    await page.getByRole('link', { name: 'Show Details arrow_right_alt' }).click();
+    expect(page).toHaveURL('/locations/8708')
+  });
+
+  test('accordian visibility changes', async ({ page }) => {
+    await page.getByText('Thresholdshelpvisibility_off').click();
+    const pollutant = await page.locator('accordion__body--open');
+    expect(pollutant).toBeVisible({ visible: false });
+  });
+
+  test('flip card visibility changes', async ({ page }) => {
+    const cardBack = await page.locator('flip-card-back');
+    expect(cardBack).toBeVisible({ visible: false });
+    await page.getByRole('button', { name: 'Choose data providers tune' }).click();
+    expect(cardBack).toBeVisible({ visible: true });
+
+  });
+
 });
