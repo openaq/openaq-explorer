@@ -92,4 +92,25 @@ test.describe('explore page', () => {
     expect(statusDiv).toHaveClass('badge--status-ok'); // this should NOT pass right now
   });
 
+  test('assert boxes checked and uncheck them', async ({ page }) => {
+    await expect(page.getByLabel('Reference grade locations')).toBeChecked();
+    await expect(page.getByLabel('Low-cost sensors locations')).toBeChecked();
+    await expect(page.getByLabel('Show locations with no recent updates')).toBeChecked();
+    await expect(page.getByLabel('Show locations with Poor data coverage')).toBeChecked();
+    await page.getByLabel('Reference grade locations').uncheck();
+    await page.getByLabel('Low-cost sensors locations').uncheck();
+    await page.getByLabel('Show locations with no recent updates').uncheck();
+    await page.getByLabel('Show locations with Poor data coverage').uncheck();
+    await expect(page.getByLabel('Reference grade locations')).not.toBeChecked();
+    await expect(page.getByLabel('Low-cost sensors locations')).not.toBeChecked();
+    await expect(page.getByLabel('Show locations with no recent updates')).not.toBeChecked();
+    await expect(page.getByLabel('Show locations with Poor data coverage')).not.toBeChecked();
+  });
+
+  test('change drop down and assert text', async ({ page }) => {
+    await page.getByRole('combobox').first().selectOption('1');
+    await expect(page.locator('select').first()).toHaveText('PM10 µg/m³');
+  });
+
+  
 });
