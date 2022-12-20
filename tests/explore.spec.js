@@ -2,7 +2,6 @@
 import { test, expect } from '@playwright/test';
 
 
-
 test.describe('explore page', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
@@ -107,9 +106,17 @@ test.describe('explore page', () => {
     await expect(page.getByLabel('Show locations with Poor data coverage')).not.toBeChecked();
   });
 
-  test('change drop down and assert text', async ({ page }) => {
+  test('change drop down and assert text', async ({ page }) => { 
+    await expect(page.locator('body > div.map-legend > div > div.map-legend-section > div.map-legend-title > span.type-subtitle-3.text-smoke-120'))
+    .toHaveText('PM 2.5 (µg/m³)'); // this looks for the text in the legend
+
     await page.getByRole('combobox').first().selectOption('1');
-    await expect(page.locator('select').first()).toHaveText('PM10 µg/m³');
+    await expect(page.locator('body > div.map-legend > div > div.map-legend-section > div.map-legend-title > span.type-subtitle-3.text-smoke-120'))
+    .toHaveText('PM10 (µg/m³)');
+
+    await page.getByRole('combobox').first().selectOption('3');
+    await expect(page.locator('body > div.map-legend > div > div.map-legend-section > div.map-legend-title > span.type-subtitle-3.text-smoke-120'))
+    .toHaveText('O₃ mass (µg/m³)');
   });
 
   
