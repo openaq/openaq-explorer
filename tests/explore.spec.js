@@ -74,12 +74,12 @@ test.describe('explore page', () => {
 
   test('accordian visibility changes', async ({ page }) => {
     await page.getByText('Thresholdshelpvisibility_off').click();
-    const pollutant = await page.locator('accordion__body--open');
+    let pollutant = page.locator('accordion__body--open');
     expect(pollutant).toBeVisible({ visible: false });
   });
 
   test('flip card visibility changes', async ({ page }) => {
-    const cardBack = await page.locator('flip-card-back');
+    const cardBack = page.locator('flip-card-back');
     expect(cardBack).toBeVisible({ visible: false });
     await page.getByRole('button', { name: 'Choose data providers tune' }).click();
     expect(cardBack).toBeVisible({ visible: true });
@@ -91,19 +91,11 @@ test.describe('explore page', () => {
     expect(statusDiv).toHaveClass('badge--status-ok'); // this should NOT pass right now
   });
 
-  test('assert boxes checked and uncheck them', async ({ page }) => {
+  test('assert boxes are checked on page load', async ({ page }) => {
     await expect(page.getByLabel('Reference grade locations')).toBeChecked();
     await expect(page.getByLabel('Low-cost sensors locations')).toBeChecked();
     await expect(page.getByLabel('Show locations with no recent updates')).toBeChecked();
     await expect(page.getByLabel('Show locations with Poor data coverage')).toBeChecked();
-    await page.getByLabel('Reference grade locations').uncheck();
-    await page.getByLabel('Low-cost sensors locations').uncheck();
-    await page.getByLabel('Show locations with no recent updates').uncheck();
-    await page.getByLabel('Show locations with Poor data coverage').uncheck();
-    await expect(page.getByLabel('Reference grade locations')).not.toBeChecked();
-    await expect(page.getByLabel('Low-cost sensors locations')).not.toBeChecked();
-    await expect(page.getByLabel('Show locations with no recent updates')).not.toBeChecked();
-    await expect(page.getByLabel('Show locations with Poor data coverage')).not.toBeChecked();
   });
 
   test('Select PM10, assert network call and legend text', async ({ page }) => { 
