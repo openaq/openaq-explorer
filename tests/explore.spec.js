@@ -171,6 +171,26 @@ test.describe('explore page', () => {
     .toHaveText('NO₂ (ppm)');
   });
 
+
+  const parameters = [
+    { parametersId: '8', label: 'CO (ppm)'},
+  ];
+
+  for (const parameter of parameters) {
+
+    test(`Select ${parameter.label}, check network call`, async ({ page }) => {      
+      const requestPromise = page.waitForRequest(`https://api.openaq.org/v2/locations/tiles/2/0/2.pbf?parameter=${parameter.parametersId}`);
+      await page.getByRole('combobox').first().selectOption(`${parameter.parametersId}`);
+      expect (await requestPromise).toBeTruthy();
+    });
+
+    test(`Select ${parameter.label}, check legend text`, async ({ page }) => {
+      await page.getByRole('combobox').first().selectOption(`${parameter.parametersId}`);
+      await expect(page.locator('body > div.map-legend > div > div.map-legend-section > div.map-legend-title > span.type-subtitle-3.text-smoke-120'))
+      .toHaveText('CO (ppm)');
+    });
+  }
+
   test('Select CO ppm, assert network call and legend text', async ({ page }) => {
       
     await expect(page.locator('body > div.map-legend > div > div.map-legend-section > div.map-legend-title > span.type-subtitle-3.text-smoke-120'))
