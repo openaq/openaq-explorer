@@ -1,10 +1,11 @@
 // @ts-check
 import { test, expect } from '@playwright/test';
 
-
 test.describe('explore page', () => {
-  test.beforeEach(async ({ page }) => {
+    test.setTimeout(120000)
+    test.beforeEach(async ({ page }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
+
   });
 
   test('homepage naivgates', async ({
@@ -170,26 +171,6 @@ test.describe('explore page', () => {
     await expect(page.locator('body > div.map-legend > div > div.map-legend-section > div.map-legend-title > span.type-subtitle-3.text-smoke-120'))
     .toHaveText('NO₂ (ppm)');
   });
-
-
-  const parameters = [
-    { parametersId: '8', label: 'CO (ppm)'},
-  ];
-
-  for (const parameter of parameters) {
-
-    test(`Select ${parameter.label}, check network call`, async ({ page }) => {      
-      const requestPromise = page.waitForRequest(`https://api.openaq.org/v2/locations/tiles/2/0/2.pbf?parameter=${parameter.parametersId}`);
-      await page.getByRole('combobox').first().selectOption(`${parameter.parametersId}`);
-      expect (await requestPromise).toBeTruthy();
-    });
-
-    test(`Select ${parameter.label}, check legend text`, async ({ page }) => {
-      await page.getByRole('combobox').first().selectOption(`${parameter.parametersId}`);
-      await expect(page.locator('body > div.map-legend > div > div.map-legend-section > div.map-legend-title > span.type-subtitle-3.text-smoke-120'))
-      .toHaveText('CO (ppm)');
-    });
-  }
 
   test('Select CO ppm, assert network call and legend text', async ({ page }) => {
       
@@ -382,6 +363,47 @@ test.describe('explore page', () => {
     await expect(page.locator('body > div.map-legend > div > div.map-legend-section > div.map-legend-title > span.type-subtitle-3.text-smoke-120'))
     .toHaveText('PM4 (µg/m³)');
   });
-  
+
+  const parameters = [
+    { parametersId: '1', label: 'PM10 (µg/m³)', xyz:'2/1/1'},
+    // { parametersId: '2', label: 'PM2.5 (µg/m³)'}, // default
+    { parametersId: '3', label: 'O₃ mass (µg/m³)', xyz: '2/3/2'},
+    { parametersId: '4', label: 'CO mass (µg/m³)', xyz: '2/1/1'},
+    { parametersId: '5', label: 'NO₂ mass (µg/m³)', xyz: '2/0/2'},
+    { parametersId: '6', label: 'SO₂ mass (µg/m³)', xyz: '2/0/2'},
+    { parametersId: '7', label: 'NO₂ (ppm)', xyz: '2/0/2'},
+    { parametersId: '8', label: 'CO (ppm)', xyz: '2/0/2'},
+    { parametersId: '9', label: 'SO₂ (ppm)', xyz: '2/0/2'},
+    { parametersId: '10', label: 'O₃ (ppm)', xyz: '2/0/2'},
+    { parametersId: '11', label: 'BC (µg/m³)', xyz: '2/0/2'},
+    { parametersId: '19', label: 'PM1 (µg/m³)', xyz: '2/3/1'},
+    { parametersId: '21', label: 'CO₂ (ppm)', xyz: '2/0/2'}, 
+    { parametersId: '27', label: 'NOx mass (µg/m³)', xyz: '2/3/1'},
+    { parametersId: '28', label: 'CH₄ (ppm)', xyz: '2/0/2'},
+    { parametersId: '33', label: 'UFP count (particles/cm³)', xyz: '2/3/1'},
+    { parametersId: '35', label: 'NO (ppm)', xyz: '2/0/2'},
+    { parametersID: '126', label: 'PM1 count (particles/cm³', xyz: '2/1/1'},
+    { parametersId: '130', label: 'PM2.5 count (particles/cm³)', xyz: '2/3/1'},
+    { parametersId: '135', label: 'PM10 count (particles/cm³)', xyz: '2/3/1'},
+    { parametersId: '19840', label: 'NOx (ppm)', xyz: '2/3/1'},
+    { parametersId: '19843', label: 'NO mass (µg/m³)', xyz: '2/3/1'},
+    { parametersId: '19844', label: 'PM4 (µg/m³)', xyz: '2/3/1'},
+  ];
+
+  for (const parameter of parameters) {
+
+    test(`Select ${parameter.label}, check network call`, async ({ page }) => {      
+      const requestPromise = page.waitForRequest(`https://api.openaq.org/v2/locations/tiles/2/2/1.pbf?parameter=${parameter.parametersId}`);
+      await page.getByRole('combobox').first().selectOption(`${parameter.parametersId}`);
+      expect (await requestPromise).toBeTruthy();
+    });
+
+    test(`Select ${parameter.label}, check legend text`, async ({ page }) => {
+      await page.getByRole('combobox').first().selectOption(`${parameter.parametersId}`);
+      await expect(page.locator('body > div.map-legend > div > div.map-legend-section > div.map-legend-title > span.type-subtitle-3.text-smoke-120'))
+      .toHaveText(`${parameter.label}`);
+    });
+  }
+
   // end of test suite
 });
