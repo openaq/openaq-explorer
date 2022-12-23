@@ -24,6 +24,7 @@ function DetailMap() {
             <a
               href={`https://openstreetmap.org?mlat=${store.location?.coordinates.latitude}&mlon=${store.location?.coordinates.longitude}&zoom=16`}
               rel="noopener noreferrer"
+              className="map-open-link"
               target="_blank"
             >
               <span class="material-symbols-outlined green">
@@ -96,7 +97,7 @@ export default function DetailOverview() {
           <div style="display:flex; height:40px">
             <Link
               href="#download-card"
-              class="btn btn-tertiary  icon-btn"
+              class="icon-btn btn-tertiary download-data-link"
             >
               <span>Download data </span>
 
@@ -161,7 +162,7 @@ export default function DetailOverview() {
                           target="_blank"
                           rel="noopener noreferrer"
                           href={source.url}
-                          class=""
+                          className="provider-link"
                         >
                           <span class="material-symbols-outlined type-color-ocean-120">
                             open_in_new
