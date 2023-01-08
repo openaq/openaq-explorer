@@ -1,4 +1,4 @@
-const API_ROOT = 'https://api.openaq.org';
+const API_ROOT = import.meta.env.VITE_API_BASE_URL;
 
 export default function createClient([state, actions]) {
   async function send(method, url, data, resKey, idx) {
@@ -36,49 +36,37 @@ export default function createClient([state, actions]) {
 
   const Locations = {
     get: (id) =>
-      send('get', `/v2/locations/${id}`, undefined, 'results', 0),
+      send('get', `/v3/locations/${id}`, undefined, 'results', 0),
   };
 
   const Parameters = {
-    getAll: () => send('get', `/v2/parameters`, undefined, 'results'),
+    getAll: () => send('get', `/v3/parameters`, undefined, 'results'),
   };
 
   const Providers = {
     getAll: () =>
-      send('get', `/v2/sources?limit=1000`, undefined, 'results'),
+      send('get', `/v3/providers?limit=1000`, undefined, 'results'),
   };
 
+  /*
   const Measurements = {
     getRecent: (locationId, parameter) => {
       console.log(locationId);
       return send(
         'get',
-        `/v2/measurements?location_id=${locationId}&parameter=${parameter}&limit=24&order=desc`,
+        `/v3/locations/${locationId}/measurements?limit=1000`,
         undefined,
         'results',
         0
       );
     },
-    getLocationMeasurements: ({ locationId, parameters }) => {
-      console.log(locationId, parameters);
-      return Promise.all(
-        parameters?.map((parameter) =>
-          send(
-            'get',
-            `/v2/measurements?location_id=${locationId}&parameter=${parameter}&limit=24&order=desc`,
-            undefined,
-            'results',
-            0
-          )
-        )
-      );
-    },
   };
+  */
 
   return {
     Auth,
     Locations,
-    Measurements,
+    //Measurements,
     Parameters,
     Providers,
   };

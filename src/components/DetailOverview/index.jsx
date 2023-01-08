@@ -85,9 +85,11 @@ export default function DetailOverview() {
           <div>
             <div class="location-breadcrumb">
               <span className="type-subtitle-3">
-                {store.location?.country}{' '}
-                {store.location?.city ? '/' : ''}{' '}
-                {store.location?.city}
+                {store.location?.country.name}
+                {store.location?.locality
+                  ? '/'
+                  : ' /No city listed'}{' '}
+                {store.location?.locality}
               </span>
             </div>
             <h2 className="type-display-1 text-sky-120">
@@ -115,12 +117,11 @@ export default function DetailOverview() {
               <div>
                 {' '}
                 <div style="display:flex; gap: 10px; align-items:center;">
-                  {store.location?.sensorType[0].toUpperCase() +
-                    store.location?.sensorType.substring(1)}{' '}
+                  {store.location?.isMonitor
+                    ? 'Monitor'
+                    : 'Air sensor'}
                   <Show
-                    when={
-                      store.location?.sensorType == 'reference grade'
-                    }
+                    when={store.location?.isMonitor}
                     fallback={<LowCostSensorMarker />}
                   >
                     <ReferenceGradeMarker />
@@ -134,18 +135,21 @@ export default function DetailOverview() {
               <div>{store.location?.entity}</div>
               <div>Measures</div>
               <div>
-                {store.location?.parameters
-                  .map((o) => `${o.displayName} (${o.unit})`)
+                {store.location?.sensors
+                  .map(
+                    (o) =>
+                      `${o.parameter.name} (${o.parameter.units})`
+                  )
                   .join(', ')}
               </div>
               <div>Name</div>
               <div>{store.location?.name}</div>
               <div>Reporting</div>
               <div>
-                {timeFromNow(store.location?.lastUpdated)}
+                {timeFromNow(store.location?.datetimeFirst.local)}
                 <div>
                   <span class="body4 smoke120">
-                    {since(store.location?.firstUpdated)}
+                    {since(store.location?.datetimeLast.local)}
                   </span>
                 </div>
               </div>

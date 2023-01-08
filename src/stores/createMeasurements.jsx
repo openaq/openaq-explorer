@@ -9,9 +9,9 @@ export default function createMeasurements(
 ) {
   const [locationSource, setLocationSource] = createStore({});
 
-  const [measurements] = createResource(
-    () => locationSource,
-    client.Measurements.getLocationMeasurements
+  const [, measurements] = createResource(
+    () => locationSource
+    //client.Measurements.getRecent
   );
   /*
   const [measurementsSource, setMeasurementsSource] = createSignal({

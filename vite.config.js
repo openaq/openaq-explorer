@@ -10,7 +10,19 @@ export default defineConfig({
   server: {
     port: 3000,
   },
+  test: {
+    environment: 'jsdom',
+    globals: true,
+    transformMode: { web: [/.\/src\/.*\.[j]sx?$/] },
+    setupFiles: ['node_modules/@testing-library/jest-dom/extend-expect.js'],
+    deps: { registerNodeLoader: true },
+    threads: false,
+    isolate: false,
+  },
   build: {
     target: 'esnext',
+  },
+  resolve: {
+    conditions: ['development', 'browser'],
   },
 });

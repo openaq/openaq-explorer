@@ -131,7 +131,7 @@ export default function Accordion() {
                 value={parameter.id}
                 selected={parameter.id == store.parameter.id}
               >
-                {parameter.displayName} {parameter.preferredUnit}
+                {parameter.displayName} {parameter.units}
               </option>
             )}
           </For>

@@ -14,8 +14,7 @@ import {
 dayjs.extend(relativeTime);
 
 export default function LocationDetailCard() {
-  const [store, { clearLocation, loadMeasurementsSource }] =
-    useStore();
+  const [store, { clearLocation }] = useStore();
 
   function timeFromNow(lastUpdated) {
     return `Updated ${dayjs(lastUpdated).fromNow()}`;
@@ -243,7 +242,7 @@ export default function LocationDetailCard() {
             ,
           </span>{' '}
           <span className="type-body-3">
-            {store.location?.country}
+            {store.location?.country.name}
           </span>
         </section>
         <hr className="hr" />
@@ -254,9 +253,9 @@ export default function LocationDetailCard() {
           >
             <div>Type:</div>
             <div>
-              {store.location?.sensorType}{' '}
+              {store.location?.isMonitor ? 'Monitor' : 'Air sensor'}{' '}
               <Show
-                when={store.location?.sensorType == 'reference grade'}
+                when={store.location?.isMonitor}
                 fallback={<LowCostSensorMarker />}
               >
                 <ReferenceGradeMarker />
@@ -264,10 +263,11 @@ export default function LocationDetailCard() {
             </div>
             <div>Measures:</div>
             <div>
-              <For each={store.location?.parameters}>
-                {(parameter, i) => (
+              <For each={store.location?.sensors}>
+                {(sensor, i) => (
                   <span className="parameter-label type-body-1">
-                    {parameter.displayName} ({parameter.unit}),
+                    {sensor.parameter.name} ({sensor.parameter.units}
+                    ),
                   </span>
                 )}
               </For>
@@ -282,9 +282,9 @@ grid-template-columns: 1fr 2fr;"
           >
             <div>Provider:</div>{' '}
             <div>
-              <For each={store.location?.sources}>
-                {(source, i) => {
-                  return source.url ? (
+              <For each={store.location?.providers}>
+                {(providers, i) => {
+                  return providers.url ? (
                     <a
                       target="_blank"
                       rel="noopener noreferrer"
@@ -300,10 +300,10 @@ grid-template-columns: 1fr 2fr;"
             </div>
             <div>Reporting: </div>
             <div>
-              {timeFromNow(store.location?.lastUpdated)}
+              {timeFromNow(store.location?.datetimeLast.local)}
               <div>
                 <span class="body4 smoke120">
-                  {since(store.location?.firstUpdated)}
+                  {since(store.location?.datetimeFirst.local)}
                 </span>
               </div>
             </div>
@@ -330,7 +330,7 @@ grid-template-columns: 1fr 2fr;"
             <span className="type-subtitle-3">Latest Readings</span>
             <span class="type-body-2 text-smoke-100">
               {`${latestMeasurementTime(
-                store.location?.lastUpdated
+                store.location?.datetimeLast.local
               )} (local time)`}
             </span>
           </div>

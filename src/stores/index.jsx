@@ -11,11 +11,12 @@ import createParameter from './createParameter';
 import createParameters from './createParameters';
 import createProviders from './createProviders';
 import createMeasurements from './createMeasurements';
+import createMapFilters from './createMapFilters';
 
 const StoreContext = createContext();
 
 export function Provider(props) {
-  let location;
+  let location = props.location;
   let overlay;
   let viewport;
   let measurements;
@@ -23,16 +24,20 @@ export function Provider(props) {
   let parameters;
   let providers;
   let help;
+  let mapFilters;
   const [state, setState] = createStore({
     get location() {
       return location();
     },
+
     get overlay() {
       return overlay;
     },
+
     get measurements() {
       return measurements;
     },
+
     get parameter() {
       return parameter;
     },
@@ -40,8 +45,13 @@ export function Provider(props) {
     get parameters() {
       return parameters;
     },
+
     get providers() {
       return providers;
+    },
+
+    get mapFilters() {
+      return mapFilters;
     },
 
     viewport: {
@@ -68,6 +78,7 @@ export function Provider(props) {
   parameters = createParameters(client, actions, state, setState);
   providers = createProviders(client, actions, state, setState);
   measurements = createMeasurements(client, actions, state, setState);
+  mapFilters = createMapFilters(client, actions, state, setState);
   //currentUser = createAuth(agent, actions, setState);
 
   return (

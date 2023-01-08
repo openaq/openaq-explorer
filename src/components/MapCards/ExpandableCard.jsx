@@ -47,7 +47,32 @@ export function ExpandableCard(props) {
 }
 
 export default function FilterOverlayCard() {
-  const [store, { loadParameter, toggleProviderList }] = useStore();
+  const [
+    store,
+    {
+      loadParameter,
+      toggleProviderList,
+      toggleMonitor,
+      toggleAirSensor,
+      toggleInactive,
+    },
+  ] = useStore();
+
+  const monitorCheck = (e) => {
+    toggleMonitor(e.target.checked);
+  };
+
+  const sensorCheck = (e) => {
+    toggleAirSensor(e.target.checked);
+  };
+
+  const noRecentUpdatesCheck = (e) => {
+    toggleInactive(e.target.checked);
+  };
+
+  const dataCoverageCheck = (e) => {
+    console.log(e.target.checked);
+  };
 
   return (
     <ExpandableCard open={true}>
@@ -68,7 +93,7 @@ export default function FilterOverlayCard() {
             <div style="width: 250px; display:grid; grid-template-columns: 1fr 4fr 1fr; grid-auto-rows: 1fr; row-gap: 8px; margin-bottom:12px;">
               <ReferenceGradeMarker />
               <label htmlFor="reference-grade">
-                Reference grade locations
+                Reference monitor locations
               </label>
               <div>
                 <input
@@ -77,12 +102,13 @@ export default function FilterOverlayCard() {
                   id="reference-grade"
                   className="checkbox"
                   checked
+                  onChange={monitorCheck}
                 />
               </div>
               <LowCostSensorMarker />
               <label htmlFor="low-cost-sensor">
                 {' '}
-                Low-cost sensors locations
+                Air sensors locations
               </label>
               <div>
                 <input
@@ -91,6 +117,7 @@ export default function FilterOverlayCard() {
                   id="low-cost-sensor"
                   className="checkbox"
                   checked
+                  onChange={sensorCheck}
                 />
               </div>
               <NoRecentUpdateMarker />
@@ -105,6 +132,7 @@ export default function FilterOverlayCard() {
                   id="no-recent-updates"
                   className="checkbox"
                   checked
+                  onChange={noRecentUpdatesCheck}
                 />
               </div>
               <PoorCoverageMarker />
@@ -119,6 +147,7 @@ export default function FilterOverlayCard() {
                   id="poor-data-coverage"
                   className="checkbox"
                   checked
+                  onChange={dataCoverageCheck}
                 />
               </div>
             </div>

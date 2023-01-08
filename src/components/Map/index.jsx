@@ -51,6 +51,39 @@ export const parametersBins = {
   19844: [0, 12.1, 35.5, 55.5, 150.5, 250.5, 501], // PM4 (µg/m³) *
 };
 
+function createTileUrl(store) {
+  let parameters = '';
+  if (store.parameter.id) {
+    parameters = `parameters_id=${store.parameter?.id}`;
+  }
+  let isMonitor = '';
+  if (store.mapFilters.monitor && store.mapFilters.airSensor) {
+    isMonitor = '';
+  }
+  if (!store.mapFilters.monitor && store.mapFilters.airSensor) {
+    isMonitor = '&monitor=false';
+  }
+  if (store.mapFilters.monitor && !store.mapFilters.airSensor) {
+    isMonitor = '&monitor=true';
+  }
+  let excludeInactive = '';
+  if (store.mapFilters.excludeInactive) {
+    excludeInactive = '&active=true';
+  }
+  let providers_ids = '';
+  if (store.mapFilters.excludedProviders.length > 0) {
+    const providers = store.providers().map((o) => o.id);
+    const ids = providers
+      .filter((o) => !store.mapFilters.excludedProviders.includes(0))
+      .join(',');
+    providers_ids = `&providers_id=${ids}`;
+  }
+
+  return `${
+    import.meta.env.VITE_API_BASE_URL
+  }/v3/locations/tiles/{z}/{x}/{y}.pbf?${parameters}${isMonitor}${excludeInactive}${providers_ids}`;
+}
+
 export function Map() {
   const [store, { setViewport, loadLocation, setLocationId }] =
     useStore();
@@ -58,7 +91,7 @@ export function Map() {
 
   function getFeature(e) {
     const features = e.target.queryRenderedFeatures(e.point);
-    const locationId = features[0].properties.locationId;
+    const locationId = features[0].properties.sensor_nodes_id;
     loadLocation(locationId);
     return features[0].geometry.coordinates;
   }
@@ -101,13 +134,7 @@ export function Map() {
         source={{
           id: 'locations',
           type: 'vector',
-          tiles: [
-            `${
-              import.meta.env.VITE_API_BASE_URL
-            }/v2/locations/tiles/{z}/{x}/{y}.pbf?parameter=${
-              store.parameter?.id
-            }`,
-          ],
+          tiles: [createTileUrl(store)],
           minzoom: 1,
           maxzoom: 24,
           bounds: [-180, -90, 180, 90],
@@ -145,29 +172,14 @@ export function Map() {
                 ['linear'],
                 ['zoom'],
                 1,
-                [
-                  'match',
-                  ['get', 'sensorType'],
-                  'low-cost sensor',
-                  2,
-                  'reference grade',
-                  4,
-                  0,
-                ],
+                ['case', ['==', ['get', 'ismonitor'], true], 4, 2],
                 14,
-                [
-                  'match',
-                  ['get', 'sensorType'],
-                  'low-cost sensor',
-                  15,
-                  'reference grade',
-                  32,
-                  0,
-                ],
+                ['case', ['==', ['get', 'ismonitor'], true], 32, 15],
               ],
             },
           }}
         />
+
         <Layer
           id="locations"
           onClick={(e) => {
@@ -185,19 +197,21 @@ export function Map() {
             'source-layer': 'default',
             paint: {
               'circle-color': [
-                'interpolate',
-                ['linear'],
-                ['number', ['get', 'lastValue']],
-                -1,
-                '#ddd',
-                ...colorScale(store.parameter.id).flat(),
+                'case',
+                ['==', ['get', 'active'], true],
+                [
+                  'interpolate',
+                  ['linear'],
+                  ['number', ['get', 'value']],
+                  -1,
+                  '#ddd',
+                  ...colorScale(store.parameter.id).flat(),
+                ],
+                '#e8ebed',
               ],
               'circle-stroke-color': [
-                'match',
-                ['get', 'sensorType'],
-                'low-cost sensor',
-                'grey',
-                'reference grade',
+                'case',
+                ['==', ['get', 'ismonitor'], true],
                 'white',
                 'grey',
               ],
@@ -206,25 +220,9 @@ export function Map() {
                 ['linear'],
                 ['zoom'],
                 2,
-                [
-                  'match',
-                  ['get', 'sensorType'],
-                  'low-cost sensor',
-                  0.25,
-                  'reference grade',
-                  1,
-                  0.25,
-                ],
+                ['case', ['==', ['get', 'ismonitor'], true], 1, 0.25],
                 14,
-                [
-                  'match',
-                  ['get', 'sensorType'],
-                  'low-cost sensor',
-                  0,
-                  'reference grade',
-                  6,
-                  0,
-                ],
+                ['case', ['==', ['get', 'ismonitor'], true], 6, 0],
               ],
               'circle-opacity': 1,
               'circle-radius': [
@@ -232,25 +230,44 @@ export function Map() {
                 ['linear'],
                 ['zoom'],
                 1,
-                [
-                  'match',
-                  ['get', 'sensorType'],
-                  'low-cost sensor',
-                  2,
-                  'reference grade',
-                  3,
-                  2,
-                ],
+                ['case', ['==', ['get', 'ismonitor'], true], 3, 2],
                 14,
-                [
-                  'match',
-                  ['get', 'sensorType'],
-                  'low-cost sensor',
-                  13, //13,
-                  'reference grade',
-                  22, //19,
-                  13,
-                ],
+                ['case', ['==', ['get', 'ismonitor'], true], 22, 13],
+              ],
+            },
+          }}
+        />
+        <Layer
+          id="inactive-locations"
+          onClick={(e) => {
+            const coordinates = getFeature(e);
+            e.target.flyTo({
+              center: coordinates,
+              zoom: e.target.getZoom() > 12 ? e.target.getZoom() : 12,
+              duration: calculateFlyToDuration(e.target.getZoom()),
+              essential: true,
+            });
+          }}
+          style={{
+            type: 'circle',
+            source: 'locations',
+            'source-layer': 'default',
+            paint: {
+              'circle-color': '#7e8c9a',
+              'circle-opacity': [
+                'case',
+                ['==', ['get', 'active'], true],
+                0,
+                1,
+              ],
+              'circle-radius': [
+                'interpolate',
+                ['linear'],
+                ['zoom'],
+                1,
+                2,
+                14,
+                8,
               ],
             },
           }}
@@ -283,25 +300,9 @@ export function Map() {
                 ['linear'],
                 ['zoom'],
                 1,
-                [
-                  'match',
-                  ['get', 'sensorType'],
-                  'low-cost sensor',
-                  4,
-                  'reference grade',
-                  5,
-                  0,
-                ],
+                ['case', ['==', ['get', 'ismonitor'], true], 5, 4],
                 14,
-                [
-                  'match',
-                  ['get', 'sensorType'],
-                  'low-cost sensor',
-                  17,
-                  'reference grade',
-                  25,
-                  17,
-                ],
+                ['case', ['==', ['get', 'ismonitor'], true], 25, 17],
               ],
             },
           }}
@@ -314,14 +315,14 @@ export function Map() {
             'source-layer': 'default',
             filter: [
               '==',
-              ['get', 'locationId'],
+              ['get', 'sensor_nodes_id'],
               ['literal', store.id || 0],
             ],
             paint: {
               'circle-color': [
                 'interpolate',
                 ['linear'],
-                ['number', ['get', 'lastValue']],
+                ['number', ['get', 'value']],
                 -1,
                 '#ddd',
                 ...colorScale(store.parameter.id).flat(),
@@ -332,50 +333,18 @@ export function Map() {
                 ['linear'],
                 ['zoom'],
                 1,
-                [
-                  'match',
-                  ['get', 'sensorType'],
-                  'low-cost sensor',
-                  2,
-                  'reference grade',
-                  3,
-                  2,
-                ],
+                ['case', ['==', ['get', 'ismonitor'], true], 3, 2],
                 14,
-                [
-                  'match',
-                  ['get', 'sensorType'],
-                  'low-cost sensor',
-                  13, //13,
-                  'reference grade',
-                  22, //19,
-                  13,
-                ],
+                ['case', ['==', ['get', 'ismonitor'], true], 22, 13],
               ],
               'circle-stroke-width': [
                 'interpolate',
                 ['linear'],
                 ['zoom'],
                 2,
-                [
-                  'match',
-                  ['get', 'sensorType'],
-                  'low-cost sensor',
-                  1,
-                  'reference grade',
-                  2,
-                  1,
-                ],
+                ['case', ['==', ['get', 'ismonitor'], true], 2, 1],
                 14,
-                [
-                  'match',
-                  ['get', 'sensorType'],
-                  'low-cost sensor',
-                  4,
-                  'reference grade',
-                  6,
-                  4,
-                ],
+                ['case', ['==', ['get', 'ismonitor'], true], 6, 4],
               ],
               'circle-stroke-color': '#85DBD9',
             },
@@ -386,11 +355,11 @@ export function Map() {
           style={{
             type: 'symbol',
             source: 'locations',
-            minzoom: 17,
+            minzoom: 11,
             maxzoom: 24,
             'source-layer': 'default',
             layout: {
-              'text-field': ['get', 'lastValue'],
+              'text-field': ['get', 'value'],
               'text-font': [
                 'Space Grotesk Regular',
                 'Arial Unicode MS Regular',
@@ -400,9 +369,9 @@ export function Map() {
                 ['linear'],
                 ['zoom'],
                 10,
-                8,
+                12,
                 24,
-                14,
+                18,
               ],
               'text-transform': 'uppercase',
               'text-allow-overlap': true,
@@ -410,32 +379,12 @@ export function Map() {
               'text-offset': [0, 0],
             },
             paint: {
-              'text-color': 'white',
-              /*
-                'interpolate',
-                ['linear'],
-                ['number', ['get', 'lastValue']],
-                -1,
-                '#000',
-                0,
-                '#000',
-                5.55555555555556,
-                '#000',
-                11.11111111111111,
-                '#000',
-                33.66666666666666,
-                '#000',
-                44.22222222222223,
-                '#000',
-                55.77777777777777,
-                '#fff',
-                77.3333333333333,
-                '#fff',
-                88.8888888888889,
-                '#fff',
-                100.44444444444446,
-                '#fff',
-                */
+              'text-color': [
+                'case',
+                ['==', ['get', 'active'], true],
+                'white',
+                'black',
+              ],
             },
           }}
         />
