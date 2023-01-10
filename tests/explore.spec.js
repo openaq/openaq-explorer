@@ -1,4 +1,5 @@
 // @ts-check
+import { legendVals, parameters } from './test-module.js';
 import { test, expect } from '@playwright/test';
 
 test.describe('explore page', () => {
@@ -364,36 +365,28 @@ test.describe('explore page', () => {
     .toHaveText('PM4 (µg/m³)');
   });
 
-  const parameters = [
-    { parametersId: '1', label: 'PM10 (µg/m³)', xyz:'2/1/1'},
-    // { parametersId: '2', label: 'PM2.5 (µg/m³)'}, // default
-    { parametersId: '3', label: 'O₃ mass (µg/m³)', xyz: '2/3/2'},
-    { parametersId: '4', label: 'CO mass (µg/m³)', xyz: '2/1/1'},
-    { parametersId: '5', label: 'NO₂ mass (µg/m³)', xyz: '2/0/2'},
-    { parametersId: '6', label: 'SO₂ mass (µg/m³)', xyz: '2/0/2'},
-    { parametersId: '7', label: 'NO₂ (ppm)', xyz: '2/0/2'},
-    { parametersId: '8', label: 'CO (ppm)', xyz: '2/0/2'},
-    { parametersId: '9', label: 'SO₂ (ppm)', xyz: '2/0/2'},
-    { parametersId: '10', label: 'O₃ (ppm)', xyz: '2/0/2'},
-    { parametersId: '11', label: 'BC (µg/m³)', xyz: '2/0/2'},
-    { parametersId: '19', label: 'PM1 (µg/m³)', xyz: '2/3/1'},
-    { parametersId: '21', label: 'CO₂ (ppm)', xyz: '2/0/2'}, 
-    { parametersId: '27', label: 'NOx mass (µg/m³)', xyz: '2/3/1'},
-    { parametersId: '28', label: 'CH₄ (ppm)', xyz: '2/0/2'},
-    { parametersId: '33', label: 'UFP count (particles/cm³)', xyz: '2/3/1'},
-    { parametersId: '35', label: 'NO (ppm)', xyz: '2/0/2'},
-    { parametersID: '126', label: 'PM1 count (particles/cm³', xyz: '2/1/1'},
-    { parametersId: '130', label: 'PM2.5 count (particles/cm³)', xyz: '2/3/1'},
-    { parametersId: '135', label: 'PM10 count (particles/cm³)', xyz: '2/3/1'},
-    { parametersId: '19840', label: 'NOx (ppm)', xyz: '2/3/1'},
-    { parametersId: '19843', label: 'NO mass (µg/m³)', xyz: '2/3/1'},
-    { parametersId: '19844', label: 'PM4 (µg/m³)', xyz: '2/3/1'},
-  ];
+  for (const legendVal of legendVals) {
+    console.log(legendVal.option);
+    test(`Map legend option ${legendVal.option} - values change with option selection`, async ({ page }) => {
+    await page.getByRole('combobox').first().selectOption(`${legendVal.option}`);
+    expect(await page.evaluate(() => [].slice.call(document.querySelector('.map-legend-bar-labels').children).map(o => o.innerText))).toStrictEqual(legendVal.vals)
+    });
+
+  }
+  // proof of concept for above test
+  test('Map legend values changes with option selection', async ({ page }) => {
+    await page.getByRole('combobox').first().selectOption('1');
+    // @ts-ignore
+    // expect(await page.evaluate(() => [].slice.call(document.querySelector('.map-legend-bar-labels').children).map(o => o.innerText))).toStrictEqual(['0', '55', '155', '255', '355', '425', '605+'])
+    expect(await page.evaluate(() => [].slice.call(document.querySelector('.map-legend-bar-labels').children).map(o => o.innerText))).toStrictEqual(['0', '55', '155', '255', '355', '425', '605+'])
+
+  });
 
   for (const parameter of parameters) {
 
     test(`Select ${parameter.label}, check network call`, async ({ page }) => {      
-      const requestPromise = page.waitForRequest(`https://api.openaq.org/v2/locations/tiles/2/2/1.pbf?parameter=${parameter.parametersId}`);
+      // const requestPromise = page.waitForRequest(`https://api.openaq.org/v2/locations/tiles/2/2/1.pbf?parameter=${parameter.parametersId}`);
+      const requestPromise = page.waitForRequest(`https://api.openaq.org/v2/locations/tiles/${parameter.xyz}.pbf?parameter=${parameter.parametersId}`);
       await page.getByRole('combobox').first().selectOption(`${parameter.parametersId}`);
       expect (await requestPromise).toBeTruthy();
     });
@@ -404,6 +397,7 @@ test.describe('explore page', () => {
       .toHaveText(`${parameter.label}`);
     });
   }
+
 
   // end of test suite
 });
