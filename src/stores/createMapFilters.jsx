@@ -11,6 +11,7 @@ export default function createMapFilters(
     airSensor: true,
     excludeInactive: false,
     excludedProviders: [],
+    providers: state.providers,
   });
   Object.assign(actions, {
     toggleMonitor: (value) => {
@@ -22,13 +23,42 @@ export default function createMapFilters(
     toggleInactive: (value) => {
       setMapFilters({ excludeInactive: !value });
     },
-
     excludeProvider: (providers_id) => {
       setMapFilters(
         produce((mapFilters) => {
           mapFilters.excludedProviders.push(providers_id);
         })
       );
+      console.log(mapFilters.excludedProviders);
+    },
+    includeProvider: (providers_id) => {
+      setMapFilters(
+        produce((mapFilters) => {
+          mapFilters.excludedProviders.filter(
+            (e) => e !== providers_id
+          );
+        })
+      );
+      console.log(mapFilters.excludedProviders);
+    },
+    excludeAllProviders: () => {
+      setMapFilters({
+        excludedProviders: [...state.providers()],
+        providers: [],
+      });
+    },
+    includeAllProviders: () => {
+      setMapFilters({
+        excludedProviders: [],
+        providers: [...state.providers()],
+      });
+    },
+    updateProviders: () => {
+      setMapFilters({
+        providers: state.providers.filter((o) =>
+          mapFilters.excludedProviders.include(o.id)
+        ),
+      });
     },
   });
 
