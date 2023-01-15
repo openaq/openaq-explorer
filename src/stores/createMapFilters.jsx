@@ -43,7 +43,7 @@ export default function createMapFilters(
     },
     excludeAllProviders: () => {
       setMapFilters({
-        excludedProviders: [...state.providers()],
+        excludedProviders: [...state.providers().map((o) => o.id)],
         providers: [],
       });
     },

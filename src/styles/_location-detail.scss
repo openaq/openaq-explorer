@@ -1,13 +1,13 @@
-@import 'typography';
-@import 'variables';
+@use 'openaq-design-system/scss/mixins/index' as mixins;
+@use 'openaq-design-system/scss/variables' as variables;
 @import 'utils';
 
 .section-card {
   background: #ffffff;
   border: 1px solid #dbdae1;
   border-radius: 12px;
-  @include body2;
-  color: $smoke120;
+  @include mixins.body2;
+  color: variables.$smoke120;
 }
 
 .detail-card {
@@ -42,13 +42,13 @@
 }
 
 .location-detail-title {
-  @include display1;
+  @include mixins.display1;
   margin: 0;
   color: #636c77;
 }
 
 .location-breadcrumb {
-  @include subtitle3;
+  @include mixins.subtitle3;
   color: #636c77;
 }
 

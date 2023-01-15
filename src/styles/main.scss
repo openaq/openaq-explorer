@@ -1,10 +1,13 @@
-@use 'openaq-design-system/scss/variables';
+@use 'openaq-design-system/scss/variables' as variables;
 @use 'openaq-design-system/scss/badges';
 @use 'openaq-design-system/scss/buttons';
 @use 'openaq-design-system/scss/inputs';
 @use 'openaq-design-system/scss/resets';
 @use 'openaq-design-system/scss/bubbles';
 @use 'openaq-design-system/scss/utilities';
+@use 'openaq-design-system/scss/mixins/index' as mixins;
+@use 'openaq-design-system/scss/horizontal-rule';
+
 @use 'flip-card';
 @use 'breadcrumbs';
 @import 'header';
@@ -17,7 +20,6 @@
 @import 'help';
 @import 'mapbox';
 @import 'charts';
-@import 'typography';
 @import 'map';
 @import 'detail-map';
 @import 'utils';
@@ -33,16 +35,10 @@ body {
 }
 
 .subtitle3 {
-  @include subtitle3;
+  @include mixins.subtitle3;
   margin: 0;
 }
 
 .text-white {
   color: white;
-}
-
-hr {
-  margin: 0;
-  border: 0;
-  border-bottom: 1px dashed variables.$smoke30;
 }

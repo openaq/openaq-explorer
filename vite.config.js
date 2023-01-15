@@ -6,7 +6,9 @@ import devtools from 'solid-devtools/vite';
 
 export default defineConfig({
   plugins: [
-    remarkHtml(),
+    remarkHtml({
+      sanitize: false
+    }),
     solidPlugin(),
     visualizer(),
     devtools({

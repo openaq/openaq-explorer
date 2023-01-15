@@ -1,5 +1,4 @@
-@import 'typography';
-@import 'variables';
+@use 'openaq-design-system/scss/variables' as variables;
 
 .map-legend {
   background: #ffffff;

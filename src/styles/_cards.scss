@@ -1,3 +1,5 @@
+@use 'openaq-design-system/scss/mixins/index' as mixins;
+
 @mixin card {
   width: 300px;
   background: #ffffff;
@@ -34,7 +36,7 @@
   height: calc(100vh - 80px - 80px);
 
   &__header {
-    @include heading3;
+    @include mixins.heading3;
     height: 58px;
     background: #1e64ab;
     padding: 0 20px;

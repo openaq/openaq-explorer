@@ -1,4 +1,4 @@
-@import 'typography';
+@use 'openaq-design-system/scss/mixins/index' as mixins;
 
 .mapboxgl-ctrl-top-left {
   width: 50% !important;
@@ -11,7 +11,7 @@
 }
 
 .mapboxgl-ctrl-geocoder--input::placeholder {
-  @include body2;
+  @include mixins.body2;
 }
 
 .mapboxgl-ctrl-geocoder--icon-search {

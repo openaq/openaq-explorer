@@ -1,3 +1,5 @@
+@use 'openaq-design-system/scss/variables' as variables;
+
 .progress-fill {
   fill: linear-gradient(180deg, #004080 -41.67%, #198cff 65%);
 }
