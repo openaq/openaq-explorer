@@ -14,10 +14,6 @@ function ProviderSearch(props) {
 
   miniSearch.addAll(store.providers());
 
-  createEffect(() => {
-    console.log(store.mapFilters.excludedProviders);
-  });
-
   let timeout;
   const onInput = (e) => {
     clearTimeout(timeout);

@@ -1,6 +1,5 @@
 import { createContext, useContext } from 'solid-js';
 import { createStore } from 'solid-js/store';
-//import createAuth from "./createAuth";
 import createLocation from './createLocation';
 import { Router, hashIntegration } from '@solidjs/router';
 import createClient from './createClient';
@@ -12,6 +11,7 @@ import createParameters from './createParameters';
 import createProviders from './createProviders';
 import createMeasurements from './createMeasurements';
 import createMapFilters from './createMapFilters';
+import createDownload from './createDownload';
 
 const StoreContext = createContext();
 
@@ -25,6 +25,7 @@ export function Provider(props) {
   let providers;
   let help;
   let mapFilters;
+  let download;
   const [state, setState] = createStore({
     get location() {
       return location();
@@ -50,6 +51,10 @@ export function Provider(props) {
       return providers;
     },
 
+    get download() {
+      return download;
+    },
+
     get mapFilters() {
       return mapFilters;
     },
@@ -62,10 +67,6 @@ export function Provider(props) {
     get help() {
       return help;
     },
-
-    //get currentUser() {
-    //  return currentUser();
-    //}
   });
   const actions = {};
   const store = [state, actions];
@@ -79,10 +80,10 @@ export function Provider(props) {
   providers = createProviders(client, actions, state, setState);
   measurements = createMeasurements(client, actions, state, setState);
   mapFilters = createMapFilters(client, actions, state, setState);
-  //currentUser = createAuth(agent, actions, setState);
+  download = createDownload(client, actions, state, setState);
 
   return (
-    <Router source={hashIntegration()}>
+    <Router>
       <StoreContext.Provider value={store}>
         {props.children}
       </StoreContext.Provider>

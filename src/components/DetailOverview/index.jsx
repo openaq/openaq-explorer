@@ -68,7 +68,7 @@ export default function DetailOverview() {
     return `Since ${dayjs(lastUpdated).format('DD/MM/YYYY')}`;
   }
 
-  setInterval(() => checkForUpdate(), 1000 * 5);
+  setInterval(() => checkForUpdate(), 1000 * 60);
 
   return (
     <div style="position:relative; top: -10px;">

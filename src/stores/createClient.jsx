@@ -1,3 +1,8 @@
+import dayjs from 'dayjs/esm/index.js';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
+
 const API_ROOT = import.meta.env.VITE_API_BASE_URL;
 
 export default function createClient([state, actions]) {
@@ -14,7 +19,6 @@ export default function createClient([state, actions]) {
       const response = await fetch(API_ROOT + url, opts);
       const json = await response.json();
       const res = resKey ? json[resKey] : json;
-      console.log;
       return idx != undefined ? res[idx] : res;
     } catch (err) {
       if (err && err.response && err.response.status === 401) {
@@ -48,25 +52,34 @@ export default function createClient([state, actions]) {
       send('get', `/v3/providers?limit=1000`, undefined, 'results'),
   };
 
-  /*
   const Measurements = {
-    getRecent: (locationId, parameter) => {
-      console.log(locationId);
+    get: (downloadFilters) => {
+      const { locationsId, parameters, dateFrom, dateTo } =
+        downloadFilters;
+      const offset = (new Date().getTimezoneOffset() / 60) * -1;
+      const datetimeStart = dayjs(dateFrom)
+        .utcOffset(offset, true)
+        .format();
+      const datetimeEnd = dayjs(dateTo)
+        .utcOffset(offset, true)
+        .format();
+      const parameterNames = parameters.join(',');
+      console.log(
+        `/v2/measurements?limit=1000&location_id=${locationsId}&parameter=${parameterNames}&date_from=${datetimeStart}&date_to=${datetimeEnd}`
+      );
       return send(
         'get',
-        `/v3/locations/${locationId}/measurements?limit=1000`,
+        `/v2/measurements?limit=1000&location_id=${locationsId}&parameter=${parameterNames}&date_from=${datetimeStart}&date_to=${datetimeEnd}`,
         undefined,
-        'results',
-        0
+        'results'
       );
     },
   };
-  */
 
   return {
     Auth,
     Locations,
-    //Measurements,
+    Measurements,
     Parameters,
     Providers,
   };

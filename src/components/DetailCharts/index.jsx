@@ -32,10 +32,10 @@ export default function DetailCharts() {
         <div style="display:flex; justify-content: space-between;">
           <div style="display:flex; gap:12px; align-items: center;">
             <select name="" id="" className="select">
-              <For each={store.location?.parameters}>
-                {(parameter, i) => (
-                  <option value={parameter.id}>
-                    {parameter.displayName} ({parameter.unit})
+              <For each={store.location?.sensors}>
+                {(item, index) => (
+                  <option value={item.parameter.name}>
+                    {item.parameter.name} ({item.parameter.units})
                   </option>
                 )}
               </For>
@@ -70,10 +70,10 @@ export default function DetailCharts() {
         <div style="display:flex; justify-content: space-between;">
           <div style="display:flex; gap:12px; align-items: center;">
             <select name="" id="" className="select">
-              <For each={store.location?.parameters}>
-                {(parameter, i) => (
-                  <option value={parameter.id}>
-                    {parameter.displayName} ({parameter.unit})
+              <For each={store.location?.sensors}>
+                {(sensor, i) => (
+                  <option value={sensor.parameter.id}>
+                    {sensor.parameter.name} ({sensor.parameter.unit})
                   </option>
                 )}
               </For>

@@ -1,7 +1,11 @@
+import { For } from 'solid-js';
 import { useStore } from '../../stores';
 
 export default function DownloadCard() {
-  const [store] = useStore();
+  const [
+    store,
+    { setParameters, setDateFrom, setDateTo, fetchMeasurements },
+  ] = useStore();
 
   return (
     <div style="position:relative;">
@@ -30,18 +34,49 @@ export default function DownloadCard() {
           </h3>
           <div style="display:grid; grid-template-rows: 1fr 1fr 1fr; gap: 12px; padding-bottom: 12px;">
             <div>
-              <label htmlFor="">Start date</label>
-              <input type="date" name="" id="" />
-              <label htmlFor="">End date</label>
-              <input type="date" name="" id="" />
+              <label htmlFor="datetime-from">Start date</label>
+              <input
+                type="date"
+                name="datetime-from"
+                id="datetime-from"
+                onChange={(e) =>
+                  setDateFrom(new Date(e.target.value))
+                }
+              />
+              <label htmlFor="datetime-to">End date</label>
+              <input
+                type="date"
+                name="datetime-to"
+                id="datetime-to"
+                onChange={(e) => setDateTo(new Date(e.target.value))}
+              />
             </div>
-            <select className="select" name="test" multiple>
-              <option>PM2.5</option>
-              <option>PM10</option>
-              <option>CO</option>
+            <select
+              className="select"
+              name="test"
+              multiple
+              onChange={(e) => {
+                const values = Array.from(
+                  e.target.selectedOptions
+                ).map(({ value }) => value);
+                setParameters(values);
+              }}
+            >
+              <For each={store.location?.sensors}>
+                {(item, index) => (
+                  <option value={item.parameter.name}>
+                    {item.parameter.name}
+                  </option>
+                )}
+              </For>
             </select>
             <div style="display:inline-block;">
-              <button className="icon-btn btn-secondary">
+              <button
+                className="icon-btn btn-secondary"
+                onClick={() => {
+                  fetchMeasurements();
+                }}
+              >
                 Download CSV
                 <span class="material-symbols-outlined">
                   cloud_download
