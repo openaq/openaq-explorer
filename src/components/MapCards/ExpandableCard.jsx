@@ -22,16 +22,13 @@ export function ExpandableCard(props) {
           : ''
       }`}
     >
-      <div className="expandable-card__header" onClick={toggleOpen}>
+      <div className="expandable-card__header">
         <div style="display:flex; align-items:center;">
           <span class="material-symbols-outlined white">layers</span>
           <h3 className="type-heading3 text-white">
             {open() ? 'Overlay' : 'Overlay & Filters'}
           </h3>
         </div>
-        <span class="material-symbols-outlined clickable-icon white">
-          {open() ? 'expand_less' : 'expand_more'}
-        </span>
       </div>
       <div
         className={
@@ -134,7 +131,7 @@ export default function FilterOverlayCard() {
             </div>
             <PoorCoverageMarker />
             <label htmlFor="poor-data-coverage">
-              Show locations with Poor data coverage
+              Show locations with poor data coverage
             </label>
             <div>
               {' '}
@@ -151,7 +148,9 @@ export default function FilterOverlayCard() {
         </div>
         <div className="expandable-card__footer">
           <div>
-            <span>Showing data from {} providers</span>
+            <span>
+              Showing data from {store.providers()?.length} providers
+            </span>
           </div>
           <button
             className="btn btn-secondary icon-btn"

@@ -1,0 +1,13 @@
+.location-detail-card {
+  .recent-readings {
+    &__header {
+      margin: 0 0 12px 0;
+    }
+
+    &__body {
+      display: grid;
+      grid-template-columns: 1.5fr 2fr 2fr;
+      row-gap: 18px;
+    }
+  }
+}

@@ -255,8 +255,8 @@ export default function LocationDetailCard() {
       >
         <section className="map-card-section">
           <span className="type-body-2">
-            {store.location?.city
-              ? store.location?.city
+            {store.location?.locality
+              ? store.location?.locality
               : 'No city listed'}
             ,
           </span>{' '}
@@ -340,25 +340,31 @@ grid-template-columns: 1fr 2fr;"
           </div>
         </section>
         <hr className="hr" />
-        <section className="map-card-section">
-          <div className="location-detail-card-section-heading">
-            <span className="type-subtitle-3">Latest Readings</span>
+        <section className="map-card-section recent-readings">
+          <header className="location-detail-card-section-heading recent-readings__header">
+            <span className="type-subtitle-3">Latest Readings </span>
             <span class="type-body-2 text-smoke-100">
               {`${latestMeasurementTime(
                 store.location?.datetimeLast.local
               )} (local time)`}
             </span>
-          </div>
-          <div style="display: grid; grid-template-columns: 0.5fr 1fr 1fr; row-gap: 18px;">
+          </header>
+          <div class="recent-readings__body">
             <For each={seriesData()}>
               {(parameter) => {
                 return (
                   <>
-                    <span>{parameter.key}</span>
-                    <span>
-                      {parameter.values[0].value}{' '}
-                      {parameter.values[0].unit}
+                    <span class="type-subtitle-3">
+                      {parameter.key}
                     </span>
+                    <div>
+                      <span className="type-body-3 text-lavender-100">
+                        {parameter.values[0].value}{' '}
+                      </span>
+                      <span className="type-body-1">
+                        {parameter.values[0].unit}
+                      </span>
+                    </div>
                     <Sparkline
                       series={parameter.values.slice(-24)}
                       width={78}

@@ -139,22 +139,6 @@ export default function Accordion() {
         <button className="btn btn-secondary">Update</button>
       </AccordionPanel>
       <AccordionPanel
-        name="aqi"
-        title="Air Quality Index"
-        contentKey="aqi"
-      >
-        <select
-          name="aqi"
-          id="aqi"
-          className="select"
-          onChange={(e) => loadParameterId(e.target.value)}
-        >
-          <option value="nowcast">US EPA PM NowCast</option>
-          <option value="nowcast">US EPA Ozone NowCast</option>
-        </select>
-        <button className="btn btn-secondary">Update</button>
-      </AccordionPanel>
-      <AccordionPanel
         name="thresholds"
         title="Thresholds"
         contentKey="thresholds"

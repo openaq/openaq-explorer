@@ -155,31 +155,20 @@ export default function DetailOverview() {
               </div>
               <div>Provider</div>
               <div>
-                <For each={store.location?.sources}>
-                  {(source, i) => {
-                    return source.url ? (
-                      <>
-                        <span className="type-body-1">
-                          {source.name}
-                        </span>
-                        <a
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          href={source.url}
-                          className="provider-link"
-                        >
-                          <span class="material-symbols-outlined type-color-ocean-120">
-                            open_in_new
-                          </span>
-                        </a>
-                      </>
-                    ) : (
-                      <span className="type-body-1">
-                        {source.name}
-                      </span>
-                    );
-                  }}
-                </For>
+                {store.location?.provider.url ? (
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href={store.location?.provider.url}
+                  >
+                    {store.location?.provider.name}{' '}
+                    <span class="material-symbols-outlined type-color-ocean-120">
+                      open_in_new
+                    </span>
+                  </a>
+                ) : (
+                  <span>{store.location?.provider.name}</span>
+                )}
               </div>
             </div>
           </section>
