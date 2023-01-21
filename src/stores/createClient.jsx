@@ -6,7 +6,14 @@ dayjs.extend(utc);
 const API_ROOT = import.meta.env.VITE_API_BASE_URL;
 
 export default function createClient([state, actions]) {
-  async function send(method, url, data, resKey, idx) {
+  async function send(
+    method,
+    url,
+    data,
+    resKey,
+    idx,
+    url_root = API_ROOT
+  ) {
     const headers = {},
       opts = { method, headers };
 
@@ -16,7 +23,7 @@ export default function createClient([state, actions]) {
     }
 
     try {
-      const response = await fetch(API_ROOT + url, opts);
+      const response = await fetch(url_root + url, opts);
       const json = await response.json();
       const res = resKey ? json[resKey] : json;
       return idx != undefined ? res[idx] : res;
@@ -64,14 +71,36 @@ export default function createClient([state, actions]) {
         .utcOffset(offset, true)
         .format();
       const parameterNames = parameters.join(',');
-      console.log(
-        `/v2/measurements?limit=1000&location_id=${locationsId}&parameter=${parameterNames}&date_from=${datetimeStart}&date_to=${datetimeEnd}`
-      );
       return send(
         'get',
         `/v2/measurements?limit=1000&location_id=${locationsId}&parameter=${parameterNames}&date_from=${datetimeStart}&date_to=${datetimeEnd}`,
         undefined,
-        'results'
+        'results',
+        undefined,
+        'https://api.openaq.org'
+      );
+    },
+
+    getRecent: (locationId) => {
+      const dateTo = new Date();
+      const dateFrom = new Date(
+        Date.now() - 86400 * 1000
+      ).toISOString();
+
+      const offset = (new Date().getTimezoneOffset() / 60) * -1;
+      const datetimeStart = dayjs(dateFrom)
+        .utcOffset(offset, true)
+        .format();
+      const datetimeEnd = dayjs(dateTo)
+        .utcOffset(offset, true)
+        .format();
+      return send(
+        'get',
+        `/v2/measurements?limit=1000&location_id=${locationId}&date_from=${datetimeStart}&date_to=${datetimeEnd}`,
+        undefined,
+        'results',
+        undefined,
+        'https://api.openaq.org'
       );
     },
   };

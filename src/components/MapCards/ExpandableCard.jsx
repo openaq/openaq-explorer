@@ -76,98 +76,92 @@ export default function FilterOverlayCard() {
 
   return (
     <ExpandableCard open={true}>
-      <div>
-        <section>
-          <Accordion />
-        </section>
-        <section className="filters-section">
-          <header className="expandable-card__header">
-            <div style="display:flex; align-items:center;">
-              <span class="material-symbols-rounded white">
-                filter_alt
-              </span>
-              <h3 className="type-heading3 text-white">Filters</h3>
-            </div>
-          </header>
-          <div style="margin: 16px 15px;">
-            <div style="width: 250px; display:grid; grid-template-columns: 1fr 4fr 1fr; grid-auto-rows: 1fr; row-gap: 8px; margin-bottom:12px;">
-              <ReferenceGradeMarker />
-              <label htmlFor="reference-grade">
-                Reference monitor locations
-              </label>
-              <div>
-                <input
-                  type="checkbox"
-                  name="reference-grade"
-                  id="reference-grade"
-                  className="checkbox"
-                  checked
-                  onChange={monitorCheck}
-                />
-              </div>
-              <LowCostSensorMarker />
-              <label htmlFor="low-cost-sensor">
-                {' '}
-                Air sensors locations
-              </label>
-              <div>
-                <input
-                  type="checkbox"
-                  name="low-cost-sensor"
-                  id="low-cost-sensor"
-                  className="checkbox"
-                  checked
-                  onChange={sensorCheck}
-                />
-              </div>
-              <NoRecentUpdateMarker />
-
-              <label htmlFor="no-recent-updates">
-                Show locations with no recent updates
-              </label>
-              <div>
-                <input
-                  type="checkbox"
-                  name="no-recent-updates"
-                  id="no-recent-updates"
-                  className="checkbox"
-                  checked
-                  onChange={noRecentUpdatesCheck}
-                />
-              </div>
-              <PoorCoverageMarker />
-              <label htmlFor="poor-data-coverage">
-                Show locations with Poor data coverage
-              </label>
-              <div>
-                {' '}
-                <input
-                  type="checkbox"
-                  name="poor-data-coverage"
-                  id="poor-data-coverage"
-                  className="checkbox"
-                  checked
-                  onChange={dataCoverageCheck}
-                />
-              </div>
-            </div>
+      <Accordion />
+      <section className="filters-section">
+        <header className="expandable-card__header">
+          <div style="display:flex; align-items:center;">
+            <span class="material-symbols-rounded white">
+              filter_alt
+            </span>
+            <h3 className="type-heading3 text-white">Filters</h3>
           </div>
-          <div className="expandable-card__footer">
+        </header>
+        <div style="margin: 16px 15px;">
+          <div style="width: 250px; display:grid; grid-template-columns: 1fr 4fr 1fr; grid-auto-rows: 1fr; row-gap: 8px; margin-bottom:12px;">
+            <ReferenceGradeMarker />
+            <label htmlFor="reference-grade">
+              Reference monitor locations
+            </label>
             <div>
-              <span>Showing data from {} providers</span>
+              <input
+                type="checkbox"
+                name="reference-grade"
+                id="reference-grade"
+                className="checkbox"
+                checked
+                onChange={monitorCheck}
+              />
             </div>
-            <button
-              className="btn btn-secondary icon-btn"
-              onClick={() => toggleProviderList(true)}
-            >
-              Choose data providers
-              <span class="material-symbols-outlined green">
-                tune
-              </span>
-            </button>
+            <LowCostSensorMarker />
+            <label htmlFor="low-cost-sensor">
+              {' '}
+              Air sensors locations
+            </label>
+            <div>
+              <input
+                type="checkbox"
+                name="low-cost-sensor"
+                id="low-cost-sensor"
+                className="checkbox"
+                checked
+                onChange={sensorCheck}
+              />
+            </div>
+            <NoRecentUpdateMarker />
+
+            <label htmlFor="no-recent-updates">
+              Show locations with no recent updates
+            </label>
+            <div>
+              <input
+                type="checkbox"
+                name="no-recent-updates"
+                id="no-recent-updates"
+                className="checkbox"
+                checked
+                onChange={noRecentUpdatesCheck}
+              />
+            </div>
+            <PoorCoverageMarker />
+            <label htmlFor="poor-data-coverage">
+              Show locations with Poor data coverage
+            </label>
+            <div>
+              {' '}
+              <input
+                type="checkbox"
+                name="poor-data-coverage"
+                id="poor-data-coverage"
+                className="checkbox"
+                checked
+                onChange={dataCoverageCheck}
+              />
+            </div>
           </div>
-        </section>
-      </div>
+        </div>
+        <div className="expandable-card__footer">
+          <div>
+            <span>Showing data from {} providers</span>
+          </div>
+          <button
+            className="btn btn-secondary icon-btn"
+            onClick={() => toggleProviderList(true)}
+          >
+            Choose data providers
+            <span class="material-symbols-outlined green">tune</span>
+          </button>
+        </div>
+      </section>
     </ExpandableCard>
   );
 }

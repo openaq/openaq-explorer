@@ -2,6 +2,7 @@ import { Link } from '@solidjs/router';
 import Sparkline from '../Charts/Sparkline';
 import { useStore } from '../../stores';
 import dayjs from 'dayjs/esm/index.js';
+import { group } from 'd3';
 
 import Progress from '../Charts/Progress';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -27,6 +28,24 @@ export default function LocationDetailCard() {
   function latestMeasurementTime(lastUpdated) {
     return dayjs(lastUpdated).format('HH:mm');
   }
+
+  const seriesData = () => {
+    if (store.recentMeasurements()) {
+      const groups = group(
+        store.recentMeasurements(),
+        (d) => d.parameter
+      );
+      return Array.from(groups, (item) => {
+        return { key: item[0], values: item[1] };
+      });
+    }
+  };
+
+  store.recentMeasurements()?.reduce((r, a) => {
+    r[a.parameter] = r[a.parameter] || [];
+    r[a.parameter].push(a);
+    return r;
+  }, Object.create(null));
 
   const series = [
     {
@@ -282,21 +301,17 @@ grid-template-columns: 1fr 2fr;"
           >
             <div>Provider:</div>{' '}
             <div>
-              <For each={store.location?.providers}>
-                {(providers, i) => {
-                  return providers.url ? (
-                    <a
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      href={source.url}
-                    >
-                      {source.name}
-                    </a>
-                  ) : (
-                    <span>{source.name}</span>
-                  );
-                }}
-              </For>
+              {store.location?.provider.url ? (
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={store.location?.provider.url}
+                >
+                  {store.location?.provider.name}
+                </a>
+              ) : (
+                <span>{store.location?.provider.name}</span>
+              )}
             </div>
             <div>Reporting: </div>
             <div>
@@ -335,6 +350,36 @@ grid-template-columns: 1fr 2fr;"
             </span>
           </div>
           <div style="display: grid; grid-template-columns: 0.5fr 1fr 1fr; row-gap: 18px;">
+            <For each={seriesData()}>
+              {(parameter) => {
+                return (
+                  <>
+                    <span>{parameter.key}</span>
+                    <span>
+                      {parameter.values[0].value}{' '}
+                      {parameter.values[0].unit}
+                    </span>
+                    <Sparkline
+                      series={parameter.values.slice(-24)}
+                      width={78}
+                      height={14}
+                      margin={{
+                        top: 1,
+                        right: 1,
+                        bottom: 1,
+                        left: 1,
+                      }}
+                      style={{
+                        strokeColor: '#5d48f4',
+                        stokeWidth: '3',
+                        fill: 'none',
+                      }}
+                    />
+                  </>
+                );
+              }}
+            </For>
+
             <For each={store.location?.parameters}>
               {(parameter, i) => {
                 return (

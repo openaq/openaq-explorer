@@ -12,6 +12,7 @@ import createProviders from './createProviders';
 import createMeasurements from './createMeasurements';
 import createMapFilters from './createMapFilters';
 import createDownload from './createDownload';
+import createRecentMeasurements from './createRecentMeasurements';
 
 const StoreContext = createContext();
 
@@ -26,6 +27,7 @@ export function Provider(props) {
   let help;
   let mapFilters;
   let download;
+  let recentMeasurements;
   const [state, setState] = createStore({
     get location() {
       return location();
@@ -37,6 +39,10 @@ export function Provider(props) {
 
     get measurements() {
       return measurements;
+    },
+
+    get recentMeasurements() {
+      return recentMeasurements;
     },
 
     get parameter() {
@@ -81,6 +87,12 @@ export function Provider(props) {
   measurements = createMeasurements(client, actions, state, setState);
   mapFilters = createMapFilters(client, actions, state, setState);
   download = createDownload(client, actions, state, setState);
+  recentMeasurements = createRecentMeasurements(
+    client,
+    actions,
+    state,
+    setState
+  );
 
   return (
     <Router>

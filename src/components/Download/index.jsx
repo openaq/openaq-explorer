@@ -1,11 +1,23 @@
 import { For } from 'solid-js';
 import { useStore } from '../../stores';
 
+function measurementsCsv(data) {
+  return data;
+}
+
 export default function DownloadCard() {
   const [
     store,
     { setParameters, setDateFrom, setDateTo, fetchMeasurements },
   ] = useStore();
+
+  const downloadOnClick = () => {
+    fetchMeasurements();
+    if (store.measurementsDownload.resolved) {
+      const csv = measurementsCsv(store.measurementsDownload);
+      console.log(csv);
+    }
+  };
 
   return (
     <div style="position:relative;">
@@ -73,9 +85,7 @@ export default function DownloadCard() {
             <div style="display:inline-block;">
               <button
                 className="icon-btn btn-secondary"
-                onClick={() => {
-                  fetchMeasurements();
-                }}
+                onClick={downloadOnClick}
               >
                 Download CSV
                 <span class="material-symbols-outlined">

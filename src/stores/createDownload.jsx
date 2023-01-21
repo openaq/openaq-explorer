@@ -14,7 +14,7 @@ export default function createDownload(
 
   const [downloadFilters, setDownloadFilters] = createSignal();
 
-  const [measurements] = createResource(
+  const [measurementsDownload] = createResource(
     downloadFilters,
     client.Measurements.get
   );
@@ -38,5 +38,5 @@ export default function createDownload(
     },
   });
 
-  return measurements;
+  return measurementsDownload;
 }

@@ -12,7 +12,9 @@ function ProviderSearch(props) {
     storeFields: ['name'],
   });
 
-  miniSearch.addAll(store.providers());
+  if (store.providers()) {
+    miniSearch.addAll(store.providers());
+  }
 
   let timeout;
   const onInput = (e) => {
@@ -33,7 +35,7 @@ function ProviderSearch(props) {
     }, 500);
   };
 
-  const providersCount = store.providers().length;
+  const providersCount = store.providers()?.length | 0;
 
   return (
     <div>
