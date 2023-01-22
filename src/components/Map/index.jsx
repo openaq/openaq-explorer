@@ -16,6 +16,18 @@ export const hexValues = [
   '#241050',
 ];
 
+export const percentHexValues = [
+  '#DEDAFB',
+  '#CEC7FF',
+  '#BCB2FE',
+  '#A497FD',
+  '#8F81EE',
+  '#7867EB',
+  '#6A5CD8',
+  '#584DAE',
+  '#241050',
+];
+
 export const aqiHexValues = [
   'green',
   'yellow',
@@ -24,6 +36,8 @@ export const aqiHexValues = [
   'purple',
   'maroon',
 ];
+
+export const percentBins = [0, 12, 24, 36, 48, 56, 68, 80, 92];
 
 export const parametersBins = {
   1: [0, 55, 155, 255, 355, 425, 605], // PM10 (µg/m³)
@@ -50,6 +64,51 @@ export const parametersBins = {
   19843: [0, 4.5, 9.5, 12.5, 15.5, 30.5, 50.5], // NO mass (µg/m³) - made a judgement call here
   19844: [0, 12.1, 35.5, 55.5, 150.5, 250.5, 501], // PM4 (µg/m³) *
 };
+
+function getField(store) {
+  return store.mapThreshold.active
+    ? [
+        'number',
+        [
+          'get',
+          `period_${store.mapThreshold.period}_threshold_${store.mapThreshold.threshold}`,
+        ],
+      ]
+    : ['number', ['get', 'value']];
+}
+
+function colorScale(parameter) {
+  const bins = hexValues.map((c, i) => [
+    parametersBins[parameter][i],
+    c,
+  ]);
+  return bins;
+}
+
+function percentColorScale() {
+  const bins = percentHexValues.map((c, i) => [percentBins[i], c]);
+  return bins;
+}
+
+function locationsCircleOpacityExpression(store) {
+  return store.mapThreshold.active
+    ? [
+        'case',
+        [
+          'has',
+          `period_${store.mapThreshold.period}_threshold_${store.mapThreshold.threshold}`,
+        ],
+        1,
+        0,
+      ]
+    : 1;
+}
+
+function getColorScale(store) {
+  return store.mapThreshold.active
+    ? percentColorScale().flat()
+    : colorScale(store.parameter.id).flat();
+}
 
 function createTileUrl(store) {
   let parameters = '';
@@ -84,6 +143,39 @@ function createTileUrl(store) {
   }/v3/locations/tiles/{z}/{x}/{y}.pbf?${parameters}${isMonitor}${excludeInactive}${providers_ids}`;
 }
 
+function createThresholdTileUrl(store) {
+  let parameters = '';
+  if (store.mapThreshold.parameter_id) {
+    parameters = `parameters_id=${store.mapThreshold.parameter_id}`;
+  }
+  let isMonitor = '';
+  if (store.mapFilters.monitor && store.mapFilters.airSensor) {
+    isMonitor = '';
+  }
+  if (!store.mapFilters.monitor && store.mapFilters.airSensor) {
+    isMonitor = '&monitor=false';
+  }
+  if (store.mapFilters.monitor && !store.mapFilters.airSensor) {
+    isMonitor = '&monitor=true';
+  }
+  let excludeInactive = '';
+  if (store.mapFilters.excludeInactive) {
+    excludeInactive = '&active=true';
+  }
+  let providers_ids = '';
+  if (store.mapFilters.excludedProviders.length > 0) {
+    const providers = store.providers().map((o) => o.id);
+    const ids = providers
+      .filter((o) => !store.mapFilters.excludedProviders.includes(0))
+      .join(',');
+    providers_ids = `&providers_id=${ids}`;
+  }
+
+  return `${
+    import.meta.env.VITE_API_BASE_URL
+  }/v3/thresholds/tiles/{z}/{x}/{y}.pbf?${parameters}${isMonitor}${excludeInactive}${providers_ids}`;
+}
+
 export function Map() {
   const [store, { setViewport, loadLocation, setLocationId }] =
     useStore();
@@ -94,14 +186,6 @@ export function Map() {
     const locationId = features[0].properties.sensor_nodes_id;
     loadLocation(locationId);
     return features[0].geometry.coordinates;
-  }
-
-  function colorScale(parameter) {
-    const bins = hexValues.map((c, i) => [
-      parametersBins[parameter][i],
-      c,
-    ]);
-    return bins;
   }
 
   return (
@@ -134,7 +218,11 @@ export function Map() {
         source={{
           id: 'locations',
           type: 'vector',
-          tiles: [createTileUrl(store)],
+          tiles: [
+            store.mapThreshold.active
+              ? createThresholdTileUrl(store)
+              : createTileUrl(store),
+          ],
           minzoom: 1,
           maxzoom: 24,
           bounds: [-180, -90, 180, 90],
@@ -202,10 +290,10 @@ export function Map() {
                 [
                   'interpolate',
                   ['linear'],
-                  ['number', ['get', 'value']],
+                  getField(store),
                   -1,
                   '#ddd',
-                  ...colorScale(store.parameter.id).flat(),
+                  ...getColorScale(store),
                 ],
                 '#e8ebed',
               ],
@@ -224,7 +312,10 @@ export function Map() {
                 14,
                 ['case', ['==', ['get', 'ismonitor'], true], 6, 0],
               ],
-              'circle-opacity': 1,
+              'circle-stroke-opacity':
+                locationsCircleOpacityExpression(store),
+              'circle-opacity':
+                locationsCircleOpacityExpression(store),
               'circle-radius': [
                 'interpolate',
                 ['linear'],
@@ -359,7 +450,7 @@ export function Map() {
             maxzoom: 24,
             'source-layer': 'default',
             layout: {
-              'text-field': ['get', 'value'],
+              'text-field': ['get', 'period_1_threshold_5'],
               'text-font': [
                 'Space Grotesk Regular',
                 'Arial Unicode MS Regular',

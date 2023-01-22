@@ -1,7 +1,7 @@
 import { createContext, useContext } from 'solid-js';
 import { createStore } from 'solid-js/store';
 import createLocation from './createLocation';
-import { Router, hashIntegration } from '@solidjs/router';
+import { Router } from '@solidjs/router';
 import createClient from './createClient';
 import createOverlay from './createOverlay';
 import createViewport from './createViewport';
@@ -13,6 +13,7 @@ import createMeasurements from './createMeasurements';
 import createMapFilters from './createMapFilters';
 import createDownload from './createDownload';
 import createRecentMeasurements from './createRecentMeasurements';
+import createMapThreshold from './createMapThreshold';
 
 const StoreContext = createContext();
 
@@ -28,6 +29,7 @@ export function Provider(props) {
   let mapFilters;
   let download;
   let recentMeasurements;
+  let mapThreshold;
   const [state, setState] = createStore({
     get location() {
       return location();
@@ -65,11 +67,17 @@ export function Provider(props) {
       return mapFilters;
     },
 
+    get mapThreshold() {
+      return mapThreshold;
+    },
+
     viewport: {
       zoom: 2,
       center: [0, 20],
     },
+
     providerListActive: false,
+
     get help() {
       return help;
     },
@@ -87,6 +95,7 @@ export function Provider(props) {
   measurements = createMeasurements(client, actions, state, setState);
   mapFilters = createMapFilters(client, actions, state, setState);
   download = createDownload(client, actions, state, setState);
+  mapThreshold = createMapThreshold(client, actions, state, setState);
   recentMeasurements = createRecentMeasurements(
     client,
     actions,

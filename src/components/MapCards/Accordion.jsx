@@ -105,7 +105,23 @@ function AccordionPanel(props) {
 }
 
 export default function Accordion() {
-  const [store, { loadParameter }] = useStore();
+  const [thresholdParameter, setThresholdParameter] = createSignal(2);
+  const [thresholdValue, setThresholdValue] = createSignal(5);
+  const [thressholdPeriod, setThressholdPeriod] = createSignal(1);
+
+  const [
+    store,
+    { loadParameter, setMapThreshold, setMapThresholdActive },
+  ] = useStore();
+
+  function setThreshold() {
+    setMapThreshold({
+      active: true,
+      parameter_id: thresholdParameter(),
+      threshold: thresholdValue(),
+      period: thressholdPeriod(),
+    });
+  }
 
   return (
     <AccordionProvider>
@@ -113,7 +129,7 @@ export default function Accordion() {
         name="pollutants"
         title="Pollutant"
         contentKey="pollutants"
-        active={true}
+        active={!store.mapThreshold.active}
         open={true}
       >
         <select
@@ -136,18 +152,26 @@ export default function Accordion() {
             )}
           </For>
         </select>
-        <button className="btn btn-secondary">Update</button>
+        <button
+          className="btn btn-secondary"
+          onClick={() => setMapThresholdActive(false)}
+        >
+          Update
+        </button>
       </AccordionPanel>
       <AccordionPanel
         name="thresholds"
         title="Thresholds"
         contentKey="thresholds"
+        active={store.mapThreshold.active}
       >
         <select
           name=""
           id=""
           className="select"
-          onChange={(e) => loadOverlay(e.target.value)}
+          onChange={(e) =>
+            setThresholdParameter(parseInt(e.target.value))
+          }
         >
           <option value="2" selected>
             PM 2.5
@@ -161,8 +185,15 @@ export default function Accordion() {
             name=""
             id=""
             className="select thresholds-controls__item"
+            onChange={(e) =>
+              setThresholdValue(parseInt(e.target.value))
+            }
           >
-            <option value="">100</option>
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="40">40</option>
+            <option value="100">100</option>
           </select>
           <span className="thresholds-controls__item">µg/m³</span>
         </div>
@@ -170,15 +201,22 @@ export default function Accordion() {
           name=""
           id=""
           className="select"
-          onChange={(e) => loadOverlay(e.target.value)}
+          onChange={(e) =>
+            setThressholdPeriod(parseInt(e.target.value))
+          }
         >
           <option value="1" selected>
-            Last 7 days
+            Last day
           </option>
-          <option value="2">Last 30 days</option>
-          <option value="3">last 90 days</option>
+          <option value="14" selected>
+            Last 14 days
+          </option>
+          <option value="30">Last 30 days</option>
+          <option value="90">last 90 days</option>
         </select>
-        <button className="btn btn-secondary">Update</button>
+        <button className="btn btn-secondary" onClick={setThreshold}>
+          Update
+        </button>
       </AccordionPanel>
     </AccordionProvider>
   );
