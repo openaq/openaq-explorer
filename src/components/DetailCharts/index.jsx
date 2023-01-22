@@ -2,7 +2,7 @@ import LineChart from '../Charts/LineChart';
 import AqiChart3 from '../Charts/AqiChart3';
 import { useStore } from '../../stores';
 import { BoxPlot, BoxPlotTooltip } from '../Charts/BoxPlot';
-import { For } from 'solid-js';
+import { createEffect, createSignal, For } from 'solid-js';
 import { ChartProvider } from '../Charts/BoxPlot';
 
 import {
@@ -14,49 +14,88 @@ import {
 } from './data';
 import ThresholdsChart from '../Charts/ThresholdsChart';
 
+function LatestMeasurementsChart() {
+  const [store] = useStore();
+  const [selectedParameter, setSelectedParameter] = createSignal(
+    store.location?.sensors[0].parameter.name
+  );
+  //const [selectTimePeriod, setSelectedTimePeriod] = createSignal();
+
+  const [data, setData] = createSignal(
+    store
+      .recentMeasurements()
+      .filter((o) => o.parameter == selectedParameter())
+  );
+
+  function updateChart() {
+    let data = store
+      .recentMeasurements()
+      .filter((o) => o.parameter == selectedParameter())
+      .filter(
+        (o) =>
+          new Date(o.date.utc) > new Date(Date.now() - 86400 * 1000)
+      );
+
+    setData(data);
+  }
+
+  return (
+    <>
+      <div style="display:flex; align-items: center; margin: 24px 0; gap:12px;">
+        <h1 className="type-heading-1 text-sky-120">
+          Latest Readings
+        </h1>
+        <span class="material-symbols-outlined text-ocean-120">
+          help
+        </span>
+      </div>
+
+      <div style="display:flex; justify-content: space-between;">
+        <div style="display:flex; gap:12px; align-items: center;">
+          <select
+            name=""
+            id=""
+            className="select"
+            onChange={(e) => setSelectedParameter(e.target.value)}
+          >
+            <For each={store.location?.sensors}>
+              {(item, index) => (
+                <option value={item.parameter.name}>
+                  {item.parameter.name} ({item.parameter.units})
+                </option>
+              )}
+            </For>
+          </select>
+          <select name="" id="" className="select">
+            <option value="1">Last 24 hours</option>
+          </select>
+          <button className="btn btn-secondary" onClick={updateChart}>
+            Update
+          </button>
+        </div>
+        <span className="chart-help">
+          How was this chart calculated?
+        </span>
+      </div>
+      <div>
+        <LineChart
+          width={1200}
+          height={250}
+          margin={40}
+          data={data()}
+        />
+      </div>
+    </>
+  );
+}
+
 export default function DetailCharts() {
   const [store] = useStore();
 
   return (
     <div className="detail-charts">
       <section className="detail-charts__section">
-        <div style="display:flex; align-items: center; margin: 24px 0; gap:12px;">
-          <h1 className="type-heading-1 text-sky-120">
-            Latest Readings
-          </h1>
-          <span class="material-symbols-outlined text-ocean-120">
-            help
-          </span>
-        </div>
-
-        <div style="display:flex; justify-content: space-between;">
-          <div style="display:flex; gap:12px; align-items: center;">
-            <select name="" id="" className="select">
-              <For each={store.location?.sensors}>
-                {(item, index) => (
-                  <option value={item.parameter.name}>
-                    {item.parameter.name} ({item.parameter.units})
-                  </option>
-                )}
-              </For>
-            </select>
-            <select name="" id="" className="select">
-              <option value="1">Last 24 hours</option>
-            </select>
-            <button className="btn btn-secondary">Update</button>
-          </div>
-          <span className="chart-help">
-            How was this chart calculated?
-          </span>
-        </div>
-        <div>
-          <LineChart
-            width={1200}
-            height={250}
-            margin={40}
-            data={recentMeasurements}
-          />
-        </div>
+        <LatestMeasurementsChart />
       </section>
       <section className="detail-charts__section">
         <div class="patterns-container" style="display: grid: "></div>

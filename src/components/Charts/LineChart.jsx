@@ -1,8 +1,9 @@
 import * as d3 from 'd3';
-import { createEffect, createSignal } from 'solid-js';
+import { createSignal, createEffect } from 'solid-js';
 
 export default function LineChart(props) {
   const [tooltipValue, setTooltipValue] = createSignal();
+  const [chartData, setChartData] = createSignal(props.data);
 
   const x = d3.scaleTime().range([0, props.width]);
   x.domain(d3.extent(props.data, (d) => new Date(d.date.local)));
@@ -26,14 +27,16 @@ export default function LineChart(props) {
     ) * 5,
   ]);
 
-  const points = props.data.map((o) => {
-    return {
-      value: o.value,
-      cx: x(new Date(o.date.local)),
-      cy: y(o.value),
-      unit: o.unit,
-    };
-  });
+  const points = (data) =>
+    data.map((o) => {
+      return {
+        value: o.value,
+        cx: x(new Date(o.date.local)),
+        cy: y(o.value),
+        unit: o.unit,
+      };
+    });
+
   const line = d3
     .line()
     .x((d) => x(new Date(d.date.local)))
@@ -45,13 +48,28 @@ export default function LineChart(props) {
     .y0(props.height)
     .y1((d) => y(d.value));
 
+  const yDomain = () => {
+    y.domain([
+      0,
+      Math.ceil(
+        d3.max(
+          props.data,
+          (d) => d.value + d3.max(props.data, (d) => d.value) / 5
+        ) / 5
+      ) * 5,
+    ]);
+  };
+
   createEffect(() => {
+    yDomain();
     d3.select('.x-axis').call(d3.axisBottom(x));
+
     d3.select('.y-axis').call(yAxis);
     d3.select('.line-chart-grid')
       .call(yAxisGrid)
       .selectAll('line,path')
       .style('stroke', '#d4d8dd');
+    setChartData(props.data);
   });
 
   return (
@@ -113,7 +131,7 @@ export default function LineChart(props) {
               props.margin / 2
             })`}
           >
-            <path className="line-chart-area" d={area(props.data)} />
+            <path className="line-chart-area" d={area(chartData())} />
           </g>
           <g
             className="chart-grid line-chart-grid"
@@ -126,8 +144,8 @@ export default function LineChart(props) {
               props.margin / 2
             })`}
           >
-            <path className="line-chart-line" d={line(props.data)} />
-            <For each={points}>
+            <path className="line-chart-line" d={line(chartData())} />
+            <For each={points(chartData())}>
               {(item) => (
                 <circle
                   className="line-chart-point"
