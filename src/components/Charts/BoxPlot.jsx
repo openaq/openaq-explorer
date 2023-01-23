@@ -141,10 +141,46 @@ export function BoxPlotTooltip(props) {
   );
 }
 
-export function BoxPlot({ name, width, height, margin, data }) {
+export function BoxPlot({
+  name,
+  width,
+  height,
+  margin,
+  data,
+  period,
+}) {
   const [tooltip, { setTooltip }] = useChart();
+  const [chartData, setChartData] = createSignal(data);
+  console.log(chartData());
 
-  const periods = data.summaries.map((o) => o.period);
+  const days = ['1', '2', '3', '4', '5', '6', '7'];
+  const hours = [
+    '01:00',
+    '02',
+    '03:00',
+    '04:00',
+    '05:00',
+    '06:00',
+    '07:00',
+    '08:00',
+    '09:00',
+    '10:00',
+    '11:00',
+    '12:00',
+    '13:00',
+    '14:00',
+    '15:00',
+    '16:00',
+    '17:00',
+    '18:00',
+    '19:00',
+    '20:00',
+    '21:00',
+    '22:00',
+    '23:00',
+    '00:00',
+  ];
+  const periods = period == 'day' ? days : hours;
   const boxWidth = width / periods.length - 5;
   const x = d3.scaleBand().range([0, width]).domain(periods);
 
@@ -152,8 +188,8 @@ export function BoxPlot({ name, width, height, margin, data }) {
     .scaleLinear()
     .range([height, 0])
     .domain([
-      d3.min(data.summaries, (d) => d.min),
-      d3.max(data.summaries, (d) => Math.ceil(d.max / 5) * 5),
+      d3.min(data, (d) => d.summary.q02),
+      d3.max(data, (d) => Math.ceil(d.summary.q98 / 5) * 5),
     ]);
 
   const ticksValues =
@@ -176,6 +212,9 @@ export function BoxPlot({ name, width, height, margin, data }) {
       .call(yAxisGrid)
       .selectAll('line,path')
       .style('stroke', '#d4d8dd');
+    console.log('effect');
+    console.log(data);
+    setChartData(data);
   });
 
   return (
@@ -193,19 +232,19 @@ export function BoxPlot({ name, width, height, margin, data }) {
             margin / 2
           })`}
         >
-          <For each={data.summaries}>
+          <For each={chartData()}>
             {(d) => {
               return (
                 <g
                   onMouseEnter={(e) => {
                     setTooltip({
-                      period: d.period,
+                      period: d.factor.label,
                       values: {
-                        max: d.max,
-                        interquartileTop: d.q3,
-                        median: d.median,
-                        interquartileBottom: d.q1,
-                        min: d.min,
+                        max: d.summary.q98,
+                        interquartileTop: d.summary.q75,
+                        median: d.summary.median,
+                        interquartileBottom: d.summary.q25,
+                        min: d.summary.q02,
                       },
                       style: {
                         display: 'block',
@@ -228,46 +267,46 @@ export function BoxPlot({ name, width, height, margin, data }) {
                     stroke-width={2}
                     stroke="#CCCCCC"
                     className="whiskers"
-                    x1={x(d.period)}
-                    x2={x(d.period)}
-                    y1={y(d.min)}
-                    y2={y(d.max)}
+                    x1={x(d.factor.label)}
+                    x2={x(d.factor.label)}
+                    y1={y(d.summary.q02)}
+                    y2={y(d.summary.q98)}
                   />
                   <line
                     stroke-width={boxWidth}
                     stroke="#EAE7FF"
                     className="box"
-                    x1={x(d.period)}
-                    x2={x(d.period)}
-                    y1={y(d.q1)}
-                    y2={y(d.q3)}
+                    x1={x(d.factor.label)}
+                    x2={x(d.factor.label)}
+                    y1={y(d.summary.q25)}
+                    y2={y(d.summary.q75)}
                   />
                   <line
                     stroke-width={2}
                     stroke="#8576ED"
                     className="q3"
-                    x1={x(d.period) - boxWidth / 2}
-                    x2={x(d.period) + boxWidth / 2}
-                    y1={y(d.q3)}
-                    y2={y(d.q3)}
+                    x1={x(d.factor.label) - boxWidth / 2}
+                    x2={x(d.factor.label) + boxWidth / 2}
+                    y1={y(d.summary.q75)}
+                    y2={y(d.summary.q75)}
                   />
                   <line
                     stroke-width={2}
                     stroke="#8576ED"
                     className="q1"
-                    x1={x(d.period) - boxWidth / 2}
-                    x2={x(d.period) + boxWidth / 2}
-                    y1={y(d.q1)}
-                    y2={y(d.q1)}
+                    x1={x(d.factor.label) - boxWidth / 2}
+                    x2={x(d.factor.label) + boxWidth / 2}
+                    y1={y(d.summary.q25)}
+                    y2={y(d.summary.q25)}
                   />
                   <line
                     stroke-width={4}
                     stroke="#584DAE"
                     className="median"
-                    x1={x(d.period) - boxWidth / 2}
-                    x2={x(d.period) + boxWidth / 2}
-                    y1={y(d.median)}
-                    y2={y(d.median)}
+                    x1={x(d.factor.label) - boxWidth / 2}
+                    x2={x(d.factor.label) + boxWidth / 2}
+                    y1={y(d.summary.median)}
+                    y2={y(d.summary.median)}
                   />
                 </g>
               );

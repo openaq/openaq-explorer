@@ -14,6 +14,8 @@ import createMapFilters from './createMapFilters';
 import createDownload from './createDownload';
 import createRecentMeasurements from './createRecentMeasurements';
 import createMapThreshold from './createMapThreshold';
+import createDayTrends from './createDayTrends';
+import createHourTrends from './createHourTrends';
 
 const StoreContext = createContext();
 
@@ -30,6 +32,8 @@ export function Provider(props) {
   let download;
   let recentMeasurements;
   let mapThreshold;
+  let dayTrends;
+  let hourTrends;
   const [state, setState] = createStore({
     get location() {
       return location();
@@ -61,6 +65,14 @@ export function Provider(props) {
 
     get download() {
       return download;
+    },
+
+    get dayTrends() {
+      return dayTrends;
+    },
+
+    get hourTrends() {
+      return hourTrends;
     },
 
     get mapFilters() {
@@ -96,6 +108,9 @@ export function Provider(props) {
   mapFilters = createMapFilters(client, actions, state, setState);
   download = createDownload(client, actions, state, setState);
   mapThreshold = createMapThreshold(client, actions, state, setState);
+  dayTrends = createDayTrends(client, actions, state, setState);
+  hourTrends = createHourTrends(client, actions, state, setState);
+
   recentMeasurements = createRecentMeasurements(
     client,
     actions,

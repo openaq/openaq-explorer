@@ -59,6 +59,18 @@ export default function createClient([state, actions]) {
       send('get', `/v3/providers?limit=1000`, undefined, 'results'),
   };
 
+  const Trends = {
+    get: (params) => {
+      const { sensorNodesId, measurandsId, period } = params;
+      return send(
+        'get',
+        `/v3/locations/${sensorNodesId}/trends/${measurandsId}?period_name=${period}`,
+        undefined,
+        'results'
+      );
+    },
+  };
+
   const Measurements = {
     get: (downloadFilters) => {
       const { locationsId, parameters, dateFrom, dateTo } =
@@ -110,6 +122,7 @@ export default function createClient([state, actions]) {
     Locations,
     Measurements,
     Parameters,
+    Trends,
     Providers,
   };
 }
