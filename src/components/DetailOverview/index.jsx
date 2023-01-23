@@ -3,7 +3,6 @@ import dayjs from 'dayjs/esm/index.js';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import Progress from '../Charts/Progress';
 import { Link } from '@solidjs/router';
-import img from '../../assets/demo.png';
 import { useStore } from '../../stores';
 import {
   LowCostSensorMarker,
@@ -52,7 +51,11 @@ function DetailMap() {
           </a>
         </strong>
       </div>
-      <img className="detail-map__image" src={img} alt="" />
+      <img
+        className="detail-map__image"
+        src={`https://images.openaq.org/maps/explorer/location_${store.id}.webp`}
+        alt=""
+      />
     </div>
   );
 }
