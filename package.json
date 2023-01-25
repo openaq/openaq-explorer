@@ -25,6 +25,8 @@
     "rollup-plugin-visualizer": "^5.8.2",
     "solid-devtools": "^0.24.7",
     "vite": "^3.0.9",
+    "vite-plugin-ejs": "^1.6.4",
+    "vite-plugin-html": "^3.2.0",
     "vite-plugin-lightningcss": "^0.0.3",
     "vite-plugin-purgecss": "^0.2.12",
     "vite-plugin-solid": "^2.3.0",

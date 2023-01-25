@@ -4,6 +4,7 @@ import remarkHtml from 'vite-remark-html';
 import visualizer from 'rollup-plugin-visualizer';
 import devtools from 'solid-devtools/vite';
 import lightningcss from 'vite-plugin-lightningcss';
+import { ViteEjsPlugin } from 'vite-plugin-ejs'
 
 
 export default defineConfig({
@@ -11,6 +12,9 @@ export default defineConfig({
     remarkHtml({
       sanitize: false
     }),
+    ViteEjsPlugin((viteConfig) => ({
+      env: viteConfig.env,
+    })),
     solidPlugin(),
     visualizer(),
     devtools({
