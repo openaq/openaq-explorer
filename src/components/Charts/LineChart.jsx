@@ -48,8 +48,9 @@ export default function LineChart(props) {
     .y1((d) => y(d.value));
 
   const yDomain = () => {
+    const minimumValue = min(props.data, (d) => d.value);
     y.domain([
-      0,
+      minimumValue < 0 ? minimumValue : 0,
       Math.ceil(
         max(
           props.data,
