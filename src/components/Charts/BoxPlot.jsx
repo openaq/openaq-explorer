@@ -5,6 +5,7 @@ import {
   scaleLinear,
   select,
   max,
+  min,
 } from 'd3';
 import { createEffect, createSignal } from 'solid-js';
 
@@ -217,8 +218,9 @@ export default function Boxplot(props) {
   const y = scaleLinear().range([props.height, 0]);
 
   const yDomain = () => {
+    const minimumValue = min(chartData(), (d) => d.summary.q02);
     y.domain([
-      0,
+      minimumValue < 0 ? minimumValue : 0,
       max(chartData(), (d) => Math.ceil(d.summary.q98 / 5) * 5),
     ]);
   };
