@@ -324,21 +324,7 @@ grid-template-columns: 1fr 2fr;"
             </div>
           </div>
         </section>
-        <hr className="hr" />
-        <section className="map-card-section">
-          <div style="display: grid; grid-template-columns: 1fr 2fr; row-gap: 10px; column-gap: 10px;">
-            <div>Data Coverage </div>
-            <div>
-              <Progress
-                width={150}
-                height={10}
-                margin={{ top: 10, right: 10, bottom: 20, left: 10 }}
-                percent={0.5}
-                legend={true}
-              />
-            </div>
-          </div>
-        </section>
+
         <hr className="hr" />
         <section className="map-card-section recent-readings">
           <header className="location-detail-card-section-heading recent-readings__header">

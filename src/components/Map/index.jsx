@@ -18,13 +18,9 @@ export const hexValues = [
 
 export const percentHexValues = [
   '#DEDAFB',
-  '#CEC7FF',
   '#BCB2FE',
-  '#A497FD',
   '#8F81EE',
-  '#7867EB',
   '#6A5CD8',
-  '#584DAE',
   '#241050',
 ];
 
@@ -37,7 +33,7 @@ export const aqiHexValues = [
   'maroon',
 ];
 
-export const percentBins = [0, 12, 24, 36, 48, 56, 68, 80, 92];
+export const percentBins = [0, 20, 40, 60, 80];
 
 export const parametersBins = {
   1: [0, 55, 155, 255, 355, 425, 605], // PM10 (µg/m³)

@@ -129,21 +129,6 @@ export default function FilterOverlayCard() {
                 onChange={noRecentUpdatesCheck}
               />
             </div>
-            <PoorCoverageMarker />
-            <label htmlFor="poor-data-coverage">
-              Show locations with poor data coverage
-            </label>
-            <div>
-              {' '}
-              <input
-                type="checkbox"
-                name="poor-data-coverage"
-                id="poor-data-coverage"
-                className="checkbox"
-                checked
-                onChange={dataCoverageCheck}
-              />
-            </div>
           </div>
         </div>
         <div className="expandable-card__footer">

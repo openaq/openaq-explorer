@@ -68,11 +68,11 @@ export function Provider(props) {
     },
 
     get dayTrends() {
-      return dayTrends;
+      return dayTrends();
     },
 
     get hourTrends() {
-      return hourTrends;
+      return hourTrends();
     },
 
     get mapFilters() {

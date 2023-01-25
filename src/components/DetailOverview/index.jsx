@@ -71,7 +71,7 @@ export default function DetailOverview() {
     return `Since ${dayjs(lastUpdated).format('DD/MM/YYYY')}`;
   }
 
-  setInterval(() => checkForUpdate(), 1000 * 60);
+  setInterval(() => checkForUpdate(), 1000 * 60 * 5);
 
   return (
     <div style="position:relative; top: -10px;">
@@ -134,8 +134,6 @@ export default function DetailOverview() {
                   {store.location?.isMobile ? 'Mobile' : 'Stationary'}
                 </div>{' '}
               </div>
-              <div>Entity</div>
-              <div>{store.location?.entity}</div>
               <div>Measures</div>
               <div>
                 {store.location?.sensors
@@ -149,10 +147,10 @@ export default function DetailOverview() {
               <div>{store.location?.name}</div>
               <div>Reporting</div>
               <div>
-                {timeFromNow(store.location?.datetimeFirst.local)}
+                {timeFromNow(store.location?.datetimeLast.local)}
                 <div>
                   <span class="body4 smoke120">
-                    {since(store.location?.datetimeLast.local)}
+                    {since(store.location?.datetimeFirst.local)}
                   </span>
                 </div>
               </div>
@@ -175,33 +173,7 @@ export default function DetailOverview() {
               </div>
             </div>
           </section>
-          <section style="flex: 1;">
-            <h4>DATA COVERAGE</h4>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; row-gap: 28px;">
-              <span>Last 7 days</span>
-              <Progress
-                width={156}
-                height={15}
-                margin={{ top: 10, right: 10, bottom: 0, left: 10 }}
-                percent={0.15}
-              />
-              <span>Last 30 days</span>
-              <Progress
-                width={156}
-                height={15}
-                margin={{ top: 10, right: 10, bottom: 0, left: 10 }}
-                percent={0.65}
-              />
-              <span>Last 90 days</span>
-              <Progress
-                width={156}
-                height={15}
-                margin={{ top: 10, right: 10, bottom: 30, left: 10 }}
-                percent={0.42}
-                legend={true}
-              />
-            </div>
-          </section>
+          <section style="flex: 1;"></section>
           <section style="flex: 1;">
             <DetailMap />
           </section>

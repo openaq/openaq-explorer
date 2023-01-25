@@ -1,10 +1,18 @@
-import { extent, min, max, scaleLinear, scaleTime, line } from 'd3';
+import {
+  extent,
+  min,
+  max,
+  scaleLinear,
+  scaleTime,
+  line,
+  isoParse,
+} from 'd3';
 
 function transform(data) {
   return data.map((o) => {
     return {
       value: parseFloat(o.value),
-      date: d3.isoParse(o.date.local),
+      date: isoParse(o.date.local),
     };
   });
 }

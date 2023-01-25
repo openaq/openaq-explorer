@@ -1,28 +1,39 @@
 import * as d3 from 'd3';
+import {
+  area as d3Area,
+  line as d3Line,
+  scaleTime,
+  scaleLinear,
+  axisBottom,
+  axisLeft,
+  select,
+  min,
+  max,
+  extent,
+} from 'd3';
 import { createSignal, createEffect } from 'solid-js';
 
 export default function LineChart(props) {
   const [tooltipValue, setTooltipValue] = createSignal();
   const [chartData, setChartData] = createSignal(props.data);
 
-  const x = d3.scaleTime().range([0, props.width]);
-  x.domain(d3.extent(props.data, (d) => new Date(d.date.local)));
+  const x = scaleTime().range([0, props.width]);
+  x.domain(extent(props.data, (d) => new Date(d.date.local)));
 
-  const y = d3.scaleLinear().range([props.height, 0]);
+  const y = scaleLinear().range([props.height, 0]);
 
-  const yAxis = d3.axisLeft(y).ticks(5);
-  const yAxisGrid = d3
-    .axisLeft(y)
+  const yAxis = axisLeft(y).ticks(5);
+  const yAxisGrid = axisLeft(y)
     .tickSize(-props.width)
     .tickFormat('')
     .ticks(5);
 
   y.domain([
-    d3.min(props.data, (d) => d.value),
+    min(props.data, (d) => d.value),
     Math.ceil(
-      d3.max(
+      max(
         props.data,
-        (d) => d.value + d3.max(props.data, (d) => d.value) / 5
+        (d) => d.value + max(props.data, (d) => d.value) / 5
       ) / 5
     ) * 5,
   ]);
@@ -37,13 +48,11 @@ export default function LineChart(props) {
       };
     });
 
-  const line = d3
-    .line()
+  const line = d3Line()
     .x((d) => x(new Date(d.date.local)))
     .y((d) => y(d.value));
 
-  const area = d3
-    .area()
+  const area = d3Area()
     .x((d) => x(new Date(d.date.local)))
     .y0(props.height)
     .y1((d) => y(d.value));
@@ -52,9 +61,9 @@ export default function LineChart(props) {
     y.domain([
       0,
       Math.ceil(
-        d3.max(
+        max(
           props.data,
-          (d) => d.value + d3.max(props.data, (d) => d.value) / 5
+          (d) => d.value + max(props.data, (d) => d.value) / 5
         ) / 5
       ) * 5,
     ]);
@@ -62,10 +71,10 @@ export default function LineChart(props) {
 
   createEffect(() => {
     yDomain();
-    d3.select('.x-axis').call(d3.axisBottom(x));
+    select('.x-axis').call(axisBottom(x));
 
-    d3.select('.y-axis').call(yAxis);
-    d3.select('.line-chart-grid')
+    select('.y-axis').call(yAxis);
+    select('.line-chart-grid')
       .call(yAxisGrid)
       .selectAll('line,path')
       .style('stroke', '#d4d8dd');

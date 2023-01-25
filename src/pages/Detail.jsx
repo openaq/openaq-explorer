@@ -16,11 +16,13 @@ function Detail() {
 
   return (
     <>
-      <Breadcrumb />
-      <DetailOverview />
-      <DetailCharts />
-      <DownloadCard />
-      <HelpCard />
+      <div style="position:relative;">
+        <Breadcrumb />
+        <DetailOverview />
+        <DetailCharts />
+        <DownloadCard />
+        <HelpCard />
+      </div>
     </>
   );
 }

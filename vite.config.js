@@ -3,6 +3,8 @@ import solidPlugin from 'vite-plugin-solid';
 import remarkHtml from 'vite-remark-html';
 import visualizer from 'rollup-plugin-visualizer';
 import devtools from 'solid-devtools/vite';
+import lightningcss from 'vite-plugin-lightningcss';
+
 
 export default defineConfig({
   plugins: [
@@ -13,6 +15,9 @@ export default defineConfig({
     visualizer(),
     devtools({
       autoname: true,
+    }),
+    lightningcss({
+      browserslist: '>= 0.25%',
     }),
   ],
   server: {
