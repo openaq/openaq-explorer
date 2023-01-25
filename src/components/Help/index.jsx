@@ -30,10 +30,15 @@ export default function HelpCard(props) {
         {helpContent[store.help.content]}
       </section>
       <footer className="map-card__footer">
-        <button class="btn btn-primary icon-btn">
+        <a
+          class="btn btn-primary icon-btn"
+          href="https://openaq.org/developers/help/"
+          target="_blank"
+          rel="noreferrer noopener"
+        >
           <span>More Help</span>
           <span class="material-symbols-outlined">arrow_forward</span>
-        </button>
+        </a>
       </footer>
     </article>
   );

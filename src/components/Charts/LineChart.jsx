@@ -28,16 +28,6 @@ export default function LineChart(props) {
     .tickFormat('')
     .ticks(5);
 
-  y.domain([
-    min(props.data, (d) => d.value),
-    Math.ceil(
-      max(
-        props.data,
-        (d) => d.value + max(props.data, (d) => d.value) / 5
-      ) / 5
-    ) * 5,
-  ]);
-
   const points = (data) =>
     data.map((o) => {
       return {
@@ -69,16 +59,20 @@ export default function LineChart(props) {
     ]);
   };
 
+  yDomain();
   createEffect(() => {
-    yDomain();
-    select('.x-axis').call(axisBottom(x));
+    if (props.data) {
+      setChartData(props.data);
 
-    select('.y-axis').call(yAxis);
-    select('.line-chart-grid')
-      .call(yAxisGrid)
-      .selectAll('line,path')
-      .style('stroke', '#d4d8dd');
-    setChartData(props.data);
+      yDomain();
+      select('.x-axis').call(axisBottom(x));
+
+      select('.y-axis').call(yAxis);
+      select('.line-chart-grid')
+        .call(yAxisGrid)
+        .selectAll('line,path')
+        .style('stroke', '#d4d8dd');
+    }
   });
 
   return (

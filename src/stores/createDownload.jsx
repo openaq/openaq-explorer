@@ -6,12 +6,6 @@ export default function createDownload(
   state,
   setState
 ) {
-  const [parameters, setParameters] = createSignal();
-
-  const [dateFrom, setDateFrom] = createSignal();
-
-  const [dateTo, setDateTo] = createSignal();
-
   const [downloadFilters, setDownloadFilters] = createSignal();
 
   const [measurementsDownload] = createResource(
@@ -28,12 +22,12 @@ export default function createDownload(
     setDateTo(datetime) {
       setDateTo(datetime);
     },
-    fetchMeasurements() {
+    setFilters(props) {
       setDownloadFilters({
         locationsId: state.location.id,
-        dateFrom: dateFrom(),
-        dateTo: dateTo(),
-        parameters: parameters(),
+        dateFrom: props.dateFrom,
+        dateTo: props.dateTo,
+        parameters: props.parameters,
       });
     },
   });

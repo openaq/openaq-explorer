@@ -6,12 +6,21 @@ export default function createRecentMeasurements(
   state,
   setState
 ) {
-  const [recentMeasurements] = createResource(
-    () => state.id,
+  const [sensorNodesId, setSensorNodesId] = createSignal(
+    () => state.id
+  );
+
+  const [recentMeasurements, { mutate }] = createResource(
+    sensorNodesId(),
     client.Measurements.getRecent
   );
 
-  Object.assign(actions, {});
+  Object.assign(actions, {
+    loadRecentMeasurements(id) {
+      mutate(null);
+      setSensorNodesId(id);
+    },
+  });
 
   return recentMeasurements;
 }

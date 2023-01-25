@@ -82,10 +82,12 @@ export default function createClient([state, actions]) {
       const datetimeEnd = dayjs(dateTo)
         .utcOffset(offset, true)
         .format();
-      const parameterNames = parameters.join(',');
+      const parameterParams = parameters
+        .map((o) => `parameter=${o}`)
+        .join('&');
       return send(
         'get',
-        `/v2/measurements?limit=1000&location_id=${locationsId}&parameter=${parameterNames}&date_from=${datetimeStart}&date_to=${datetimeEnd}`,
+        `/v2/measurements?limit=1000&location_id=${locationsId}&${parameterParams}&date_from=${datetimeStart}&date_to=${datetimeEnd}`,
         undefined,
         'results',
         undefined,

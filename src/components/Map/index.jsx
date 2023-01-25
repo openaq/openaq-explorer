@@ -173,14 +173,23 @@ function createThresholdTileUrl(store) {
 }
 
 export function Map() {
-  const [store, { setViewport, loadLocation, setLocationId }] =
-    useStore();
+  const [
+    store,
+    {
+      setViewport,
+      loadLocation,
+      setLocationId,
+      loadRecentMeasurements,
+    },
+  ] = useStore();
   const [cursorStyle, setCursorStyle] = createSignal('');
 
   function getFeature(e) {
     const features = e.target.queryRenderedFeatures(e.point);
     const locationId = features[0].properties.sensor_nodes_id;
     loadLocation(locationId);
+    loadRecentMeasurements(locationId);
+
     return features[0].geometry.coordinates;
   }
 
