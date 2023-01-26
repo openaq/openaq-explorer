@@ -34,8 +34,16 @@ function DetailMap() {
             </a>
           </div>
           <div className="detail-map-overlay__coordinates">
-            <span>{store.location?.coordinates.latitude}</span>
-            <span>{store.location?.coordinates.longitude}</span>
+            <span>
+              {parseFloat(
+                store.location?.coordinates.latitude.toFixed(4)
+              )}
+            </span>
+            <span>
+              {parseFloat(
+                store.location?.coordinates.longitude.toFixed(4)
+              )}
+            </span>
           </div>
         </div>
       </div>

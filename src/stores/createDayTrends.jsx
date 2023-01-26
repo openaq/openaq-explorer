@@ -8,10 +8,14 @@ export default function createDayTrends(
 ) {
   const [trendParams, setTrendParams] = createSignal();
 
-  let [dayTrends] = createResource(trendParams, client.Trends.get);
+  let [dayTrends, { mutate }] = createResource(
+    trendParams,
+    client.Trends.get
+  );
 
   Object.assign(actions, {
     setDayTrendParams: (params) => {
+      mutate(null);
       setTrendParams({
         sensorNodesId: params.sensorNodesId,
         measurandsId: params.measurandsId,
