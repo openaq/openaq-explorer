@@ -1,8 +1,9 @@
-import { createEffect, createSignal, For } from 'solid-js';
+import { createSignal, For } from 'solid-js';
 import { useStore } from '../../stores';
 import { produce, createStore } from 'solid-js/store';
 import dayjs from 'dayjs/esm/index.js';
 import utc from 'dayjs/plugin/utc';
+import { parametersLookup } from '../../lookups';
 
 dayjs.extend(utc);
 
@@ -130,7 +131,9 @@ export default function DownloadCard() {
                 {(sensor) => (
                   <>
                     <label for={`${sensor.parameter.name}-checkbox`}>
-                      {sensor.name}
+                      {parametersLookup[sensor.parameter.name] ||
+                        sensor.parameter.name}{' '}
+                      {sensor.parameter.units}
                     </label>
                     <input
                       type="checkbox"

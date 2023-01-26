@@ -27,7 +27,7 @@ Air sensors are symbolized as:
     <div class="low-cost-sensor-marker__fill"></div>
 </div>
 
-For locations that have recorded measurements historically but have not received a measurement in the last 48 hours are symbolized as: 
+Locations that have recorded measurements historically, but have not received measurements in the last 48 hours, are symbolized as: 
 
 <div class="no-recent-data-marker">
     <div class="no-recent-data-marker__border"></div>

@@ -52,18 +52,24 @@ function ProviderSearch(props) {
 export default function ProvidersCard() {
   const [store, { toggleProviderList, updateProviders }] = useStore();
 
-  const [providers, setProviders] = createStore(
-    store
-      .providers()
-      .map((o) => {
-        return {
-          name: o.sourceName,
-          id: o.id,
-          checked: true,
-        };
-      })
-      .sort((a, b) => (a.name < b.name ? -1 : 1))
-  );
+  const [providers, setProviders] = createStore([]);
+
+  createEffect(() => {
+    if (store.providers.state == 'ready') {
+      setProviders(
+        store
+          .providers()
+          .map((o) => {
+            return {
+              name: o.sourceName,
+              id: o.id,
+              checked: true,
+            };
+          })
+          .sort((a, b) => (a.name < b.name ? -1 : 1))
+      );
+    }
+  });
 
   return (
     <article
