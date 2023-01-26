@@ -191,8 +191,19 @@
 }
 
 .providers-list-subtitle {
+  width: 70%;
+  margin: 0 auto;
   display: flex;
   justify-content: space-between;
+
+  .providers-list-select-all {
+    cursor: pointer;
+  }
+
+  .providers-list-select-none {
+    cursor: pointer;
+  }
+
   .providers-list-count {
     @include mixins.body1;
     &__number {

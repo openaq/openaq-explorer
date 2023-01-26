@@ -84,12 +84,12 @@ export default function FilterOverlayCard() {
           </div>
         </header>
         <div style="margin: 16px 15px;">
-          <div style="width: 250px; display:grid; grid-template-columns: 1fr 4fr 1fr; grid-auto-rows: 1fr; row-gap: 8px; margin-bottom:12px;">
+          <div class="filters-section__body">
             <ReferenceGradeMarker />
             <label htmlFor="reference-grade">
               Reference monitor locations
             </label>
-            <div>
+            <div class="marker-legend-item">
               <input
                 type="checkbox"
                 name="reference-grade"
@@ -104,7 +104,7 @@ export default function FilterOverlayCard() {
               {' '}
               Air sensors locations
             </label>
-            <div>
+            <div class="marker-legend-item">
               <input
                 type="checkbox"
                 name="low-cost-sensor"
@@ -119,7 +119,7 @@ export default function FilterOverlayCard() {
             <label htmlFor="no-recent-updates">
               Show locations with no recent updates
             </label>
-            <div>
+            <div class="marker-legend-item">
               <input
                 type="checkbox"
                 name="no-recent-updates"
@@ -132,11 +132,6 @@ export default function FilterOverlayCard() {
           </div>
         </div>
         <div className="expandable-card__footer">
-          <div>
-            <span>
-              Showing data from {store.providers()?.length} providers
-            </span>
-          </div>
           <button
             className="btn btn-secondary icon-btn"
             onClick={() => toggleProviderList(true)}

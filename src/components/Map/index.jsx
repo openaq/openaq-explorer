@@ -126,12 +126,11 @@ function createTileUrl(store) {
     excludeInactive = '&active=true';
   }
   let providers_ids = '';
-  if (store.mapFilters.excludedProviders.length > 0) {
-    const providers = store.providers().map((o) => o.id);
-    const ids = providers
-      .filter((o) => !store.mapFilters.excludedProviders.includes(0))
+  if (store.mapFilters.providers.length > 0) {
+    const providers = store.mapFilters.providers
+      .map((o) => o.id)
       .join(',');
-    providers_ids = `&providers_id=${ids}`;
+    providers_ids = `&providers_id=${providers}`;
   }
 
   return `${

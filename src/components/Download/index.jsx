@@ -75,7 +75,6 @@ export default function DownloadCard() {
       dateTo: dateTo(),
       parameters: parameters,
     });
-    console.log(store.download.loading);
     const csv = measurementsCsv(store.download());
     downloadFile(`measurements_${store.id}.csv`, csv);
   };
@@ -153,12 +152,10 @@ export default function DownloadCard() {
                               const idx = parameters.indexOf(
                                 e.target.value
                               );
-                              console.log(idx);
                               parameters.splice(idx, 1);
                             })
                           );
                         }
-                        console.log(parameters);
                       }}
                     />
                   </>

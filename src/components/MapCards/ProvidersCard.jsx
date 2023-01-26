@@ -1,5 +1,5 @@
-import { createEffect, For } from 'solid-js';
-import { createSignal } from 'solid-js';
+import { createEffect, createSignal, For } from 'solid-js';
+import { createStore } from 'solid-js/store';
 import { useStore } from '../../stores';
 import MiniSearch from 'minisearch';
 
@@ -42,53 +42,28 @@ function ProviderSearch(props) {
       <input type="text" className="search-input" onInput={onInput} />
       <span>
         {count() > 0
-          ? `Showing ${count()} of ${providersCount} providers`
-          : `Showing all ${providersCount} providers`}
+          ? `Listing ${count()} of ${providersCount} providers`
+          : `Listing all ${providersCount} providers`}
       </span>
     </div>
   );
 }
 
-function ProviderSelect(props) {
-  const [store, { excludeProvider }] = useStore();
-
-  return (
-    <>
-      <span class="provider-name">{props.provider.sourceName}</span>
-      <input
-        type="checkbox"
-        name={`source-${props.provider.id}`}
-        id={`source-${props.provider.id}`}
-        className="checkbox"
-        checked={
-          !store.mapFilters.excludedProviders
-            .map((o) => o.id)
-            .includes(props.provider.id)
-            ? true
-            : false
-        }
-        onChange={(e) => {
-          if (!e.target.checked) {
-            excludeProvider(props.provider.id);
-          }
-        }}
-      />
-    </>
-  );
-}
-
 export default function ProvidersCard() {
-  const [
-    store,
-    {
-      toggleProviderList,
-      includeAllProviders,
-      excludeAllProviders,
-      updateProviders,
-    },
-  ] = useStore();
+  const [store, { toggleProviderList, updateProviders }] = useStore();
 
-  const [providers, setProviders] = createSignal(store.providers());
+  const [providers, setProviders] = createStore(
+    store
+      .providers()
+      .map((o) => {
+        return {
+          name: o.sourceName,
+          id: o.id,
+          checked: true,
+        };
+      })
+      .sort((a, b) => (a.name < b.name ? -1 : 1))
+  );
 
   return (
     <article
@@ -113,27 +88,48 @@ export default function ProvidersCard() {
         <section className="map-card-section">
           <div class="providers-list-subtitle">
             <span
-              className="type-link-1"
-              onClick={includeAllProviders}
+              className="type-link-1 providers-list-select-all"
+              onClick={() =>
+                setProviders(() => true, 'checked', true)
+              }
             >
               Select All
             </span>
             <span>|</span>
             <span
-              className="type-link-1"
-              onClick={excludeAllProviders}
+              className="type-link-1 providers-list-select-none"
+              onClick={() => {
+                setProviders(() => true, 'checked', false);
+              }}
             >
               Select None
+            </span>
+          </div>
+          <div>
+            <span>
+              {providers.filter((o) => o.checked).length} providers
+              selected
             </span>
           </div>
         </section>
         <section className="map-card-section">
           <ProviderSearch setProviders={setProviders} />
           <ul className="providers-list">
-            <For each={providers()}>
+            <For each={providers}>
               {(provider, i) => (
                 <li className="providers-list__item">
-                  <ProviderSelect provider={provider} />
+                  <span class="provider-name">{provider.name}</span>
+                  <input
+                    type="checkbox"
+                    name={`source-${provider.id}`}
+                    id={`source-${provider.id}`}
+                    className="checkbox"
+                    value={provider.id}
+                    checked={provider.checked}
+                    onChange={(e) => {
+                      setProviders(i(), 'checked', e.target.checked);
+                    }}
+                  />
                 </li>
               )}
             </For>
@@ -141,7 +137,17 @@ export default function ProvidersCard() {
         </section>
       </div>
       <footer className="map-card__footer">
-        <button className="btn btn-primary" onClick={updateProviders}>
+        <button
+          className={`update-providers-btn btn btn-primary ${
+            providers.filter((o) => o.checked).length > 0
+              ? ''
+              : 'btn-primary--disabled'
+          }`}
+          disabled={providers.filter((o) => o.checked).length == 0}
+          onClick={() =>
+            updateProviders(providers.filter((o) => o.checked))
+          }
+        >
           Update
         </button>
       </footer>
