@@ -1,60 +1,39 @@
-import { createEffect, createSignal, For } from 'solid-js';
-import { createStore } from 'solid-js/store';
+import { createEffect, For, Suspense } from 'solid-js';
+import { createStore, produce } from 'solid-js/store';
 import { useStore } from '../../stores';
 import MiniSearch from 'minisearch';
-
-function ProviderSearch(props) {
-  const [store] = useStore();
-  const [count, setCount] = createSignal(0);
-
-  const miniSearch = new MiniSearch({
-    fields: ['name'],
-    storeFields: ['name'],
-  });
-
-  if (store.providers()) {
-    miniSearch.addAll(store.providers());
-  }
-
-  let timeout;
-  const onInput = (e) => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => {
-      const value = e.target.value;
-      const res = miniSearch.search(value, { prefix: true });
-      setCount(res.length);
-      props.setProviders(
-        res.length
-          ? store
-              .providers()
-              .filter((provider) =>
-                res.map((o) => o.id).includes(provider.id)
-              )
-          : store.providers()
-      );
-    }, 500);
-  };
-
-  const providersCount = store.providers()?.length | 0;
-
-  return (
-    <div>
-      <input type="text" className="search-input" onInput={onInput} />
-      <span>
-        {count() > 0
-          ? `Listing ${count()} of ${providersCount} providers`
-          : `Listing all ${providersCount} providers`}
-      </span>
-    </div>
-  );
-}
 
 export default function ProvidersCard() {
   const [store, { toggleProviderList, updateProviders }] = useStore();
 
   const [providers, setProviders] = createStore([]);
 
+  const miniSearch = new MiniSearch({
+    fields: ['name'],
+    storeFields: ['name'],
+  });
+
+  let timeout;
+
+  const onSearchInput = (e) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      const value = e.target.value;
+      const res = miniSearch.search(value, { prefix: true });
+      setProviders(
+        () => true,
+        produce((provider) =>
+          value != ''
+            ? (provider.matchesQuery =
+                res.map((o) => o.id).indexOf(provider.id) != -1)
+            : (provider.matchesQuery = true)
+        )
+      );
+    }, 500);
+  };
+
   createEffect(() => {
+    console.log('effect');
     if (store.providers.state == 'ready') {
       setProviders(
         store
@@ -62,12 +41,15 @@ export default function ProvidersCard() {
           .map((o) => {
             return {
               name: o.sourceName,
+              locationsCount: o.locationsCount,
               id: o.id,
               checked: true,
+              matchesQuery: true,
             };
           })
           .sort((a, b) => (a.name < b.name ? -1 : 1))
       );
+      miniSearch.addAll(providers);
     }
   });
 
@@ -119,25 +101,53 @@ export default function ProvidersCard() {
           </div>
         </section>
         <section className="map-card-section">
-          <ProviderSearch setProviders={setProviders} />
+          <div>
+            <input
+              type="text"
+              className="search-input"
+              onInput={onSearchInput}
+            />
+            <span>
+              <Suspense fallback={<p>Loading...</p>}>
+                {providers.filter((o) => o.matchesQuery).length ==
+                store.providers().length
+                  ? `Listing all ${
+                      store.providers().length
+                    } providers`
+                  : `Listing ${
+                      providers.filter((o) => o.matchesQuery).length
+                    } of ${store.providers().length} providers`}
+              </Suspense>
+            </span>
+          </div>
           <ul className="providers-list">
-            <For each={providers}>
-              {(provider, i) => (
-                <li className="providers-list__item">
-                  <span class="provider-name">{provider.name}</span>
-                  <input
-                    type="checkbox"
-                    name={`source-${provider.id}`}
-                    id={`source-${provider.id}`}
-                    className="checkbox"
-                    value={provider.id}
-                    checked={provider.checked}
-                    onChange={(e) => {
-                      setProviders(i(), 'checked', e.target.checked);
-                    }}
-                  />
-                </li>
-              )}
+            <For each={providers.filter((o) => o.matchesQuery)}>
+              {(provider, i) => {
+                if (provider.matchesQuery) {
+                  return (
+                    <li className="providers-list__item">
+                      <span class="provider-name">
+                        {provider.name}
+                      </span>
+                      <input
+                        type="checkbox"
+                        name={`source-${provider.id}`}
+                        id={`source-${provider.id}`}
+                        className="checkbox"
+                        value={provider.id}
+                        checked={provider.checked}
+                        onChange={(e) => {
+                          setProviders(
+                            (p) => p.id == provider.id,
+                            'checked',
+                            e.target.checked
+                          );
+                        }}
+                      />
+                    </li>
+                  );
+                }
+              }}
             </For>
           </ul>
         </section>
