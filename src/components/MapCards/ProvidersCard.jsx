@@ -1,4 +1,4 @@
-import { createEffect, For, Suspense } from 'solid-js';
+import { createEffect, createSignal, For, Suspense } from 'solid-js';
 import { createStore, produce } from 'solid-js/store';
 import { useStore } from '../../stores';
 import MiniSearch from 'minisearch';
@@ -6,6 +6,7 @@ import MiniSearch from 'minisearch';
 export default function ProvidersCard() {
   const [store, { toggleProviderList, updateProviders }] = useStore();
 
+  const [count, setCount] = createSignal();
   const [providers, setProviders] = createStore([]);
 
   const miniSearch = new MiniSearch({
@@ -33,8 +34,8 @@ export default function ProvidersCard() {
   };
 
   createEffect(() => {
-    console.log('effect');
     if (store.providers.state == 'ready') {
+      setCount(store.providers().length);
       setProviders(
         store
           .providers()
@@ -108,16 +109,12 @@ export default function ProvidersCard() {
               onInput={onSearchInput}
             />
             <span>
-              <Suspense fallback={<p>Loading...</p>}>
-                {providers.filter((o) => o.matchesQuery).length ==
-                store.providers().length
-                  ? `Listing all ${
-                      store.providers().length
-                    } providers`
-                  : `Listing ${
-                      providers.filter((o) => o.matchesQuery).length
-                    } of ${store.providers().length} providers`}
-              </Suspense>
+              {providers.filter((o) => o.matchesQuery).length ==
+              count()
+                ? `Listing all ${count()} providers`
+                : `Listing ${
+                    providers.filter((o) => o.matchesQuery).length
+                  } of ${count()} providers`}
             </span>
           </div>
           <ul className="providers-list">
