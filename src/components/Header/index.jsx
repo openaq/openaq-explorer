@@ -41,7 +41,10 @@ export default function Header() {
               </a>
             </li>
             <li>
-              <a href="/partners" class="nav__item partners-tab">
+              <a
+                href="https://openaq.org/partners"
+                class="nav__item partners-tab"
+              >
                 Partners
               </a>
             </li>
