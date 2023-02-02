@@ -67,7 +67,8 @@ function getField(store) {
         'number',
         [
           'get',
-          `period_${store.mapThreshold.period}_threshold_${store.mapThreshold.threshold}`,
+          'exceedance',
+          //`period_${store.mapThreshold.period}_threshold_${store.mapThreshold.threshold}`,
         ],
       ]
     : ['number', ['get', 'value']];
@@ -92,7 +93,8 @@ function locationsCircleOpacityExpression(store) {
         'case',
         [
           'has',
-          `period_${store.mapThreshold.period}_threshold_${store.mapThreshold.threshold}`,
+          'exceedance',
+          //`period_${store.mapThreshold.period}_threshold_${store.mapThreshold.threshold}`,
         ],
         1,
         0,
@@ -158,17 +160,11 @@ function createThresholdTileUrl(store) {
     excludeInactive = '&active=true';
   }
   let providers_ids = '';
-  if (store.mapFilters.excludedProviders.length > 0) {
-    const providers = store.providers().map((o) => o.id);
-    const ids = providers
-      .filter((o) => !store.mapFilters.excludedProviders.includes(0))
-      .join(',');
-    providers_ids = `&providers_id=${ids}`;
-  }
-
+  const period = store.mapThreshold.period;
+  const threshold = store.mapThreshold.threshold;
   return `${
     import.meta.env.VITE_API_BASE_URL
-  }/v3/thresholds/tiles/{z}/{x}/{y}.pbf?${parameters}${isMonitor}${excludeInactive}${providers_ids}`;
+  }/v3/thresholds/tiles/{z}/{x}/{y}.pbf?period=${period}&threshold=${threshold}&${parameters}${isMonitor}${excludeInactive}${providers_ids}`;
 }
 
 export function Map() {
@@ -454,7 +450,7 @@ export function Map() {
             maxzoom: 24,
             'source-layer': 'default',
             layout: {
-              'text-field': ['get', 'period_1_threshold_5'],
+              'text-field': ['get', 'exceedance'],
               'text-font': [
                 'Space Grotesk Regular',
                 'Arial Unicode MS Regular',
