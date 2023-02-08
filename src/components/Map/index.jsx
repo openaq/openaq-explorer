@@ -89,16 +89,7 @@ function percentColorScale() {
 
 function locationsCircleOpacityExpression(store) {
   return store.mapThreshold.active
-    ? [
-        'case',
-        [
-          'has',
-          'exceedance',
-          //`period_${store.mapThreshold.period}_threshold_${store.mapThreshold.threshold}`,
-        ],
-        1,
-        0,
-      ]
+    ? ['case', ['has', 'exceedance'], 1, 0]
     : 1;
 }
 

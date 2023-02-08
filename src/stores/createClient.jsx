@@ -87,7 +87,7 @@ export default function createClient([state, actions]) {
         .join('&');
       return send(
         'get',
-        `/v3/measurementsv2?limit=1000&location_id=${locationsId}&${parameterParams}&date_from=${datetimeStart}&date_to=${datetimeEnd}`,
+        `/v3/locations/${locationsId}/measurementsv2?limit=1000&${parameterParams}&date_from=${datetimeStart}&date_to=${datetimeEnd}`,
         undefined,
         'results',
         undefined
@@ -109,11 +109,10 @@ export default function createClient([state, actions]) {
         .format();
       return send(
         'get',
-        `/v2/measurements?limit=1000&location_id=${locationId}&date_from=${datetimeStart}&date_to=${datetimeEnd}`,
+        `/v3/locations/${locationId}/measurementsv2?limit=1000&date_from=${datetimeStart}&date_to=${datetimeEnd}`,
         undefined,
         'results',
-        undefined,
-        'https://api.openaq.org'
+        undefined
       );
     },
   };
