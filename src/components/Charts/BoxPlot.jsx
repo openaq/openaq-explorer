@@ -187,16 +187,16 @@ export default function Boxplot(props) {
     setTooltip({
       period: lookup[d.factor.label],
       values: {
-        max: parseFloat(d.summary.q98.toFixed(4)),
-        interquartileTop: parseFloat(d.summary.q75.toFixed(4)),
-        median: parseFloat(d.summary.median.toFixed(4)),
-        interquartileBottom: parseFloat(d.summary.q25.toFixed(4)),
-        min: parseFloat(d.summary.q02.toFixed(4)),
+        max: parseFloat(d.summary.q98.toFixed(3)),
+        interquartileTop: parseFloat(d.summary.q75.toFixed(3)),
+        median: parseFloat(d.summary.median.toFixed(3)),
+        interquartileBottom: parseFloat(d.summary.q25.toFixed(3)),
+        min: parseFloat(d.summary.q02.toFixed(3)),
       },
       style: {
         display: 'block',
-        x: e.clientX,
-        y: e.clientY,
+        x: e.pageX + 20,
+        y: e.pageY - 250,
       },
     });
   };
@@ -257,94 +257,93 @@ export default function Boxplot(props) {
 
   return (
     <>
-      <div style="position:relative;">
-        <BoxPlotTooltip data={tooltip()} />
-        <svg
-          width={`${props.width + props.margin}px`}
-          height={`${props.height + props.margin}px`}
+      <BoxPlotTooltip data={tooltip()} />
+      <svg
+        width={`${props.width + props.margin}px`}
+        height={`${props.height + props.margin}px`}
+      >
+        <g
+          className={`chart-grid box-plot-grid-${props.name}`}
+          transform={`translate(${props.margin / 2} ${
+            props.margin / 2
+          } )`}
+        ></g>
+        <g
+          transform={`translate(${
+            props.margin / 1.8 + boxWidth / 2
+          } ${props.margin / 2})`}
         >
-          <g
-            className={`chart-grid box-plot-grid-${props.name}`}
-            transform={`translate(${props.margin / 2} ${
-              props.margin / 2
-            } )`}
-          ></g>
-          <g
-            transform={`translate(${
-              props.margin / 1.8 + boxWidth / 2
-            } ${props.margin / 2})`}
-          >
-            <For each={chartData()}>
-              {(d) => {
-                return (
-                  <g
-                    onMouseEnter={(e) => onMouseEnter(e, d)}
-                    onMouseLeave={onMouseLeave}
-                  >
-                    <line
-                      stroke-width={2}
-                      stroke="#CCCCCC"
-                      className="whiskers"
-                      x1={x(d.factor.label)}
-                      x2={x(d.factor.label)}
-                      y1={y(d.summary.q02)}
-                      y2={y(d.summary.q98)}
-                    />
-                    <line
-                      stroke-width={boxWidth}
-                      stroke="#EAE7FF"
-                      className="box"
-                      x1={x(d.factor.label)}
-                      x2={x(d.factor.label)}
-                      y1={y(d.summary.q25)}
-                      y2={y(d.summary.q75)}
-                    />
-                    <line
-                      stroke-width={2}
-                      stroke="#8576ED"
-                      className="q3"
-                      x1={x(d.factor.label) - boxWidth / 2}
-                      x2={x(d.factor.label) + boxWidth / 2}
-                      y1={y(d.summary.q75)}
-                      y2={y(d.summary.q75)}
-                    />
-                    <line
-                      stroke-width={2}
-                      stroke="#8576ED"
-                      className="q1"
-                      x1={x(d.factor.label) - boxWidth / 2}
-                      x2={x(d.factor.label) + boxWidth / 2}
-                      y1={y(d.summary.q25)}
-                      y2={y(d.summary.q25)}
-                    />
-                    <line
-                      stroke-width={4}
-                      stroke="#584DAE"
-                      className="median"
-                      x1={x(d.factor.label) - boxWidth / 2}
-                      x2={x(d.factor.label) + boxWidth / 2}
-                      y1={y(d.summary.median)}
-                      y2={y(d.summary.median)}
-                    />
-                  </g>
-                );
-              }}
-            </For>
-          </g>
-          <g
-            class={`box-plot-y-axis-${props.name}`}
-            transform={`translate(${props.margin / 2} ${
-              props.margin / 2
-            })`}
-          ></g>
-          <g
-            class={`box-plot-x-axis-${props.name}`}
-            transform={`translate(${props.margin / 2} ${
-              props.height + props.margin / 2
-            })`}
-          ></g>
-        </svg>
-      </div>
+          <For each={chartData()}>
+            {(d) => {
+              return (
+                <g
+                  class="box-plot-bar"
+                  onMouseEnter={(e) => onMouseEnter(e, d)}
+                  onMouseLeave={onMouseLeave}
+                >
+                  <line
+                    stroke-width={2}
+                    stroke="#CCCCCC"
+                    className="whiskers"
+                    x1={x(d.factor.label)}
+                    x2={x(d.factor.label)}
+                    y1={y(d.summary.q02)}
+                    y2={y(d.summary.q98)}
+                  />
+                  <line
+                    stroke-width={boxWidth}
+                    stroke="#EAE7FF"
+                    className="box"
+                    x1={x(d.factor.label)}
+                    x2={x(d.factor.label)}
+                    y1={y(d.summary.q25)}
+                    y2={y(d.summary.q75)}
+                  />
+                  <line
+                    stroke-width={2}
+                    stroke="#8576ED"
+                    className="q3"
+                    x1={x(d.factor.label) - boxWidth / 2}
+                    x2={x(d.factor.label) + boxWidth / 2}
+                    y1={y(d.summary.q75)}
+                    y2={y(d.summary.q75)}
+                  />
+                  <line
+                    stroke-width={2}
+                    stroke="#8576ED"
+                    className="q1"
+                    x1={x(d.factor.label) - boxWidth / 2}
+                    x2={x(d.factor.label) + boxWidth / 2}
+                    y1={y(d.summary.q25)}
+                    y2={y(d.summary.q25)}
+                  />
+                  <line
+                    stroke-width={4}
+                    stroke="#584DAE"
+                    className="median"
+                    x1={x(d.factor.label) - boxWidth / 2}
+                    x2={x(d.factor.label) + boxWidth / 2}
+                    y1={y(d.summary.median)}
+                    y2={y(d.summary.median)}
+                  />
+                </g>
+              );
+            }}
+          </For>
+        </g>
+        <g
+          class={`box-plot-y-axis-${props.name}`}
+          transform={`translate(${props.margin / 2} ${
+            props.margin / 2
+          })`}
+        ></g>
+        <g
+          class={`box-plot-x-axis-${props.name}`}
+          transform={`translate(${props.margin / 2} ${
+            props.height + props.margin / 2
+          })`}
+        ></g>
+      </svg>
     </>
   );
 }
