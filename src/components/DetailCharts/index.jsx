@@ -28,7 +28,6 @@ function LatestMeasurementsChart() {
   };
 
   const track = createReaction(() => {
-    console.log('react');
     setSelectedParameter(store.location?.sensors[0].parameter.name);
     setChartParams({
       parameter: store.location?.sensors[0].parameter.name,

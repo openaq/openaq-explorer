@@ -1,4 +1,4 @@
-import { createSignal, For } from 'solid-js';
+import { createSignal, For, createReaction } from 'solid-js';
 import { useStore } from '../../stores';
 import { produce, createStore } from 'solid-js/store';
 import dayjs from 'dayjs/esm/index.js';
@@ -68,6 +68,14 @@ export default function DownloadCard() {
     store.location?.sensors.map((o) => o.parameter.name) ?? [];
 
   const [parameters, setParameters] = createStore(allParameters());
+
+  const track = createReaction(() => {
+    setParameters(
+      store.location?.sensors.map((o) => o.parameter.name)
+    );
+  });
+
+  track(() => store.location?.sensors);
 
   const downloadOnClick = () => {
     setFilters({
