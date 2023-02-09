@@ -117,10 +117,36 @@ export default function createClient([state, actions]) {
     },
   };
 
+  const Downloads = {
+    get: (downloadFilters) => {
+      const { locationsId, parameters, dateFrom, dateTo } =
+        downloadFilters;
+      const offset = (new Date().getTimezoneOffset() / 60) * -1;
+      const datetimeStart = dayjs(dateFrom)
+        .utcOffset(offset, true)
+        .format();
+      const datetimeEnd = dayjs(dateTo)
+        .utcOffset(offset, true)
+        .format();
+      const parameterParams = parameters
+        .map((o) => `parameter=${o}`)
+        .join('&');
+      return send(
+        'get',
+        `/v2/measurements?location_id=${locationsId}&limit=1000&${parameterParams}&date_from=${datetimeStart}&date_to=${datetimeEnd}`,
+        undefined,
+        'results',
+        undefined,
+        'https://api.openaq.org'
+      );
+    },
+  };
+
   return {
     Auth,
     Locations,
     Measurements,
+    Downloads,
     Parameters,
     Trends,
     Providers,

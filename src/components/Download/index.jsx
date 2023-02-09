@@ -1,4 +1,10 @@
-import { createSignal, For, createReaction } from 'solid-js';
+import {
+  createSignal,
+  For,
+  createReaction,
+  createEffect,
+  on,
+} from 'solid-js';
 import { useStore } from '../../stores';
 import { produce, createStore } from 'solid-js/store';
 import dayjs from 'dayjs/esm/index.js';
@@ -58,7 +64,7 @@ function measurementsCsv(data) {
 }
 
 export default function DownloadCard() {
-  const [store, { setFilters }] = useStore();
+  const [store, { setDownloadFilters }] = useStore();
 
   const [dateTo, setDateTo] = createSignal(new Date());
   const [dateFrom, setDateFrom] = createSignal(
@@ -78,14 +84,23 @@ export default function DownloadCard() {
   track(() => store.location?.sensors);
 
   const downloadOnClick = () => {
-    setFilters({
+    setDownloadFilters({
       dateFrom: dateFrom(),
       dateTo: dateTo(),
       parameters: parameters,
     });
-    const csv = measurementsCsv(store.download());
-    downloadFile(`measurements_${store.id}.csv`, csv);
   };
+
+  createEffect(
+    on(
+      store.download,
+      (download) => {
+        const csv = measurementsCsv(download);
+        downloadFile(`measurements_${store.id}.csv`, csv);
+      },
+      { defer: true }
+    )
+  );
 
   return (
     <div style="position:relative;">

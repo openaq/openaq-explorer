@@ -10,7 +10,7 @@ export default function createDownload(
 
   const [measurementsDownload] = createResource(
     downloadFilters,
-    client.Measurements.get
+    client.Downloads.get
   );
   Object.assign(actions, {
     setParameters(parameters) {
@@ -22,7 +22,7 @@ export default function createDownload(
     setDateTo(datetime) {
       setDateTo(datetime);
     },
-    setFilters(props) {
+    setDownloadFilters(props) {
       setDownloadFilters({
         locationsId: state.location.id,
         dateFrom: props.dateFrom,
