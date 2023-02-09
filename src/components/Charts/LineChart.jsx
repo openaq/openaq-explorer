@@ -18,8 +18,7 @@ export default function LineChart(props) {
   const [chartData, setChartData] = createSignal(props.data);
 
   const x = scaleTime().range([0, props.width]);
-  x.domain(extent(props.data, (d) => new Date(d.date.local)));
-
+  console.log(props.data);
   const y = scaleLinear().range([props.height, 0]);
 
   const yAxis = axisLeft(y).ticks(5);
@@ -49,22 +48,26 @@ export default function LineChart(props) {
 
   const yDomain = () => {
     const minimumValue = min(props.data, (d) => d.value);
+
     y.domain([
       minimumValue < 0 ? minimumValue : 0,
-      Math.ceil(
-        max(
-          props.data,
-          (d) => d.value + max(props.data, (d) => d.value) / 5
-        ) / 5
-      ) * 5,
+      max(
+        props.data,
+        (d) => d.value + max(props.data, (d) => d.value)
+      ),
     ]);
   };
 
+  const xDomain = () => {
+    x.domain(extent(props.data, (d) => new Date(d.date.local)));
+  };
+
   yDomain();
+  xDomain();
   createEffect(() => {
     if (props.data) {
       setChartData(props.data);
-
+      xDomain();
       yDomain();
       select('.x-axis').call(axisBottom(x));
 

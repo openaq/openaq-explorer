@@ -1,7 +1,13 @@
 import LineChart from '../Charts/LineChart';
 import { useStore } from '../../stores';
 import Boxplot from '../Charts/BoxPlot';
-import { createSignal, For } from 'solid-js';
+import {
+  createEffect,
+  createSignal,
+  For,
+  createReaction,
+} from 'solid-js';
+import { createStore } from 'solid-js/store';
 
 function LatestMeasurementsChart() {
   const [store] = useStore();
@@ -9,27 +15,33 @@ function LatestMeasurementsChart() {
     store.location?.sensors[0].parameter.name
   );
   //const [selectTimePeriod, setSelectedTimePeriod] = createSignal();
+  const [chartParams, setChartParams] = createStore({
+    parameter: selectedParameter(),
+  });
 
-  const [data, setData] = createSignal(
-    store.recentMeasurements()
-      ? store
-          .recentMeasurements()
-          .filter((o) => o.parameter == selectedParameter())
-      : []
-  );
+  const chartData = (params) => {
+    const measurements = store.recentMeasurements();
+    return (
+      measurements?.filter((o) => o.parameter == params.parameter) ??
+      []
+    );
+  };
 
-  function updateChart() {
-    if (store.recentMeasurements()) {
-      let data = store
-        .recentMeasurements()
-        .filter((o) => o.parameter == selectedParameter())
-        .filter(
-          (o) =>
-            new Date(o.date.utc) > new Date(Date.now() - 86400 * 1000)
-        );
-      setData(data);
-    }
-  }
+  const track = createReaction(() => {
+    console.log('react');
+    setSelectedParameter(store.location?.sensors[0].parameter.name);
+    setChartParams({
+      parameter: store.location?.sensors[0].parameter.name,
+    });
+  });
+
+  track(() => store.location?.sensors[0].parameter.name);
+
+  const onClickUpdate = () => {
+    setChartParams({
+      parameter: selectedParameter(),
+    });
+  };
 
   return (
     <>
@@ -48,8 +60,13 @@ function LatestMeasurementsChart() {
             onChange={(e) => setSelectedParameter(e.target.value)}
           >
             <For each={store.location?.sensors}>
-              {(item, index) => (
-                <option value={item.parameter.name}>
+              {(item) => (
+                <option
+                  value={item.parameter.name}
+                  selected={
+                    selectedParameter() == item.parameter.name
+                  }
+                >
                   {item.parameter.name} ({item.parameter.units})
                 </option>
               )}
@@ -58,7 +75,10 @@ function LatestMeasurementsChart() {
           <select name="" id="" className="select">
             <option value="1">Last 24 hours</option>
           </select>
-          <button className="btn btn-secondary" onClick={updateChart}>
+          <button
+            className="btn btn-secondary"
+            onClick={onClickUpdate}
+          >
             Update
           </button>
         </div>
@@ -67,8 +87,8 @@ function LatestMeasurementsChart() {
         <LineChart
           width={1200}
           height={250}
-          margin={40}
-          data={data()}
+          margin={100}
+          data={chartData(chartParams)}
         />
       </div>
     </>
@@ -148,7 +168,7 @@ function TrendsCharts() {
             width={350}
             height={350}
             period="hour"
-            margin={50}
+            margin={80}
             data={store.hourTrends}
           />
         </div>
@@ -159,7 +179,7 @@ function TrendsCharts() {
             width={350}
             height={350}
             period="day"
-            margin={50}
+            margin={80}
             data={store.dayTrends}
           />
         </div>

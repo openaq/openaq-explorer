@@ -64,11 +64,10 @@ export default function DownloadCard() {
   const [dateFrom, setDateFrom] = createSignal(
     new Date(Date.now() - 86400000)
   );
+  const allParameters = () =>
+    store.location?.sensors.map((o) => o.parameter.name) ?? [];
 
-  const allParameters = store.location?.sensors.map(
-    (o) => o.parameter.name
-  );
-  const [parameters, setParameters] = createStore(allParameters);
+  const [parameters, setParameters] = createStore(allParameters());
 
   const downloadOnClick = () => {
     setFilters({
