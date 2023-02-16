@@ -1,6 +1,6 @@
 import MapGL, { Source, Layer, Control } from 'solid-map-gl';
 import Geocoder from '../Geocoder';
-import { createSignal } from 'solid-js';
+import { createEffect, createSignal, on } from 'solid-js';
 import { useStore } from '../../stores';
 
 function calculateFlyToDuration(zoom) {
@@ -166,9 +166,30 @@ export function Map() {
       loadLocation,
       setLocationId,
       loadRecentMeasurements,
+      setMeasurements,
     },
   ] = useStore();
-  const [cursorStyle, setCursorStyle] = createSignal('');
+  const [cursorStyle, setCursorStyle] = createSignal();
+
+  createEffect(
+    on(
+      () => store.location,
+      () => {
+        if (store.location) {
+          const dateTo = new Date();
+          const dateFrom = new Date(
+            Date.now() - 86400 * 1000
+          ).toISOString();
+          setMeasurements(
+            store.location.id,
+            store.location.sensors[0].parameter.id,
+            dateFrom,
+            dateTo
+          );
+        }
+      }
+    )
+  );
 
   function getFeature(e) {
     const features = e.target.queryRenderedFeatures(e.point);

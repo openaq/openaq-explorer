@@ -12,7 +12,7 @@ function transform(data) {
   return data.map((o) => {
     return {
       value: parseFloat(o.value),
-      date: isoParse(o.date.local),
+      date: isoParse(o.period.datetimeTo.local),
     };
   });
 }

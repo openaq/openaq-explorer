@@ -72,9 +72,10 @@ export default function createClient([state, actions]) {
   };
 
   const Measurements = {
-    get: (downloadFilters) => {
-      const { locationsId, parameters, dateFrom, dateTo } =
-        downloadFilters;
+    get: (params) => {
+      console.log('get measurements');
+      const { locationsId, parameter, dateFrom, dateTo } = params;
+      console.log(locationsId);
       const offset = (new Date().getTimezoneOffset() / 60) * -1;
       const datetimeStart = dayjs(dateFrom)
         .utcOffset(offset, true)
@@ -82,12 +83,10 @@ export default function createClient([state, actions]) {
       const datetimeEnd = dayjs(dateTo)
         .utcOffset(offset, true)
         .format();
-      const parameterParams = parameters
-        .map((o) => `parameter=${o}`)
-        .join('&');
+      const parameterParams = `parameters_id=${parameter}`;
       return send(
         'get',
-        `/v3/locations/${locationsId}/measurementsv2?limit=1000&${parameterParams}&date_from=${datetimeStart}&date_to=${datetimeEnd}`,
+        `/v3/locations/${locationsId}/measurements?period_name=hour&limit=1000&${parameterParams}&date_from=${datetimeStart}&date_to=${datetimeEnd}`,
         undefined,
         'results',
         undefined
@@ -109,7 +108,7 @@ export default function createClient([state, actions]) {
         .format();
       return send(
         'get',
-        `/v3/locations/${locationId}/measurementsv2?limit=1000&date_from=${datetimeStart}&date_to=${datetimeEnd}`,
+        `/v3/locations/${locationId}/measurements?period_name=hour&limit=1000&date_from=${datetimeStart}&date_to=${datetimeEnd}`,
         undefined,
         'results',
         undefined
@@ -129,11 +128,11 @@ export default function createClient([state, actions]) {
         .utcOffset(offset, true)
         .format();
       const parameterParams = parameters
-        .map((o) => `parameter=${o}`)
+        .map((o) => `parameters_id=${o}`)
         .join('&');
       return send(
         'get',
-        `/v2/measurements?location_id=${locationsId}&limit=1000&${parameterParams}&date_from=${datetimeStart}&date_to=${datetimeEnd}`,
+        `/v2/measurements?period_name=hour&location_id=${locationsId}&limit=1000&${parameterParams}&date_from=${datetimeStart}&date_to=${datetimeEnd}`,
         undefined,
         'results',
         undefined,

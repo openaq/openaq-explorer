@@ -18,7 +18,6 @@ export default function LineChart(props) {
   const [chartData, setChartData] = createSignal(props.data);
 
   const x = scaleTime().range([0, props.width]);
-  console.log(props.data);
   const y = scaleLinear().range([props.height, 0]);
 
   const yAxis = axisLeft(y).ticks(5);
@@ -31,18 +30,18 @@ export default function LineChart(props) {
     data.map((o) => {
       return {
         value: o.value,
-        cx: x(new Date(o.date.local)),
+        cx: x(new Date(o.period.datetimeTo.local)),
         cy: y(o.value),
-        unit: o.unit,
+        unit: o.parameter.units,
       };
     });
 
   const line = d3Line()
-    .x((d) => x(new Date(d.date.local)))
+    .x((d) => x(new Date(d.period.datetimeTo.local)))
     .y((d) => y(d.value));
 
   const area = d3Area()
-    .x((d) => x(new Date(d.date.local)))
+    .x((d) => x(new Date(d.period.datetimeTo.local)))
     .y0(props.height)
     .y1((d) => y(d.value));
 
@@ -59,7 +58,9 @@ export default function LineChart(props) {
   };
 
   const xDomain = () => {
-    x.domain(extent(props.data, (d) => new Date(d.date.local)));
+    x.domain(
+      extent([new Date(props.dateFrom), new Date(props.dateTo)])
+    );
   };
 
   yDomain();
@@ -88,8 +89,8 @@ export default function LineChart(props) {
             tooltipValue()?.visible
               ? 'display:flex;'
               : 'display:none;'
-          }left:${tooltipValue()?.x - 90}px; top:${
-            tooltipValue()?.y - 25
+          }left:${tooltipValue()?.x - 65}px; top:${
+            tooltipValue()?.y + 5
           }px;`}
         >
           <span className="line-chart-tooltip__value">

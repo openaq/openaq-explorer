@@ -1,47 +1,54 @@
 import LineChart from '../Charts/LineChart';
 import { useStore } from '../../stores';
 import Boxplot from '../Charts/BoxPlot';
-import {
-  createEffect,
-  createSignal,
-  For,
-  createReaction,
-} from 'solid-js';
-import { createStore } from 'solid-js/store';
+import { createSignal, For, createReaction } from 'solid-js';
+
+function calculateTimeDiff(hours) {
+  return 60 * 60 * hours * 1000;
+}
 
 function LatestMeasurementsChart() {
-  const [store] = useStore();
+  const [store, { setMeasurements }] = useStore();
   const [selectedParameter, setSelectedParameter] = createSignal(
-    store.location?.sensors[0].parameter.name
+    store.location?.sensors[0].parameter.id
   );
-  //const [selectTimePeriod, setSelectedTimePeriod] = createSignal();
-  const [chartParams, setChartParams] = createStore({
-    parameter: selectedParameter(),
-  });
+  const [selectedTimePeriod, setSelectedTimePeriod] =
+    createSignal(24);
+  const [dateFrom, setDateFrom] = createSignal(
+    new Date(
+      Date.now() - calculateTimeDiff(selectedTimePeriod())
+    ).toISOString()
+  );
+  const [dateTo] = createSignal(new Date().toISOString()); // static for now
 
-  const chartData = (params) => {
-    const measurements = store.recentMeasurements();
-    return (
-      measurements?.filter((o) => o.parameter == params.parameter) ??
-      []
-    );
-  };
+  const chartData = () =>
+    store.measurements() ? store.measurements() : [];
 
   const track = createReaction(() => {
-    setSelectedParameter(store.location?.sensors[0].parameter.name);
-    setChartParams({
-      parameter: store.location?.sensors[0].parameter.name,
-    });
+    setSelectedParameter(store.location?.sensors[0].parameter.id);
+    setMeasurements(
+      store.location.id,
+      store.location?.sensors[0].parameter.id,
+      dateFrom(),
+      dateTo()
+    );
   });
 
   track(() => store.location?.sensors[0].parameter.name);
 
   const onClickUpdate = () => {
-    setChartParams({
-      parameter: selectedParameter(),
-    });
+    setDateFrom(
+      new Date(
+        Date.now() - calculateTimeDiff(selectedTimePeriod())
+      ).toISOString()
+    );
+    setMeasurements(
+      store.location.id,
+      selectedParameter(),
+      dateFrom(),
+      dateTo()
+    );
   };
-
   return (
     <>
       <div style="display:flex; align-items: center; margin: 24px 0; gap:12px;">
@@ -61,18 +68,25 @@ function LatestMeasurementsChart() {
             <For each={store.location?.sensors}>
               {(item) => (
                 <option
-                  value={item.parameter.name}
-                  selected={
-                    selectedParameter() == item.parameter.name
-                  }
+                  value={item.parameter.id}
+                  selected={selectedParameter() == item.parameter.id}
                 >
                   {item.parameter.name} ({item.parameter.units})
                 </option>
               )}
             </For>
           </select>
-          <select name="" id="" className="select">
-            <option value="1">Last 24 hours</option>
+          <select
+            name=""
+            id=""
+            className="select"
+            onChange={(e) => setSelectedTimePeriod(e.target.value)}
+          >
+            <option value="24">Last 24 hours</option>
+            <option value="48">Last 48 hours</option>
+            <option value="72">Last 72 hours</option>
+            <option value="168">Last 1 week</option>
+            <option value="720">Last 30 days</option>
           </select>
           <button
             className="btn btn-secondary"
@@ -87,7 +101,9 @@ function LatestMeasurementsChart() {
           width={1200}
           height={250}
           margin={100}
-          data={chartData(chartParams)}
+          dateFrom={dateFrom()}
+          dateTo={dateTo()}
+          data={chartData()}
         />
       </div>
     </>
@@ -161,7 +177,6 @@ function TrendsCharts() {
       <div style="display: flex; justify-content: space-around;">
         <div>
           <h3 className="type-header-3">Hour of day</h3>
-
           <Boxplot
             name={'time-of-day'}
             width={350}

@@ -32,11 +32,12 @@ export default function LocationDetailCard() {
     if (store.recentMeasurements()) {
       const groups = group(
         store.recentMeasurements(),
-        (d) => d.parameter
+        (d) => d.parameter.name
       );
-      return Array.from(groups, (item) => {
+      const values = Array.from(groups, (item) => {
         return { key: item[0], values: item[1] };
       });
+      return values;
     }
   };
 

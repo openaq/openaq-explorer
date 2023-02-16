@@ -1,9 +1,4 @@
-import {
-  createSignal,
-  createContext,
-  useContext,
-  createEffect,
-} from 'solid-js';
+import { createSignal, createContext, useContext } from 'solid-js';
 import { createStore } from 'solid-js/store';
 import { useStore } from '../../stores';
 import Badge from '../Badge';
