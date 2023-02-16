@@ -221,7 +221,7 @@ export default function Boxplot(props) {
     const minimumValue = min(chartData(), (d) => d.summary.q02);
     y.domain([
       minimumValue < 0 ? minimumValue : 0,
-      max(chartData(), (d) => Math.ceil(d.summary.q98 / 5) * 5 * 1.1),
+      max(chartData(), (d) => d.summary.q98 * 1.1),
     ]);
   };
 
