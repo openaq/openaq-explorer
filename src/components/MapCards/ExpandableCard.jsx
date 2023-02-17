@@ -125,7 +125,6 @@ export default function FilterOverlayCard() {
                 name="no-recent-updates"
                 id="no-recent-updates"
                 className="checkbox"
-                checked
                 onChange={noRecentUpdatesCheck}
               />
             </div>

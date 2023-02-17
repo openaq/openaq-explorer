@@ -9,7 +9,7 @@ export default function createMapFilters(
   const [mapFilters, setMapFilters] = createStore({
     monitor: true,
     airSensor: true,
-    excludeInactive: false,
+    excludeInactive: true,
     providers: state.providers,
   });
   Object.assign(actions, {
