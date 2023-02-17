@@ -10,12 +10,77 @@ import {
   min,
   max,
   extent,
+  timeFormat,
+  timeSecond,
+  timeMinute,
+  timeHour,
+  timeDay,
+  timeWeek,
+  timeMonth,
+  timeYear,
 } from 'd3';
 import { createSignal, createEffect } from 'solid-js';
+import { useStore } from '../../stores';
+
+const formatMillisecond = timeFormat('.%L');
+const formatSecond = timeFormat(':%S');
+const formatMinute = timeFormat('%I:%M');
+const formatHour = timeFormat('%I:%M');
+const formatDay = timeFormat('%b %d');
+const formatWeek = timeFormat('%b %d');
+const formatMonth = timeFormat('%B');
+const formatYear = timeFormat('%Y');
+
+const multiFormat = (date) =>
+  (timeSecond(date) < date
+    ? formatMillisecond
+    : timeMinute(date) < date
+    ? formatSecond
+    : timeHour(date) < date
+    ? formatMinute
+    : timeDay(date) < date
+    ? formatHour
+    : timeMonth(date) < date
+    ? timeWeek(date) < date
+      ? formatDay
+      : formatWeek
+    : timeYear(date) < date
+    ? formatMonth
+    : formatYear)(date);
+
+// splits single measurements series into multiple subseries
+// if dates are not continuous
+function splitMeasurements(measurements) {
+  let result = [];
+  let lastDate;
+  if (measurements.length === 0) {
+    return [[]];
+  }
+  measurements.reduce((acc, curr, idx, arr) => {
+    const date = new Date(curr.period.datetimeTo.local);
+    if (
+      !(
+        lastDate === undefined ||
+        parseInt((date - lastDate) / (60 * 60 * 1000)) === 1
+      )
+    ) {
+      result.push(acc);
+      acc = [];
+    }
+    acc.push(curr);
+    if (idx === arr.length - 1 && acc.length > 0) {
+      result.push(acc);
+    }
+    lastDate = date;
+    return acc;
+  }, []);
+  return result;
+}
 
 export default function LineChart(props) {
   const [tooltipValue, setTooltipValue] = createSignal();
   const [chartData, setChartData] = createSignal(props.data);
+  const [store] = useStore();
 
   const x = scaleTime().range([0, props.width]);
   const y = scaleLinear().range([props.height, 0]);
@@ -25,6 +90,10 @@ export default function LineChart(props) {
     .tickSize(-props.width)
     .tickFormat('')
     .ticks(5);
+
+  const xAxis = axisBottom(x)
+    .ticks(24)
+    .tickFormat((d) => multiFormat(d));
 
   const points = (data) =>
     data.map((o) => {
@@ -50,10 +119,7 @@ export default function LineChart(props) {
 
     y.domain([
       minimumValue < 0 ? minimumValue : 0,
-      max(
-        props.data,
-        (d) => d.value + max(props.data, (d) => d.value)
-      ),
+      max(props.data, (d) => max(props.data, (d) => d.value) * 1.2),
     ]);
   };
 
@@ -70,7 +136,7 @@ export default function LineChart(props) {
       setChartData(props.data);
       xDomain();
       yDomain();
-      select('.x-axis').call(axisBottom(x));
+      select('.x-axis').call(xAxis);
 
       select('.y-axis').call(yAxis);
       select('.line-chart-grid')
@@ -139,7 +205,14 @@ export default function LineChart(props) {
               props.margin / 2
             })`}
           >
-            <path className="line-chart-area" d={area(chartData())} />
+            <For each={splitMeasurements(chartData())}>
+              {(areaData) => (
+                <path
+                  className="line-chart-area"
+                  d={area(areaData)}
+                />
+              )}
+            </For>
           </g>
           <g
             className="chart-grid line-chart-grid"
@@ -152,7 +225,14 @@ export default function LineChart(props) {
               props.margin / 2
             })`}
           >
-            <path className="line-chart-line" d={line(chartData())} />
+            <For each={splitMeasurements(chartData())}>
+              {(lineData) => (
+                <path
+                  className="line-chart-line"
+                  d={line(lineData)}
+                />
+              )}
+            </For>
             <For each={points(chartData())}>
               {(item) => (
                 <circle
@@ -175,6 +255,29 @@ export default function LineChart(props) {
                 />
               )}
             </For>
+            <Show when={store.measurements.loading}>
+              <text
+                text-anchor="middle"
+                x={props.width / 2}
+                y={props.height / 2}
+              >
+                Loading...
+              </text>
+            </Show>
+            <Show
+              when={
+                store.measurements.state == 'ready' &&
+                props.data.length === 0
+              }
+            >
+              <text
+                text-anchor="middle"
+                x={props.width / 2}
+                y={props.height / 2}
+              >
+                No data in selected time range
+              </text>
+            </Show>
           </g>
           <g
             class="y-axis"

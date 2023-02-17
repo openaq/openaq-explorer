@@ -156,8 +156,13 @@ function TrendsCharts() {
             onChange={(e) => setMeasurandsId(e.target.value)}
           >
             <For each={store.location?.sensors}>
-              {(sensor, i) => (
-                <option value={sensor.parameter.id}>
+              {(sensor) => (
+                <option
+                  value={sensor.parameter.id}
+                  selected={() =>
+                    measurandsId() == sensor.parameter.id
+                  }
+                >
                   {sensor.parameter.name} ({sensor.parameter.units})
                 </option>
               )}
