@@ -1,5 +1,6 @@
 # OpenAQ Explorer
 
+![explore-screenshot](https://user-images.githubusercontent.com/8487728/219827842-24082062-832d-45ae-8def-e58ffd6cd6e9.jpg)
 
 
 ## Development
