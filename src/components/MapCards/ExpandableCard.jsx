@@ -3,7 +3,6 @@ import { useStore } from '../../stores';
 import {
   LowCostSensorMarker,
   NoRecentUpdateMarker,
-  PoorCoverageMarker,
   ReferenceGradeMarker,
 } from '../LocationMarker';
 import Accordion from './Accordion';
@@ -55,20 +54,21 @@ export default function FilterOverlayCard() {
     },
   ] = useStore();
 
+  const [showMonitors, setShowMonitors] = createSignal(true);
+  const [showAirSensors, setShowAirSensors] = createSignal(true);
+
   const monitorCheck = (e) => {
+    setShowMonitors(e.target.checked);
     toggleMonitor(e.target.checked);
   };
 
   const sensorCheck = (e) => {
+    setShowAirSensors(e.target.checked);
     toggleAirSensor(e.target.checked);
   };
 
   const noRecentUpdatesCheck = (e) => {
     toggleInactive(e.target.checked);
-  };
-
-  const dataCoverageCheck = (e) => {
-    console.log(e.target.checked);
   };
 
   return (
@@ -95,8 +95,9 @@ export default function FilterOverlayCard() {
                 name="reference-grade"
                 id="reference-grade"
                 className="checkbox"
-                checked
+                checked={store.mapFilters.monitor}
                 onChange={monitorCheck}
+                disabled={!showAirSensors()}
               />
             </div>
             <LowCostSensorMarker />
@@ -110,8 +111,9 @@ export default function FilterOverlayCard() {
                 name="low-cost-sensor"
                 id="low-cost-sensor"
                 className="checkbox"
-                checked
+                checked={store.mapFilters.airSensor}
                 onChange={sensorCheck}
+                disabled={!showMonitors()}
               />
             </div>
             <NoRecentUpdateMarker />
