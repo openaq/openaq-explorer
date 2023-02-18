@@ -366,7 +366,6 @@ test.describe('explore page', () => {
   });
 
   for (const legendVal of legendVals) {
-    console.log(legendVal.option);
     test(`Map legend option ${legendVal.option} - values change with option selection`, async ({ page }) => {
     await page.getByRole('combobox').first().selectOption(`${legendVal.option}`);
     expect(await page.evaluate(() => [].slice.call(document.querySelector('.map-legend-bar-labels').children).map(o => o.innerText))).toStrictEqual(legendVal.vals)

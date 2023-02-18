@@ -102,7 +102,7 @@ const config = {
   webServer: {
     command: 'yarn run dev',
     url: 'http://localhost:3000',
-    timeout: 120 * 1000,
+    timeout: 60 * 1000,
     reuseExistingServer: !process.env.CI,
   }
 };
