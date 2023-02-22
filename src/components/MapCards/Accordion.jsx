@@ -1,9 +1,4 @@
-import {
-  createSignal,
-  createContext,
-  useContext,
-  createEffect,
-} from 'solid-js';
+import { createSignal, createContext, useContext } from 'solid-js';
 import { createStore } from 'solid-js/store';
 import { useStore } from '../../stores';
 import Badge from '../Badge';
@@ -45,7 +40,9 @@ function AccordionHelp({ contentKey, open }) {
 
   return (
     <span
-      class={`material-symbols-outlined ${open() ? 'white' : 'grey'}`}
+      class={`${contentKey}-help-btn material-symbols-outlined ${
+        open() ? 'white' : 'grey'
+      }`}
       onClick={(e) => showHelp(e)}
     >
       help
@@ -102,8 +99,140 @@ function AccordionPanel(props) {
   );
 }
 
+function ThresholdSelect() {
+  const [thresholdParameter, setThresholdParameter] = createSignal(2); // initialize with PM25
+  const [thresholdValue, setThresholdValue] = createSignal(5); // initialize at 5ugm3
+  const [thressholdPeriod, setThressholdPeriod] = createSignal(14); // initialize at 14 days
+
+  const [store, { setMapThreshold }] = useStore();
+
+  function setThreshold() {
+    setMapThreshold({
+      active: true,
+      parameter_id: thresholdParameter(),
+      threshold: thresholdValue(),
+      period: thressholdPeriod(),
+    });
+  }
+
+  const parameters = [
+    { value: 2, display: 'PM2.5' },
+    { value: 1, display: 'PM10' },
+    { value: 3, display: 'O₃' },
+    { value: 5, display: 'NO₂' },
+  ];
+  const periods = [
+    { value: 14, display: 'Last 14 days' },
+    { value: 30, display: 'Last 30 days' },
+    { value: 90, display: 'Last 90 days' },
+  ];
+  const thresholdValues = [
+    { value: 5, display: 5, parameter: 2 },
+    { value: 10, display: 10, parameter: 2 },
+    { value: 250, display: 250, parameter: 2 },
+    { value: 15, display: 15, parameter: 1 },
+    { value: 20, display: 20, parameter: 1 },
+    { value: 100, display: 100, parameter: 3 },
+    { value: 10, display: 10, parameter: 5 },
+    { value: 40, display: 40, parameter: 5 },
+  ];
+
+  const [thresholds, setThresholds] = createSignal(
+    thresholdValues.filter((o) => o.parameter == 2)
+  );
+
+  function onParameterChange(e) {
+    setThresholds(
+      thresholdValues.filter((o) => o.parameter == e.target.value)
+    );
+    setThresholdValue(
+      thresholdValues.filter((o) => o.parameter == e.target.value)[0]
+        .value
+    );
+    setThresholdParameter(parseInt(e.target.value));
+  }
+
+  return (
+    <>
+      <select
+        name=""
+        id=""
+        className="select"
+        onChange={onParameterChange}
+      >
+        <For each={parameters}>
+          {(parameter) => (
+            <option value={parameter.value}>
+              {parameter.display}
+            </option>
+          )}
+        </For>
+      </select>
+      <div className="thresholds-controls">
+        <span className="thresholds-controls__item">Above</span>
+        <select
+          name=""
+          id=""
+          className="select thresholds-controls__item"
+          onChange={(e) =>
+            setThresholdValue(parseInt(e.target.value))
+          }
+        >
+          <For
+            each={thresholds().filter(
+              (o) => o.parameter === thresholdParameter()
+            )}
+          >
+            {(threshold, i) => (
+              <option value={threshold.value} selected={i === 1}>
+                {threshold.display}
+              </option>
+            )}
+          </For>
+        </select>
+        <span className="thresholds-controls__item">µg/m³</span>
+      </div>
+      <select
+        name=""
+        id=""
+        className="select"
+        onChange={(e) =>
+          setThressholdPeriod(parseInt(e.target.value))
+        }
+      >
+        <For each={periods}>
+          {(period, i) => (
+            <option value={period.value} selected={i == 0}>
+              {period.display}
+            </option>
+          )}
+        </For>
+      </select>
+      <button className="btn btn-secondary" onClick={setThreshold}>
+        Update
+      </button>
+    </>
+  );
+}
+
 export default function Accordion() {
-  const [store, { loadParameter }] = useStore();
+  const [thresholdParameter, setThresholdParameter] = createSignal(2);
+  const [thresholdValue, setThresholdValue] = createSignal(5);
+  const [thressholdPeriod, setThressholdPeriod] = createSignal(1);
+
+  const [
+    store,
+    { loadParameter, setMapThreshold, setMapThresholdActive },
+  ] = useStore();
+
+  function setThreshold() {
+    setMapThreshold({
+      active: true,
+      parameter_id: thresholdParameter(),
+      threshold: thresholdValue(),
+      period: thressholdPeriod(),
+    });
+  }
 
   return (
     <AccordionProvider>
@@ -111,7 +240,7 @@ export default function Accordion() {
         name="pollutants"
         title="Pollutant"
         contentKey="pollutants"
-        active={true}
+        active={!store.mapThreshold.active}
         open={true}
       >
         <select
@@ -129,70 +258,25 @@ export default function Accordion() {
                 value={parameter.id}
                 selected={parameter.id == store.parameter.id}
               >
-                {parameter.displayName} {parameter.preferredUnit}
+                {parameter.displayName} {parameter.units}
               </option>
             )}
           </For>
         </select>
-        <button className="btn btn-secondary">Update</button>
-      </AccordionPanel>
-      <AccordionPanel
-        name="aqi"
-        title="Air Quality Index"
-        contentKey="aqi"
-      >
-        <select
-          name="aqi"
-          id="aqi"
-          className="select"
-          onChange={(e) => loadParameterId(e.target.value)}
+        <button
+          className="btn btn-secondary"
+          onClick={() => setMapThresholdActive(false)}
         >
-          <option value="nowcast">US EPA PM NowCast</option>
-          <option value="nowcast">US EPA Ozone NowCast</option>
-        </select>
-        <button className="btn btn-secondary">Update</button>
+          Update
+        </button>
       </AccordionPanel>
       <AccordionPanel
         name="thresholds"
         title="Thresholds"
         contentKey="thresholds"
+        active={store.mapThreshold.active}
       >
-        <select
-          name=""
-          id=""
-          className="select"
-          onChange={(e) => loadOverlay(e.target.value)}
-        >
-          <option value="2" selected>
-            PM 2.5
-          </option>
-          <option value="1">PM 10</option>
-          <option value="3">O&#8323;</option>
-        </select>
-        <div className="thresholds-controls">
-          <span className="thresholds-controls__item">Above</span>
-          <select
-            name=""
-            id=""
-            className="select thresholds-controls__item"
-          >
-            <option value="">100</option>
-          </select>
-          <span className="thresholds-controls__item">µg/m³</span>
-        </div>
-        <select
-          name=""
-          id=""
-          className="select"
-          onChange={(e) => loadOverlay(e.target.value)}
-        >
-          <option value="1" selected>
-            Last 7 days
-          </option>
-          <option value="2">Last 30 days</option>
-          <option value="3">last 90 days</option>
-        </select>
-        <button className="btn btn-secondary">Update</button>
+        <ThresholdSelect />
       </AccordionPanel>
     </AccordionProvider>
   );

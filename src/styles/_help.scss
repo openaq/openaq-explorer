@@ -1,4 +1,4 @@
-@import 'typography';
+@use 'openaq-design-system/scss/mixins/index' as mixins;
 
 .help-panel {
   padding: 16px;
@@ -7,26 +7,18 @@
     border-top: 1px dashed #d4d8dd;
   }
 
-  h1 {
-    @include subtitle3;
-    color: #5a6672;
-    font-weight: 700;
-    font-size: 14px;
+  h1 h2 h3 h4 {
+    @include mixins.subtitle3;
   }
 
   p {
-    @include body1;
-    color: #5a6672;
-    font-weight: 400;
-    font-size: 14px;
+    @include mixins.body1;
+    margin: 10px 0;
   }
 
   ul {
     li {
-      @include body1;
-      color: #5a6672;
-      font-weight: 400;
-      font-size: 14px;
+      @include mixins.body1;
     }
   }
 }

@@ -1,8 +1,9 @@
-@use 'openaq-design-system/scss/variables';
+@use 'openaq-design-system/scss/variables' as variables;
+@use 'openaq-design-system/scss/mixins/index' as mixins;
 
 .chart-help {
-  @include link2;
-  color: $smoke120;
+  @include mixins.link2;
+  color: variables.$smoke120;
   cursor: pointer;
 }
 
@@ -39,4 +40,8 @@
 
 .aqi-hazardous-chart-point {
   fill: variables.$us-epa-maroon;
+}
+
+.box-plot-bar {
+  cursor: pointer;
 }

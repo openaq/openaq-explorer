@@ -1,4 +1,4 @@
-import { createResource, createSignal } from 'solid-js';
+import { createResource } from 'solid-js';
 
 export default function createProviders(
   client,
@@ -7,6 +7,7 @@ export default function createProviders(
   setState
 ) {
   let [providers] = createResource(client.Providers.getAll);
+
   Object.assign(actions, {
     toggleProviderList: (show) => {
       setState('providerListActive', show);

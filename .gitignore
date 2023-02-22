@@ -2,3 +2,7 @@ node_modules
 dist
 .env
 .DS_Store
+/test-results/
+/playwright-report/
+/playwright/.cache/
+stats.html

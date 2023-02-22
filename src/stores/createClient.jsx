@@ -1,7 +1,19 @@
-const API_ROOT = 'https://api.openaq.org';
+import dayjs from 'dayjs/esm/index.js';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
+
+const API_ROOT = import.meta.env.VITE_API_BASE_URL;
 
 export default function createClient([state, actions]) {
-  async function send(method, url, data, resKey, idx) {
+  async function send(
+    method,
+    url,
+    data,
+    resKey,
+    idx,
+    url_root = API_ROOT
+  ) {
     const headers = {},
       opts = { method, headers };
 
@@ -11,10 +23,9 @@ export default function createClient([state, actions]) {
     }
 
     try {
-      const response = await fetch(API_ROOT + url, opts);
+      const response = await fetch(url_root + url, opts);
       const json = await response.json();
       const res = resKey ? json[resKey] : json;
-      console.log;
       return idx != undefined ? res[idx] : res;
     } catch (err) {
       if (err && err.response && err.response.status === 401) {
@@ -36,41 +47,96 @@ export default function createClient([state, actions]) {
 
   const Locations = {
     get: (id) =>
-      send('get', `/v2/locations/${id}`, undefined, 'results', 0),
+      send('get', `/v3/locations/${id}`, undefined, 'results', 0),
   };
 
   const Parameters = {
-    getAll: () => send('get', `/v2/parameters`, undefined, 'results'),
+    getAll: () => send('get', `/v3/parameters`, undefined, 'results'),
   };
 
   const Providers = {
     getAll: () =>
-      send('get', `/v2/sources?limit=1000`, undefined, 'results'),
+      send('get', `/v3/providers?limit=1000`, undefined, 'results'),
+  };
+
+  const Trends = {
+    get: (params) => {
+      const { sensorNodesId, measurandsId, period } = params;
+      return send(
+        'get',
+        `/v3/locations/${sensorNodesId}/trends/${measurandsId}?period_name=${period}`,
+        undefined,
+        'results'
+      );
+    },
   };
 
   const Measurements = {
-    getRecent: (locationId, parameter) => {
-      console.log(locationId);
+    get: (params) => {
+      console.log('get measurements');
+      const { locationsId, parameter, dateFrom, dateTo } = params;
+      console.log(locationsId);
+      const offset = (new Date().getTimezoneOffset() / 60) * -1;
+      const datetimeStart = dayjs(dateFrom)
+        .utcOffset(offset, true)
+        .format();
+      const datetimeEnd = dayjs(dateTo)
+        .utcOffset(offset, true)
+        .format();
+      const parameterParams = `parameters_id=${parameter}`;
       return send(
         'get',
-        `/v2/measurements?location_id=${locationId}&parameter=${parameter}&limit=24&order=desc`,
+        `/v3/locations/${locationsId}/measurements?period_name=hour&limit=1000&${parameterParams}&date_from=${datetimeStart}&date_to=${datetimeEnd}`,
         undefined,
         'results',
-        0
+        undefined
       );
     },
-    getLocationMeasurements: ({ locationId, parameters }) => {
-      console.log(locationId, parameters);
-      return Promise.all(
-        parameters?.map((parameter) =>
-          send(
-            'get',
-            `/v2/measurements?location_id=${locationId}&parameter=${parameter}&limit=24&order=desc`,
-            undefined,
-            'results',
-            0
-          )
-        )
+
+    getRecent: (locationId) => {
+      const dateTo = new Date();
+      const dateFrom = new Date(
+        Date.now() - 86400 * 1000
+      ).toISOString();
+
+      const offset = (new Date().getTimezoneOffset() / 60) * -1;
+      const datetimeStart = dayjs(dateFrom)
+        .utcOffset(offset, true)
+        .format();
+      const datetimeEnd = dayjs(dateTo)
+        .utcOffset(offset, true)
+        .format();
+      return send(
+        'get',
+        `/v3/locations/${locationId}/measurements?period_name=hour&limit=1000&date_from=${datetimeStart}&date_to=${datetimeEnd}`,
+        undefined,
+        'results',
+        undefined
+      );
+    },
+  };
+
+  const Downloads = {
+    get: (downloadFilters) => {
+      const { locationsId, parameters, dateFrom, dateTo } =
+        downloadFilters;
+      const offset = (new Date().getTimezoneOffset() / 60) * -1;
+      const datetimeStart = dayjs(dateFrom)
+        .utcOffset(offset, true)
+        .format();
+      const datetimeEnd = dayjs(dateTo)
+        .utcOffset(offset, true)
+        .format();
+      const parameterParams = parameters
+        .map((o) => `parameters_id=${o}`)
+        .join('&');
+      return send(
+        'get',
+        `/v2/measurements?period_name=hour&location_id=${locationsId}&limit=1000&${parameterParams}&date_from=${datetimeStart}&date_to=${datetimeEnd}`,
+        undefined,
+        'results',
+        undefined,
+        'https://api.openaq.org'
       );
     },
   };
@@ -79,7 +145,9 @@ export default function createClient([state, actions]) {
     Auth,
     Locations,
     Measurements,
+    Downloads,
     Parameters,
+    Trends,
     Providers,
   };
 }

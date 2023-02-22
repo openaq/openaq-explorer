@@ -1,19 +1,58 @@
-import { For } from 'solid-js';
-import { createSignal } from 'solid-js';
+import { createEffect, createSignal, For, Suspense } from 'solid-js';
+import { createStore, produce } from 'solid-js/store';
 import { useStore } from '../../stores';
-
-function ProviderSearch(providers, setProviders) {}
+import MiniSearch from 'minisearch';
 
 export default function ProvidersCard() {
-  const [store, { toggleProviderList }] = useStore();
+  const [store, { toggleProviderList, updateProviders }] = useStore();
 
-  const [providers, setProviders] = createSignal(store.providers());
+  const [count, setCount] = createSignal();
+  const [providers, setProviders] = createStore([]);
 
-  const [activeProviders, setActiveProviders] = createSignal(
-    store.providers()
-  );
+  const miniSearch = new MiniSearch({
+    fields: ['name'],
+    storeFields: ['name'],
+  });
 
-  const onProviderClick = (e) => {};
+  let timeout;
+
+  const onSearchInput = (e) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      const value = e.target.value;
+      const res = miniSearch.search(value, { prefix: true });
+      setProviders(
+        () => true,
+        produce((provider) =>
+          value != ''
+            ? (provider.matchesQuery =
+                res.map((o) => o.id).indexOf(provider.id) != -1)
+            : (provider.matchesQuery = true)
+        )
+      );
+    }, 500);
+  };
+
+  createEffect(() => {
+    if (store.providers.state == 'ready') {
+      setCount(store.providers().length);
+      setProviders(
+        store
+          .providers()
+          .map((o) => {
+            return {
+              name: o.sourceName,
+              locationsCount: o.locationsCount,
+              id: o.id,
+              checked: true,
+              matchesQuery: true,
+            };
+          })
+          .sort((a, b) => (a.name < b.name ? -1 : 1))
+      );
+      miniSearch.addAll(providers);
+    }
+  });
 
   return (
     <article
@@ -37,47 +76,93 @@ export default function ProvidersCard() {
       <div className="map-card__body">
         <section className="map-card-section">
           <div class="providers-list-subtitle">
-            <span class="providers-list-count">
-              Show all{' '}
-              <span class="providers-list-count__number">
-                {providers()?.length}
-              </span>{' '}
-              data providers
+            <span
+              className="type-link-1 providers-list-select-all"
+              onClick={() =>
+                setProviders(() => true, 'checked', true)
+              }
+            >
+              Select All
             </span>
-            <input
-              type="checkbox"
-              name="show-all-data-sources"
-              id="show-all-data-source"
-              className="checkbox"
-              checked
-            />
+            <span>|</span>
+            <span
+              className="type-link-1 providers-list-select-none"
+              onClick={() => {
+                setProviders(() => true, 'checked', false);
+              }}
+            >
+              Select None
+            </span>
+          </div>
+          <div>
+            <span>
+              {providers.filter((o) => o.checked).length} providers
+              selected
+            </span>
           </div>
         </section>
         <section className="map-card-section">
-          <input type="text" className="search-input" />
-
+          <div>
+            <input
+              type="text"
+              className="search-input"
+              onInput={onSearchInput}
+            />
+            <span>
+              {providers.filter((o) => o.matchesQuery).length ==
+              count()
+                ? `Listing all ${count()} providers`
+                : `Listing ${
+                    providers.filter((o) => o.matchesQuery).length
+                  } of ${count()} providers`}
+            </span>
+          </div>
           <ul className="providers-list">
-            <For each={providers()}>
-              {(provider, i) => (
-                <li className="providers-list__item">
-                  <span class="provider-name">
-                    {provider.sourceName}
-                  </span>
-                  <input
-                    type="checkbox"
-                    name={`source-${provider.id}`}
-                    id={`source-${provider.id}`}
-                    className="checkbox"
-                    checked
-                  />
-                </li>
-              )}
+            <For each={providers.filter((o) => o.matchesQuery)}>
+              {(provider, i) => {
+                if (provider.matchesQuery) {
+                  return (
+                    <li className="providers-list__item">
+                      <span class="provider-name">
+                        {provider.name}
+                      </span>
+                      <input
+                        type="checkbox"
+                        name={`source-${provider.id}`}
+                        id={`source-${provider.id}`}
+                        className="checkbox"
+                        value={provider.id}
+                        checked={provider.checked}
+                        onChange={(e) => {
+                          setProviders(
+                            (p) => p.id == provider.id,
+                            'checked',
+                            e.target.checked
+                          );
+                        }}
+                      />
+                    </li>
+                  );
+                }
+              }}
             </For>
           </ul>
         </section>
       </div>
       <footer className="map-card__footer">
-        <button className="btn btn-primary">Update</button>
+        <button
+          className={`update-providers-btn btn btn-primary ${
+            providers.filter((o) => o.checked).length > 0
+              ? ''
+              : 'btn-primary--disabled'
+          }`}
+          disabled={providers.filter((o) => o.checked).length == 0}
+          onClick={() =>
+            updateProviders(providers.filter((o) => o.checked))
+          }
+        >
+          Update
+        </button>
       </footer>
     </article>
   );

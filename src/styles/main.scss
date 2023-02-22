@@ -1,11 +1,16 @@
-@use 'openaq-design-system/scss/variables';
+@use 'openaq-design-system/scss/variables' as variables;
 @use 'openaq-design-system/scss/badges';
 @use 'openaq-design-system/scss/buttons';
 @use 'openaq-design-system/scss/inputs';
 @use 'openaq-design-system/scss/resets';
 @use 'openaq-design-system/scss/bubbles';
 @use 'openaq-design-system/scss/utilities';
+@use 'openaq-design-system/scss/mixins/index' as mixins;
+@use 'openaq-design-system/scss/horizontal-rule';
+@use 'location-detail-card';
+
 @use 'flip-card';
+@use 'breadcrumbs';
 @import 'header';
 @import 'map-card';
 @import 'progress-bar';
@@ -16,7 +21,6 @@
 @import 'help';
 @import 'mapbox';
 @import 'charts';
-@import 'typography';
 @import 'map';
 @import 'detail-map';
 @import 'utils';
@@ -32,7 +36,7 @@ body {
 }
 
 .subtitle3 {
-  @include subtitle3;
+  @include mixins.subtitle3;
   margin: 0;
 }
 
@@ -40,8 +44,34 @@ body {
   color: white;
 }
 
-hr {
-  margin: 0;
-  border: 0;
-  border-bottom: 1px dashed variables.$smoke30;
+.page-404 {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 80px - 250px);
+
+  .bubble-lg {
+    z-index: -1;
+    position: absolute;
+    left: -100px;
+    top: 30px;
+  }
+
+  .bubble-sm {
+    z-index: -1;
+
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+  }
+}
+
+.date-input {
+  height: 40px;
+  width: 150px;
+  border-radius: 14px;
+  border: 1px solid #d0d5dd;
+  padding: 0 20px;
+  margin: 0 20px;
 }

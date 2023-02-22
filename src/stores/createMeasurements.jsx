@@ -1,5 +1,4 @@
-import { createResource, createSignal } from 'solid-js';
-import { createStore } from 'solid-js/store';
+import { createResource, createSignal, batch } from 'solid-js';
 
 export default function createMeasurements(
   client,
@@ -7,30 +6,35 @@ export default function createMeasurements(
   state,
   setState
 ) {
-  const [locationSource, setLocationSource] = createStore({});
+  const [locationsId, setLocationsId] = createSignal();
+  const [parameter, setParameter] = createSignal();
+  const [dateFrom, setDateFrom] = createSignal();
+  const [dateTo, setDateTo] = createSignal();
 
-  const [measurements] = createResource(
-    () => locationSource,
-    client.Measurements.getLocationMeasurements
+  const fetchParams = () => {
+    if (locationsId() && parameter() && dateFrom() && dateTo) {
+      return {
+        locationsId: locationsId(),
+        parameter: parameter(),
+        dateFrom: dateFrom(),
+        dateTo: dateTo(),
+      };
+    }
+  };
+
+  const [measurements, { mutate }] = createResource(
+    fetchParams,
+    client.Measurements.get
   );
-  /*
-  const [measurementsSource, setMeasurementsSource] = createSignal({
-    locationId: state.location?.id,
-    parameters: state.location?.parameters.map((o) => o.id),
-  });
-  let measurements = createResource(
-    () => {  },
-    client.Measurements.getLocationMeasurements
-  );
-    */
   Object.assign(actions, {
-    loadMeasurementsSource(locationId, parameters) {
-      //setState({ locationId, parameters });
-      //setLocationSource({
-      //  locationId,
-      //  parameters,
-      //});
-      //console.log(locationSource.locationId);
+    setMeasurements(locationsId, parameter, dateFrom, dateTo) {
+      mutate([]);
+      batch(() => {
+        setLocationsId(locationsId);
+        setParameter(parameter);
+        setDateFrom(dateFrom);
+        setDateTo(dateTo);
+      });
     },
   });
 

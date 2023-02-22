@@ -3,12 +3,13 @@ import dayjs from 'dayjs/esm/index.js';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import Progress from '../Charts/Progress';
 import { Link } from '@solidjs/router';
-import img from '../../assets/demo.png';
 import { useStore } from '../../stores';
 import {
   LowCostSensorMarker,
   ReferenceGradeMarker,
 } from '../LocationMarker';
+
+import { parametersLookup } from '../../lookups';
 
 dayjs.extend(relativeTime);
 
@@ -24,6 +25,7 @@ function DetailMap() {
             <a
               href={`https://openstreetmap.org?mlat=${store.location?.coordinates.latitude}&mlon=${store.location?.coordinates.longitude}&zoom=16`}
               rel="noopener noreferrer"
+              className="map-open-link"
               target="_blank"
             >
               <span class="material-symbols-outlined green">
@@ -32,8 +34,16 @@ function DetailMap() {
             </a>
           </div>
           <div className="detail-map-overlay__coordinates">
-            <span>{store.location?.coordinates.latitude}</span>
-            <span>{store.location?.coordinates.longitude}</span>
+            <span>
+              {parseFloat(
+                store.location?.coordinates.latitude.toFixed(4)
+              )}
+            </span>
+            <span>
+              {parseFloat(
+                store.location?.coordinates.longitude.toFixed(4)
+              )}
+            </span>
           </div>
         </div>
       </div>
@@ -51,7 +61,11 @@ function DetailMap() {
           </a>
         </strong>
       </div>
-      <img className="detail-map__image" src={img} alt="" />
+      <img
+        className="detail-map__image"
+        src={`https://images.openaq.org/maps/explorer/location_${store.id}.webp`}
+        alt=""
+      />
     </div>
   );
 }
@@ -67,7 +81,7 @@ export default function DetailOverview() {
     return `Since ${dayjs(lastUpdated).format('DD/MM/YYYY')}`;
   }
 
-  setInterval(() => checkForUpdate(), 1000 * 5);
+  setInterval(() => checkForUpdate(), 1000 * 60 * 5);
 
   return (
     <div style="position:relative; top: -10px;">
@@ -84,9 +98,11 @@ export default function DetailOverview() {
           <div>
             <div class="location-breadcrumb">
               <span className="type-subtitle-3">
-                {store.location?.country}{' '}
-                {store.location?.city ? '/' : ''}{' '}
-                {store.location?.city}
+                {store.location?.country.name}
+                {store.location?.locality
+                  ? '/'
+                  : ' /No city listed'}{' '}
+                {store.location?.locality}
               </span>
             </div>
             <h2 className="type-display-1 text-sky-120">
@@ -96,7 +112,7 @@ export default function DetailOverview() {
           <div style="display:flex; height:40px">
             <Link
               href="#download-card"
-              class="btn btn-tertiary  icon-btn"
+              class="icon-btn btn-tertiary download-data-link"
             >
               <span>Download data </span>
 
@@ -114,12 +130,11 @@ export default function DetailOverview() {
               <div>
                 {' '}
                 <div style="display:flex; gap: 10px; align-items:center;">
-                  {store.location?.sensorType[0].toUpperCase() +
-                    store.location?.sensorType.substring(1)}{' '}
+                  {store.location?.isMonitor
+                    ? 'Monitor'
+                    : 'Air sensor'}
                   <Show
-                    when={
-                      store.location?.sensorType == 'reference grade'
-                    }
+                    when={store.location?.isMonitor}
                     fallback={<LowCostSensorMarker />}
                   >
                     <ReferenceGradeMarker />
@@ -129,82 +144,49 @@ export default function DetailOverview() {
                   {store.location?.isMobile ? 'Mobile' : 'Stationary'}
                 </div>{' '}
               </div>
-              <div>Entity</div>
-              <div>{store.location?.entity}</div>
               <div>Measures</div>
               <div>
-                {store.location?.parameters
-                  .map((o) => `${o.displayName} (${o.unit})`)
+                {store.location?.sensors
+                  .map(
+                    (o) =>
+                      `${
+                        parametersLookup[o.parameter.name] ||
+                        o.parameter.name
+                      } (${o.parameter.units})`
+                  )
                   .join(', ')}
               </div>
               <div>Name</div>
               <div>{store.location?.name}</div>
               <div>Reporting</div>
               <div>
-                {timeFromNow(store.location?.lastUpdated)}
+                {timeFromNow(store.location?.datetimeLast.local)}
                 <div>
                   <span class="body4 smoke120">
-                    {since(store.location?.firstUpdated)}
+                    {since(store.location?.datetimeFirst.local)}
                   </span>
                 </div>
               </div>
               <div>Provider</div>
               <div>
-                <For each={store.location?.sources}>
-                  {(source, i) => {
-                    return source.url ? (
-                      <>
-                        <span className="type-body-1">
-                          {source.name}
-                        </span>
-                        <a
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          href={source.url}
-                          class=""
-                        >
-                          <span class="material-symbols-outlined type-color-ocean-120">
-                            open_in_new
-                          </span>
-                        </a>
-                      </>
-                    ) : (
-                      <span className="type-body-1">
-                        {source.name}
-                      </span>
-                    );
-                  }}
-                </For>
+                {store.location?.provider.url ? (
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href={store.location?.provider.url}
+                  >
+                    {store.location?.provider.name}{' '}
+                    <span class="material-symbols-outlined type-color-ocean-120">
+                      open_in_new
+                    </span>
+                  </a>
+                ) : (
+                  <span>{store.location?.provider.name}</span>
+                )}
               </div>
             </div>
           </section>
-          <section style="flex: 1;">
-            <h4>DATA COVERAGE</h4>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; row-gap: 28px;">
-              <span>Last 7 days</span>
-              <Progress
-                width={156}
-                height={15}
-                margin={{ top: 10, right: 10, bottom: 0, left: 10 }}
-                percent={0.15}
-              />
-              <span>Last 30 days</span>
-              <Progress
-                width={156}
-                height={15}
-                margin={{ top: 10, right: 10, bottom: 0, left: 10 }}
-                percent={0.65}
-              />
-              <span>Last 90 days</span>
-              <Progress
-                width={156}
-                height={15}
-                margin={{ top: 10, right: 10, bottom: 30, left: 10 }}
-                percent={0.42}
-                legend={true}
-              />
-            </div>
-          </section>
+          <section style="flex: 1;"></section>
           <section style="flex: 1;">
             <DetailMap />
           </section>

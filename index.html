@@ -5,15 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <link rel="shortcut icon" type="image/ico" href="/src/assets/favicon.ico" />
-    <link rel="preconnect" href="https:/api.openaq.org">
+    <link rel="preconnect" href="https://api.openaq.org">
+    <link rel="preconnect" href="https://staging.openaq.org">
+    <link rel="preconnect" href="https://images.openaq.org">
+    <link rel="preconnect" href="https://api.mapbox.com">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <% if (env.VITE_APP_ENV === 'production') { %>
+      <script defer data-domain="explore.openaq.org" src="https://plausible.io/js/script.js"></script>
+    <% } %>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-   
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.6.1/d3.min.js" integrity="sha512-MefNfAGJ/pEy89xLOFs3V6pYPs6AmUhXJrRlydI/9wZuGrqxmrdQ80zKHUcyadAcpH67teDZcBeS6oMJLPtTqw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-   <style>
+      <style>
       .material-symbols-outlined {
         font-variation-settings:
         'FILL' 0,

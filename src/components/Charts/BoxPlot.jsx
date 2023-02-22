@@ -1,84 +1,43 @@
-import * as d3 from 'd3';
+import {
+  axisLeft,
+  axisBottom,
+  scaleBand,
+  scaleLinear,
+  select,
+  max,
+  min,
+} from 'd3';
 import { createEffect, createSignal } from 'solid-js';
-import { createStore } from 'solid-js/store';
-import { useContext } from 'solid-js';
-import { createContext } from 'solid-js';
 
-const ChartContext = createContext();
-
-export function ChartProvider(props) {
-  const [store, setStore] = createStore({
-      values: {
-        max: 0,
-      },
-      style: {
-        display: 'none',
-        top: 0,
-        left: 0,
-      },
-    }),
-    setTooltip = [
-      store,
-      {
-        setTooltip: (props) => {
-          setStore({
-            period: props.period,
-            values: {
-              max: props.values?.max,
-              interquartileTop: props.values?.interquartileTop,
-              median: props.values?.median,
-              interquartileBottom: props.values?.interquartileBottom,
-              min: props.values?.min,
-            },
-            style: {
-              display: props.style.display,
-              y: props.style.y,
-              x: props.style.x,
-            },
-          });
-        },
-      },
-    ];
-
-  return (
-    <ChartContext.Provider value={setTooltip}>
-      {props.children}
-    </ChartContext.Provider>
-  );
-}
-
-export function useChart() {
-  return useContext(ChartContext);
-}
-
-export function BoxPlotTooltip(props) {
-  const [tooltip] = useChart();
-
+function BoxPlotTooltip(props) {
   return (
     <div
       style={`
-      position:absolute;
-      top:${tooltip.style.y}px;
-      left:${tooltip.style.x}px; 
-      display:${tooltip.style?.display || 'none'}`}
+          position:absolute;
+          z-index:4;
+          top:${props.data.style?.y}px;
+          left:${props.data.style?.x}px; 
+          display:${props.data.style?.display || 'none'}`}
       className="box-plot-tooltip"
       role="tooltip"
     >
       <div className="box-plot-tooltip__head">
         <span className="type-body3 text-white">
-          {tooltip.period}
+          {props.data?.period}
         </span>
       </div>
       <div className="box-plot-tooltip__body">
         <div className="box-plot-legend-item">
           <div className="bg-smoke-10 box-plot-legend-color"></div>
           <div>
-            <span className="type-body-3">{tooltip.values?.max}</span>
+            <span className="type-body-3">
+              {props.data?.values?.max}
+            </span>
             <span className="type-body-1">µg/m³</span>
           </div>
           <div className="box-plot-legend-item-label">
             <span className="type-body-1">
-              99<sup>th</sup> percentile
+              98<sup>th</sup> percentile
             </span>
           </div>
         </div>
@@ -86,7 +45,7 @@ export function BoxPlotTooltip(props) {
           <div className="bg-lavender-100 box-plot-legend-color"></div>
           <div>
             <span className="type-body-3">
-              {tooltip.values?.interquartileTop}
+              {props.data.values?.interquartileTop}
             </span>
             <span className="type-body-1">µg/m³</span>
           </div>
@@ -100,7 +59,7 @@ export function BoxPlotTooltip(props) {
           <div className="bg-lavender-120 box-plot-legend-color"></div>
           <div>
             <span className="type-body-3">
-              {tooltip.values?.median}{' '}
+              {props.data.values?.median}{' '}
             </span>
             <span className="type-body-1">µg/m³</span>
           </div>
@@ -112,7 +71,7 @@ export function BoxPlotTooltip(props) {
           <div className="bg-lavender-100 box-plot-legend-color"></div>
           <div>
             <span className="type-body-3">
-              {tooltip.values?.interquartileBottom}{' '}
+              {props.data.values?.interquartileBottom}{' '}
             </span>
             <span className="type-body-1">µg/m³</span>
           </div>
@@ -126,13 +85,13 @@ export function BoxPlotTooltip(props) {
           <div className="bg-smoke-10 box-plot-legend-color"></div>
           <div>
             <span className="type-body-3">
-              {tooltip.values?.min}{' '}
+              {props.data.values?.min}{' '}
             </span>
             <span className="type-body-1">µg/m³</span>
           </div>
           <div className="box-plot-legend-item-label">
             <span className="type-body-1">
-              1<sup>st</sup> percentile
+              2<sup>nd</sup> percentile
             </span>
           </div>
         </div>
@@ -141,133 +100,231 @@ export function BoxPlotTooltip(props) {
   );
 }
 
-export function BoxPlot({ name, width, height, margin, data }) {
-  const [tooltip, { setTooltip }] = useChart();
+export default function Boxplot(props) {
+  const [tooltip, setTooltip] = createSignal({
+    style: {
+      display: 'none',
+      y: 0,
+      x: 0,
+    },
+  });
 
-  const periods = data.summaries.map((o) => o.period);
-  const boxWidth = width / periods.length - 5;
-  const x = d3.scaleBand().range([0, width]).domain(periods);
+  const days = {
+    1: 'Monday',
+    2: 'Tuesday',
+    3: 'Wednesday',
+    4: 'Thursday',
+    5: 'Friday',
+    6: 'Saturday',
+    7: 'Sunday',
+  };
 
-  const y = d3
-    .scaleLinear()
-    .range([height, 0])
-    .domain([
-      d3.min(data.summaries, (d) => d.min),
-      d3.max(data.summaries, (d) => Math.ceil(d.max / 5) * 5),
+  const hoursKeys = [
+    '01',
+    '02',
+    '03',
+    '04',
+    '05',
+    '06',
+    '07',
+    '08',
+    '09',
+    '10',
+    '11',
+    '12',
+    '13',
+    '14',
+    '15',
+    '16',
+    '17',
+    '18',
+    '19',
+    '20',
+    '21',
+    '22',
+    '23',
+    '00',
+  ];
+  const hoursValues = [
+    '01:00',
+    '02:00',
+    '03:00',
+    '04:00',
+    '05:00',
+    '06:00',
+    '07:00',
+    '08:00',
+    '09:00',
+    '10:00',
+    '11:00',
+    '12:00',
+    '13:00',
+    '14:00',
+    '15:00',
+    '16:00',
+    '17:00',
+    '18:00',
+    '19:00',
+    '20:00',
+    '21:00',
+    '22:00',
+    '23:00',
+    '00:00',
+  ];
+  const hours = Object.assign(
+    ...hoursKeys.map((k, i) => ({ [k]: hoursValues[i] }))
+  );
+
+  const orderHours = (values) =>
+    Object.keys(values).sort((a, b) => parseInt(a) - parseInt(b));
+
+  const periods =
+    props.period == 'day' ? Object.keys(days) : orderHours(hours);
+  const lookup = props.period == 'day' ? days : hours;
+  const boxWidth = props.width / periods.length - 5;
+
+  const onMouseEnter = (e, d) => {
+    setTooltip({
+      period: lookup[d.factor.label],
+      values: {
+        max: parseFloat(d.summary.q98.toFixed(3)),
+        interquartileTop: parseFloat(d.summary.q75.toFixed(3)),
+        median: parseFloat(d.summary.median.toFixed(3)),
+        interquartileBottom: parseFloat(d.summary.q25.toFixed(3)),
+        min: parseFloat(d.summary.q02.toFixed(3)),
+      },
+      style: {
+        display: 'block',
+        x: e.pageX + 20,
+        y: e.pageY - 250,
+      },
+    });
+  };
+
+  const onMouseLeave = () => {
+    setTooltip({
+      style: {
+        display: 'none',
+        y: 0,
+        x: 0,
+      },
+    });
+  };
+
+  const x = scaleBand().range([0, props.width]).domain(periods);
+
+  const [chartData, setChartData] = createSignal();
+
+  const y = scaleLinear().range([props.height, 0]);
+
+  const yDomain = () => {
+    const minimumValue = min(chartData(), (d) => d.summary.q02);
+    y.domain([
+      minimumValue < 0 ? minimumValue : 0,
+      max(chartData(), (d) => d.summary.q98 * 1.1),
     ]);
+  };
 
   const ticksValues =
     periods.length > 12
-      ? x.domain().filter((e, i) => i % 3 == 0)
+      ? x
+          .domain()
+          .filter((e, i) => i % 3 == 0)
+          .sort((a, b) => parseInt(b) - parseInt(a))
       : periods;
 
-  const yAxis = d3.axisLeft(y).ticks(6);
-  const yAxisGrid = d3
-    .axisLeft(y)
-    .tickSize(-width)
+  const yAxis = axisLeft(y).ticks(6);
+  const yAxisGrid = axisLeft(y)
+    .tickSize(-props.width)
     .tickFormat('')
     .ticks(6);
-  const xAxis = d3.axisBottom(x).tickValues(ticksValues);
+  const xAxis = axisBottom(x)
+    .tickValues(ticksValues)
+    .tickFormat((e, i) => lookup[e]);
 
   createEffect(() => {
-    d3.select(`.box-plot-x-axis-${name}`).call(xAxis);
-    d3.select(`.box-plot-y-axis-${name}`).call(yAxis);
-    d3.select(`.box-plot-grid-${name}`)
-      .call(yAxisGrid)
-      .selectAll('line,path')
-      .style('stroke', '#d4d8dd');
+    if (props.data) {
+      setChartData(props.data);
+      yDomain();
+      select(`.box-plot-x-axis-${props.name}`).call(xAxis);
+      select(`.box-plot-y-axis-${props.name}`).call(yAxis);
+      select(`.box-plot-grid-${props.name}`)
+        .call(yAxisGrid)
+        .selectAll('line,path')
+        .style('stroke', '#d4d8dd');
+    }
   });
 
   return (
     <>
+      <BoxPlotTooltip data={tooltip()} />
       <svg
-        width={`${width + margin}px`}
-        height={`${height + margin}px`}
+        width={`${props.width + props.margin}px`}
+        height={`${props.height + props.margin}px`}
       >
         <g
-          className={`chart-grid box-plot-grid-${name}`}
-          transform={`translate(${margin / 2} ${margin / 2} )`}
+          className={`chart-grid box-plot-grid-${props.name}`}
+          transform={`translate(${props.margin / 2} ${
+            props.margin / 2
+          } )`}
         ></g>
         <g
-          transform={`translate(${margin / 1.8 + boxWidth / 2} ${
-            margin / 2
-          })`}
+          transform={`translate(${
+            props.margin / 1.8 + boxWidth / 2
+          } ${props.margin / 2})`}
         >
-          <For each={data.summaries}>
+          <For each={chartData()}>
             {(d) => {
               return (
                 <g
-                  onMouseEnter={(e) => {
-                    setTooltip({
-                      period: d.period,
-                      values: {
-                        max: d.max,
-                        interquartileTop: d.q3,
-                        median: d.median,
-                        interquartileBottom: d.q1,
-                        min: d.min,
-                      },
-                      style: {
-                        display: 'block',
-                        x: e.clientX - 220,
-                        y: e.clientY - 400,
-                      },
-                    });
-                  }}
-                  onMouseLeave={(e) =>
-                    setTooltip({
-                      style: {
-                        display: 'none',
-                        y: 0,
-                        x: 0,
-                      },
-                    })
-                  }
+                  class="box-plot-bar"
+                  onMouseEnter={(e) => onMouseEnter(e, d)}
+                  onMouseLeave={onMouseLeave}
                 >
                   <line
                     stroke-width={2}
                     stroke="#CCCCCC"
                     className="whiskers"
-                    x1={x(d.period)}
-                    x2={x(d.period)}
-                    y1={y(d.min)}
-                    y2={y(d.max)}
+                    x1={x(d.factor.label)}
+                    x2={x(d.factor.label)}
+                    y1={y(d.summary.q02)}
+                    y2={y(d.summary.q98)}
                   />
                   <line
                     stroke-width={boxWidth}
                     stroke="#EAE7FF"
                     className="box"
-                    x1={x(d.period)}
-                    x2={x(d.period)}
-                    y1={y(d.q1)}
-                    y2={y(d.q3)}
+                    x1={x(d.factor.label)}
+                    x2={x(d.factor.label)}
+                    y1={y(d.summary.q25)}
+                    y2={y(d.summary.q75)}
                   />
                   <line
                     stroke-width={2}
                     stroke="#8576ED"
                     className="q3"
-                    x1={x(d.period) - boxWidth / 2}
-                    x2={x(d.period) + boxWidth / 2}
-                    y1={y(d.q3)}
-                    y2={y(d.q3)}
+                    x1={x(d.factor.label) - boxWidth / 2}
+                    x2={x(d.factor.label) + boxWidth / 2}
+                    y1={y(d.summary.q75)}
+                    y2={y(d.summary.q75)}
                   />
                   <line
                     stroke-width={2}
                     stroke="#8576ED"
                     className="q1"
-                    x1={x(d.period) - boxWidth / 2}
-                    x2={x(d.period) + boxWidth / 2}
-                    y1={y(d.q1)}
-                    y2={y(d.q1)}
+                    x1={x(d.factor.label) - boxWidth / 2}
+                    x2={x(d.factor.label) + boxWidth / 2}
+                    y1={y(d.summary.q25)}
+                    y2={y(d.summary.q25)}
                   />
                   <line
                     stroke-width={4}
                     stroke="#584DAE"
                     className="median"
-                    x1={x(d.period) - boxWidth / 2}
-                    x2={x(d.period) + boxWidth / 2}
-                    y1={y(d.median)}
-                    y2={y(d.median)}
+                    x1={x(d.factor.label) - boxWidth / 2}
+                    x2={x(d.factor.label) + boxWidth / 2}
+                    y1={y(d.summary.median)}
+                    y2={y(d.summary.median)}
                   />
                 </g>
               );
@@ -275,13 +332,15 @@ export function BoxPlot({ name, width, height, margin, data }) {
           </For>
         </g>
         <g
-          class={`box-plot-y-axis-${name}`}
-          transform={`translate(${margin / 2} ${margin / 2})`}
+          class={`box-plot-y-axis-${props.name}`}
+          transform={`translate(${props.margin / 2} ${
+            props.margin / 2
+          })`}
         ></g>
         <g
-          class={`box-plot-x-axis-${name}`}
-          transform={`translate(${margin / 2} ${
-            height + margin / 2
+          class={`box-plot-x-axis-${props.name}`}
+          transform={`translate(${props.margin / 2} ${
+            props.height + props.margin / 2
           })`}
         ></g>
       </svg>

@@ -3,7 +3,6 @@ import { useStore } from '../../stores';
 import {
   LowCostSensorMarker,
   NoRecentUpdateMarker,
-  PoorCoverageMarker,
   ReferenceGradeMarker,
 } from '../LocationMarker';
 import Accordion from './Accordion';
@@ -22,21 +21,18 @@ export function ExpandableCard(props) {
           : ''
       }`}
     >
-      <div className="expandable-card__header" onClick={toggleOpen}>
+      <div className="expandable-card__header">
         <div style="display:flex; align-items:center;">
           <span class="material-symbols-outlined white">layers</span>
           <h3 className="type-heading3 text-white">
             {open() ? 'Overlay' : 'Overlay & Filters'}
           </h3>
         </div>
-        <span class="material-symbols-outlined clickable-icon white">
-          {open() ? 'expand_less' : 'expand_more'}
-        </span>
       </div>
       <div
         className={
           open()
-            ? 'expandable-card__body--open'
+            ? 'expandable-card__body expandable-card__body--open'
             : 'expandable-card__body'
         }
       >
@@ -47,98 +43,105 @@ export function ExpandableCard(props) {
 }
 
 export default function FilterOverlayCard() {
-  const [store, { loadParameter, toggleProviderList }] = useStore();
+  const [
+    store,
+    {
+      loadParameter,
+      toggleProviderList,
+      toggleMonitor,
+      toggleAirSensor,
+      toggleInactive,
+    },
+  ] = useStore();
+
+  const [showMonitors, setShowMonitors] = createSignal(true);
+  const [showAirSensors, setShowAirSensors] = createSignal(true);
+
+  const monitorCheck = (e) => {
+    setShowMonitors(e.target.checked);
+    toggleMonitor(e.target.checked);
+  };
+
+  const sensorCheck = (e) => {
+    setShowAirSensors(e.target.checked);
+    toggleAirSensor(e.target.checked);
+  };
+
+  const noRecentUpdatesCheck = (e) => {
+    toggleInactive(e.target.checked);
+  };
 
   return (
     <ExpandableCard open={true}>
-      <div>
-        <section>
-          <Accordion />
-        </section>
-        <section className="filters-section">
-          <header className="expandable-card__header">
-            <div style="display:flex; align-items:center;">
-              <span class="material-symbols-rounded white">
-                filter_alt
-              </span>
-              <h3 className="type-heading3 text-white">Filters</h3>
+      <Accordion />
+      <section className="filters-section">
+        <header className="expandable-card__header">
+          <div style="display:flex; align-items:center;">
+            <span class="material-symbols-rounded white">
+              filter_alt
+            </span>
+            <h3 className="type-heading3 text-white">Filters</h3>
+          </div>
+        </header>
+        <div style="margin: 16px 15px;">
+          <div class="filters-section__body">
+            <ReferenceGradeMarker />
+            <label htmlFor="reference-grade">
+              Reference monitor locations
+            </label>
+            <div class="marker-legend-item">
+              <input
+                type="checkbox"
+                name="reference-grade"
+                id="reference-grade"
+                className="checkbox"
+                checked={store.mapFilters.monitor}
+                onChange={monitorCheck}
+                disabled={!showAirSensors()}
+              />
             </div>
-          </header>
-          <div style="margin: 16px 15px;">
-            <div style="width: 250px; display:grid; grid-template-columns: 1fr 4fr 1fr; grid-auto-rows: 1fr; row-gap: 8px; margin-bottom:12px;">
-              <ReferenceGradeMarker />
-              <label htmlFor="reference-grade">
-                Reference grade locations
-              </label>
-              <div>
-                <input
-                  type="checkbox"
-                  name="reference-grade"
-                  id="reference-grade"
-                  className="checkbox"
-                  checked
-                />
-              </div>
-              <LowCostSensorMarker />
-              <label htmlFor="low-cost-sensor">
-                {' '}
-                Low-cost sensors locations
-              </label>
-              <div>
-                <input
-                  type="checkbox"
-                  name="low-cost-sensor"
-                  id="low-cost-sensor"
-                  className="checkbox"
-                  checked
-                />
-              </div>
-              <NoRecentUpdateMarker />
+            <LowCostSensorMarker />
+            <label htmlFor="low-cost-sensor">
+              {' '}
+              Air sensors locations
+            </label>
+            <div class="marker-legend-item">
+              <input
+                type="checkbox"
+                name="low-cost-sensor"
+                id="low-cost-sensor"
+                className="checkbox"
+                checked={store.mapFilters.airSensor}
+                onChange={sensorCheck}
+                disabled={!showMonitors()}
+              />
+            </div>
+            <NoRecentUpdateMarker />
 
-              <label htmlFor="no-recent-updates">
-                Show locations with no recent updates
-              </label>
-              <div>
-                <input
-                  type="checkbox"
-                  name="no-recent-updates"
-                  id="no-recent-updates"
-                  className="checkbox"
-                  checked
-                />
-              </div>
-              <PoorCoverageMarker />
-              <label htmlFor="poor-data-coverage">
-                Show locations with Poor data coverage
-              </label>
-              <div>
-                {' '}
-                <input
-                  type="checkbox"
-                  name="poor-data-coverage"
-                  id="poor-data-coverage"
-                  className="checkbox"
-                  checked
-                />
-              </div>
+            <label htmlFor="no-recent-updates">
+              Show locations with no recent updates
+            </label>
+            <div class="marker-legend-item">
+              <input
+                type="checkbox"
+                name="no-recent-updates"
+                id="no-recent-updates"
+                className="checkbox"
+                onChange={noRecentUpdatesCheck}
+              />
             </div>
           </div>
-          <div className="expandable-card__footer">
-            <div>
-              <span>Showing data from {} providers</span>
-            </div>
-            <button
-              className="btn btn-secondary icon-btn"
-              onClick={() => toggleProviderList(true)}
-            >
-              Choose data providers
-              <span class="material-symbols-outlined green">
-                tune
-              </span>
-            </button>
-          </div>
-        </section>
-      </div>
+        </div>
+        <div className="expandable-card__footer">
+          <button
+            className="btn btn-secondary icon-btn"
+            onClick={() => toggleProviderList(true)}
+          >
+            Choose data providers
+            <span class="material-symbols-outlined green">tune</span>
+          </button>
+        </div>
+      </section>
     </ExpandableCard>
   );
 }

@@ -1,14 +1,11 @@
-@use 'openaq-design-system/scss/variables';
-@use 'openaq-design-system/scss/utilities';
+@use 'openaq-design-system/scss/variables' as variables;
+@use 'openaq-design-system/scss/mixins/index' as mixins;
 
-@import 'typography';
 @import 'cards';
 
 .expandable-card {
   @include card;
   position: absolute;
-  //top: 100px;
-  //right: 48px;
   transform: none;
   will-change: transform;
   transition: transform 0.3s cubic-bezier(0, 0, 0.3, 1);
@@ -30,13 +27,14 @@
   }
 
   &__body {
+    height: auto;
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease-out;
 
     &--open {
       max-height: calc(100vh - 80px - 16px - 100px);
-      overflow-y: auto;
+      overflow-y: scroll;
       transition: max-height 0.5s ease-in;
     }
   }
@@ -52,7 +50,7 @@
 
 .accordion {
   &__header {
-    @include subtitle3;
+    @include mixins.subtitle3;
     background-color: variables.$sky10;
     color: #636c77;
     height: 44px;
@@ -109,7 +107,7 @@
   }
 
   &__header {
-    @include heading3;
+    @include mixins.heading3;
     height: 57px;
     background: #1e64ab;
     padding: 0 20px;
@@ -187,18 +185,29 @@
     padding: 12px 10px;
 
     .provider-name {
-      @include body1;
+      @include mixins.body1;
     }
   }
 }
 
 .providers-list-subtitle {
+  width: 70%;
+  margin: 0 auto;
   display: flex;
   justify-content: space-between;
+
+  .providers-list-select-all {
+    cursor: pointer;
+  }
+
+  .providers-list-select-none {
+    cursor: pointer;
+  }
+
   .providers-list-count {
-    @include body1;
+    @include mixins.body1;
     &__number {
-      @include subtitle2;
+      @include mixins.subtitle2;
     }
   }
 }

@@ -1,3 +1,6 @@
+@use 'openaq-design-system/scss/variables' as variables;
+@use 'openaq-design-system/scss/mixins/index' as mixins;
+
 .clickable-icon {
   cursor: pointer;
 }
@@ -6,17 +9,17 @@
   color: white;
 }
 .grey {
-  color: #636c77;
+  color: variables.$smoke120;
 }
 
 .green {
-  color: $ocean120;
+  color: variables.$ocean120;
 }
 
 .smoke120 {
-  color: $smoke120;
+  color: variables.$smoke120;
 }
 
 .body4 {
-  @include body4;
+  @include mixins.body4;
 }
