@@ -156,12 +156,7 @@ function Bounds() {
   const [store] = useStore();
 
   createEffect(() => {
-    console.log('EFFECT');
-    console.log(store.mapBbox);
-    console.log(store.viewport);
     if (!store.viewport && store.mapBbox) {
-      console.log('EFFECT true');
-
       const bounds = [...store.mapBbox];
       map().fitBounds(
         [

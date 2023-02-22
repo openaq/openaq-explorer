@@ -22,7 +22,6 @@ export default function createParameter(
 
   Object.assign(actions, {
     loadParameter(id) {
-      console.log(id);
       const parameter = state
         .parameters()
         .find((x) => x.id === parseInt(id));

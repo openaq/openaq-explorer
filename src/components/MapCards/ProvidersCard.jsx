@@ -12,6 +12,7 @@ export default function ProvidersCard() {
 
   const [count, setCount] = createSignal();
   const [providers, setProviders] = createStore([]);
+  const [activeProviders, setActiveProviders] = createSignal([]);
 
   const miniSearch = new MiniSearch({
     fields: ['name'],
@@ -70,7 +71,6 @@ export default function ProvidersCard() {
     let maxRight = -180;
     let maxTop = -90;
     providerBounds.forEach(([left, bottom, right, top]) => {
-      console.log(left, bottom, right, top);
       if (left < minLeft) minLeft = left;
       if (bottom < minBottom) minBottom = bottom;
       if (right > maxRight) maxRight = right;
@@ -78,6 +78,11 @@ export default function ProvidersCard() {
     });
     setViewport(null);
     setBounds([minLeft, minBottom, maxRight, maxTop]);
+  }
+
+  function onClickUpdate(providers) {
+    setActiveProviders(providers);
+    updateProviders(providers);
   }
 
   return (
@@ -127,8 +132,8 @@ export default function ProvidersCard() {
             </span>
             <Show
               when={
-                providers.filter((o) => o.checked).length !=
-                  count() && providers.length != 0
+                activeProviders().length != count() &&
+                activeProviders().length != 0
               }
             >
               <div
@@ -200,7 +205,7 @@ export default function ProvidersCard() {
           }`}
           disabled={providers.filter((o) => o.checked).length == 0}
           onClick={() =>
-            updateProviders(providers.filter((o) => o.checked))
+            onClickUpdate(providers.filter((o) => o.checked))
           }
         >
           Update

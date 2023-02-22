@@ -73,9 +73,7 @@ export default function createClient([state, actions]) {
 
   const Measurements = {
     get: (params) => {
-      console.log('get measurements');
       const { locationsId, parameter, dateFrom, dateTo } = params;
-      console.log(locationsId);
       const offset = (new Date().getTimezoneOffset() / 60) * -1;
       const datetimeStart = dayjs(dateFrom)
         .utcOffset(offset, true)
