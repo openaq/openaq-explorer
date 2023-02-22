@@ -16,7 +16,6 @@ export default function createOverlay(
 
   Object.assign(actions, {
     loadParameterId(id) {
-      console.log(id);
       setState('parameter', 'id', id);
       setParameterId(id);
     },

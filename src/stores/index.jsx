@@ -16,6 +16,7 @@ import createRecentMeasurements from './createRecentMeasurements';
 import createMapThreshold from './createMapThreshold';
 import createDayTrends from './createDayTrends';
 import createHourTrends from './createHourTrends';
+import createMapBbox from './createMapBbox';
 
 const StoreContext = createContext();
 
@@ -29,6 +30,7 @@ export function Provider(props) {
   let providers;
   let help;
   let mapFilters;
+  let mapBbox;
   let download;
   let recentMeasurements;
   let mapThreshold;
@@ -83,9 +85,13 @@ export function Provider(props) {
       return mapThreshold;
     },
 
+    get mapBbox() {
+      return mapBbox();
+    },
+
     viewport: {
-      zoom: 2,
-      center: [0, 20],
+      zoom: 1.2,
+      center: [40, 20],
     },
 
     providerListActive: false,
@@ -110,6 +116,7 @@ export function Provider(props) {
   mapThreshold = createMapThreshold(client, actions, state, setState);
   dayTrends = createDayTrends(client, actions, state, setState);
   hourTrends = createHourTrends(client, actions, state, setState);
+  mapBbox = createMapBbox(client, actions, state, setState);
 
   recentMeasurements = createRecentMeasurements(
     client,

@@ -1,4 +1,4 @@
-import MapGL, { Source, Layer, Control } from 'solid-map-gl';
+import MapGL, { Source, Layer, Control, useMap } from 'solid-map-gl';
 import Geocoder from '../Geocoder';
 import { createEffect, createSignal, on } from 'solid-js';
 import { useStore } from '../../stores';
@@ -63,14 +63,7 @@ export const parametersBins = {
 
 function getField(store) {
   return store.mapThreshold.active
-    ? [
-        'number',
-        [
-          'get',
-          'exceedance',
-          //`period_${store.mapThreshold.period}_threshold_${store.mapThreshold.threshold}`,
-        ],
-      ]
+    ? ['number', ['get', 'exceedance']]
     : ['number', ['get', 'value']];
 }
 
@@ -156,6 +149,25 @@ function createThresholdTileUrl(store) {
   return `${
     import.meta.env.VITE_API_BASE_URL
   }/v3/thresholds/tiles/{z}/{x}/{y}.pbf?period=${period}&threshold=${threshold}&${parameters}${isMonitor}${excludeInactive}${providers_ids}`;
+}
+
+function Bounds() {
+  const map = useMap();
+  const [store] = useStore();
+
+  createEffect(() => {
+    if (!store.viewport && store.mapBbox) {
+      const bounds = [...store.mapBbox];
+      map().fitBounds(
+        [
+          [bounds[0], bounds[1]],
+          [bounds[2], bounds[3]],
+        ],
+        { padding: { top: 90, bottom: 150, left: 20, right: 360 } }
+      );
+    }
+  });
+  return <></>;
 }
 
 export function Map() {
@@ -492,6 +504,7 @@ export function Map() {
           }}
         />
       </Source>
+      <Bounds />
     </MapGL>
   );
 }
