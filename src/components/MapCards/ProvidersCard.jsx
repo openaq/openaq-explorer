@@ -1,10 +1,14 @@
-import { createEffect, createSignal, For, Suspense } from 'solid-js';
+import { createEffect, createSignal, For, Show } from 'solid-js';
 import { createStore, produce } from 'solid-js/store';
 import { useStore } from '../../stores';
 import MiniSearch from 'minisearch';
+import bbox from '@turf/bbox';
 
 export default function ProvidersCard() {
-  const [store, { toggleProviderList, updateProviders }] = useStore();
+  const [
+    store,
+    { toggleProviderList, updateProviders, setBounds, setViewport },
+  ] = useStore();
 
   const [count, setCount] = createSignal();
   const [providers, setProviders] = createStore([]);
@@ -46,6 +50,7 @@ export default function ProvidersCard() {
               id: o.id,
               checked: true,
               matchesQuery: true,
+              bbox: o.bbox,
             };
           })
           .sort((a, b) => (a.name < b.name ? -1 : 1))
@@ -53,6 +58,27 @@ export default function ProvidersCard() {
       miniSearch.addAll(providers);
     }
   });
+
+  function zoomToExtent() {
+    const providerBounds = providers
+      .filter((o) => o.checked)
+      .map((o) => {
+        return bbox(o.bbox);
+      });
+    let minLeft = 180;
+    let minBottom = 90;
+    let maxRight = -180;
+    let maxTop = -90;
+    providerBounds.forEach(([left, bottom, right, top]) => {
+      console.log(left, bottom, right, top);
+      if (left < minLeft) minLeft = left;
+      if (bottom < minBottom) minBottom = bottom;
+      if (right > maxRight) maxRight = right;
+      if (top > maxTop) maxTop = top;
+    });
+    setViewport(null);
+    setBounds([minLeft, minBottom, maxRight, maxTop]);
+  }
 
   return (
     <article
@@ -99,6 +125,22 @@ export default function ProvidersCard() {
               {providers.filter((o) => o.checked).length} providers
               selected
             </span>
+            <Show
+              when={
+                providers.filter((o) => o.checked).length !=
+                  count() && providers.length != 0
+              }
+            >
+              <div
+                style="cursor:pointer; display:flex; align-items:center; justify-content:center;"
+                onClick={zoomToExtent}
+              >
+                <span>Zoom to provider extent </span>
+                <span class="material-symbols-outlined">
+                  crop_free
+                </span>
+              </div>
+            </Show>
           </div>
         </section>
         <section className="map-card-section">
