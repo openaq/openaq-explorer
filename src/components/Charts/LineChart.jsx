@@ -1,4 +1,3 @@
-import * as d3 from 'd3';
 import {
   area as d3Area,
   line as d3Line,
@@ -24,8 +23,8 @@ import { useStore } from '../../stores';
 
 const formatMillisecond = timeFormat('.%L');
 const formatSecond = timeFormat(':%S');
-const formatMinute = timeFormat('%I:%M');
-const formatHour = timeFormat('%I:%M');
+const formatMinute = timeFormat('%H:%M');
+const formatHour = timeFormat('%H:%M');
 const formatDay = timeFormat('%b %d');
 const formatWeek = timeFormat('%b %d');
 const formatMonth = timeFormat('%B');
@@ -102,6 +101,7 @@ export default function LineChart(props) {
         cx: x(new Date(o.period.datetimeTo.local)),
         cy: y(o.value),
         unit: o.parameter.units,
+        date: new Date(o.period.datetimeTo.local),
       };
     });
 
@@ -240,12 +240,25 @@ export default function LineChart(props) {
                 x2={tooltipValue()?.x}
                 y2={tooltipValue()?.y}
                 stroke="#6A5CD8"
+                stroke-width={1}
               />
               <circle
                 className="line-chart-point-highlight"
                 cx={tooltipValue()?.x}
                 cy={tooltipValue()?.y}
                 r={9}
+              />
+              <rect
+                x="0"
+                y="0"
+                rx="5"
+                ry="5"
+                width="40"
+                height="25"
+                fill="#6A5CD8"
+                transform={`translate(${tooltipValue()?.x - 20},${
+                  props.height
+                })`}
               />
             </Show>
             <For each={points(chartData())}>
@@ -262,6 +275,7 @@ export default function LineChart(props) {
                       y: item.cy,
                       value: item.value,
                       unit: item.unit,
+                      date: item.date,
                     })
                   }
                   onMouseLeave={(e) =>
@@ -306,6 +320,25 @@ export default function LineChart(props) {
               props.height + props.margin / 2
             })`}
           ></g>
+          <g
+            transform={`translate(${props.margin / 2} ${
+              props.margin / 2
+            })`}
+          >
+            <Show when={tooltipValue()?.visible}>
+              <text
+                x="0"
+                y="0"
+                font-size="12"
+                fill="white"
+                transform={`translate(${tooltipValue()?.x - 16},${
+                  props.height + 17
+                })`}
+              >
+                {formatHour(tooltipValue()?.date)}
+              </text>
+            </Show>
+          </g>
         </svg>
       </div>
     </>
