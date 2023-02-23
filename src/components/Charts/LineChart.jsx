@@ -19,7 +19,7 @@ import {
   timeMonth,
   timeYear,
 } from 'd3';
-import { createSignal, createEffect } from 'solid-js';
+import { createSignal, createEffect, Show } from 'solid-js';
 import { useStore } from '../../stores';
 
 const formatMillisecond = timeFormat('.%L');
@@ -193,10 +193,10 @@ export default function LineChart(props) {
           </defs>
           <filter id="shadow" color-interpolation-filters="sRGB">
             <feDropShadow
-              dx="10"
-              dy="10"
-              stdDeviation="3"
-              flood-opacity="0.5"
+              dx="2"
+              dy="2"
+              stdDeviation="0.5"
+              flood-opacity="0.2"
             />
           </filter>
 
@@ -233,13 +233,28 @@ export default function LineChart(props) {
                 />
               )}
             </For>
+            <Show when={tooltipValue()?.visible}>
+              <line
+                x1={tooltipValue()?.x}
+                y1={props.height}
+                x2={tooltipValue()?.x}
+                y2={tooltipValue()?.y}
+                stroke="#6A5CD8"
+              />
+              <circle
+                className="line-chart-point-highlight"
+                cx={tooltipValue()?.x}
+                cy={tooltipValue()?.y}
+                r={9}
+              />
+            </Show>
             <For each={points(chartData())}>
               {(item) => (
                 <circle
                   className="line-chart-point"
                   cx={item.cx}
                   cy={item.cy}
-                  r={3}
+                  r={item.cx == tooltipValue()?.x ? 5 : 3}
                   onMouseEnter={(e) =>
                     setTooltipValue({
                       visible: true,

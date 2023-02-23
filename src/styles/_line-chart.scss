@@ -36,7 +36,12 @@
   &:hover {
     fill: #6a5cd8;
     stroke-width: 0;
-    filter: url(#shadow);
+
     stroke: white;
   }
+}
+
+.line-chart-point-highlight {
+  fill: white;
+  filter: url(#shadow);
 }
