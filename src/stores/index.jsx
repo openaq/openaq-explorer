@@ -18,6 +18,7 @@ import createDayTrends from './createDayTrends';
 import createHourTrends from './createHourTrends';
 import createMapBbox from './createMapBbox';
 
+
 const StoreContext = createContext();
 
 export function Provider(props) {
@@ -31,6 +32,7 @@ export function Provider(props) {
   let help;
   let mapFilters;
   let mapBbox;
+
   let download;
   let recentMeasurements;
   let mapThreshold;
@@ -117,6 +119,7 @@ export function Provider(props) {
   dayTrends = createDayTrends(client, actions, state, setState);
   hourTrends = createHourTrends(client, actions, state, setState);
   mapBbox = createMapBbox(client, actions, state, setState);
+
 
   recentMeasurements = createRecentMeasurements(
     client,

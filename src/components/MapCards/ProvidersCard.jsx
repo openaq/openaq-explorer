@@ -14,6 +14,7 @@ export default function ProvidersCard() {
   const [providers, setProviders] = createStore([]);
   const [activeProviders, setActiveProviders] = createSignal([]);
 
+
   const miniSearch = new MiniSearch({
     fields: ['name'],
     storeFields: ['name'],
@@ -85,6 +86,7 @@ export default function ProvidersCard() {
     updateProviders(providers);
   }
 
+
   return (
     <article
       className={`card map-card ${
@@ -146,6 +148,22 @@ export default function ProvidersCard() {
                 </span>
               </div>
             </Show>
+            </span>
+            <span>|</span>
+            <span
+              className="type-link-1 providers-list-select-none"
+              onClick={() => {
+                setProviders(() => true, 'checked', false);
+              }}
+            >
+              Select None
+            </span>
+          </div>
+          <div>
+            <span>
+              {providers.filter((o) => o.checked).length} providers
+              selected
+            </span>
           </div>
         </section>
         <section className="map-card-section">

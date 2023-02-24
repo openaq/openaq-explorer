@@ -9,7 +9,8 @@
 ## Development
 
 
-This projcets use vite for building and bundling. Certain build variables are required in a root level `.env` file following the vite environment variable requirements. https://vitejs.dev/guide/env-and-mode.html
+This project uses vite for building and bundling. Certain build variables are required in a root level `.env` file following the vite environment variable requirements. https://vitejs.dev/guide/env-and-mode.html
+
 
 The `.env` file should contain the following variables:
 
@@ -25,9 +26,20 @@ To run the development server:
 yarn run dev
 ```
 
+
+### Testing
+
+End-to-end testing uses [Playwright](https://playwright.dev/)
+
+
 To run the end-to-end test suite
 
 ```
 yarn playwright test
 ```
+
+
+## Deployment
+
+Continuous deployment is handled by Github Actions.
 
