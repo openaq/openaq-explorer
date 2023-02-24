@@ -248,7 +248,6 @@ export default function Accordion() {
           id=""
           className="select"
           onChange={(e) => {
-            console.log(store);
             loadParameter(e.target.value);
           }}
         >
