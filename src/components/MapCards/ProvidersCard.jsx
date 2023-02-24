@@ -14,7 +14,6 @@ export default function ProvidersCard() {
   const [providers, setProviders] = createStore([]);
   const [activeProviders, setActiveProviders] = createSignal([]);
 
-
   const miniSearch = new MiniSearch({
     fields: ['name'],
     storeFields: ['name'],
@@ -86,7 +85,6 @@ export default function ProvidersCard() {
     updateProviders(providers);
   }
 
-
   return (
     <article
       className={`card map-card ${
@@ -127,44 +125,24 @@ export default function ProvidersCard() {
               Select None
             </span>
           </div>
-          <div>
-            <span>
-              {providers.filter((o) => o.checked).length} providers
-              selected
-            </span>
-            <Show
-              when={
-                activeProviders().length != count() &&
-                activeProviders().length != 0
-              }
+          <span>
+            {providers.filter((o) => o.checked).length} providers
+            selected
+          </span>
+          <Show
+            when={
+              activeProviders().length != count() &&
+              activeProviders().length != 0
+            }
+          >
+            <div
+              style="cursor:pointer; display:flex; align-items:center; justify-content:center;"
+              onClick={zoomToExtent}
             >
-              <div
-                style="cursor:pointer; display:flex; align-items:center; justify-content:center;"
-                onClick={zoomToExtent}
-              >
-                <span>Zoom to provider extent </span>
-                <span class="material-symbols-outlined">
-                  crop_free
-                </span>
-              </div>
-            </Show>
-            </span>
-            <span>|</span>
-            <span
-              className="type-link-1 providers-list-select-none"
-              onClick={() => {
-                setProviders(() => true, 'checked', false);
-              }}
-            >
-              Select None
-            </span>
-          </div>
-          <div>
-            <span>
-              {providers.filter((o) => o.checked).length} providers
-              selected
-            </span>
-          </div>
+              <span>Zoom to provider extent </span>
+              <span class="material-symbols-outlined">crop_free</span>
+            </div>
+          </Show>
         </section>
         <section className="map-card-section">
           <div>
