@@ -90,9 +90,8 @@ export function Provider(props) {
       return mapBbox();
     },
 
-    viewport: {
-      zoom: 1.2,
-      center: [40, 20],
+    get viewport() {
+      return viewport();
     },
 
     providerListActive: false,
