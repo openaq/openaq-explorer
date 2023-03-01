@@ -5,7 +5,7 @@ import dayjs from 'dayjs/esm/index.js';
 import { group } from 'd3';
 
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { For } from 'solid-js';
+import { For, Show } from 'solid-js';
 import {
   LowCostSensorMarker,
   ReferenceGradeMarker,
@@ -49,43 +49,53 @@ export default function LocationDetailCard() {
 
   return (
     <article
-      className={`dismissable-card location-detail-card ${
+      class={`dismissable-card location-detail-card ${
         !store.id || store.help.active
           ? 'dismissable-card--translate'
           : ''
       }`}
     >
-      <header className="location-detail-card__header">
-        <h3 className="map-card-title">
+      <header class="location-detail-card__header">
+        <h3 class="map-card-title">
           {store.location ? store.location?.name : 'Loading...'}
         </h3>
-        <button className="close-btn" onClick={() => clearLocation()}>
+        <button class="close-btn" onClick={() => clearLocation()}>
           <span class="material-symbols-outlined clickable-icon white">
             close
           </span>
         </button>
       </header>
-      <div className={`map-card__body`}>
-        <section className="map-card-section">
-          <span className="type-body-2">
+      <div class={`map-card__body`}>
+        <section class="map-card-section">
+          <span class="type-body-2">
             {store.location?.locality
               ? store.location?.locality
               : 'No city listed'}
             ,
           </span>{' '}
-          <span className="type-body-3">
+          <span class="type-body-3">
             {store.location?.country.name}
           </span>
         </section>
-        <hr className="hr" />
-        <section className="map-card-section">
+        <hr class="hr" />
+        <section class="map-card-section">
           <div
-            style="display: grid; row-gap: 10px; column-gap: 10px;
-    grid-template-columns: 1fr 2fr;"
+            style={{
+              display: 'grid',
+              'row-gap': '10px',
+              'column-gap': '10px',
+              'grid-template-columns': '1fr 2fr',
+            }}
           >
             <div>Type:</div>
             <div>
-              <div style="display: flex; gap:15px; align-items: center;">
+              <div
+                style={{
+                  display: 'flex',
+                  gap: '15px',
+                  'align-items': 'center',
+                }}
+              >
                 {store.location?.isMonitor ? 'Monitor' : 'Air sensor'}{' '}
                 <Show
                   when={store.location?.isMonitor}
@@ -98,8 +108,8 @@ export default function LocationDetailCard() {
             <div>Measures:</div>
             <div>
               <For each={store.location?.sensors}>
-                {(sensor, i) => (
-                  <span className="parameter-label type-body-1">
+                {(sensor) => (
+                  <span class="parameter-label type-body-1">
                     {sensor.parameter.name} ({sensor.parameter.units}
                     ),
                   </span>
@@ -108,11 +118,15 @@ export default function LocationDetailCard() {
             </div>
           </div>
         </section>
-        <hr className="hr" />
-        <section className="map-card-section">
+        <hr class="hr" />
+        <section class="map-card-section">
           <div
-            style="display: grid; row-gap: 10px; column-gap: 10px;
-grid-template-columns: 1fr 2fr;"
+            style={{
+              display: 'grid',
+              'row-gap': '10px',
+              'column-gap': '10px',
+              'grid-template-columns': '1fr 2fr',
+            }}
           >
             <div>Provider:</div>{' '}
             <div>
@@ -140,10 +154,10 @@ grid-template-columns: 1fr 2fr;"
           </div>
         </section>
 
-        <hr className="hr" />
-        <section className="map-card-section recent-readings">
-          <header className="location-detail-card-section-heading recent-readings__header">
-            <span className="type-subtitle-3">Latest Readings </span>
+        <hr class="hr" />
+        <section class="map-card-section recent-readings">
+          <header class="location-detail-card-section-heading recent-readings__header">
+            <span class="type-subtitle-3">Latest Readings </span>
             <span class="type-body-2 text-smoke-100">
               {`${latestMeasurementTime(
                 store.location?.datetimeLast.local
@@ -159,10 +173,10 @@ grid-template-columns: 1fr 2fr;"
                       {parameter.key}
                     </span>
                     <div>
-                      <span className="type-body-3 text-lavender-100">
+                      <span class="type-body-3 text-lavender-100">
                         {parameter.values[0].value}{' '}
                       </span>
-                      <span className="type-body-1">
+                      <span class="type-body-1">
                         {parameter.values[0].unit}
                       </span>
                     </div>
@@ -177,8 +191,7 @@ grid-template-columns: 1fr 2fr;"
                         left: 1,
                       }}
                       style={{
-                        strokeColor: '#5d48f4',
-                        stokeWidth: '3',
+                        'stroke-color': '#5d48f4',
                         fill: 'none',
                       }}
                     />
@@ -189,10 +202,10 @@ grid-template-columns: 1fr 2fr;"
           </div>
         </section>
       </div>
-      <footer className="location-detail-card__footer">
+      <footer class="location-detail-card__footer">
         <Link
           disabled
-          className={`icon-btn btn-primary ${
+          class={`icon-btn btn-primary ${
             store.location ? '' : ' btn-primary--disabled'
           }`}
           href={

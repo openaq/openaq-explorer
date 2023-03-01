@@ -23,7 +23,7 @@ export default function createLocations(
     },
     clearLocation() {
       setState({ id: null });
-      location = null;
+      mutate(null);
     },
   });
 

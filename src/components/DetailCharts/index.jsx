@@ -51,18 +51,34 @@ function LatestMeasurementsChart() {
   };
   return (
     <>
-      <div style="display:flex; align-items: center; margin: 24px 0; gap:12px;">
-        <h1 className="type-heading-1 text-sky-120">
-          Latest Readings
-        </h1>
+      <div
+        style={{
+          display: 'flex',
+          'align-items': 'center',
+          margin: '24px 0',
+          gap: '12px',
+        }}
+      >
+        <h1 class="type-heading-1 text-sky-120">Latest Readings</h1>
       </div>
 
-      <div style="display:flex; justify-content: space-between;">
-        <div style="display:flex; gap:12px; align-items: center;">
+      <div
+        style={{
+          display: 'flex',
+          'justify-content': 'space-between',
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            gap: '12px',
+            'align-items': 'center',
+          }}
+        >
           <select
             name=""
             id=""
-            className="select"
+            class="select"
             onChange={(e) => setSelectedParameter(e.target.value)}
           >
             <For each={store.location?.sensors}>
@@ -80,7 +96,7 @@ function LatestMeasurementsChart() {
           <select
             name=""
             id=""
-            className="select"
+            class="select"
             onChange={(e) => setSelectedTimePeriod(e.target.value)}
           >
             <option value="24">Last 24 hours</option>
@@ -89,10 +105,7 @@ function LatestMeasurementsChart() {
             <option value="168">Last 1 week</option>
             <option value="720">Last 30 days</option>
           </select>
-          <button
-            className="btn btn-secondary"
-            onClick={onClickUpdate}
-          >
+          <button class="btn btn-secondary" onClick={onClickUpdate}>
             Update
           </button>
         </div>
@@ -143,17 +156,35 @@ function TrendsCharts() {
 
   return (
     <>
-      <div class="patterns-container" style="display: grid: "></div>
-      <div style="display:flex; align-items: center; margin: 24px 0; gap:12px;">
-        <h1 className="type-heading-1 text-sky-120">Patterns</h1>
+      <div class="patterns-container" style={{ display: 'grid:' }} />
+      <div
+        style={{
+          display: 'flex',
+          'align-items': 'center',
+          margin: '24px 0',
+          gap: '12px',
+        }}
+      >
+        <h1 class="type-heading-1 text-sky-120">Patterns</h1>
       </div>
 
-      <div style="display:flex; justify-content: space-between;">
-        <div style="display:flex; gap:12px; align-items: center;">
+      <div
+        style={{
+          display: 'flex',
+          'justify-content': 'space-between',
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            gap: '12px',
+            'align-items': 'center',
+          }}
+        >
           <select
             name=""
             id=""
-            className="select"
+            class="select"
             onChange={(e) => setMeasurandsId(e.target.value)}
           >
             <For each={store.location?.sensors}>
@@ -170,20 +201,22 @@ function TrendsCharts() {
               )}
             </For>
           </select>
-          <select name="" id="" className="select">
+          <select name="" id="" class="select">
             <option value="">All time</option>
           </select>
           <button
-            className="btn btn-secondary"
+            class="btn btn-secondary"
             onClick={() => updateData()}
           >
             Update
           </button>
         </div>
       </div>
-      <div style="display: flex; justify-content: space-around;">
+      <div
+        style={{ display: 'flex', 'justify-content': 'space-around' }}
+      >
         <div>
-          <h3 className="type-header-3">Hour of day</h3>
+          <h3 class="type-header-3">Hour of day</h3>
           <Boxplot
             name={'time-of-day'}
             width={350}
@@ -194,7 +227,7 @@ function TrendsCharts() {
           />
         </div>
         <div>
-          <h3 className="type-header-3">Day of week</h3>
+          <h3 class="type-header-3">Day of week</h3>
           <Boxplot
             name={'day-of-week'}
             width={350}
@@ -209,13 +242,13 @@ function TrendsCharts() {
   );
 }
 
-export default function DetailCharts(props) {
+export default function DetailCharts() {
   return (
-    <div className="detail-charts">
-      <section className="detail-charts__section">
+    <div class="detail-charts">
+      <section class="detail-charts__section">
         <LatestMeasurementsChart />
       </section>
-      <section className="detail-charts__section">
+      <section class="detail-charts__section">
         <TrendsCharts />
       </section>
     </div>

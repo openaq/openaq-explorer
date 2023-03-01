@@ -5,6 +5,7 @@ import visualizer from 'rollup-plugin-visualizer';
 import devtools from 'solid-devtools/vite';
 import lightningcss from 'vite-plugin-lightningcss';
 import { ViteEjsPlugin } from 'vite-plugin-ejs'
+import eslint from 'vite-plugin-eslint';
 
 
 export default defineConfig({
@@ -23,6 +24,18 @@ export default defineConfig({
     lightningcss({
       browserslist: '>= 0.25%',
     }),
+    {
+      ...eslint(),
+      apply: 'build',
+    },
+    {
+      ...eslint({
+        failOnWarning: false,
+        failOnError: false,
+      }),
+      apply: 'serve',
+      enforce: 'post'
+    }
   ],
   server: {
     port: 3000,

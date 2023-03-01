@@ -5,7 +5,7 @@ dayjs.extend(utc);
 
 const API_ROOT = import.meta.env.VITE_API_BASE_URL;
 
-export default function createClient([state, actions]) {
+export default function createClient([actions]) {
   async function send(
     method,
     url,

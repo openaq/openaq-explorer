@@ -7,7 +7,7 @@ export default function MapCards() {
 
   return (
     <div
-      className={`flip-card explore-card ${
+      class={`flip-card explore-card ${
         store.providerListActive ? 'flip-card--active' : ''
       }`}
     >

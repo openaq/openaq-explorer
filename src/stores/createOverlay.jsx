@@ -1,5 +1,4 @@
 import { createSignal } from 'solid-js';
-import { createStore } from 'solid-js/store';
 import { createResource } from 'solid-js';
 
 export default function createOverlay(
@@ -8,7 +7,7 @@ export default function createOverlay(
   state,
   setState
 ) {
-  const [parameterId, setParameterId] = createSignal(2);
+  const [setParameterId] = createSignal(2);
 
   // TODO when new endpoint is available it would be better to
   // only fetch a single parameter

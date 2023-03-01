@@ -9,7 +9,7 @@ export default function Breadcrumb() {
         <span class="material-symbols-outlined green">home</span>
       </a>
       <span class="material-symbols-outlined">chevron_right</span>
-      <Link href="/" className="breadcrumb-explore">
+      <Link href="/" class="breadcrumb-explore">
         Explore the data
       </Link>
       <span class="material-symbols-outlined">chevron_right</span>

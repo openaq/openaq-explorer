@@ -19,7 +19,7 @@ import {
   timeYear,
 } from 'd3';
 
-import { createSignal, createEffect, Show } from 'solid-js';
+import { createSignal, createEffect, Show, For } from 'solid-js';
 import { useStore } from '../../stores';
 
 const formatMillisecond = timeFormat('.%L');
@@ -120,7 +120,7 @@ export default function LineChart(props) {
 
     y.domain([
       minimumValue < 0 ? minimumValue : 0,
-      max(props.data, (d) => max(props.data, (d) => d.value) * 1.2),
+      max(props.data, () => max(props.data, (d) => d.value) * 1.2),
     ]);
   };
 
@@ -130,8 +130,6 @@ export default function LineChart(props) {
     );
   };
 
-  yDomain();
-  xDomain();
   createEffect(() => {
     if (props.data) {
       setChartData(props.data);
@@ -149,9 +147,9 @@ export default function LineChart(props) {
 
   return (
     <>
-      <div style="position:relative;">
+      <div style={{ position: 'relative' }}>
         <div
-          className="line-chart-tooltip"
+          class="line-chart-tooltip"
           style={`${
             tooltipValue()?.visible
               ? 'display:flex;'
@@ -160,10 +158,10 @@ export default function LineChart(props) {
             tooltipValue()?.y + 5
           }px;`}
         >
-          <span className="line-chart-tooltip__value">
+          <span class="line-chart-tooltip__value">
             {tooltipValue()?.value}
           </span>{' '}
-          <span className="line-chart-tooltip__unit">
+          <span class="line-chart-tooltip__unit">
             {tooltipValue()?.unit}
           </span>
         </div>
@@ -208,19 +206,16 @@ export default function LineChart(props) {
           >
             <For each={splitMeasurements(chartData())}>
               {(areaData) => (
-                <path
-                  className="line-chart-area"
-                  d={area(areaData)}
-                />
+                <path class="line-chart-area" d={area(areaData)} />
               )}
             </For>
           </g>
           <g
-            className="chart-grid line-chart-grid"
+            class="chart-grid line-chart-grid"
             transform={`translate(${props.margin / 2} ${
               props.margin / 2
             } )`}
-          ></g>
+          />
           <g
             transform={`translate(${props.margin / 2} ${
               props.margin / 2
@@ -228,10 +223,7 @@ export default function LineChart(props) {
           >
             <For each={splitMeasurements(chartData())}>
               {(lineData) => (
-                <path
-                  className="line-chart-line"
-                  d={line(lineData)}
-                />
+                <path class="line-chart-line" d={line(lineData)} />
               )}
             </For>
             <Show when={tooltipValue()?.visible}>
@@ -244,7 +236,7 @@ export default function LineChart(props) {
                 stroke-width={1}
               />
               <circle
-                className="line-chart-point-highlight"
+                class="line-chart-point-highlight"
                 cx={tooltipValue()?.x}
                 cy={tooltipValue()?.y}
                 r={9}
@@ -265,11 +257,11 @@ export default function LineChart(props) {
             <For each={points(chartData())}>
               {(item) => (
                 <circle
-                  className="line-chart-point"
+                  class="line-chart-point"
                   cx={item.cx}
                   cy={item.cy}
                   r={item.cx == tooltipValue()?.x ? 5 : 3}
-                  onMouseEnter={(e) =>
+                  onMouseEnter={() =>
                     setTooltipValue({
                       visible: true,
                       x: item.cx,
@@ -279,7 +271,7 @@ export default function LineChart(props) {
                       date: item.date,
                     })
                   }
-                  onMouseLeave={(e) =>
+                  onMouseLeave={() =>
                     setTooltipValue({ visible: false })
                   }
                 />
@@ -314,13 +306,13 @@ export default function LineChart(props) {
             transform={`translate(${props.margin / 2} ${
               props.margin / 2
             })`}
-          ></g>
+          />
           <g
             class="x-axis"
             transform={`translate(${props.margin / 2} ${
               props.height + props.margin / 2
             })`}
-          ></g>
+          />
           <g
             transform={`translate(${props.margin / 2} ${
               props.margin / 2

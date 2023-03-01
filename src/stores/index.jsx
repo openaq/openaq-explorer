@@ -4,7 +4,6 @@ import createLocation from './createLocation';
 import { Router } from '@solidjs/router';
 import createClient from './createClient';
 import createOverlay from './createOverlay';
-import createViewport from './createViewport';
 import createHelp from './createHelp';
 import createParameter from './createParameter';
 import createParameters from './createParameters';
@@ -18,13 +17,11 @@ import createDayTrends from './createDayTrends';
 import createHourTrends from './createHourTrends';
 import createMapBbox from './createMapBbox';
 
-
 const StoreContext = createContext();
 
 export function Provider(props) {
   let location = props.location;
   let overlay;
-  let viewport;
   let measurements;
   let parameter;
   let parameters;
@@ -107,9 +104,8 @@ export function Provider(props) {
   const client = createClient(store);
   overlay = createOverlay(client, actions, state, setState);
   location = createLocation(client, actions, state, setState);
-  viewport = createViewport(client, actions, state, setState);
-  parameter = createParameter(client, actions, state, setState);
-  help = createHelp(client, actions, state, setState);
+  parameter = createParameter(client, actions, state);
+  help = createHelp(client, actions);
   parameters = createParameters(client, actions, state, setState);
   providers = createProviders(client, actions, state, setState);
   measurements = createMeasurements(client, actions, state, setState);
@@ -119,7 +115,6 @@ export function Provider(props) {
   dayTrends = createDayTrends(client, actions, state, setState);
   hourTrends = createHourTrends(client, actions, state, setState);
   mapBbox = createMapBbox(client, actions, state, setState);
-
 
   recentMeasurements = createRecentMeasurements(
     client,

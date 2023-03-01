@@ -1,7 +1,7 @@
+import { Show } from 'solid-js';
 import style from './DetailOverview.module.css';
 import dayjs from 'dayjs/esm/index.js';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import Progress from '../Charts/Progress';
 import { Link } from '@solidjs/router';
 import { useStore } from '../../stores';
 import {
@@ -15,15 +15,15 @@ function DetailMap() {
   const [store] = useStore();
 
   return (
-    <div className="detail-map">
-      <div className="detail-map-overlay">
-        <div style="margin: 20px 16px;">
-          <div className="detail-map-overlay__title">
-            <h5 className="subtitle3">LOCATION</h5>
+    <div class="detail-map">
+      <div class="detail-map-overlay">
+        <div style={{ margin: '20px 16px' }}>
+          <div class="detail-map-overlay__title">
+            <h5 class="subtitle3">LOCATION</h5>
             <a
               href={`https://openstreetmap.org?mlat=${store.location?.coordinates.latitude}&mlon=${store.location?.coordinates.longitude}&zoom=16`}
               rel="noopener noreferrer"
-              className="map-open-link"
+              class="map-open-link"
               target="_blank"
             >
               <span class="material-symbols-outlined green">
@@ -31,7 +31,7 @@ function DetailMap() {
               </span>
             </a>
           </div>
-          <div className="detail-map-overlay__coordinates">
+          <div class="detail-map-overlay__coordinates">
             <span>
               {parseFloat(
                 store.location?.coordinates.latitude.toFixed(4)
@@ -45,7 +45,7 @@ function DetailMap() {
           </div>
         </div>
       </div>
-      <div className="detail-map__attribution">
+      <div class="detail-map__attribution">
         © <a href="https://www.mapbox.com/about/maps/">Mapbox</a> ©{' '}
         <a href="http://www.openstreetmap.org/copyright">
           OpenStreetMap
@@ -60,7 +60,7 @@ function DetailMap() {
         </strong>
       </div>
       <img
-        className="detail-map__image"
+        class="detail-map__image"
         src={`https://images.openaq.org/maps/explorer/location_${store.id}.webp`}
         alt=""
       />
@@ -69,7 +69,7 @@ function DetailMap() {
 }
 
 export default function DetailOverview() {
-  const [store, { loadLocation, checkForUpdate }] = useStore();
+  const [store, { checkForUpdate }] = useStore();
 
   function timeFromNow(lastUpdated) {
     return `Updated ${dayjs(lastUpdated).fromNow()}`;
@@ -82,20 +82,30 @@ export default function DetailOverview() {
   setInterval(() => checkForUpdate(), 1000 * 60 * 5);
 
   return (
-    <div style="position:relative; top: -10px;">
+    <div style={{ position: 'relative', top: '-10px' }}>
       <div
-        className="bubble-lg"
-        style="position:absolute; top: -46px; right: -120px; z-index:-1;"
-      ></div>
+        class="bubble-lg"
+        style={{
+          position: 'absolute',
+          top: '-46px',
+          right: '-120px',
+          'z-index': '-1',
+        }}
+      />
       <div
-        className="bubble-sm"
-        style="position:absolute; top: 220px; right: 30px; z-index:-1;"
-      ></div>
-      <div className={`${style.overview} section-card`}>
-        <div className={style['overview__header']}>
+        class="bubble-sm"
+        style={{
+          position: 'absolute',
+          top: '220px',
+          right: '30px',
+          'z-index': '-1',
+        }}
+      />
+      <div class={`${style.overview} section-card`}>
+        <div class={style['overview__header']}>
           <div>
             <div class="location-breadcrumb">
-              <span className="type-subtitle-3">
+              <span class="type-subtitle-3">
                 {store.location?.country.name}
                 {store.location?.locality
                   ? '/'
@@ -103,11 +113,11 @@ export default function DetailOverview() {
                 {store.location?.locality}
               </span>
             </div>
-            <h2 className="type-display-1 text-sky-120">
+            <h2 class="type-display-1 text-sky-120">
               {store.location?.name}
             </h2>
           </div>
-          <div style="display:flex; height:40px">
+          <div style={{ display: 'flex', height: '40px' }}>
             <Link
               href="#download-card"
               class="icon-btn btn-tertiary download-data-link"
@@ -120,14 +130,26 @@ export default function DetailOverview() {
             </Link>
           </div>
         </div>
-        <div className={style['overview__body']}>
-          <section style="flex: 1;">
+        <div class={style['overview__body']}>
+          <section style={{ flex: '1' }}>
             <h4>CHARACTERISTICS</h4>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; row-gap: 16px;">
+            <div
+              style={{
+                display: 'grid',
+                'grid-template-columns': '1fr 1fr',
+                'row-gap': '16px',
+              }}
+            >
               <div>Type</div>
               <div>
                 {' '}
-                <div style="display:flex; gap: 10px; align-items:center;">
+                <div
+                  style={{
+                    display: 'flex',
+                    gap: '10px',
+                    'align-items': 'center',
+                  }}
+                >
                   {store.location?.isMonitor
                     ? 'Monitor'
                     : 'Air sensor'}
@@ -181,8 +203,8 @@ export default function DetailOverview() {
               </div>
             </div>
           </section>
-          <section style="flex: 1;"></section>
-          <section style="flex: 1;">
+          <section style={{ flex: '1' }} />
+          <section style={{ flex: '1' }}>
             <DetailMap />
           </section>
         </div>

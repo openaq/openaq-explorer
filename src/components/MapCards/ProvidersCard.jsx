@@ -87,28 +87,26 @@ export default function ProvidersCard() {
 
   return (
     <article
-      className={`card map-card ${
-        store.providerListActive ? '' : ''
-      }`}
+      class={`card map-card ${store.providerListActive ? '' : ''}`}
     >
-      <header className="map-card__header">
-        <div style="display:flex;">
+      <header class="map-card__header">
+        <div style={{ display: 'flex' }}>
           <button
-            className="close-btn"
+            class="close-btn"
             onClick={() => toggleProviderList(false)}
           >
             <span class="material-symbols-outlined white clickable-icon">
               arrow_back
             </span>
           </button>
-          <h3 className="map-card-title">Data Providers</h3>
+          <h3 class="map-card-title">Data Providers</h3>
         </div>
       </header>
-      <div className="map-card__body">
-        <section className="map-card-section">
+      <div class="map-card__body">
+        <section class="map-card-section">
           <div class="providers-list-subtitle">
             <span
-              className="type-link-1 providers-list-select-all"
+              class="type-link-1 providers-list-select-all"
               onClick={() =>
                 setProviders(() => true, 'checked', true)
               }
@@ -117,7 +115,7 @@ export default function ProvidersCard() {
             </span>
             <span>|</span>
             <span
-              className="type-link-1 providers-list-select-none"
+              class="type-link-1 providers-list-select-none"
               onClick={() => {
                 setProviders(() => true, 'checked', false);
               }}
@@ -136,7 +134,12 @@ export default function ProvidersCard() {
             }
           >
             <div
-              style="cursor:pointer; display:flex; align-items:center; justify-content:center;"
+              style={{
+                cursor: 'pointer',
+                display: 'flex',
+                'align-items': 'center',
+                'justify-content': 'center',
+              }}
               onClick={zoomToExtent}
             >
               <span>Zoom to provider extent </span>
@@ -144,11 +147,11 @@ export default function ProvidersCard() {
             </div>
           </Show>
         </section>
-        <section className="map-card-section">
+        <section class="map-card-section">
           <div>
             <input
               type="text"
-              className="search-input"
+              class="search-input"
               onInput={onSearchInput}
             />
             <span>
@@ -160,12 +163,12 @@ export default function ProvidersCard() {
                   } of ${count()} providers`}
             </span>
           </div>
-          <ul className="providers-list">
+          <ul class="providers-list">
             <For each={providers.filter((o) => o.matchesQuery)}>
-              {(provider, i) => {
+              {(provider) => {
                 if (provider.matchesQuery) {
                   return (
-                    <li className="providers-list__item">
+                    <li class="providers-list__item">
                       <span class="provider-name">
                         {provider.name}
                       </span>
@@ -173,7 +176,7 @@ export default function ProvidersCard() {
                         type="checkbox"
                         name={`source-${provider.id}`}
                         id={`source-${provider.id}`}
-                        className="checkbox"
+                        class="checkbox"
                         value={provider.id}
                         checked={provider.checked}
                         onChange={(e) => {
@@ -192,9 +195,9 @@ export default function ProvidersCard() {
           </ul>
         </section>
       </div>
-      <footer className="map-card__footer">
+      <footer class="map-card__footer">
         <button
-          className={`update-providers-btn btn btn-primary ${
+          class={`update-providers-btn btn btn-primary ${
             providers.filter((o) => o.checked).length > 0
               ? ''
               : 'btn-primary--disabled'

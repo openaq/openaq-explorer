@@ -9,7 +9,7 @@ const helpContent = {
   aqi: lazy(() => import('./AqiHelp')),
 };
 
-export default function HelpCard(props) {
+export default function HelpCard() {
   const [store, { toggleHelp }] = useStore();
 
   return (
@@ -26,10 +26,10 @@ export default function HelpCard(props) {
           </span>
         </button>
       </header>
-      <section className="map-card__body">
+      <section class="map-card__body">
         {helpContent[store.help.content]}
       </section>
-      <footer className="map-card__footer">
+      <footer class="map-card__footer">
         <a
           class="btn btn-primary icon-btn"
           href="https://openaq.org/developers/help/"

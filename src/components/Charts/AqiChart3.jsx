@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import { createEffect, createSignal } from 'solid-js';
+import { createEffect, For } from 'solid-js';
 
 function aqiValue(value) {
   if (value < 50) {
@@ -100,7 +100,7 @@ export default function AqiChart3(props) {
             transform={`translate(${props.margin / 2} ${
               props.margin / 2
             })`}
-          ></g>
+          />
           <g
             transform={`translate(${props.margin} ${
               props.margin / 2
@@ -132,25 +132,25 @@ export default function AqiChart3(props) {
           <g
             class="y-axis"
             transform={`translate(${props.margin / 2} 0)`}
-          ></g>
+          />
           <g
             class="x-axis"
             transform={`translate(0 ${
               props.height + props.margin / 2
             })`}
-          ></g>
+          />
           <g
             class={`aqi-plot-y-axis-${props.name}`}
             transform={`translate(${props.margin / 2} ${
               props.margin / 2
             })`}
-          ></g>
+          />
           <g
             class={`aqi-plot-x-axis-${props.name}`}
             transform={`translate(${props.margin / 2} ${
               props.height + props.margin / 2
             })`}
-          ></g>
+          />
         </svg>
       </div>
     </>

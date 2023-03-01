@@ -1,20 +1,22 @@
-import { createSignal } from 'solid-js';
+import { createSignal, For } from 'solid-js';
 import { useStore } from '../../stores';
 import Badge from '../Badge';
 import ExpandableCard from './ExpandableCard';
 
-function AccordionHelp({ contentKey, open }) {
-  const [store, { toggleHelp, loadContent }] = useStore();
+function AccordionHelp(props) {
+  const [, { toggleHelp, loadContent }] = useStore();
 
   const showHelp = (e) => {
     toggleHelp(true);
-    loadContent(contentKey);
+    loadContent(props.contentKey);
     e.stopPropagation();
   };
 
   return (
     <span
-      class={`material-symbols-outlined ${open() ? 'white' : 'grey'}`}
+      class={`material-symbols-outlined ${
+        props.open() ? 'white' : 'grey'
+      }`}
       onClick={(e) => showHelp(e)}
     >
       help
@@ -23,7 +25,7 @@ function AccordionHelp({ contentKey, open }) {
 }
 
 function Accordion(props) {
-  const [active, setActive] = createSignal(props.active || false);
+  const [active] = createSignal(props.active || false);
   const [open, setOpen] = createSignal(props.open || false);
 
   const toggleOpen = () => {
@@ -31,18 +33,18 @@ function Accordion(props) {
   };
 
   return (
-    <section className="accordion">
+    <section class="accordion">
       <div
-        className={`accordion__header ${
+        class={`accordion__header ${
           open() ? 'accordion__header--open' : ''
         }`}
         onClick={toggleOpen}
       >
-        <div className="header-section">
-          <h3 className="accordion__header-title">{props.title}</h3>
+        <div class="header-section">
+          <h3 class="accordion__header-title">{props.title}</h3>
           <AccordionHelp contentKey={props.contentKey} open={open} />
         </div>
-        <div className="header-section">
+        <div class="header-section">
           {active() ? (
             <Badge type={'status-ok'}>
               Active " "
@@ -56,7 +58,7 @@ function Accordion(props) {
         </div>
       </div>
       <div
-        className={`accordion__body ${
+        class={`accordion__body ${
           open() ? 'accordion__body--open' : ''
         }`}
       >
@@ -80,11 +82,11 @@ export default function OverlayCard() {
         <select
           name=""
           id=""
-          className="select"
+          class="select"
           onChange={(e) => loadParameter(e.target.value)}
         >
           <For each={store.parameters}>
-            {(parameter, idx) => (
+            {(parameter) => (
               <option value="2" selected>
                 {parameter.displayName}
               </option>
@@ -96,7 +98,7 @@ export default function OverlayCard() {
         <select
           name="aqi"
           id="aqi"
-          className="select"
+          class="select"
           onChange={(e) => loadParameter(e.target.value)}
         >
           <option value="nowcast">US EPA PM NowCast</option>
@@ -108,7 +110,7 @@ export default function OverlayCard() {
           <select
             name=""
             id=""
-            className="select"
+            class="select"
             onChange={(e) => loadParameter(e.target.value)}
           >
             <option value="2" selected>
@@ -120,16 +122,16 @@ export default function OverlayCard() {
         </div>
         <div>
           <span>Above</span>{' '}
-          <select name="" id="" className="select">
+          <select name="" id="" class="select">
             <option value="">100</option>
           </select>
-          <span></span>{' '}
+          <span />{' '}
         </div>
         <div>
           <select
             name=""
             id=""
-            className="select"
+            class="select"
             onChange={(e) => loadParameter(e.target.value)}
           >
             <option value="1" selected>
