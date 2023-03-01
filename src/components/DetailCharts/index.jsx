@@ -34,7 +34,7 @@ function LatestMeasurementsChart() {
     );
   });
 
-  track(() => store.location?.sensors[0].parameter.name);
+  track(() => store.location?.sensors[0].parameter.displayName);
 
   const onClickUpdate = () => {
     setDateFrom(
@@ -71,7 +71,8 @@ function LatestMeasurementsChart() {
                   value={item.parameter.id}
                   selected={selectedParameter() == item.parameter.id}
                 >
-                  {item.parameter.name} ({item.parameter.units})
+                  {item.parameter.displayName} ({item.parameter.units}
+                  )
                 </option>
               )}
             </For>
@@ -163,7 +164,8 @@ function TrendsCharts() {
                     measurandsId() == sensor.parameter.id
                   }
                 >
-                  {sensor.parameter.name} ({sensor.parameter.units})
+                  {sensor.parameter.displayName} (
+                  {sensor.parameter.units})
                 </option>
               )}
             </For>

@@ -9,8 +9,6 @@ import {
   ReferenceGradeMarker,
 } from '../LocationMarker';
 
-import { parametersLookup } from '../../lookups';
-
 dayjs.extend(relativeTime);
 
 function DetailMap() {
@@ -149,10 +147,7 @@ export default function DetailOverview() {
                 {store.location?.sensors
                   .map(
                     (o) =>
-                      `${
-                        parametersLookup[o.parameter.name] ||
-                        o.parameter.name
-                      } (${o.parameter.units})`
+                      `${o.parameter.displayName} (${o.parameter.units})`
                   )
                   .join(', ')}
               </div>
