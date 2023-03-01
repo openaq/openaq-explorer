@@ -191,7 +191,8 @@ export default function LocationDetailCard() {
                         left: 1,
                       }}
                       style={{
-                        'stroke-color': '#5d48f4',
+                        color: '#5d48f4',
+                        width: '3',
                         fill: 'none',
                       }}
                     />

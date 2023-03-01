@@ -1,4 +1,3 @@
-import { useStore } from '../stores';
 import { Map } from '../components/Map';
 import MapLegend from '../components/Map/MapLegend';
 import HelpCard from '../components/Help';
@@ -11,7 +10,6 @@ export default function Explore() {
       <Map />
       <MapLegend />
       <MapCards />
-
       <LocationDetailCard />
       <HelpCard />
     </>

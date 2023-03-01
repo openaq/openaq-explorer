@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import {
   createSignal,
   createContext,
@@ -35,7 +36,7 @@ function useAccordion() {
 }
 
 function AccordionHelp(props) {
-  const [{ toggleHelp, loadContent }] = useStore();
+  const [, { toggleHelp, loadContent }] = useStore();
 
   const showHelp = (e) => {
     toggleHelp(true);
@@ -44,16 +45,17 @@ function AccordionHelp(props) {
   };
 
   return (
-    <span
-      class={`${
-        props.contentKey
-      }-help-btn material-symbols-outlined ${
-        props.open() ? 'white' : 'grey'
-      }`}
-      onClick={(e) => showHelp(e)}
-    >
-      help
-    </span>
+    <button class="button-reset" onClick={(e) => showHelp(e)}>
+      <span
+        class={`${
+          props.contentKey
+        }-help-btn material-symbols-outlined ${
+          props.open() ? 'white' : 'grey'
+        }`}
+      >
+        help
+      </span>
+    </button>
   );
 }
 
@@ -71,6 +73,7 @@ function AccordionPanel(props) {
         onClick={() => {
           togglePanel(props.name);
         }}
+        onKeyDown={() => console.log('keydown')}
       >
         <div class="header-section">
           <h3 class="accordion__header-title">{props.title}</h3>

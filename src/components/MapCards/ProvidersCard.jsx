@@ -93,6 +93,7 @@ export default function ProvidersCard() {
         <div style={{ display: 'flex' }}>
           <button
             class="close-btn"
+            aria-label="close"
             onClick={() => toggleProviderList(false)}
           >
             <span class="material-symbols-outlined white clickable-icon">
@@ -105,23 +106,23 @@ export default function ProvidersCard() {
       <div class="map-card__body">
         <section class="map-card-section">
           <div class="providers-list-subtitle">
-            <span
-              class="type-link-1 providers-list-select-all"
+            <button
+              class="button-reset type-link-1 providers-list-select-all"
               onClick={() =>
                 setProviders(() => true, 'checked', true)
               }
             >
               Select All
-            </span>
+            </button>
             <span>|</span>
-            <span
-              class="type-link-1 providers-list-select-none"
+            <button
+              class="button-reset type-link-1 providers-list-select-none"
               onClick={() => {
                 setProviders(() => true, 'checked', false);
               }}
             >
               Select None
-            </span>
+            </button>
           </div>
           <span>
             {providers.filter((o) => o.checked).length} providers
@@ -133,7 +134,7 @@ export default function ProvidersCard() {
               activeProviders().length != 0
             }
           >
-            <div
+            <button
               style={{
                 cursor: 'pointer',
                 display: 'flex',
@@ -144,7 +145,7 @@ export default function ProvidersCard() {
             >
               <span>Zoom to provider extent </span>
               <span class="material-symbols-outlined">crop_free</span>
-            </div>
+            </button>
           </Show>
         </section>
         <section class="map-card-section">

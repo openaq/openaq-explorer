@@ -155,26 +155,32 @@ export default function DownloadCard() {
             }}
           >
             <div>
-              <label for="datetime-from">Start date</label>
-              <input
-                type="date"
-                name="datetime-from"
-                id="datetime-from"
-                class="date-input"
-                value={dateFrom().toISOString().split('T')[0]}
-                onChange={(e) =>
-                  setDateFrom(new Date(e.target.value))
-                }
-              />
-              <label for="datetime-to">End date</label>
-              <input
-                type="date"
-                name="datetime-to"
-                id="datetime-to"
-                class="date-input"
-                value={dateTo().toISOString().split('T')[0]}
-                onChange={(e) => setDateTo(new Date(e.target.value))}
-              />
+              <label for="datetime-from">
+                Start date
+                <input
+                  type="date"
+                  name="datetime-from"
+                  id="datetime-from"
+                  class="date-input"
+                  value={dateFrom().toISOString().split('T')[0]}
+                  onChange={(e) =>
+                    setDateFrom(new Date(e.target.value))
+                  }
+                />
+              </label>
+              <label for="datetime-to">
+                End date
+                <input
+                  type="date"
+                  name="datetime-to"
+                  id="datetime-to"
+                  class="date-input"
+                  value={dateTo().toISOString().split('T')[0]}
+                  onChange={(e) =>
+                    setDateTo(new Date(e.target.value))
+                  }
+                />
+              </label>
             </div>
             <div
               style={{

@@ -12,12 +12,11 @@ import { createEffect, createSignal, For } from 'solid-js';
 function BoxPlotTooltip(props) {
   return (
     <div
-      style={`
-          position:absolute;
-          z-index:4;
-          top:${props.data.style?.y}px;
-          left:${props.data.style?.x}px; 
-          display:${props.data.style?.display || 'none'}`}
+      style={{
+        top: `${props.data.style?.y}px`,
+        left: `${props.data.style?.x}px`,
+        display: `${props.data.style?.display || 'none'}`,
+      }}
       class="box-plot-tooltip"
       role="tooltip"
     >

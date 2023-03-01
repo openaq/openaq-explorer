@@ -1,4 +1,4 @@
-import { createSignal, For } from 'solid-js';
+import { createEffect, createSignal, For } from 'solid-js';
 import { useStore } from '../../stores';
 import Badge from '../Badge';
 import ExpandableCard from './ExpandableCard';
@@ -13,24 +13,29 @@ function AccordionHelp(props) {
   };
 
   return (
-    <span
+    <button
       class={`material-symbols-outlined ${
         props.open() ? 'white' : 'grey'
       }`}
       onClick={(e) => showHelp(e)}
     >
       help
-    </span>
+    </button>
   );
 }
 
 function Accordion(props) {
-  const [active] = createSignal(props.active || false);
-  const [open, setOpen] = createSignal(props.open || false);
+  const [active, setActive] = createSignal(false);
+  const [open, setOpen] = createSignal(false);
 
   const toggleOpen = () => {
     setOpen(!open());
   };
+
+  createEffect(() => {
+    setActive(props.active);
+    setOpen(props.open);
+  });
 
   return (
     <section class="accordion">
@@ -39,6 +44,9 @@ function Accordion(props) {
           open() ? 'accordion__header--open' : ''
         }`}
         onClick={toggleOpen}
+        onKeyDown={() => {}}
+        role="button"
+        tabIndex={0}
       >
         <div class="header-section">
           <h3 class="accordion__header-title">{props.title}</h3>
@@ -72,7 +80,7 @@ export default function OverlayCard() {
   const [store, { loadParameter }] = useStore();
 
   return (
-    <ExpandableCard title={'Overlay'} open={true}>
+    <ExpandableCard title={'Overlay'}>
       <Accordion
         title="Pollutant"
         contentKey="pollutants"

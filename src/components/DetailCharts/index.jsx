@@ -12,11 +12,13 @@ function LatestMeasurementsChart() {
   const [selectedParameter, setSelectedParameter] = createSignal(
     store.location?.sensors[0].parameter.id
   );
+
+  const defaultTimePeriod = 24;
   const [selectedTimePeriod, setSelectedTimePeriod] =
-    createSignal(24);
+    createSignal(defaultTimePeriod);
   const [dateFrom, setDateFrom] = createSignal(
     new Date(
-      Date.now() - calculateTimeDiff(selectedTimePeriod())
+      Date.now() - calculateTimeDiff(defaultTimePeriod)
     ).toISOString()
   );
   const [dateTo] = createSignal(new Date().toISOString()); // static for now
@@ -25,6 +27,17 @@ function LatestMeasurementsChart() {
     store.measurements() ? store.measurements() : [];
 
   const track = createReaction(() => {
+    setDateFrom(
+      new Date(
+        Date.now() - calculateTimeDiff(selectedTimePeriod())
+      ).toISOString()
+    );
+    setMeasurements(
+      store.location.id,
+      selectedParameter(),
+      dateFrom(),
+      dateTo()
+    );
     setSelectedParameter(store.location?.sensors[0].parameter.id);
     setMeasurements(
       store.location.id,
@@ -49,6 +62,8 @@ function LatestMeasurementsChart() {
       dateTo()
     );
   };
+
+  onClickUpdate();
   return (
     <>
       <div

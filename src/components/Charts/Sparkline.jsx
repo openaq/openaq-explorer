@@ -7,8 +7,7 @@ import {
   line,
   isoParse,
 } from 'd3';
-
-import { mergeProps } from 'solid-js';
+import { createEffect } from 'solid-js';
 
 function transform(data) {
   return data.map((o) => {
@@ -19,11 +18,7 @@ function transform(data) {
   });
 }
 
-export default function Sparkline(_props) {
-  const props = mergeProps(
-    { style: { fill: 'none', strokeColor: 'black' } },
-    _props
-  );
+export default function Sparkline(props) {
   const data = transform(props.series);
   const x = scaleTime().range([0, props.width]);
   const y = scaleLinear().range([props.height, 0]);
@@ -33,6 +28,8 @@ export default function Sparkline(_props) {
   const generateLine = line()
     .x((d) => x(d.date))
     .y((d) => y(d.value));
+
+  createEffect(() => {});
 
   return (
     <svg
@@ -47,7 +44,11 @@ export default function Sparkline(_props) {
         transform={`translate(${props.margin.left} ${props.margin.top})`}
       >
         <path
-          style={`fill:${props.style.fill}; stroke:${props.style.strokeColor}; stroke-width:${props.style.stokeWidth}`}
+          style={{
+            fill: props.style.fill,
+            stroke: props.style.color,
+            'stroke-width': props.style.width,
+          }}
           d={generateLine(data)}
         />
       </g>

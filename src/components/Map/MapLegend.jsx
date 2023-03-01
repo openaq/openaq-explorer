@@ -1,3 +1,4 @@
+import { For } from 'solid-js';
 import { useStore } from '../../stores';
 import {
   parametersBins,
@@ -23,34 +24,32 @@ export default function MapLegend() {
   };
 
   return (
-    <div className="map-legend">
-      <div className="map-legend__body">
-        <div className="map-legend-section">
-          <div className="map-legend-title">
-            <span className="type-subtitle-3 text-smoke-120">
+    <div class="map-legend">
+      <div class="map-legend__body">
+        <div class="map-legend-section">
+          <div class="map-legend-title">
+            <span class="type-subtitle-3 text-smoke-120">
               {store.parameter.parameterName} ({store.parameter.unit})
             </span>
-            <span className="type-subtitle-3 text-smoke-60">
+            <span class="type-subtitle-3 text-smoke-60">
               {legendTitle}
             </span>
           </div>
-          <div className="map-legend-bar">
+          <div class="map-legend-bar">
             <For each={colors()}>
-              {(value, i) => (
-                <div
-                  style={`flex: 1; background-color: ${value};`}
-                ></div>
+              {(value) => (
+                <div style={`flex: 1; background-color: ${value};`} />
               )}
             </For>
           </div>
           <div
-            className="map-legend-bar-labels"
-            style="display:flex; margin:0;"
+            class="map-legend-bar-labels"
+            style={{ display: 'flex', margin: '0' }}
           >
             {store.mapThreshold.active ? (
               <For each={percentBins}>
-                {(value, i) => (
-                  <span className="type-body-4" style="flex:1;">
+                {(value) => (
+                  <span class="type-body-4" style={{ flex: '1' }}>
                     {value}
                   </span>
                 )}
@@ -58,7 +57,7 @@ export default function MapLegend() {
             ) : (
               <For each={parametersBins[store.parameter.id]}>
                 {(value, i) => (
-                  <span className="type-body-4" style="flex:1;">
+                  <span class="type-body-4" style={{ flex: '1' }}>
                     {value}
                     {i() + 1 ==
                     parametersBins[store.parameter.id].length
@@ -70,14 +69,13 @@ export default function MapLegend() {
             )}
           </div>
         </div>
-        <div className="legend-help-section">
-          <span
-            class="legend-help material-symbols-outlined clickable-icon"
-            onClick={(e) => showHelp(e)}
-          >
-            help
-          </span>
-          <span>Help</span>
+        <div class="legend-help-section">
+          <button onClick={(e) => showHelp(e)} class="button-reset">
+            <span class="legend-help material-symbols-outlined clickable-icon">
+              help
+            </span>
+            <span>Help</span>
+          </button>
         </div>
       </div>
     </div>

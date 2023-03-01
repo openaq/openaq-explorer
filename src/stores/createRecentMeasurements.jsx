@@ -5,9 +5,7 @@ export default function createRecentMeasurements(
   actions,
   state
 ) {
-  const [sensorNodesId, setSensorNodesId] = createSignal(
-    () => state.id
-  );
+  const [sensorNodesId, setSensorNodesId] = createSignal(state.id);
 
   const [recentMeasurements, { mutate }] = createResource(
     () => sensorNodesId(),

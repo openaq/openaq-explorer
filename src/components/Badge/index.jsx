@@ -1,8 +1,6 @@
 export default function Badge(props) {
-  const badgeType = props.type;
-
   return (
-    <div class={`badge ${badgeType ? `badge--${badgeType}` : ''}`}>
+    <div class={`badge ${props.type ? `badge--${props.type}` : ''}`}>
       {props.children}
     </div>
   );

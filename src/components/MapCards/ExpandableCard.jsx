@@ -8,7 +8,7 @@ import {
 import Accordion from './Accordion';
 
 export function ExpandableCard(props) {
-  const [open] = createSignal(props.open || false);
+  const [open] = createSignal(true);
   const [store] = useStore();
 
   return (
@@ -69,7 +69,7 @@ export default function FilterOverlayCard() {
   };
 
   return (
-    <ExpandableCard open={true}>
+    <ExpandableCard>
       <Accordion />
       <section class="filters-section">
         <header class="expandable-card__header">
@@ -83,10 +83,8 @@ export default function FilterOverlayCard() {
         <div style={{ margin: '16px 15px' }}>
           <div class="filters-section__body">
             <ReferenceGradeMarker />
-            <label for="reference-grade">
-              Reference monitor locations
-            </label>
-            <div class="marker-legend-item">
+            <label class="marker-legend-item" for="reference-grade">
+              <span>Reference monitor locations</span>
               <input
                 type="checkbox"
                 name="reference-grade"
@@ -96,13 +94,10 @@ export default function FilterOverlayCard() {
                 onChange={monitorCheck}
                 disabled={!showAirSensors()}
               />
-            </div>
-            <LowCostSensorMarker />
-            <label for="low-cost-sensor">
-              {' '}
-              Air sensors locations
             </label>
-            <div class="marker-legend-item">
+            <LowCostSensorMarker />
+            <label class="marker-legend-item" for="low-cost-sensor">
+              Air sensors locations
               <input
                 type="checkbox"
                 name="low-cost-sensor"
@@ -112,13 +107,10 @@ export default function FilterOverlayCard() {
                 onChange={sensorCheck}
                 disabled={!showMonitors()}
               />
-            </div>
-            <NoRecentUpdateMarker />
-
-            <label for="no-recent-updates">
-              Show locations with no recent updates
             </label>
-            <div class="marker-legend-item">
+            <NoRecentUpdateMarker />
+            <label class="marker-legend-item" for="no-recent-updates">
+              Show locations with no recent updates
               <input
                 type="checkbox"
                 name="no-recent-updates"
@@ -126,7 +118,7 @@ export default function FilterOverlayCard() {
                 class="checkbox"
                 onChange={noRecentUpdatesCheck}
               />
-            </div>
+            </label>
           </div>
         </div>
         <div class="expandable-card__footer">

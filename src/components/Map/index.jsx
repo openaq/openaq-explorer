@@ -1,3 +1,4 @@
+/* eslint-disable solid/style-prop */
 import MapGL, { Source, Layer, Control, useMap } from 'solid-map-gl';
 import Geocoder from '../Geocoder';
 import { createEffect, createSignal, on } from 'solid-js';
@@ -170,14 +171,12 @@ function Bounds() {
   return <></>;
 }
 
-
 export function Map() {
   const [
     store,
     {
       setViewport,
       loadLocation,
-      setLocationId,
       loadRecentMeasurements,
       setMeasurements,
     },
