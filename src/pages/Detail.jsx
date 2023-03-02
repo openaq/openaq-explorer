@@ -4,7 +4,7 @@ import Breadcrumb from '../components/Breadcrumb';
 import DetailCharts from '../components/DetailCharts';
 import DetailOverview from '../components/DetailOverview';
 import DownloadCard from '../components/Download';
-import HelpCard from '../components/Help';
+import { HelpPanel } from '../components/Help';
 import { useStore } from '../stores';
 
 function Detail() {
@@ -17,11 +17,11 @@ function Detail() {
   return (
     <>
       <div style={{ position: 'relative' }}>
+        <HelpPanel />
         <Breadcrumb />
         <DetailOverview />
         <DetailCharts />
         <DownloadCard />
-        <HelpCard />
       </div>
     </>
   );

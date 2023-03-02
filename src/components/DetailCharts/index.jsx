@@ -8,7 +8,8 @@ function calculateTimeDiff(hours) {
 }
 
 function LatestMeasurementsChart() {
-  const [store, { setMeasurements }] = useStore();
+  const [store, { setMeasurements, toggleHelp, loadContent }] =
+    useStore();
   const [selectedParameter, setSelectedParameter] = createSignal(
     store.location?.sensors[0].parameter.id
   );
@@ -82,6 +83,16 @@ function LatestMeasurementsChart() {
         }}
       >
         <h1 class="type-heading-1 text-sky-120">Latest Readings</h1>
+        <button
+          class="button-reset"
+          style={{ display: 'flex' }}
+          onClick={() => {
+            toggleHelp(true);
+            loadContent('lineChartHelp');
+          }}
+        >
+          <span class="material-symbols-outlined">help</span>
+        </button>
       </div>
 
       <div

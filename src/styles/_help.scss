@@ -1,4 +1,70 @@
 @use 'openaq-design-system/scss/mixins/index' as mixins;
+@use 'openaq-design-system/scss/variables' as variables;
+
+@mixin background-opacity($color, $opacity: 1) {
+  background: $color;
+  background: rgba($color, $opacity);
+}
+
+.help-background {
+  width: 100%;
+  height: 100vh;
+  z-index: 3;
+  position: fixed;
+  pointer-events: none;
+
+  top: 0;
+
+  &--active {
+    @include background-opacity(variables.$smoke120, 0.7);
+    pointer-events: auto;
+
+    body:has(&) {
+      overflow-y: hidden;
+    }
+  }
+}
+
+.help-side-panel {
+  position: fixed;
+  background-color: white;
+  height: 100vh;
+  top: 0;
+  right: 0;
+  width: 280px;
+  transform: none;
+  will-change: transform;
+  transition: transform 0.3s cubic-bezier(0, 0, 0.3, 1);
+
+  &__header {
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: variables.$lavender100;
+    padding: 0 20px;
+    cursor: pointer;
+    color: white;
+  }
+
+  &__body {
+    height: calc(100vh - 50px - 76px);
+    overflow-y: scroll;
+  }
+
+  &__footer {
+    border-top: 1px solid variables.$smoke10;
+    padding: 24px 15px 15px 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  &--translate {
+    transform: translateX(120%);
+    transition: transform 0.3s cubic-bezier(0, 0, 0.3, 1);
+  }
+}
 
 .help-panel {
   padding: 16px;
@@ -7,7 +73,13 @@
     border-top: 1px dashed #d4d8dd;
   }
 
-  h1 h2 h3 h4 {
+  h1 {
+    @include mixins.subtitle2;
+  }
+
+  h2,
+  h3,
+  h4 {
     @include mixins.subtitle3;
   }
 
