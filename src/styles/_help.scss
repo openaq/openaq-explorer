@@ -18,6 +18,10 @@
   &--active {
     @include background-opacity(variables.$smoke120, 0.7);
     pointer-events: auto;
+
+    body:has(&) {
+      overflow-y: hidden;
+    }
   }
 }
 
@@ -27,7 +31,7 @@
   height: 100vh;
   top: 0;
   right: 0;
-  width: 350px;
+  width: 280px;
   transform: none;
   will-change: transform;
   transition: transform 0.3s cubic-bezier(0, 0, 0.3, 1);
