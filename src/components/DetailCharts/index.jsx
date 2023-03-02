@@ -83,6 +83,16 @@ function LatestMeasurementsChart() {
         }}
       >
         <h1 class="type-heading-1 text-sky-120">Latest Readings</h1>
+        <button
+          class="button-reset"
+          style={{ display: 'flex' }}
+          onClick={() => {
+            toggleHelp(true);
+            loadContent('lineChartHelp');
+          }}
+        >
+          <span class="material-symbols-outlined">help</span>
+        </button>
       </div>
 
       <div
@@ -132,15 +142,6 @@ function LatestMeasurementsChart() {
             Update
           </button>
         </div>
-        <button
-          class="button-reset type-link-2"
-          onClick={() => {
-            toggleHelp(true);
-            loadContent('lineChartHelp');
-          }}
-        >
-          How was this chart created?
-        </button>
       </div>
       <div>
         <LineChart
