@@ -16,7 +16,7 @@ function Detail() {
 
   return (
     <>
-      <div style="position:relative;">
+      <div style={{ position: 'relative' }}>
         <Breadcrumb />
         <DetailOverview />
         <DetailCharts />

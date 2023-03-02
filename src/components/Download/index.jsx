@@ -75,6 +75,7 @@ export default function DownloadCard() {
   const [parameters, setParameters] = createStore(allParameters());
 
   const track = createReaction(() => {
+    console.log('track sensors');
     setParameters(
       store.location?.sensors.map((o) => o.parameter.name)
     );
@@ -83,11 +84,7 @@ export default function DownloadCard() {
   track(() => store.location?.sensors);
 
   const downloadOnClick = () => {
-    setDownloadFilters({
-      dateFrom: dateFrom(),
-      dateTo: dateTo(),
-      parameters: parameters,
-    });
+    setDownloadFilters(dateFrom(), dateTo(), parameters);
   };
 
   createEffect(
@@ -148,9 +145,9 @@ export default function DownloadCard() {
           <div
             style={{
               'margin-top': '20px',
-              display: 'grid',
-              'grid-template-rows': '1fr 1fr 1fr',
-              gap: '12px',
+              display: 'flex',
+              'flex-direction': 'column',
+              gap: '32px',
               'padding-bottom': '12px',
             }}
           >

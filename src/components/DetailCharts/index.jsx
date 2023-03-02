@@ -26,7 +26,7 @@ function LatestMeasurementsChart() {
   const chartData = () =>
     store.measurements() ? store.measurements() : [];
 
-  const track = createReaction(() => {
+  const trackName = createReaction(() => {
     setDateFrom(
       new Date(
         Date.now() - calculateTimeDiff(selectedTimePeriod())
@@ -47,7 +47,11 @@ function LatestMeasurementsChart() {
     );
   });
 
-  track(() => store.location?.sensors[0].parameter.displayName);
+  const trackId = createReaction(() => onClickUpdate());
+
+  trackName(() => store.location?.sensors[0].parameter.displayName);
+
+  trackId(() => store.location?.id);
 
   const onClickUpdate = () => {
     setDateFrom(
@@ -63,7 +67,10 @@ function LatestMeasurementsChart() {
     );
   };
 
-  onClickUpdate();
+  if (store.location?.id) {
+    onClickUpdate();
+  }
+
   return (
     <>
       <div
