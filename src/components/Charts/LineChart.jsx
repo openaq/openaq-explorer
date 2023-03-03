@@ -17,9 +17,10 @@ import {
   timeWeek,
   timeMonth,
   timeYear,
+  scaleSymlog,
 } from 'd3';
 
-import { createSignal, createEffect, Show, For } from 'solid-js';
+import { createSignal, Show, For, createEffect } from 'solid-js';
 import { useStore } from '../../stores';
 
 const formatMillisecond = timeFormat('.%L');
@@ -79,23 +80,41 @@ function splitMeasurements(measurements) {
 
 export default function LineChart(props) {
   const [tooltipValue, setTooltipValue] = createSignal();
-  const [chartData, setChartData] = createSignal(props.data);
   const [store] = useStore();
 
-  const x = scaleTime().range([0, props.width]);
-  const y = scaleLinear().range([props.height, 0]);
+  const xScale = (width, dateFrom, dateTo) => {
+    const x = scaleTime().range([0, width]);
+    x.domain(extent([new Date(dateFrom), new Date(dateTo)]));
+    return x;
+  };
 
-  const yAxis = axisLeft(y).ticks(5);
-  const yAxisGrid = axisLeft(y)
-    .tickSize(-props.width)
-    .tickFormat('')
-    .ticks(5);
+  const yScale = (scaleType, height, data) => {
+    let y;
+    if (scaleType == 'linear') {
+      y = scaleLinear().range([height, 0]);
+    } else {
+      y = scaleSymlog().range([height, 0]);
+    }
 
-  const xAxis = axisBottom(x)
-    .ticks(24)
-    .tickFormat((d) => multiFormat(d));
+    const minimumValue = min(data, (d) => d.value);
+    const domainMin = minimumValue < 0 ? minimumValue : 0;
+    y.domain([
+      domainMin,
+      max(data, () => max(data, (d) => d.value) * 1.2),
+    ]);
+    return y;
+  };
 
-  const points = (data) =>
+  const yAxis = (y) => axisLeft(y).ticks(5);
+  const yAxisGrid = (y, width) =>
+    axisLeft(y).tickSize(-width).tickFormat('').ticks(5);
+
+  const xAxis = (x) =>
+    axisBottom(x)
+      .ticks(24)
+      .tickFormat((d) => multiFormat(d));
+
+  const points = (data, x, y) =>
     data.map((o) => {
       return {
         value: o.value,
@@ -106,57 +125,46 @@ export default function LineChart(props) {
       };
     });
 
-  const line = d3Line()
-    .x((d) => x(new Date(d.period.datetimeTo.local)))
-    .y((d) => y(d.value));
+  const line = (x, y) =>
+    d3Line()
+      .x((d) => x(new Date(d.period.datetimeTo.local)))
+      .y((d) => y(d.value));
 
-  const area = d3Area()
-    .x((d) => x(new Date(d.period.datetimeTo.local)))
-    .y0(props.height)
-    .y1((d) => y(d.value));
+  const area = (x, y) =>
+    d3Area()
+      .x((d) => x(new Date(d.period.datetimeTo.local)))
+      .y0(props.height)
+      .y1((d) => y(d.value));
 
-  const yDomain = () => {
-    const minimumValue = min(props.data, (d) => d.value);
+  let yAxisRef;
+  let xAxisRef;
+  let gridRef;
 
-    y.domain([
-      minimumValue < 0 ? minimumValue : 0,
-      max(props.data, () => max(props.data, (d) => d.value) * 1.2),
-    ]);
-  };
-
-  const xDomain = () => {
-    x.domain(
-      extent([new Date(props.dateFrom), new Date(props.dateTo)])
-    );
-  };
-
-  createEffect(() => {
+  function update() {
     if (props.data) {
-      setChartData(props.data);
-      xDomain();
-      yDomain();
-      select('.x-axis').call(xAxis);
-
-      select('.y-axis').call(yAxis);
-      select('.line-chart-grid')
-        .call(yAxisGrid)
+      const x = xScale(props.width, props.dateFrom, props.dateTo);
+      const y = yScale(props.scale, props.height, props.data);
+      select(xAxisRef).call(xAxis(x));
+      select(yAxisRef).call(yAxis(y));
+      select(gridRef)
+        .call(yAxisGrid(y, props.width))
         .selectAll('line,path')
         .style('stroke', '#d4d8dd');
     }
-  });
+  }
+
+  createEffect(() => update());
 
   return (
     <>
       <div style={{ position: 'relative' }}>
         <div
           class="line-chart-tooltip"
-          style={`${
-            tooltipValue()?.visible
-              ? 'display:flex;'
-              : 'display:none;'
-          }left:${tooltipValue()?.x - 65}px; top:${
-            tooltipValue()?.y + 5
-          }px;`}
+          style={{
+            display: tooltipValue()?.visible ? 'flex' : 'none',
+            left: `${tooltipValue()?.x - 65}px`,
+            top: `${tooltipValue()?.y + 5}px;`,
+          }}
         >
           <span class="line-chart-tooltip__value">
             {tooltipValue()?.value}
@@ -204,9 +212,15 @@ export default function LineChart(props) {
               props.margin / 2
             })`}
           >
-            <For each={splitMeasurements(chartData())}>
-              {(areaData) => (
-                <path class="line-chart-area" d={area(areaData)} />
+            <For each={splitMeasurements(props.data)}>
+              {(d) => (
+                <path
+                  class="line-chart-area"
+                  d={area(
+                    xScale(props.width, props.dateFrom, props.dateTo),
+                    yScale(props.scale, props.height, props.data)
+                  )(d)}
+                />
               )}
             </For>
           </g>
@@ -215,15 +229,22 @@ export default function LineChart(props) {
             transform={`translate(${props.margin / 2} ${
               props.margin / 2
             } )`}
+            ref={gridRef}
           />
           <g
             transform={`translate(${props.margin / 2} ${
               props.margin / 2
             })`}
           >
-            <For each={splitMeasurements(chartData())}>
+            <For each={splitMeasurements(props.data)}>
               {(lineData) => (
-                <path class="line-chart-line" d={line(lineData)} />
+                <path
+                  class="line-chart-line"
+                  d={line(
+                    xScale(props.width, props.dateFrom, props.dateTo),
+                    yScale(props.scale, props.height, props.data)
+                  )(lineData)}
+                />
               )}
             </For>
             <Show when={tooltipValue()?.visible}>
@@ -254,7 +275,13 @@ export default function LineChart(props) {
                 })`}
               />
             </Show>
-            <For each={points(chartData())}>
+            <For
+              each={points(
+                props.data,
+                xScale(props.width, props.dateFrom, props.dateTo),
+                yScale(props.scale, props.height, props.data)
+              )}
+            >
               {(item) => (
                 <circle
                   class="line-chart-point"
@@ -306,12 +333,14 @@ export default function LineChart(props) {
             transform={`translate(${props.margin / 2} ${
               props.margin / 2
             })`}
+            ref={yAxisRef}
           />
           <g
             class="x-axis"
             transform={`translate(${props.margin / 2} ${
               props.height + props.margin / 2
             })`}
+            ref={xAxisRef}
           />
           <g
             transform={`translate(${props.margin / 2} ${
