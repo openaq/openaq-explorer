@@ -117,7 +117,6 @@ export default function createClient([actions]) {
 
   const Downloads = {
     get: (props) => {
-      console.log(props);
       const offset = (new Date().getTimezoneOffset() / 60) * -1;
       const datetimeStart = dayjs(props.dateFrom)
         .utcOffset(offset, true)

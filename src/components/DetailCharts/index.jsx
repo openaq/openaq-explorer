@@ -8,11 +8,14 @@ function calculateTimeDiff(hours) {
 }
 
 function LatestMeasurementsChart() {
-  const [store, { setMeasurements, toggleHelp, loadContent }] =
-    useStore();
+  const [
+    store,
+    { setMeasurements, toggleHelp, loadContent, setScale },
+  ] = useStore();
   const [selectedParameter, setSelectedParameter] = createSignal(
     store.location?.sensors[0].parameter.id
   );
+  const [selectedScale, setSelectedScale] = createSignal('linear');
 
   const defaultTimePeriod = 24;
   const [selectedTimePeriod, setSelectedTimePeriod] =
@@ -39,6 +42,7 @@ function LatestMeasurementsChart() {
       dateFrom(),
       dateTo()
     );
+    //setScale(selectedScale());
     setSelectedParameter(store.location?.sensors[0].parameter.id);
     setMeasurements(
       store.location.id,
@@ -66,6 +70,7 @@ function LatestMeasurementsChart() {
       dateFrom(),
       dateTo()
     );
+    setScale(selectedScale());
   };
 
   if (store.location?.id) {
@@ -138,6 +143,17 @@ function LatestMeasurementsChart() {
             <option value="168">Last 1 week</option>
             <option value="720">Last 30 days</option>
           </select>
+          <select
+            name="scale-type"
+            id="scale-type-select"
+            class="select"
+            onChange={(e) => setSelectedScale(e.target.value)}
+          >
+            <option value="linear" selected>
+              Linear
+            </option>
+            <option value="log">Logarithmic</option>
+          </select>
           <button class="btn btn-secondary" onClick={onClickUpdate}>
             Update
           </button>
@@ -151,6 +167,7 @@ function LatestMeasurementsChart() {
           dateFrom={dateFrom()}
           dateTo={dateTo()}
           data={chartData()}
+          scale={store.latestReadings}
         />
       </div>
     </>

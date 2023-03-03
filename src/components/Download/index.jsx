@@ -75,7 +75,6 @@ export default function DownloadCard() {
   const [parameters, setParameters] = createStore(allParameters());
 
   const track = createReaction(() => {
-    console.log('track sensors');
     setParameters(
       store.location?.sensors.map((o) => o.parameter.name)
     );
