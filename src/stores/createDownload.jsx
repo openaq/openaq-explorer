@@ -1,11 +1,6 @@
 import { createResource, createSignal } from 'solid-js';
 
-export default function createDownload(
-  client,
-  actions,
-  state,
-  setState
-) {
+export default function createDownload(client, actions, state) {
   const [downloadFilters, setDownloadFilters] = createSignal();
 
   const [measurementsDownload] = createResource(
@@ -14,20 +9,26 @@ export default function createDownload(
   );
   Object.assign(actions, {
     setParameters(parameters) {
-      setParameters(parameters);
+      setDownloadFilters(() => ({
+        parameters: parameters,
+      }));
     },
     setDateFrom(datetime) {
-      setDateFrom(datetime);
+      setDownloadFilters(() => ({
+        dateFrom: datetime,
+      }));
     },
     setDateTo(datetime) {
-      setDateTo(datetime);
+      setDownloadFilters(() => ({
+        dateTo: datetime,
+      }));
     },
-    setDownloadFilters(props) {
+    setDownloadFilters(dateFrom, dateTo, parameters) {
       setDownloadFilters({
         locationsId: state.location.id,
-        dateFrom: props.dateFrom,
-        dateTo: props.dateTo,
-        parameters: props.parameters,
+        dateFrom: dateFrom,
+        dateTo: dateTo,
+        parameters: parameters,
       });
     },
   });

@@ -7,6 +7,7 @@ import {
   line,
   isoParse,
 } from 'd3';
+import { createEffect } from 'solid-js';
 
 function transform(data) {
   return data.map((o) => {
@@ -17,16 +18,10 @@ function transform(data) {
   });
 }
 
-export default function Sparkline({
-  series,
-  width,
-  height,
-  margin,
-  style = { fill: 'none', strokeColor: 'black' },
-}) {
-  const data = transform(series);
-  const x = scaleTime().range([0, width]);
-  const y = scaleLinear().range([height, 0]);
+export default function Sparkline(props) {
+  const data = transform(props.series);
+  const x = scaleTime().range([0, props.width]);
+  const y = scaleLinear().range([props.height, 0]);
   x.domain(extent(data, (d) => d.date));
   y.domain([min(data, (d) => d.value), max(data, (d) => d.value)]);
 
@@ -34,14 +29,26 @@ export default function Sparkline({
     .x((d) => x(d.date))
     .y((d) => y(d.value));
 
+  createEffect(() => {});
+
   return (
     <svg
-      width={`${width + margin.left + margin.right}px`}
-      height={`${height + margin.top + margin.bottom}px`}
+      width={`${
+        props.width + props.margin.left + props.margin.right
+      }px`}
+      height={`${
+        props.height + props.margin.top + props.margin.bottom
+      }px`}
     >
-      <g transform={`translate(${margin.left} ${margin.top})`}>
+      <g
+        transform={`translate(${props.margin.left} ${props.margin.top})`}
+      >
         <path
-          style={`fill:${style.fill}; stroke:${style.strokeColor}; stroke-width:${style.stokeWidth}`}
+          style={{
+            fill: props.style.fill,
+            stroke: props.style.color,
+            'stroke-width': props.style.width,
+          }}
           d={generateLine(data)}
         />
       </g>

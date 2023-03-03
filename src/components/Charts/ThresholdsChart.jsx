@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 
-import { createSignal } from 'solid-js';
+import { For } from 'solid-js';
 import { createEffect } from 'solid-js';
 
 export default function ThresholdsChart(props) {
@@ -51,7 +51,7 @@ export default function ThresholdsChart(props) {
             transform={`translate(${props.margin / 2} ${
               props.margin / 2
             })`}
-          ></g>
+          />
           <g
             transform={`translate(${props.margin} ${
               props.margin / 2
@@ -72,25 +72,25 @@ export default function ThresholdsChart(props) {
           <g
             class="y-axis"
             transform={`translate(${props.margin / 2} 0)`}
-          ></g>
+          />
           <g
             class="x-axis"
             transform={`translate(0 ${
               props.height + props.margin / 2
             })`}
-          ></g>
+          />
           <g
             class={`thresholds-plot-y-axis-${props.name}`}
             transform={`translate(${props.margin / 2} ${
               props.margin / 2
             })`}
-          ></g>
+          />
           <g
             class={`thresholds-plot-x-axis-${props.name}`}
             transform={`translate(${props.margin / 2} ${
               props.height + props.margin / 2
             })`}
-          ></g>
+          />
         </svg>
       </div>
     </>

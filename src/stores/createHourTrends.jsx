@@ -1,11 +1,6 @@
 import { createResource, createSignal } from 'solid-js';
 
-export default function createHourTrends(
-  client,
-  actions,
-  state,
-  setState
-) {
+export default function createHourTrends(client, actions) {
   const [trendParams, setTrendParams] = createSignal();
 
   let [trends, { mutate }] = createResource(

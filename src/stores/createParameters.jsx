@@ -1,11 +1,6 @@
-import { createResource, createSignal } from 'solid-js';
+import { createResource } from 'solid-js';
 
-export default function createLocations(
-  client,
-  actions,
-  state,
-  setState
-) {
+export default function createLocations(client, actions) {
   let [parameters] = createResource(client.Parameters.getAll);
 
   Object.assign(actions, {});

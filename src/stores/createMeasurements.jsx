@@ -1,11 +1,6 @@
 import { createResource, createSignal, batch } from 'solid-js';
 
-export default function createMeasurements(
-  client,
-  actions,
-  state,
-  setState
-) {
+export default function createMeasurements(client, actions) {
   const [locationsId, setLocationsId] = createSignal();
   const [parameter, setParameter] = createSignal();
   const [dateFrom, setDateFrom] = createSignal();

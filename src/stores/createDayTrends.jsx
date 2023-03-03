@@ -1,11 +1,6 @@
 import { createResource, createSignal } from 'solid-js';
 
-export default function createDayTrends(
-  client,
-  actions,
-  state,
-  setState
-) {
+export default function createDayTrends(client, actions) {
   const [trendParams, setTrendParams] = createSignal();
 
   let [dayTrends, { mutate }] = createResource(

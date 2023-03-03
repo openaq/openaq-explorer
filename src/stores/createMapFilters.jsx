@@ -1,11 +1,6 @@
-import { createStore, produce } from 'solid-js/store';
+import { createStore } from 'solid-js/store';
 
-export default function createMapFilters(
-  client,
-  actions,
-  state,
-  setState
-) {
+export default function createMapFilters(client, actions, state) {
   const [mapFilters, setMapFilters] = createStore({
     monitor: true,
     airSensor: true,

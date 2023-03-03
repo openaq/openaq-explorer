@@ -7,10 +7,10 @@ export default function Header() {
         <a href="/" class="header-logo" aria-label="openaq logo">
           <img src={imgSvg} alt="openaq logo" />
         </a>
-        <div class="spacer"></div>
+        <div class="spacer" />
         <nav class="nav">
-          <input id="menu-toggle" type="checkbox" />
           <label class="menu-button-container" for="menu-toggle">
+            <input id="menu-toggle" type="checkbox" />
             <div class="menu-button">
               <span class="material-symbols-outlined">menu</span>
             </div>

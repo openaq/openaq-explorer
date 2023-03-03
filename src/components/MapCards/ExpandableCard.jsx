@@ -8,29 +8,27 @@ import {
 import Accordion from './Accordion';
 
 export function ExpandableCard(props) {
-  const [open, setOpen] = createSignal(props.open || false);
+  const [open] = createSignal(true);
   const [store] = useStore();
-
-  const toggleOpen = () => setOpen(!open());
 
   return (
     <div
-      className={`expandable-card ${
+      class={`expandable-card ${
         store.help.active || store.id
           ? 'expandable-card--translate'
           : ''
       }`}
     >
-      <div className="expandable-card__header">
-        <div style="display:flex; align-items:center;">
+      <div class="expandable-card__header">
+        <div style={{ display: 'flex', 'align-items': 'center' }}>
           <span class="material-symbols-outlined white">layers</span>
-          <h3 className="type-heading3 text-white">
+          <h3 class="type-heading3 text-white">
             {open() ? 'Overlay' : 'Overlay & Filters'}
           </h3>
         </div>
       </div>
       <div
-        className={
+        class={
           open()
             ? 'expandable-card__body expandable-card__body--open'
             : 'expandable-card__body'
@@ -46,7 +44,6 @@ export default function FilterOverlayCard() {
   const [
     store,
     {
-      loadParameter,
       toggleProviderList,
       toggleMonitor,
       toggleAirSensor,
@@ -72,69 +69,61 @@ export default function FilterOverlayCard() {
   };
 
   return (
-    <ExpandableCard open={true}>
+    <ExpandableCard>
       <Accordion />
-      <section className="filters-section">
-        <header className="expandable-card__header">
-          <div style="display:flex; align-items:center;">
+      <section class="filters-section">
+        <header class="expandable-card__header">
+          <div style={{ display: 'flex', 'align-items': 'center' }}>
             <span class="material-symbols-rounded white">
               filter_alt
             </span>
-            <h3 className="type-heading3 text-white">Filters</h3>
+            <h3 class="type-heading3 text-white">Filters</h3>
           </div>
         </header>
-        <div style="margin: 16px 15px;">
+        <div style={{ margin: '16px 15px' }}>
           <div class="filters-section__body">
             <ReferenceGradeMarker />
-            <label htmlFor="reference-grade">
-              Reference monitor locations
-            </label>
-            <div class="marker-legend-item">
+            <label class="marker-legend-item" for="reference-grade">
+              <span>Reference monitor locations</span>
               <input
                 type="checkbox"
                 name="reference-grade"
                 id="reference-grade"
-                className="checkbox"
+                class="checkbox"
                 checked={store.mapFilters.monitor}
                 onChange={monitorCheck}
                 disabled={!showAirSensors()}
               />
-            </div>
-            <LowCostSensorMarker />
-            <label htmlFor="low-cost-sensor">
-              {' '}
-              Air sensors locations
             </label>
-            <div class="marker-legend-item">
+            <LowCostSensorMarker />
+            <label class="marker-legend-item" for="low-cost-sensor">
+              Air sensors locations
               <input
                 type="checkbox"
                 name="low-cost-sensor"
                 id="low-cost-sensor"
-                className="checkbox"
+                class="checkbox"
                 checked={store.mapFilters.airSensor}
                 onChange={sensorCheck}
                 disabled={!showMonitors()}
               />
-            </div>
-            <NoRecentUpdateMarker />
-
-            <label htmlFor="no-recent-updates">
-              Show locations with no recent updates
             </label>
-            <div class="marker-legend-item">
+            <NoRecentUpdateMarker />
+            <label class="marker-legend-item" for="no-recent-updates">
+              Show locations with no recent updates
               <input
                 type="checkbox"
                 name="no-recent-updates"
                 id="no-recent-updates"
-                className="checkbox"
+                class="checkbox"
                 onChange={noRecentUpdatesCheck}
               />
-            </div>
+            </label>
           </div>
         </div>
-        <div className="expandable-card__footer">
+        <div class="expandable-card__footer">
           <button
-            className="btn btn-secondary icon-btn"
+            class="btn btn-secondary icon-btn"
             onClick={() => toggleProviderList(true)}
           >
             Choose data providers

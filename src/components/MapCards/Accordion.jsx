@@ -1,4 +1,10 @@
-import { createSignal, createContext, useContext } from 'solid-js';
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+import {
+  createSignal,
+  createContext,
+  useContext,
+  For,
+} from 'solid-js';
 import { createStore } from 'solid-js/store';
 import { useStore } from '../../stores';
 import Badge from '../Badge';
@@ -29,24 +35,27 @@ function useAccordion() {
   return useContext(AccordionContext);
 }
 
-function AccordionHelp({ contentKey, open }) {
-  const [store, { toggleHelp, loadContent }] = useStore();
+function AccordionHelp(props) {
+  const [, { toggleHelp, loadContent }] = useStore();
 
   const showHelp = (e) => {
     toggleHelp(true);
-    loadContent(contentKey);
+    loadContent(props.contentKey);
     e.stopPropagation();
   };
 
   return (
-    <span
-      class={`${contentKey}-help-btn material-symbols-outlined ${
-        open() ? 'white' : 'grey'
-      }`}
-      onClick={(e) => showHelp(e)}
-    >
-      help
-    </span>
+    <button class="button-reset" onClick={(e) => showHelp(e)}>
+      <span
+        class={`${
+          props.contentKey
+        }-help-btn material-symbols-outlined ${
+          props.open() ? 'white' : 'grey'
+        }`}
+      >
+        help
+      </span>
+    </button>
   );
 }
 
@@ -56,20 +65,21 @@ function AccordionPanel(props) {
   const open = () => activePanel.name == props.name;
 
   return (
-    <section className="accordion">
+    <section class="accordion">
       <header
-        className={`accordion__header ${
+        class={`accordion__header ${
           open() ? 'accordion__header--open' : ''
         }`}
         onClick={() => {
           togglePanel(props.name);
         }}
+        onKeyDown={() => console.log('keydown')}
       >
-        <div className="header-section">
-          <h3 className="accordion__header-title">{props.title}</h3>
+        <div class="header-section">
+          <h3 class="accordion__header-title">{props.title}</h3>
           <AccordionHelp contentKey={props.contentKey} open={open} />
         </div>
-        <div className="header-section">
+        <div class="header-section">
           {props.active ? (
             <Badge type={'status-ok'}>
               Active
@@ -89,7 +99,7 @@ function AccordionPanel(props) {
         </div>
       </header>
       <div
-        className={`accordion__body ${
+        class={`accordion__body ${
           open() ? 'accordion__body--open' : ''
         }`}
       >
@@ -104,7 +114,7 @@ function ThresholdSelect() {
   const [thresholdValue, setThresholdValue] = createSignal(5); // initialize at 5ugm3
   const [thressholdPeriod, setThressholdPeriod] = createSignal(14); // initialize at 14 days
 
-  const [store, { setMapThreshold }] = useStore();
+  const [{ setMapThreshold }] = useStore();
 
   function setThreshold() {
     setMapThreshold({
@@ -157,7 +167,7 @@ function ThresholdSelect() {
       <select
         name=""
         id=""
-        className="select"
+        class="select"
         onChange={onParameterChange}
       >
         <For each={parameters}>
@@ -168,12 +178,12 @@ function ThresholdSelect() {
           )}
         </For>
       </select>
-      <div className="thresholds-controls">
-        <span className="thresholds-controls__item">Above</span>
+      <div class="thresholds-controls">
+        <span class="thresholds-controls__item">Above</span>
         <select
           name=""
           id=""
-          className="select thresholds-controls__item"
+          class="select thresholds-controls__item"
           onChange={(e) =>
             setThresholdValue(parseInt(e.target.value))
           }
@@ -190,12 +200,12 @@ function ThresholdSelect() {
             )}
           </For>
         </select>
-        <span className="thresholds-controls__item">µg/m³</span>
+        <span class="thresholds-controls__item">µg/m³</span>
       </div>
       <select
         name=""
         id=""
-        className="select"
+        class="select"
         onChange={(e) =>
           setThressholdPeriod(parseInt(e.target.value))
         }
@@ -208,7 +218,7 @@ function ThresholdSelect() {
           )}
         </For>
       </select>
-      <button className="btn btn-secondary" onClick={setThreshold}>
+      <button class="btn btn-secondary" onClick={setThreshold}>
         Update
       </button>
     </>
@@ -216,23 +226,8 @@ function ThresholdSelect() {
 }
 
 export default function Accordion() {
-  const [thresholdParameter, setThresholdParameter] = createSignal(2);
-  const [thresholdValue, setThresholdValue] = createSignal(5);
-  const [thressholdPeriod, setThressholdPeriod] = createSignal(1);
-
-  const [
-    store,
-    { loadParameter, setMapThreshold, setMapThresholdActive },
-  ] = useStore();
-
-  function setThreshold() {
-    setMapThreshold({
-      active: true,
-      parameter_id: thresholdParameter(),
-      threshold: thresholdValue(),
-      period: thressholdPeriod(),
-    });
-  }
+  const [store, { loadParameter, setMapThresholdActive }] =
+    useStore();
 
   return (
     <AccordionProvider>
@@ -246,13 +241,13 @@ export default function Accordion() {
         <select
           name=""
           id=""
-          className="select"
+          class="select"
           onChange={(e) => {
             loadParameter(e.target.value);
           }}
         >
           <For each={store.parameters()}>
-            {(parameter, idx) => (
+            {(parameter) => (
               <option
                 value={parameter.id}
                 selected={parameter.id == store.parameter.id}
@@ -263,7 +258,7 @@ export default function Accordion() {
           </For>
         </select>
         <button
-          className="btn btn-secondary"
+          class="btn btn-secondary"
           onClick={() => setMapThresholdActive(false)}
         >
           Update

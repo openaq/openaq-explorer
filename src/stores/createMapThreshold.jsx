@@ -1,11 +1,6 @@
 import { createStore } from 'solid-js/store';
 
-export default function createMapThreshold(
-  client,
-  actions,
-  state,
-  setState
-) {
+export default function createMapThreshold(client, actions) {
   const [thresholdValues, setThresholdValues] = createStore({
     active: false,
     parameter_id: 2,

@@ -8,15 +8,21 @@ function calculateTimeDiff(hours) {
 }
 
 function LatestMeasurementsChart() {
-  const [store, { setMeasurements }] = useStore();
+  const [
+    store,
+    { setMeasurements, toggleHelp, loadContent, setScale },
+  ] = useStore();
   const [selectedParameter, setSelectedParameter] = createSignal(
     store.location?.sensors[0].parameter.id
   );
+  const [selectedScale, setSelectedScale] = createSignal('linear');
+
+  const defaultTimePeriod = 24;
   const [selectedTimePeriod, setSelectedTimePeriod] =
-    createSignal(24);
+    createSignal(defaultTimePeriod);
   const [dateFrom, setDateFrom] = createSignal(
     new Date(
-      Date.now() - calculateTimeDiff(selectedTimePeriod())
+      Date.now() - calculateTimeDiff(defaultTimePeriod)
     ).toISOString()
   );
   const [dateTo] = createSignal(new Date().toISOString()); // static for now
@@ -24,7 +30,19 @@ function LatestMeasurementsChart() {
   const chartData = () =>
     store.measurements() ? store.measurements() : [];
 
-  const track = createReaction(() => {
+  const trackName = createReaction(() => {
+    setDateFrom(
+      new Date(
+        Date.now() - calculateTimeDiff(selectedTimePeriod())
+      ).toISOString()
+    );
+    setMeasurements(
+      store.location.id,
+      selectedParameter(),
+      dateFrom(),
+      dateTo()
+    );
+    //setScale(selectedScale());
     setSelectedParameter(store.location?.sensors[0].parameter.id);
     setMeasurements(
       store.location.id,
@@ -34,7 +52,11 @@ function LatestMeasurementsChart() {
     );
   });
 
-  track(() => store.location?.sensors[0].parameter.name);
+  const trackId = createReaction(() => onClickUpdate());
+
+  trackName(() => store.location?.sensors[0].parameter.displayName);
+
+  trackId(() => store.location?.id);
 
   const onClickUpdate = () => {
     setDateFrom(
@@ -48,21 +70,53 @@ function LatestMeasurementsChart() {
       dateFrom(),
       dateTo()
     );
+    setScale(selectedScale());
   };
+
+  if (store.location?.id) {
+    onClickUpdate();
+  }
+
   return (
     <>
-      <div style="display:flex; align-items: center; margin: 24px 0; gap:12px;">
-        <h1 className="type-heading-1 text-sky-120">
-          Latest Readings
-        </h1>
+      <div
+        style={{
+          display: 'flex',
+          'align-items': 'center',
+          margin: '24px 0',
+          gap: '12px',
+        }}
+      >
+        <h1 class="type-heading-1 text-sky-120">Latest Readings</h1>
+        <button
+          class="button-reset"
+          style={{ display: 'flex' }}
+          onClick={() => {
+            toggleHelp(true);
+            loadContent('lineChartHelp');
+          }}
+        >
+          <span class="material-symbols-outlined">help</span>
+        </button>
       </div>
 
-      <div style="display:flex; justify-content: space-between;">
-        <div style="display:flex; gap:12px; align-items: center;">
+      <div
+        style={{
+          display: 'flex',
+          'justify-content': 'space-between',
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            gap: '12px',
+            'align-items': 'center',
+          }}
+        >
           <select
             name=""
             id=""
-            className="select"
+            class="select"
             onChange={(e) => setSelectedParameter(e.target.value)}
           >
             <For each={store.location?.sensors}>
@@ -71,7 +125,8 @@ function LatestMeasurementsChart() {
                   value={item.parameter.id}
                   selected={selectedParameter() == item.parameter.id}
                 >
-                  {item.parameter.name} ({item.parameter.units})
+                  {item.parameter.displayName} ({item.parameter.units}
+                  )
                 </option>
               )}
             </For>
@@ -79,7 +134,7 @@ function LatestMeasurementsChart() {
           <select
             name=""
             id=""
-            className="select"
+            class="select"
             onChange={(e) => setSelectedTimePeriod(e.target.value)}
           >
             <option value="24">Last 24 hours</option>
@@ -88,10 +143,18 @@ function LatestMeasurementsChart() {
             <option value="168">Last 1 week</option>
             <option value="720">Last 30 days</option>
           </select>
-          <button
-            className="btn btn-secondary"
-            onClick={onClickUpdate}
+          <select
+            name="scale-type"
+            id="scale-type-select"
+            class="select"
+            onChange={(e) => setSelectedScale(e.target.value)}
           >
+            <option value="linear" selected>
+              Linear
+            </option>
+            <option value="log">Logarithmic</option>
+          </select>
+          <button class="btn btn-secondary" onClick={onClickUpdate}>
             Update
           </button>
         </div>
@@ -104,6 +167,7 @@ function LatestMeasurementsChart() {
           dateFrom={dateFrom()}
           dateTo={dateTo()}
           data={chartData()}
+          scale={store.latestReadings}
         />
       </div>
     </>
@@ -142,17 +206,35 @@ function TrendsCharts() {
 
   return (
     <>
-      <div class="patterns-container" style="display: grid: "></div>
-      <div style="display:flex; align-items: center; margin: 24px 0; gap:12px;">
-        <h1 className="type-heading-1 text-sky-120">Patterns</h1>
+      <div class="patterns-container" style={{ display: 'grid:' }} />
+      <div
+        style={{
+          display: 'flex',
+          'align-items': 'center',
+          margin: '24px 0',
+          gap: '12px',
+        }}
+      >
+        <h1 class="type-heading-1 text-sky-120">Patterns</h1>
       </div>
 
-      <div style="display:flex; justify-content: space-between;">
-        <div style="display:flex; gap:12px; align-items: center;">
+      <div
+        style={{
+          display: 'flex',
+          'justify-content': 'space-between',
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            gap: '12px',
+            'align-items': 'center',
+          }}
+        >
           <select
             name=""
             id=""
-            className="select"
+            class="select"
             onChange={(e) => setMeasurandsId(e.target.value)}
           >
             <For each={store.location?.sensors}>
@@ -163,25 +245,28 @@ function TrendsCharts() {
                     measurandsId() == sensor.parameter.id
                   }
                 >
-                  {sensor.parameter.name} ({sensor.parameter.units})
+                  {sensor.parameter.displayName} (
+                  {sensor.parameter.units})
                 </option>
               )}
             </For>
           </select>
-          <select name="" id="" className="select">
+          <select name="" id="" class="select">
             <option value="">All time</option>
           </select>
           <button
-            className="btn btn-secondary"
+            class="btn btn-secondary"
             onClick={() => updateData()}
           >
             Update
           </button>
         </div>
       </div>
-      <div style="display: flex; justify-content: space-around;">
+      <div
+        style={{ display: 'flex', 'justify-content': 'space-around' }}
+      >
         <div>
-          <h3 className="type-header-3">Hour of day</h3>
+          <h3 class="type-header-3">Hour of day</h3>
           <Boxplot
             name={'time-of-day'}
             width={350}
@@ -192,7 +277,7 @@ function TrendsCharts() {
           />
         </div>
         <div>
-          <h3 className="type-header-3">Day of week</h3>
+          <h3 class="type-header-3">Day of week</h3>
           <Boxplot
             name={'day-of-week'}
             width={350}
@@ -207,13 +292,13 @@ function TrendsCharts() {
   );
 }
 
-export default function DetailCharts(props) {
+export default function DetailCharts() {
   return (
-    <div className="detail-charts">
-      <section className="detail-charts__section">
+    <div class="detail-charts">
+      <section class="detail-charts__section">
         <LatestMeasurementsChart />
       </section>
-      <section className="detail-charts__section">
+      <section class="detail-charts__section">
         <TrendsCharts />
       </section>
     </div>

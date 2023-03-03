@@ -80,14 +80,12 @@
   &__body {
     width: 250px;
     display: grid;
-    grid-template-columns: 1fr 4fr 1fr;
+    grid-template-columns: 1fr 4fr;
     grid-auto-rows: 1fr;
     row-gap: 8px;
-    margin-bottom: 12px;
     .marker-legend-item {
-      justify-content: center;
-      display: flex;
-      align-items: center;
+      display: grid;
+      grid-template-columns: 6fr 1fr;
     }
   }
 }

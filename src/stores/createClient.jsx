@@ -5,7 +5,7 @@ dayjs.extend(utc);
 
 const API_ROOT = import.meta.env.VITE_API_BASE_URL;
 
-export default function createClient([state, actions]) {
+export default function createClient([actions]) {
   async function send(
     method,
     url,
@@ -116,22 +116,25 @@ export default function createClient([state, actions]) {
   };
 
   const Downloads = {
-    get: (downloadFilters) => {
-      const { locationsId, parameters, dateFrom, dateTo } =
-        downloadFilters;
+    get: (props) => {
       const offset = (new Date().getTimezoneOffset() / 60) * -1;
-      const datetimeStart = dayjs(dateFrom)
+      const datetimeStart = dayjs(props.dateFrom)
         .utcOffset(offset, true)
         .format();
-      const datetimeEnd = dayjs(dateTo)
+      const datetimeEnd = dayjs(props.dateTo)
         .utcOffset(offset, true)
         .format();
-      const parameterParams = parameters
-        .map((o) => `parameters_id=${o}`)
-        .join('&');
+      let parameterParams = '';
+      if (props.parameters) {
+        parameterParams = props.parameters
+          .map((o) => `parameters_id=${o}`)
+          .join('&');
+        parameterParams = `&${parameterParams}`;
+      }
+
       return send(
         'get',
-        `/v2/measurements?period_name=hour&location_id=${locationsId}&limit=1000&${parameterParams}&date_from=${datetimeStart}&date_to=${datetimeEnd}`,
+        `/v2/measurements?location_id=${props.locationsId}&limit=1000${parameterParams}&date_from=${datetimeStart}&date_to=${datetimeEnd}`,
         undefined,
         'results',
         undefined,

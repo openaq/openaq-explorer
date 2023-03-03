@@ -9,7 +9,6 @@ import { useStore } from '../../stores';
 import { produce, createStore } from 'solid-js/store';
 import dayjs from 'dayjs/esm/index.js';
 import utc from 'dayjs/plugin/utc';
-import { parametersLookup } from '../../lookups';
 
 dayjs.extend(utc);
 
@@ -84,11 +83,7 @@ export default function DownloadCard() {
   track(() => store.location?.sensors);
 
   const downloadOnClick = () => {
-    setDownloadFilters({
-      dateFrom: dateFrom(),
-      dateTo: dateTo(),
-      parameters: parameters,
-    });
+    setDownloadFilters(dateFrom(), dateTo(), parameters);
   };
 
   createEffect(
@@ -103,58 +98,99 @@ export default function DownloadCard() {
   );
 
   return (
-    <div style="position:relative;">
+    <div style={{ position: 'relative' }}>
       <div
-        className="bubble-lg"
-        style="position:absolute; z-index:-1; bottom:-60px; left: -120px"
-      ></div>
+        class="bubble-lg"
+        style={{
+          position: 'absolute',
+          'z-index': '-1',
+          bottom: '-60px',
+          left: '-120px',
+        }}
+      />
       <div
-        className="bubble-sm"
-        style="position:absolute; bottom:-139px; left: 60px"
-      ></div>
-      <article className="detail-charts" id="download-card">
-        <section className="detail-charts__section">
-          <div style="display:flex; justify-content: space-between;">
-            <div style="display:flex; align-items: center; margin: 24px 0; gap:12px;">
-              <h3 className="type-heading-1 text-sky-120">
+        class="bubble-sm"
+        style={{
+          position: 'absolute',
+          bottom: '-139px',
+          left: '60px',
+        }}
+      />
+      <article class="detail-charts" id="download-card">
+        <section class="detail-charts__section">
+          <div
+            style={{
+              display: 'flex',
+              'justify-content': 'space-between',
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                'align-items': 'center',
+                margin: '24px 0',
+                gap: '12px',
+              }}
+            >
+              <h3 class="type-heading-1 text-sky-120">
                 Download & API
               </h3>
             </div>
           </div>
-          <h3 className="type-subtitle-1 text-sky-120">
+          <h3 class="type-subtitle-1 text-sky-120">
             Download Data (CSV)
           </h3>
 
-          <div style="margin-top: 20px; display:grid; grid-template-rows: 1fr 1fr 1fr; gap: 12px; padding-bottom: 12px;">
+          <div
+            style={{
+              'margin-top': '20px',
+              display: 'flex',
+              'flex-direction': 'column',
+              gap: '32px',
+              'padding-bottom': '12px',
+            }}
+          >
             <div>
-              <label htmlFor="datetime-from">Start date</label>
-              <input
-                type="date"
-                name="datetime-from"
-                id="datetime-from"
-                class="date-input"
-                value={dateFrom().toISOString().split('T')[0]}
-                onChange={(e) =>
-                  setDateFrom(new Date(e.target.value))
-                }
-              />
-              <label htmlFor="datetime-to">End date</label>
-              <input
-                type="date"
-                name="datetime-to"
-                id="datetime-to"
-                class="date-input"
-                value={dateTo().toISOString().split('T')[0]}
-                onChange={(e) => setDateTo(new Date(e.target.value))}
-              />
+              <label for="datetime-from">
+                Start date
+                <input
+                  type="date"
+                  name="datetime-from"
+                  id="datetime-from"
+                  class="date-input"
+                  value={dateFrom().toISOString().split('T')[0]}
+                  onChange={(e) =>
+                    setDateFrom(new Date(e.target.value))
+                  }
+                />
+              </label>
+              <label for="datetime-to">
+                End date
+                <input
+                  type="date"
+                  name="datetime-to"
+                  id="datetime-to"
+                  class="date-input"
+                  value={dateTo().toISOString().split('T')[0]}
+                  onChange={(e) =>
+                    setDateTo(new Date(e.target.value))
+                  }
+                />
+              </label>
             </div>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; width: 250px; row-gap: 15px;">
+            <div
+              style={{
+                display: 'grid',
+                'grid-template-columns': '1fr 1fr',
+                width: '250px',
+                'row-gap': '15px',
+              }}
+            >
               <For each={store.location?.sensors}>
                 {(sensor) => (
                   <>
                     <label for={`${sensor.parameter.name}-checkbox`}>
-                      {parametersLookup[sensor.parameter.name] ||
-                        sensor.parameter.name}{' '}
+                      {sensor.parameter.displayName}
                       {sensor.parameter.units}
                     </label>
                     <input
@@ -187,9 +223,9 @@ export default function DownloadCard() {
                 )}
               </For>
             </div>
-            <div style="display:inline-block;">
+            <div style={{ display: 'inline-block' }}>
               <button
-                className="icon-btn btn-secondary"
+                class="icon-btn btn-secondary"
                 onClick={downloadOnClick}
                 disabled={store.download.loading}
               >
@@ -204,10 +240,17 @@ export default function DownloadCard() {
             </div>
           </div>
         </section>
-        <section className="detail-charts__section">
-          <div style="display:grid; grid-template-rows: 1fr 1fr 1fr; gap: 12px;  padding-bottom: 24px;">
-            <h3 className="type-subtitle-1 text-sky-120">API</h3>
-            <span className="type-body-2">
+        <section class="detail-charts__section">
+          <div
+            style={{
+              display: 'grid',
+              'grid-template-rows': '1fr 1fr 1fr',
+              gap: '12px',
+              'padding-bottom': '24px',
+            }}
+          >
+            <h3 class="type-subtitle-1 text-sky-120">API</h3>
+            <span class="type-body-2">
               Measurements can be accessed programmatically via the
               OpenAQ API through this URL:
             </span>
@@ -228,7 +271,7 @@ export default function DownloadCard() {
                 .format()}
               &limit=1000
             </span>
-            <div style="display:inline-block;">
+            <div style={{ display: 'inline-block' }}>
               <a
                 href={`https://api.openaq.org/v2/measurements?location_id=${
                   store.location?.id
@@ -246,16 +289,14 @@ export default function DownloadCard() {
                   .map((s) => s.trim())
                   .filter(Boolean)
                   .join('')}
-                className="btn btn-secondary"
-                style="display:inline;"
+                class="btn btn-secondary"
+                style={{ display: 'inline' }}
               >
                 Try this link
               </a>
             </div>
-            <h5 className="type-subtitle-3">
-              What is the OpenAQ API?
-            </h5>
-            <p className="type-body-1">
+            <h5 class="type-subtitle-3">What is the OpenAQ API?</h5>
+            <p class="type-body-1">
               The OpenAQ API lets you access OpenAQ data directly and
               automatically, so you can use it in your own tools and
               applications. Learn more

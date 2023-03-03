@@ -3,15 +3,12 @@ import { createResource, createSignal } from 'solid-js';
 export default function createRecentMeasurements(
   client,
   actions,
-  state,
-  setState
+  state
 ) {
-  const [sensorNodesId, setSensorNodesId] = createSignal(
-    () => state.id
-  );
+  const [sensorNodesId, setSensorNodesId] = createSignal(state.id);
 
   const [recentMeasurements, { mutate }] = createResource(
-    sensorNodesId(),
+    () => sensorNodesId(),
     client.Measurements.getRecent
   );
 

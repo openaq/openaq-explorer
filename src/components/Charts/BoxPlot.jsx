@@ -7,90 +7,85 @@ import {
   max,
   min,
 } from 'd3';
-import { createEffect, createSignal } from 'solid-js';
+import { createEffect, createSignal, For } from 'solid-js';
 
 function BoxPlotTooltip(props) {
   return (
     <div
-      style={`
-          position:absolute;
-          z-index:4;
-          top:${props.data.style?.y}px;
-          left:${props.data.style?.x}px; 
-          display:${props.data.style?.display || 'none'}`}
-      className="box-plot-tooltip"
+      style={{
+        top: `${props.data.style?.y}px`,
+        left: `${props.data.style?.x}px`,
+        display: `${props.data.style?.display || 'none'}`,
+      }}
+      class="box-plot-tooltip"
       role="tooltip"
     >
-      <div className="box-plot-tooltip__head">
-        <span className="type-body3 text-white">
+      <div class="box-plot-tooltip__head">
+        <span class="type-body3 text-white">
           {props.data?.period}
         </span>
       </div>
-      <div className="box-plot-tooltip__body">
-        <div className="box-plot-legend-item">
-          <div className="bg-smoke-10 box-plot-legend-color"></div>
+      <div class="box-plot-tooltip__body">
+        <div class="box-plot-legend-item">
+          <div class="bg-smoke-10 box-plot-legend-color" />
           <div>
-            <span className="type-body-3">
-              {props.data?.values?.max}
-            </span>
-            <span className="type-body-1">µg/m³</span>
+            <span class="type-body-3">{props.data?.values?.max}</span>
+            <span class="type-body-1">µg/m³</span>
           </div>
-          <div className="box-plot-legend-item-label">
-            <span className="type-body-1">
+          <div class="box-plot-legend-item-label">
+            <span class="type-body-1">
               98<sup>th</sup> percentile
             </span>
           </div>
         </div>
-        <div className="box-plot-legend-item">
-          <div className="bg-lavender-100 box-plot-legend-color"></div>
+        <div class="box-plot-legend-item">
+          <div class="bg-lavender-100 box-plot-legend-color" />
           <div>
-            <span className="type-body-3">
+            <span class="type-body-3">
               {props.data.values?.interquartileTop}
             </span>
-            <span className="type-body-1">µg/m³</span>
+            <span class="type-body-1">µg/m³</span>
           </div>
-          <div className="box-plot-legend-item-label">
-            <span className="type-body-1">
+          <div class="box-plot-legend-item-label">
+            <span class="type-body-1">
               75<sup>th</sup> percentile
             </span>
           </div>
         </div>
-        <div className="box-plot-legend-item bg-sky-10">
-          <div className="bg-lavender-120 box-plot-legend-color"></div>
+        <div class="box-plot-legend-item bg-sky-10">
+          <div class="bg-lavender-120 box-plot-legend-color" />
           <div>
-            <span className="type-body-3">
+            <span class="type-body-3">
               {props.data.values?.median}{' '}
             </span>
-            <span className="type-body-1">µg/m³</span>
+            <span class="type-body-1">µg/m³</span>
           </div>
-          <div className="box-plot-legend-item-label">
-            <span className="type-body-1">Median</span>
+          <div class="box-plot-legend-item-label">
+            <span class="type-body-1">Median</span>
           </div>
         </div>
-        <div className="box-plot-legend-item">
-          <div className="bg-lavender-100 box-plot-legend-color"></div>
+        <div class="box-plot-legend-item">
+          <div class="bg-lavender-100 box-plot-legend-color" />
           <div>
-            <span className="type-body-3">
+            <span class="type-body-3">
               {props.data.values?.interquartileBottom}{' '}
             </span>
-            <span className="type-body-1">µg/m³</span>
+            <span class="type-body-1">µg/m³</span>
           </div>
-          <div className="box-plot-legend-item-label">
-            <span className="type-body-1">
+          <div class="box-plot-legend-item-label">
+            <span class="type-body-1">
               25<sup>th</sup> percentile
             </span>
           </div>
         </div>
-        <div className="box-plot-legend-item">
-          <div className="bg-smoke-10 box-plot-legend-color"></div>
+        <div class="box-plot-legend-item">
+          <div class="bg-smoke-10 box-plot-legend-color" />
           <div>
-            <span className="type-body-3">
-              {props.data.values?.min}{' '}
-            </span>
-            <span className="type-body-1">µg/m³</span>
+            <span class="type-body-3">{props.data.values?.min} </span>
+            <span class="type-body-1">µg/m³</span>
           </div>
-          <div className="box-plot-legend-item-label">
-            <span className="type-body-1">
+          <div class="box-plot-legend-item-label">
+            <span class="type-body-1">
               2<sup>nd</sup> percentile
             </span>
           </div>
@@ -240,7 +235,7 @@ export default function Boxplot(props) {
     .ticks(6);
   const xAxis = axisBottom(x)
     .tickValues(ticksValues)
-    .tickFormat((e, i) => lookup[e]);
+    .tickFormat((e) => lookup[e]);
 
   createEffect(() => {
     if (props.data) {
@@ -263,11 +258,11 @@ export default function Boxplot(props) {
         height={`${props.height + props.margin}px`}
       >
         <g
-          className={`chart-grid box-plot-grid-${props.name}`}
+          class={`chart-grid box-plot-grid-${props.name}`}
           transform={`translate(${props.margin / 2} ${
             props.margin / 2
           } )`}
-        ></g>
+        />
         <g
           transform={`translate(${
             props.margin / 1.8 + boxWidth / 2
@@ -284,7 +279,7 @@ export default function Boxplot(props) {
                   <line
                     stroke-width={2}
                     stroke="#CCCCCC"
-                    className="whiskers"
+                    class="whiskers"
                     x1={x(d.factor.label)}
                     x2={x(d.factor.label)}
                     y1={y(d.summary.q02)}
@@ -293,7 +288,7 @@ export default function Boxplot(props) {
                   <line
                     stroke-width={boxWidth}
                     stroke="#EAE7FF"
-                    className="box"
+                    class="box"
                     x1={x(d.factor.label)}
                     x2={x(d.factor.label)}
                     y1={y(d.summary.q25)}
@@ -302,7 +297,7 @@ export default function Boxplot(props) {
                   <line
                     stroke-width={2}
                     stroke="#8576ED"
-                    className="q3"
+                    class="q3"
                     x1={x(d.factor.label) - boxWidth / 2}
                     x2={x(d.factor.label) + boxWidth / 2}
                     y1={y(d.summary.q75)}
@@ -311,7 +306,7 @@ export default function Boxplot(props) {
                   <line
                     stroke-width={2}
                     stroke="#8576ED"
-                    className="q1"
+                    class="q1"
                     x1={x(d.factor.label) - boxWidth / 2}
                     x2={x(d.factor.label) + boxWidth / 2}
                     y1={y(d.summary.q25)}
@@ -320,7 +315,7 @@ export default function Boxplot(props) {
                   <line
                     stroke-width={4}
                     stroke="#584DAE"
-                    className="median"
+                    class="median"
                     x1={x(d.factor.label) - boxWidth / 2}
                     x2={x(d.factor.label) + boxWidth / 2}
                     y1={y(d.summary.median)}
@@ -336,13 +331,13 @@ export default function Boxplot(props) {
           transform={`translate(${props.margin / 2} ${
             props.margin / 2
           })`}
-        ></g>
+        />
         <g
           class={`box-plot-x-axis-${props.name}`}
           transform={`translate(${props.margin / 2} ${
             props.height + props.margin / 2
           })`}
-        ></g>
+        />
       </svg>
     </>
   );
