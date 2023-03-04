@@ -1,4 +1,4 @@
-import { For } from 'solid-js';
+import { createEffect, For } from 'solid-js';
 import { useStore } from '../../stores';
 import {
   parametersBins,
@@ -6,6 +6,7 @@ import {
   percentHexValues,
   hexValues,
 } from '.';
+import { create } from 'd3';
 export default function MapLegend() {
   const [store, { toggleHelp, loadContent }] = useStore();
 
@@ -22,6 +23,8 @@ export default function MapLegend() {
     loadContent('legend');
     e.stopPropagation();
   };
+
+  createEffect(() => console.log(store.parameter));
 
   return (
     <div class="map-legend">
