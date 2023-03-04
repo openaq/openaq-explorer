@@ -6,7 +6,6 @@ import {
   percentHexValues,
   hexValues,
 } from '.';
-import { create } from 'd3';
 export default function MapLegend() {
   const [store, { toggleHelp, loadContent }] = useStore();
 
