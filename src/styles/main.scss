@@ -11,7 +11,8 @@
 
 @use 'flip-card';
 @use 'breadcrumbs';
-@import 'header';
+@use 'buttons' as *;
+@use 'header';
 @import 'map-card';
 @import 'progress-bar';
 @import 'tooltips';

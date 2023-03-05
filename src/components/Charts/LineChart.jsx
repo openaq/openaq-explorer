@@ -163,7 +163,7 @@ export default function LineChart(props) {
           style={{
             display: tooltipValue()?.visible ? 'flex' : 'none',
             left: `${tooltipValue()?.x - 65}px`,
-            top: `${tooltipValue()?.y + 5}px;`,
+            top: `${tooltipValue()?.y + 5}px`,
           }}
         >
           <span class="line-chart-tooltip__value">

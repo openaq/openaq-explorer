@@ -1,4 +1,4 @@
-import { For } from 'solid-js';
+import { createEffect, For } from 'solid-js';
 import { useStore } from '../../stores';
 import {
   parametersBins,
@@ -22,6 +22,8 @@ export default function MapLegend() {
     loadContent('legend');
     e.stopPropagation();
   };
+
+  createEffect(() => console.log(store.parameter));
 
   return (
     <div class="map-legend">

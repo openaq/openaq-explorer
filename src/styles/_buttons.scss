@@ -1,3 +1,15 @@
+.zoom-to-provider-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-
-
+.button-reset {
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+}

@@ -104,7 +104,7 @@ export default function ProvidersCard() {
         </div>
       </header>
       <div class="map-card__body">
-        <section class="map-card-section">
+        <section class="map-card-section provider-card-section">
           <div class="providers-list-subtitle">
             <button
               class="button-reset type-link-1 providers-list-select-all"
@@ -135,12 +135,7 @@ export default function ProvidersCard() {
             }
           >
             <button
-              style={{
-                cursor: 'pointer',
-                display: 'flex',
-                'align-items': 'center',
-                'justify-content': 'center',
-              }}
+              class="button-reset zoom-to-provider-btn"
               onClick={zoomToExtent}
             >
               <span>Zoom to provider extent </span>
