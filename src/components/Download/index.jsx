@@ -9,8 +9,10 @@ import { useStore } from '../../stores';
 import { produce, createStore } from 'solid-js/store';
 import dayjs from 'dayjs/esm/index.js';
 import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 
 dayjs.extend(utc);
+dayjs.extend(timezone);
 
 function downloadFile(filename, text) {
   const element = document.createElement('a');
@@ -69,6 +71,10 @@ export default function DownloadCard() {
   const [dateFrom, setDateFrom] = createSignal(
     new Date(Date.now() - 86400000)
   );
+
+  const [timezone, setTimezone] = createSignal(
+    store.location?.timezone
+  );
   const allParameters = () =>
     store.location?.sensors.map((o) => o.parameter.name) ?? [];
 
@@ -78,9 +84,10 @@ export default function DownloadCard() {
     setParameters(
       store.location?.sensors.map((o) => o.parameter.name)
     );
+    setTimezone(store.location.timezone);
   });
 
-  track(() => store.location?.sensors);
+  track(() => store.location);
 
   const downloadOnClick = () => {
     setDownloadFilters(dateFrom(), dateTo(), parameters);
@@ -260,15 +267,13 @@ export default function DownloadCard() {
               {() => (parameters.length > 0 ? '&' : '')}
               {parameters.map((o) => `parameter=${o}`).join('&')}
               &date_from=
-              {dayjs
-                .utc(dateFrom().toISOString().split('T')[0])
-                .utcOffset(0, true)
-                .format()}
+              {dayjs(dateFrom())
+                .tz(timezone())
+                .format('YYYY-MM-DDTHH:mm:ssZ')}
               &date_to=
-              {dayjs
-                .utc(dateTo().toISOString().split('T')[0])
-                .utcOffset(0, true)
-                .format()}
+              {dayjs(dateTo())
+                .tz(timezone())
+                .format('YYYY-MM-DDTHH:mm:ssZ')}
               &limit=1000
             </span>
             <div style={{ display: 'inline-block' }}>
@@ -277,19 +282,19 @@ export default function DownloadCard() {
                   store.location?.id
                 }&${parameters.map((o) => `parameter=${o}`).join('&')}
                 &date_from=
-                ${dayjs
-                  .utc(dateFrom().toISOString().split('T')[0])
-                  .utcOffset(1, true)
-                  .format()}&date_to=
-                ${dayjs
-                  .utc(dateTo().toISOString().split('T')[0])
-                  .utcOffset(1, true)
-                  .format()}&limit=1000`
+                ${dayjs(dateFrom())
+                  .tz(timezone())
+                  .format('YYYY-MM-DDTHH:mm:ssZ')}&date_to=
+                  ${dayjs(dateTo())
+                    .tz(timezone())
+                    .format('YYYY-MM-DDTHH:mm:ssZ')}&limit=1000`
                   .split('\n')
                   .map((s) => s.trim())
                   .filter(Boolean)
                   .join('')}
                 class="btn btn-secondary"
+                target="_blank"
+                rel="noopener noreferrer"
                 style={{ display: 'inline' }}
               >
                 Try this link
