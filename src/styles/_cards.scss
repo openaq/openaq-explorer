@@ -31,6 +31,12 @@
   right: 48px;
 }
 
+@media (max-width: 1000px) {
+  .explore-card {
+    display: none;
+  }
+}
+
 .map-card {
   background-color: white;
   height: calc(100vh - 80px - 80px);

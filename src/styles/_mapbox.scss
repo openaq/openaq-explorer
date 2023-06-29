@@ -23,3 +23,9 @@
     right: 12px !important;
   }
 }
+
+@media (max-width: 1000px) {
+  .mapboxgl-ctrl-top-left {
+    width: 95% !important;
+  }
+}

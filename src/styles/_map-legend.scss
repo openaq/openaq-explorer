@@ -54,3 +54,13 @@
     padding: 4px;
   }
 }
+
+@media (max-width: 1000px) {
+  .map-legend {
+    position: absolute;
+    border-radius: 0px;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+  }
+}

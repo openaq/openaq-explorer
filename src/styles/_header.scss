@@ -135,6 +135,7 @@
     display: flex;
   }
   .nav-list {
+    display: none;
     position: absolute;
     top: 0;
     margin-top: $header-height;
@@ -143,6 +144,10 @@
     width: 100%;
     justify-content: center;
     align-items: center;
+
+    &--visible {
+      display: flex;
+    }
 
     & > li {
       overflow: hidden;

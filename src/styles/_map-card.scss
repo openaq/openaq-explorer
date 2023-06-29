@@ -95,6 +95,7 @@
   top: 100px;
   right: 48px;
   height: calc(100vh - 80px - 80px);
+  z-index: 999;
   background: #ffffff;
   border: 6px solid variables.$ocean10;
 

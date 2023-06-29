@@ -51,7 +51,13 @@ export default function createClient([actions]) {
   };
 
   const Parameters = {
-    getAll: () => send('get', `/v3/parameters`, undefined, 'results'),
+    getAll: () =>
+      send(
+        'get',
+        `/v3/parameters?parameter_type=pollutant`,
+        undefined,
+        'results'
+      ),
   };
 
   const Providers = {

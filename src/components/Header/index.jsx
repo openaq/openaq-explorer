@@ -1,6 +1,8 @@
+import { createSignal } from 'solid-js';
 import imgSvg from '../../assets/logo.svg';
 
 export default function Header() {
+  const [open, setOpen] = createSignal(false);
   return (
     <header class="header">
       <div class="header-contents">
@@ -11,11 +13,16 @@ export default function Header() {
         <nav class="nav">
           <label class="menu-button-container" for="menu-toggle">
             <input id="menu-toggle" type="checkbox" />
-            <div class="menu-button">
+            <button
+              class="menu-button button-reset"
+              onClick={() => {
+                setOpen(!open());
+              }}
+            >
               <span class="material-symbols-outlined">menu</span>
-            </div>
+            </button>
           </label>
-          <ul class="nav-list">
+          <ul class={`nav-list ${open() ? 'nav-list--visible' : ''}`}>
             <li>
               <a
                 class="nav__item nav__item--active explore-data-tab"
