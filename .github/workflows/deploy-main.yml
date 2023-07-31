@@ -9,6 +9,7 @@ env:
   VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
   VITE_MAPBOX_STYLE: ${{ secrets.VITE_MAPBOX_STYLE }}
   VITE_APP_ENV: 'production'
+  VITE_USER_AGENT: ${{ secrets.USER_AGENT }}
 jobs:
   deploy:
     if: "!contains(github.event.head_commit.message, 'ci skip')"
