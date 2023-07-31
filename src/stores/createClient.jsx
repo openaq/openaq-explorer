@@ -4,6 +4,7 @@ import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 
 const API_ROOT = import.meta.env.VITE_API_BASE_URL;
+const USER_AGENT = import.meta.env.VITE_USER_AGENT;
 
 export default function createClient([actions]) {
   async function send(
@@ -16,6 +17,8 @@ export default function createClient([actions]) {
   ) {
     const headers = {},
       opts = { method, headers };
+
+    headers['User-Agent'] = USER_AGENT;
 
     if (data !== undefined) {
       headers['Content-Type'] = 'application/json';
