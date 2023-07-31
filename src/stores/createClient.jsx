@@ -18,7 +18,7 @@ export default function createClient([actions]) {
     const headers = {},
       opts = { method, headers };
 
-    headers['User-Agent'] = USER_AGENT;
+    headers['API-User-Agent'] = USER_AGENT;
 
     if (data !== undefined) {
       headers['Content-Type'] = 'application/json';
