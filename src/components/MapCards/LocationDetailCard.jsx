@@ -174,10 +174,13 @@ export default function LocationDetailCard() {
                     </span>
                     <div>
                       <span class="type-body-3 text-lavender-100">
-                        {parameter.values[0].value}{' '}
+                        {parameter.values.slice(-1)[0].value}{' '}
                       </span>
                       <span class="type-body-1">
-                        {parameter.values[0].unit}
+                        {
+                          parameter.values.slice(-1)[0].parameter
+                            .units
+                        }
                       </span>
                     </div>
                     <Sparkline
