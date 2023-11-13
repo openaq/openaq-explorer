@@ -1,45 +1,30 @@
-# OpenAQ Explorer
+# SolidStart
 
-![staging workflow](https://github.com/openaq/openaq-explorer/actions/workflows/deploy-develop.yml/badge.svg)
-![prod workflow](https://github.com/openaq/openaq-explorer/actions/workflows/deploy-main.yml/badge.svg)
+Everything you need to build a Solid project, powered by [`solid-start`](https://start.solidjs.com);
 
-![explore-screenshot](https://user-images.githubusercontent.com/8487728/219827842-24082062-832d-45ae-8def-e58ffd6cd6e9.jpg)
+## Creating a project
 
+```bash
+# create a new project in the current directory
+npm init solid@latest
 
-## Development
-
-
-This project uses vite for building and bundling. Certain build variables are required in a root level `.env` file following the vite environment variable requirements. https://vitejs.dev/guide/env-and-mode.html
-
-
-The `.env` file should contain the following variables:
-
-```
-VITE_MAPBOX_ACCESS_TOKEN=mapboxaccesstoken
-VITE_API_BASE_URL=openaqapidomainurl
-VITE_MAPBOX_STYLE=mapboxstyleurl
+# create a new project in my-app
+npm init solid@latest my-app
 ```
 
-To run the development server:
+## Developing
 
-```sh
-yarn run dev
+Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+
+```bash
+npm run dev
+
+# or start the server and open the app in a new browser tab
+npm run dev -- --open
 ```
 
+## Building
 
-### Testing
+Solid apps are built with _adapters_, which optimise your project for deployment to different environments.
 
-End-to-end testing uses [Playwright](https://playwright.dev/)
-
-
-To run the end-to-end test suite
-
-```
-yarn playwright test
-```
-
-
-## Deployment
-
-Continuous deployment is handled by Github Actions.
-
+By default, `npm run build` will generate a Node app that you can run with `npm start`. To use a different adapter, add it to the `devDependencies` in `package.json` and specify in your `vite.config.js`.

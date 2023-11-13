@@ -1,16 +1,73 @@
+import { createServerData$ } from 'solid-start/server';
+import { logout, getUser, createServerAction$ } from '~/db/session';
+
+import listsSvg from '~/assets/imgs/lists.svg';
+import imgSvg from '~/assets/imgs/logo.svg';
+import accountSvg from '~/assets/imgs/account.svg';
+import settingsSvg from '~/assets/imgs/settings.svg';
+import logoutSvg from '~/assets/imgs/logout.svg';
+
 import { createSignal } from 'solid-js';
-import imgSvg from '../../assets/logo.svg';
+
+function Account() {
+  const [, { Form }] = createServerAction$((formData, { request }) =>
+    logout(request)
+  );
+
+  return (
+    <div class="dropdown">
+      <a href="/account">
+        <img
+          width="24px"
+          height="24px"
+          src={accountSvg}
+          alt="account icon"
+        />
+      </a>
+      <ul class="submenu" aria-label="submenu">
+        <li class="submenu__item">
+          <a href="/account">
+            <img
+              width="24px"
+              height="24px"
+              src={settingsSvg}
+              alt="settings icon"
+            />
+            Settings
+          </a>
+        </li>
+        <li class="submenu__item">
+          <Form>
+            <img src={logoutSvg} alt="logout icon" />
+            <button name="logout" type="submit">
+              Logout
+            </button>
+          </Form>
+        </li>
+      </ul>
+    </div>
+  );
+}
 
 export default function Header() {
-  const [open, setOpen] = createSignal(false);
+  const [open, setOpen] = createSignal();
+
+  const user = createServerData$(async (_, { request }) => {
+    const user = await getUser(request);
+    return user;
+  });
+
   return (
     <header class="header">
       <div class="header-contents">
-        <a href="/" class="header-logo" aria-label="openaq logo">
-          <img src={imgSvg} alt="openaq logo" />
-        </a>
-        <div class="spacer" />
         <nav class="nav">
+          <a
+            href="https://openaq.org"
+            class="header-logo"
+            aria-label="openaq logo"
+          >
+            <img src={imgSvg} alt="openaq logo" />
+          </a>
           <label class="menu-button-container" for="menu-toggle">
             <input id="menu-toggle" type="checkbox" />
             <button
@@ -26,7 +83,7 @@ export default function Header() {
             <li>
               <a
                 class="nav__item nav__item--active explore-data-tab"
-                href="https://explore.openaq.org"
+                href="/"
               >
                 Explore the data (Beta)
               </a>
@@ -159,12 +216,43 @@ export default function Header() {
             </li>
           </ul>
         </nav>
-        <a
-          href="https://secure.givelively.org/donate/openaq-inc/"
-          class="btn btn-primary donate-btn js-header-donate-btn"
-        >
-          Donate
-        </a>
+        <div class="account-nav">
+          {user() ? (
+            ''
+          ) : (
+            <a href="/register" class="type-link-3 text-smoke-120">
+              Sign up
+            </a>
+          )}
+          {user() ? (
+            ''
+          ) : (
+            <a href="/login" class="btn btn-secondary">
+              Login{' '}
+            </a>
+          )}
+          {user() ? (
+            <a href="/lists" class="type-link-3">
+              <img
+                width="24px"
+                height="24px"
+                src={listsSvg}
+                alt="account icon"
+              />{' '}
+              Lists
+            </a>
+          ) : (
+            ''
+          )}
+          {user() ? <Account /> : ''}
+
+          <a
+            href="https://secure.givelively.org/donate/openaq-inc/"
+            class="btn btn-primary donate-btn js-header-donate-btn"
+          >
+            Donate
+          </a>
+        </div>
       </div>
     </header>
   );
