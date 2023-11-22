@@ -186,11 +186,11 @@ export default function DetailOverview() {
               </div>
               <div>Provider</div>
               <div>
-                {store.location?.provider.url ? (
+                {store.location?.provider.name == 'PurpleAir' ? (
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={store.location?.provider.url}
+                    href="https://www2.purpleair.com/"
                   >
                     {store.location?.provider.name}{' '}
                     <span class="material-symbols-outlined type-color-ocean-120">
