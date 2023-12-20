@@ -5,6 +5,8 @@ import {
   useServerContext,
 } from 'solid-start';
 import { FormError } from 'solid-start/data';
+import { A } from 'solid-start';
+
 import { isServer } from 'solid-js/web';
 import {
   createServerAction$,
@@ -273,9 +275,9 @@ export default function Register() {
       <div>
         <span class="type-subtitle-3 text-sky-120">
           Already have an account?{' '}
-          <a class="type-link-3 text-sky-120" href="/login">
+          <A class="type-link-3 text-sky-120" href="/login">
             Login
-          </a>
+          </A>
         </span>
       </div>
     </main>

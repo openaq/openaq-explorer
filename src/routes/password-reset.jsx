@@ -7,6 +7,7 @@ import {
   redirect,
 } from 'solid-start/server';
 import { login, createUserSession, getUser } from '~/db/session';
+import { A } from 'solid-start';
 
 export default function PasswordReset() {
   const [loggingIn, { Form }] = createServerAction$(async (form) => {
@@ -39,7 +40,7 @@ export default function PasswordReset() {
         <button type="submit">Send password reset link</button>
       </Form>
       <div>
-        Don't have an account? <a href="/register">Sign up</a>
+        Don't have an account? <A href="/register">Sign up</A>
       </div>
     </main>
   );

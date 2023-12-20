@@ -14,6 +14,7 @@ import {
 } from 'solid-start';
 import '~/assets/scss/main.scss';
 import Header from './components/Header';
+import { Provider } from './stores';
 export default function Root() {
   return (
     <Html lang="en">
@@ -29,9 +30,11 @@ export default function Root() {
         <Suspense>
           <ErrorBoundary>
             <Header />
-            <Routes>
-              <FileRoutes />
-            </Routes>
+            <Provider>
+              <Routes>
+                <FileRoutes />
+              </Routes>
+            </Provider>
           </ErrorBoundary>
         </Suspense>
         <Scripts />

@@ -1,3 +1,5 @@
+import { A } from 'solid-start';
+
 export default function PasswordReset() {
   return (
     <main>
@@ -7,7 +9,7 @@ export default function PasswordReset() {
         Please click on the link in the email to reset your password.
       </p>
       <div>
-        <a href="/password-reset">Re-enter email address</a>
+        <A href="/password-reset">Re-enter email address</A>
       </div>
     </main>
   );

@@ -124,15 +124,12 @@ export async function createUserSession(
   redirectTo,
   remember
 ) {
-  console.log("createUserSession")
   const session = await storage.getSession();
   session.set('userId', userId);
   const maxAge = remember
     ? USER_SESSION_MAX_AGE * 30
     : USER_SESSION_MAX_AGE;
-  console.log(maxAge);
   const cookie = await storage.commitSession(session, { maxAge });
-
   return redirect(redirectTo, {
     headers: {
       'Set-Cookie': cookie,

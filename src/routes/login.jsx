@@ -1,5 +1,5 @@
 import { Show } from 'solid-js';
-import { useParams, useRouteData } from 'solid-start';
+import { useParams, useRouteData, A } from 'solid-start';
 import { FormError } from 'solid-start/data';
 import {
   createServerAction$,
@@ -99,9 +99,9 @@ export default function Login() {
       <div>
         <span class="type-subtitle-3 text-sky-120">
           Don't have an account?{' '}
-          <a class="type-link-3 text-sky-120" href="/register">
+          <A class="type-link-3 text-sky-120" href="/register">
             Sign up
-          </a>
+          </A>
         </span>
       </div>
     </main>

@@ -1,3 +1,5 @@
+import { A } from 'solid-start';
+
 export default function VerifyEmail() {
   const [, { ResendEmailForm }] = createServerAction$(
     (f, { request }) => resendEmail(request)
@@ -16,7 +18,7 @@ export default function VerifyEmail() {
             Resend email
           </button>
         </ResendEmailForm>
-        <a href="/update-email">Update email address</a>
+        <A href="/update-email">Update email address</A>
       </div>
     </main>
   );

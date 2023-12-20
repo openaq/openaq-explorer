@@ -5,6 +5,11 @@
 @use 'openaq-design-system/scss/utilities';
 @use 'openaq-design-system/scss/inputs';
 
+html body {
+  margin: 0;
+  padding: 0;
+}
+
 .header {
   padding: 0 40px;
   z-index: 1000;

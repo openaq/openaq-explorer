@@ -9,6 +9,8 @@ import logoutSvg from '~/assets/imgs/logout.svg';
 
 import { createSignal } from 'solid-js';
 
+import { A } from 'solid-start';
+
 function Account() {
   const [, { Form }] = createServerAction$((formData, { request }) =>
     logout(request)
@@ -16,17 +18,17 @@ function Account() {
 
   return (
     <div class="dropdown">
-      <a href="/account">
+      <A href="/account">
         <img
           width="24px"
           height="24px"
           src={accountSvg}
           alt="account icon"
         />
-      </a>
+      </A>
       <ul class="submenu" aria-label="submenu">
         <li class="submenu__item">
-          <a href="/account">
+          <A href="/account">
             <img
               width="24px"
               height="24px"
@@ -34,7 +36,7 @@ function Account() {
               alt="settings icon"
             />
             Settings
-          </a>
+          </A>
         </li>
         <li class="submenu__item">
           <Form>
@@ -61,13 +63,13 @@ export default function Header() {
     <header class="header">
       <div class="header-contents">
         <nav class="nav">
-          <a
+          <A
             href="https://openaq.org"
             class="header-logo"
             aria-label="openaq logo"
           >
             <img src={imgSvg} alt="openaq logo" />
-          </a>
+          </A>
           <label class="menu-button-container" for="menu-toggle">
             <input id="menu-toggle" type="checkbox" />
             <button
@@ -81,136 +83,136 @@ export default function Header() {
           </label>
           <ul class={`nav-list ${open() ? 'nav-list--visible' : ''}`}>
             <li>
-              <a
+              <A
                 class="nav__item nav__item--active explore-data-tab"
                 href="/"
               >
                 Explore the data (Beta)
-              </a>
+              </A>
             </li>
             <li>
-              <a
+              <A
                 href="https://openaq.org/why-air-quality"
                 class="nav__item air-quality-tab"
               >
                 Why air quality?
-              </a>
+              </A>
             </li>
             <li>
-              <a
+              <A
                 href="https://openaq.org/why-open-data"
                 class="nav__item open-data-tab"
               >
                 Why open data?
-              </a>
+              </A>
             </li>
             <li>
-              <a
+              <A
                 href="https://openaq.org/partners"
                 class="nav__item partners-tab"
               >
                 Partners
-              </a>
+              </A>
             </li>
             <li class="dropdown">
-              <a
+              <A
                 href="https://openaq.org/developers/platform-overview/"
                 aria-haspopup="true"
                 class="nav__item"
               >
                 Developers
-              </a>
+              </A>
               <ul class="submenu" aria-label="submenu">
                 <li class="submenu__item">
-                  <a
+                  <A
                     class="nav__item api-overview-nav"
                     href="https://openaq.org/developers/platform-overview/"
                   >
                     Platform Overview
-                  </a>
+                  </A>
                 </li>
                 <li class="submenu__item">
-                  <a
+                  <A
                     class="nav__item documentation-nav js-header-docs-link"
                     href="https://docs.openaq.org"
                   >
                     Developer Documentation
-                  </a>
+                  </A>
                 </li>
                 <li class="submenu__item">
-                  <a
+                  <A
                     class="nav__item dev-use-case-nav"
                     href="https://openaq.org/use-cases/developer/"
                   >
                     Developer Use Cases
-                  </a>
+                  </A>
                 </li>
                 <li class="submenu__item">
-                  <a
+                  <A
                     class="nav__item help-nav"
                     href="https://openaq.org/developers/help/"
                   >
                     Help
-                  </a>
+                  </A>
                 </li>
               </ul>
             </li>
             <li class="dropdown">
-              <a
+              <A
                 href="https://openaq.org/about/"
                 aria-haspopup="true"
                 class="nav__item"
               >
                 About
-              </a>
+              </A>
               <ul class="submenu" aria-label="submenu">
                 <li class="submenu__item">
-                  <a
+                  <A
                     class="nav__item about-nav"
                     href="https://openaq.org/about/"
                   >
                     About Us
-                  </a>
+                  </A>
                 </li>
                 <li class="submenu__item">
-                  <a
+                  <A
                     class="nav__item initiatives-nav"
                     href="https://openaq.org/about/initiatives/"
                   >
                     Initiatives
-                  </a>
+                  </A>
                 </li>
                 <li class="submenu__item">
-                  <a
+                  <A
                     class="nav__item people-nav"
                     href="https://openaq.org/about/people/"
                   >
                     People
-                  </a>
+                  </A>
                 </li>
                 <li class="submenu__item">
-                  <a
+                  <A
                     class="nav__item"
                     href="https://openaq.org/about/blog"
                   >
                     Blog
-                  </a>
+                  </A>
                 </li>
                 <li class="submenu__item">
-                  <a
+                  <A
                     class="nav__item use-cases-nav"
                     href="https://openaq.org/use-cases/"
                   >
                     Use Cases
-                  </a>
+                  </A>
                 </li>
                 <li class="submenu__item">
-                  <a
+                  <A
                     class="nav__item reporting-nav"
                     href="https://openaq.org/about/legal/"
                   >
                     Legal & Policies
-                  </a>
+                  </A>
                 </li>
               </ul>
             </li>
@@ -220,19 +222,19 @@ export default function Header() {
           {user() ? (
             ''
           ) : (
-            <a href="/register" class="type-link-3 text-smoke-120">
+            <A href="/register" class="type-link-3 text-smoke-120">
               Sign up
-            </a>
+            </A>
           )}
           {user() ? (
             ''
           ) : (
-            <a href="/login" class="btn btn-secondary">
+            <A href="/login" class="btn btn-secondary">
               Login{' '}
-            </a>
+            </A>
           )}
           {user() ? (
-            <a href="/lists" class="type-link-3">
+            <A href="/lists" class="type-link-3">
               <img
                 width="24px"
                 height="24px"
@@ -240,18 +242,18 @@ export default function Header() {
                 alt="account icon"
               />{' '}
               Lists
-            </a>
+            </A>
           ) : (
             ''
           )}
           {user() ? <Account /> : ''}
 
-          <a
+          <A
             href="https://secure.givelively.org/donate/openaq-inc/"
             class="btn btn-primary donate-btn js-header-donate-btn"
           >
             Donate
-          </a>
+          </A>
         </div>
       </div>
     </header>
