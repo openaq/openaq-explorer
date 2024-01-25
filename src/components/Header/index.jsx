@@ -6,7 +6,11 @@ export default function Header() {
   return (
     <header class="header">
       <div class="header-contents">
-        <a href="/" class="header-logo" aria-label="openaq logo">
+        <a
+          href="https://openaq.org"
+          class="header-logo"
+          aria-label="openaq logo"
+        >
           <img src={imgSvg} alt="openaq logo" />
         </a>
         <div class="spacer" />
