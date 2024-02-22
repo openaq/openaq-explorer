@@ -16,7 +16,6 @@ export function DeleteLocationModal(props: DeleteLocationModalDefinition) {
   const [store, { toggleDeleteListLocationModalOpen }] = useStore();
   const deletingListLocation = useSubmission(deleteListLocationAction);
 
-  createEffect(() => console.log(store))
 
   const onClickClose: JSX.EventHandler<
     HTMLButtonElement,

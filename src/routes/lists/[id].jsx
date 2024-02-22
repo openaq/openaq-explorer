@@ -27,9 +27,6 @@ export default function List() {
   });
   const list = createAsync(() => getList(id), { deferStream: true });
 
-  createEffect(() => {
-    console.log(list());
-  });
   return (
     <>
       <Header />

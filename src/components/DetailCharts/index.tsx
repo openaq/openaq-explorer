@@ -75,11 +75,6 @@ export function DetailCharts(props: DetailChartsDefinition) {
   } 
 
 
-
-  createEffect(() => {
-    console.log(clientWidth(),chartWidth())
-  })
-
   const [selectedSensor, setSelectedSensor] = createSignal(
     props.sensors?.[0].id
   );
