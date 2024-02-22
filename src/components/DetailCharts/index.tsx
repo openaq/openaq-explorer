@@ -51,14 +51,34 @@ function getYears(datetimeFirst: string, datetimeLast: string): string[] {
 export function DetailCharts(props: DetailChartsDefinition) {
 
 
-  const [clientWidth, setClientWidth] = createSignal()
+  const [clientWidth, setClientWidth] = createSignal<number>(0)
+  const [xTicks, setXTicks] = createSignal(24)
 
   onMount(() => {
     setClientWidth(document.body.clientWidth)
   });
 
+  const chartWidth = () => {
+    if (clientWidth() <  800) {
+      setXTicks(4)
+      return 300;
 
-  createEffect(() => console.log(clientWidth()))
+    }
+    if (clientWidth() <  1200) {
+      setXTicks(12)
+
+      return 800;
+    }
+    setXTicks(24)
+
+    return 1200;
+  } 
+
+
+
+  createEffect(() => {
+    console.log(clientWidth(),chartWidth())
+  })
 
   const [selectedSensor, setSelectedSensor] = createSignal(
     props.sensors?.[0].id
@@ -161,8 +181,11 @@ export function DetailCharts(props: DetailChartsDefinition) {
   return (
     <section class={styles['detail-charts']}>
       <div>
+        <header class={styles['detail-charts__header']}>
         <h1 class={styles.heading}>Latest Readings</h1>
-        <div>
+        </header>
+        
+        <div class={styles['chart-container']}>
           <div class={styles['chart-controls']}>
             <select
               name="sensor-select"
@@ -215,9 +238,10 @@ export function DetailCharts(props: DetailChartsDefinition) {
           </div>
           <div>
             <LineChart
-              width={1200}
+              width={chartWidth()}
               height={250}
               margin={100}
+              xTicks={xTicks()}
               dateFrom={dateFrom()}
               dateTo={dateTo()}
               data={measurements()}
@@ -237,8 +261,10 @@ export function DetailCharts(props: DetailChartsDefinition) {
       </div>
       <hr class={styles['horizontal-rule']} />
       <div>
+      <header class={styles['detail-charts__header']}>
         <h1 class={styles.heading}>Patterns</h1>
-        <div>
+        </header>
+        <div class={styles['chart-container']}>
           <div class={styles['chart-controls']}>
             <select
               name="sensor-select"

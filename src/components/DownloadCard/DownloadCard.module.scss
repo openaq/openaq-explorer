@@ -1,8 +1,39 @@
+@use '~/assets/scss/media-queries.scss' as f;
+@use 'openaq-design-system/scss/variables';
+@use 'openaq-design-system/scss/mixins/index.scss' as mixins;
+
 .download-card {
   border: 1px solid #d4d8dd;
   border-radius: 22px;
   overflow: hidden;
   padding: 50px;
+  min-height: 200px;
+
+  @include f.respond(medium) {
+    border: none;
+    padding: 0px;
+    border-radius: 0;
+
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  &__header {
+    @include f.respond(medium) {
+      height: 45px;
+      padding: 20px;
+      background-color: variables.$sky120;
+    }
+
+    .heading {
+      @include mixins.heading1(variables.$sky120);
+
+      @include f.respond(medium) {
+        @include mixins.heading1(white);
+      }
+    }
+  }
 }
 
 .date-input {
