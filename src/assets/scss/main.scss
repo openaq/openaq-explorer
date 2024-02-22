@@ -8,241 +8,22 @@
 html body {
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
 }
 
-.header {
-  padding: 0 40px;
-  z-index: 1000;
-}
-.header-contents {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-}
-
-.spacer {
-  display: none;
-}
-
-#menu-toggle {
-  display: none;
-}
-.account-nav {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-.nav {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  justify-content: space-between;
-
-  &__item {
-    @include mixins.navigation1;
-    padding: 8px 0;
-    margin: 0 12px;
-
-    &--active {
-      color: variables.$sky100;
-      border-bottom: variables.$ocean100 solid 2px;
-    }
-  }
-}
-
-.nav-list {
-  display: flex;
-  flex-direction: row;
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
-.menu-button-container {
-  display: none;
-  height: 100%;
-  width: 30px;
-  cursor: pointer;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-#menu-toggle {
-  display: none;
-}
-
-.menu-button {
-  display: flex;
-  align-items: center;
-  background-color: #fff;
-}
-
-.submenu {
-  list-style: none;
-  margin: 0;
-  padding-left: 0;
-  width: 320px;
-  background-color: white;
-  visibility: hidden;
-  opacity: 0;
-  min-width: 5rem;
-  position: absolute;
-  transition: all 0.5s ease;
-  margin-top: 1rem;
-  top: 10px;
-  left: 0;
-  display: none;
-
-  &:hover {
-    visibility: visible;
-    opacity: 1;
-    display: block;
-  }
-
-  &__item {
-    height: 24px;
-    margin: 12px;
-  }
-}
-
-.dropdown {
-  position: relative;
-  background-color: white;
-
-  &:hover {
-    .submenu {
-      background-color: white;
-      visibility: visible;
-      opacity: 1;
-      z-index: 1000;
-      display: block;
-      border: 1px solid #eaecf0;
-      border-radius: 12px;
-    }
-  }
-}
-
-@media (max-width: 1000px) {
-  $header-height: 60px;
-
-  .header {
-    height: $header-height;
-  }
-
-  .spacer {
-    display: block;
-    order: 3;
-    width: 30px;
-  }
-
-  .header-logo {
-    order: 2;
-  }
-  .nav {
-    order: 1;
-  }
-
-  .donate-btn {
-    display: none;
-  }
-
-  .menu-button-container {
-    display: flex;
-  }
-  .nav-list {
-    display: none;
-    position: absolute;
-    top: 0;
-    margin-top: $header-height;
-    left: 0;
-    flex-direction: column;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
-
-    &--visible {
-      display: flex;
-    }
-
-    & > li {
-      overflow: hidden;
-    }
-  }
-
-  .dropdown {
-    position: relative;
-    background-color: white;
-
-    &:hover {
-      .submenu {
-        z-index: 1000;
-        display: flex;
-        border: none;
-        border-radius: 0;
-      }
-    }
-
-    & > a {
-      display: none;
-    }
-
-    & {
-      .submenu {
-        background-color: white;
-        visibility: visible;
-        position: static;
-        margin: 0;
-        opacity: 1;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-
-        &:hover {
-          display: flex;
-        }
-
-        &__item {
-          display: flex;
-          height: auto;
-          width: 100%;
-          margin: 0;
-          justify-content: center;
-          border: 1px solid #eaecf0;
-        }
-      }
-    }
-  }
-
-  #menu-toggle ~ .nav-list > li {
-    height: 0;
-    margin: 0;
-    padding: 0;
-    border: 0;
-    transition: height 400ms cubic-bezier(0.23, 1, 0.32, 1);
-  }
-  #menu-toggle:checked ~ .nav-list > li {
-    border: 1px solid variables.$smoke10;
-    display: flex;
-    height: auto;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    transition: height 400ms cubic-bezier(0.23, 1, 0.32, 1);
-  }
-  .nav-list > li {
-    z-index: 1000;
-    display: flex;
-    justify-content: center;
-    margin: 0;
-    width: 100%;
-    background-color: white;
-  }
-  .nav-list > li:not(:last-child) {
-    border-bottom: 1px solid #444;
-  }
+.gradient-title {
+  background-color: variables.$lavender100;
+  background-image: linear-gradient(
+    92deg,
+    variables.$sky120 0%,
+    variables.$lavender100 10%
+  );
+  background-size: 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
 }
 
 ::backdrop {
@@ -251,6 +32,7 @@ html body {
 }
 
 .modal {
+  width: 600px;
   border: none;
   border-radius: 20px;
   padding: 0;
@@ -269,7 +51,7 @@ html body {
   }
 
   &__body {
-    padding: 20px;
+    padding: 30px;
   }
 
   &__footer {
@@ -277,40 +59,7 @@ html body {
     justify-content: end;
     gap: 8px;
     padding: 20px;
-  }
-}
-
-.account-page {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 70px 0;
-
-  &__section {
-    width: 600px;
-    display: flex;
-    flex-direction: column;
-
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-
-      .form-element {
-        display: flex;
-        flex-direction: column;
-        margin: 9px 0;
-        gap: 8px;
-
-        input {
-          width: 80%;
-        }
-
-        button {
-          align-self: flex-start;
-        }
-      }
-    }
+    border-top: 1px solid variables.$ocean10;
   }
 }
 
@@ -319,6 +68,7 @@ html body {
   flex-direction: column;
   align-items: center;
   margin: 70px 0;
+  gap: 12px;
 
   .login-form {
     width: 360px;
@@ -347,6 +97,7 @@ html body {
   flex-direction: column;
   align-items: center;
   margin: 70px 0;
+  gap: 16px;
 
   .register-form {
     width: 360px;
@@ -367,5 +118,45 @@ html body {
       margin: 9px 0;
       gap: 8px;
     }
+  }
+}
+
+.button-reset {
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+}
+
+.maplibregl-ctrl-top-left {
+  width: 50% !important;
+}
+
+.maplibregl-ctrl-geocoder {
+  width: 100% !important;
+  max-width: 500px !important;
+  border-radius: 14px !important;
+}
+
+.maplibregl-ctrl-geocoder--input::placeholder {
+  @include mixins.body2;
+}
+
+.maplibregl-ctrl-geocoder--icon-search {
+  right: 12px !important;
+}
+
+@media screen and (min-width: 640px) {
+  .maplibregl-ctrl-geocoder--icon-search {
+    right: 12px !important;
+  }
+}
+
+@media (max-width: 1000px) {
+  .maplibregl-ctrl-top-left {
+    width: 95% !important;
   }
 }

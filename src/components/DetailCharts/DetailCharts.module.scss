@@ -1,0 +1,30 @@
+@use 'openaq-design-system/scss/variables';
+@use 'openaq-design-system/scss/mixins/index' as mixins;
+@use 'openaq-design-system/scss/horizontal-rule';
+
+.detail-charts {
+  border: 1px solid variables.$smoke30;
+  border-radius: 22px;
+  overflow: hidden;
+  padding: 50px;
+
+  .heading {
+    @include mixins.heading1(variables.$sky120);
+  }
+
+  .horizontal-rule {
+    @extend .hr;
+    margin: 50px -50px !important;
+  }
+}
+
+.timezone {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chart-controls {
+  display: flex;
+  gap: 8px;
+}

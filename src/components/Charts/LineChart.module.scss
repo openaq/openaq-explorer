@@ -1,0 +1,47 @@
+@use 'openaq-design-system/scss/variables' as variables;
+
+.line-chart-tooltip {
+  position: absolute;
+  width: 110px;
+  height: 40px;
+  background: #8576ec;
+  border-radius: 16px 16px 0px 16px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+  color: white;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &__value {
+    font-weight: 700;
+  }
+}
+
+.line-chart-line {
+  fill: none;
+  stroke-width: 6px;
+  stroke: #8576ed;
+  stroke-linejoin: round;
+}
+
+.line-chart-area {
+  fill: url(#area-gradient);
+}
+
+.line-chart-point {
+  cursor: pointer;
+  fill: #b3aaf0;
+
+  &:hover {
+    fill: #6a5cd8;
+    stroke-width: 0;
+
+    stroke: white;
+  }
+}
+
+.line-chart-point-highlight {
+  fill: white;
+  filter: url(#shadow);
+}

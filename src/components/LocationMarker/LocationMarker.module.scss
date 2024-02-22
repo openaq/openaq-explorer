@@ -1,0 +1,103 @@
+@use 'openaq-design-system/scss/variables' as variables;
+
+@mixin marker {
+  height: 32px;
+  width: 32px;
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+.low-cost-sensor-marker {
+  @include marker;
+
+  &__fill {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: variables.$lavender80;
+    box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.5);
+  }
+}
+
+.reference-grade-marker {
+  @include marker;
+
+  &__border {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: white;
+    box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.5);
+  }
+
+  &__fill {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: variables.$lavender80;
+  }
+}
+
+.no-recent-data-marker {
+  @include marker;
+
+  &__border {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: white;
+    box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.5);
+  }
+
+  &__fill {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: variables.$smoke10;
+  }
+
+  &__dot {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: variables.$smoke100;
+  }
+}
+
+.poor-coverage-marker {
+  @include marker;
+
+  &__border {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: white;
+    box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.5);
+  }
+
+  &__fill {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: variables.$lavender80;
+  }
+
+  &__dot {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: variables.$fire60;
+  }
+}

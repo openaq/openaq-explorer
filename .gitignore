@@ -10,6 +10,8 @@ netlify
 .env
 .env*.local
 
+.vinxi
+
 # dependencies
 /node_modules
 

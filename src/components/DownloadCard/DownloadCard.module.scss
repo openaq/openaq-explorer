@@ -1,0 +1,24 @@
+.download-card {
+  border: 1px solid #d4d8dd;
+  border-radius: 22px;
+  overflow: hidden;
+  padding: 50px;
+}
+
+.date-input {
+  height: 40px;
+  width: 150px;
+  border-radius: 14px;
+  border: 1px solid #d0d5dd;
+  padding: 0 20px;
+  margin: 0 20px;
+}
+
+.parameter-inputs {
+  display: grid;
+  grid-template-columns: max-content auto;
+  margin: 20px 0;
+  width: 300px;
+  row-gap: 15px;
+  column-gap: 15px;
+}

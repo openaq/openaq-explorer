@@ -1,0 +1,37 @@
+@use 'openaq-design-system/scss/variables';
+@use 'openaq-design-system/scss/mixins/index' as mixins;
+
+.share-view {
+  width: 90%;
+  .users-access-section {
+    display: flex;
+    flex-direction: column;
+    h3 {
+      @include mixins.heading3(variables.$sky120);
+    }
+
+    .users-list {
+      margin-left: 20px;
+    }
+
+    .add-person-form {
+      input {
+        width: 70%;
+      }
+    }
+  }
+
+  .list-access-section {
+    h3 {
+      @include mixins.heading3(variables.$sky120);
+    }
+    display: flex;
+  }
+
+  .link-section {
+    h3 {
+      @include mixins.heading3(variables.$sky120);
+    }
+    display: flex;
+  }
+}
