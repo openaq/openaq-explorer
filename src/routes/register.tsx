@@ -107,6 +107,7 @@ export default function Register() {
             <input
               class="text-input"
               name="email-address"
+              type="email"
               placeholder=" "
               autocomplete="on"
               required

@@ -1,4 +1,4 @@
-import { createEffect } from 'solid-js';
+import { Show, createEffect } from 'solid-js';
 import style from './PasswordScore.module.scss';
 
 const errorSvg = 'warning_fire100.svg';
@@ -109,6 +109,11 @@ export default function PasswordScore(props: PasswordScoreDefinition) {
         </div>
       </div>
       <div>
+        <Show when={props.score < 4}>
+        <span class={style["strength-message"]}>
+          Please choose a stronger password
+        </span>
+        </Show>
         <span class={style["strength-message"]}>
           {passwordValues(props.score).message}
           {passwordValues(props.score).symbol ? <img src={`/svgs/${passwordValues(props.score).symbol }`} alt="" /> : ''}

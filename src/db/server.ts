@@ -184,7 +184,8 @@ export async function register(formData: FormData) {
   'use server';
 
   const event = getRequestEvent();
-  const clientAddress = '0.0.0.0/32'//`${event?.clientAddress}/32`; // does not work on localhost returns ::1/32
+  const ip = event?.clientAddress
+  const clientAddress = `${ip == '::1' ? '0.0.0.0' : ip}/32`; // does not work on localhost returns ::1/32
   const fullName = String(formData.get('fullname'));
   const emailAddress = String(formData.get('email-address'));
   const password = String(formData.get('password'));
@@ -351,7 +352,7 @@ export async function forgotPassword(formData: FormData) {
   }
   try {
     const url = new URL(import.meta.env.VITE_API_BASE_URL);
-    url.pathname = `/auth/send-password-email`;
+    url.pathname = `/auth/send-password-changed-email`;
     const data = { emailAddress: user[0].emailAddress }
     const res = await fetch(url.href, {
       method: "POST",
@@ -384,8 +385,24 @@ export async function nameChange(formData: FormData) {
 export async function regenerateKey(formData: FormData) {
   'use server';
   const usersId = Number(formData.get('users-id'));
+  const user = db.user.getUserById(usersId)
   try {
     await db.user.regenerateKey(usersId);
+    try {
+      const url = new URL(import.meta.env.VITE_API_BASE_URL);
+      url.pathname = `/auth/regenerate-token`;
+      const data = { usersId: usersId, token: user[0].token }
+      const res = await fetch(url.href, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-Key': `${import.meta.env.VITE_EXPLORER_API_KEY}`,
+        },
+        body: JSON.stringify(data)
+      });
+    } catch (err) {
+      return err as Error;
+    }
     throw redirect('/account');
   } catch (err) {
     return err as Error;
