@@ -1,11 +1,9 @@
-import { useSearchParams, useSubmission } from '@solidjs/router';
-import { resendEmailAction } from '~/db';
+import { useSearchParams } from '@solidjs/router';
 import { Header } from '~/components/Header';
 import style from './VerifyEmail.module.scss';
 
 export default function VerifyEmail() {
   const [searchParams] = useSearchParams();
-  const resendingEmail = useSubmission(resendEmailAction);
 
   return (
     <>

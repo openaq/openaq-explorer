@@ -1,11 +1,9 @@
 import { useSearchParams, useSubmission } from '@solidjs/router';
-import { resendEmailAction } from '~/db';
 import { Header } from '~/components/Header';
 import style from './Expired.module.scss';
 
 export default function VerifyEmail() {
   const [searchParams] = useSearchParams();
-  const resendingEmail = useSubmission(resendEmailAction);
 
   return (
     <>
@@ -23,15 +21,6 @@ export default function VerifyEmail() {
           the verification email.
         </p>
         <div>
-          <form action={resendEmailAction}>
-            <button
-              class="btn btn-primary"
-              name="resend"
-              type="submit"
-            >
-              Resend email
-            </button>
-          </form>
         </div>
         <div class={style['bubble-lg']} />
         <div class={style['bubble-sm']} />
