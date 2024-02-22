@@ -524,7 +524,3 @@ export async function deleteListLocation(formData: FormData) {
   }
 }
 
-
-export async function resendEmail() {
-  console.log('foo');
-}

@@ -1,10 +1,7 @@
 import { Header } from '~/components/Header';
 import { Map } from '~/components/Map';
 import { getUser } from '~/db';
-
-
 import { LocationDetailCard } from '~/components/Cards/LocationDetailCard';
-
 import { FlipCard } from '~/components/Cards/FlipCard';
 
 export const route = {

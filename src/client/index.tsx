@@ -52,8 +52,11 @@ async function fetchSensorTrends(
   'use server';
   const url = new URL(import.meta.env.VITE_API_BASE_URL);
   url.pathname = `/v3/sensors/${sensorsId}/measurements`;
-  url.search = `?period_name=${periodName}&date_from=${datetimeFrom}&date_to=${datetimeTo}`;
-  console.log(url.href)
+  url.search = `?period_name=${periodName}&date_from=${datetimeFrom.replace(
+    ' ',
+    '%2b')}&date_to=${datetimeTo.replace(
+      ' ',
+      '%2b')}`;
   const res = await fetch(url.href, {
     headers: {
       'Content-Type': 'application/json',
@@ -180,14 +183,12 @@ export const getSensorTrends = GET(
     datetimeTo: string
   ) => {
     'use server';
-    console.log("SENSOR TREND", sensorsId, periodName, datetimeFrom, datetimeTo)
     const data = await fetchSensorTrends(
       sensorsId,
       periodName,
       datetimeFrom,
       datetimeTo
     );
-    console.log(data)
     return json(data, {
       headers: { 'cache-control': 'max-age=86400' },
     });
