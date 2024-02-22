@@ -1,8 +1,30 @@
-node_modules
+
 dist
+.solid
+.output
+.vercel
+.netlify
+netlify
+
+# Environment
 .env
+.env*.local
+
+.vinxi
+
+# dependencies
+/node_modules
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+*.launch
+.settings/
+
+# Temp
+gitignore
+
+# System Files
 .DS_Store
-/test-results/
-/playwright-report/
-/playwright/.cache/
-stats.html
+Thumbs.db

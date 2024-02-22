@@ -7,7 +7,8 @@ import {
   max,
   min,
 } from 'd3';
-import { createEffect, createSignal, For } from 'solid-js';
+import { createEffect, createSignal, For, Show } from 'solid-js';
+import style from './BoxPlot.module.scss';
 
 function BoxPlotTooltip(props) {
   return (
@@ -17,28 +18,28 @@ function BoxPlotTooltip(props) {
         left: `${props.data.style?.x}px`,
         display: `${props.data.style?.display || 'none'}`,
       }}
-      class="box-plot-tooltip"
+      class={style['box-plot-tooltip']}
       role="tooltip"
     >
-      <div class="box-plot-tooltip__head">
+      <div class={style['box-plot-tooltip__head']}>
         <span class="type-body3 text-white">
           {props.data?.period}
         </span>
       </div>
-      <div class="box-plot-tooltip__body">
-        <div class="box-plot-legend-item">
+      <div class={style['box-plot-tooltip__body']}>
+        <div class={style['box-plot-legend-item']}>
           <div class="bg-smoke-10 box-plot-legend-color" />
           <div>
             <span class="type-body-3">{props.data?.values?.max}</span>
             <span class="type-body-1">µg/m³</span>
           </div>
-          <div class="box-plot-legend-item-label">
+          <div class={style['box-plot-legend-item-label']}>
             <span class="type-body-1">
               98<sup>th</sup> percentile
             </span>
           </div>
         </div>
-        <div class="box-plot-legend-item">
+        <div class={style['box-plot-legend-item']}>
           <div class="bg-lavender-100 box-plot-legend-color" />
           <div>
             <span class="type-body-3">
@@ -46,13 +47,13 @@ function BoxPlotTooltip(props) {
             </span>
             <span class="type-body-1">µg/m³</span>
           </div>
-          <div class="box-plot-legend-item-label">
+          <div class={style['box-plot-legend-item-label']}>
             <span class="type-body-1">
               75<sup>th</sup> percentile
             </span>
           </div>
         </div>
-        <div class="box-plot-legend-item bg-sky-10">
+        <div class={`${style['box-plot-legend-item']} bg-sky-1`}>
           <div class="bg-lavender-120 box-plot-legend-color" />
           <div>
             <span class="type-body-3">
@@ -60,11 +61,11 @@ function BoxPlotTooltip(props) {
             </span>
             <span class="type-body-1">µg/m³</span>
           </div>
-          <div class="box-plot-legend-item-label">
+          <div class={style['box-plot-legend-item-label']}>
             <span class="type-body-1">Median</span>
           </div>
         </div>
-        <div class="box-plot-legend-item">
+        <div class={style['box-plot-legend-item']}>
           <div class="bg-lavender-100 box-plot-legend-color" />
           <div>
             <span class="type-body-3">
@@ -72,19 +73,19 @@ function BoxPlotTooltip(props) {
             </span>
             <span class="type-body-1">µg/m³</span>
           </div>
-          <div class="box-plot-legend-item-label">
+          <div class={style['box-plot-legend-item-label']}>
             <span class="type-body-1">
               25<sup>th</sup> percentile
             </span>
           </div>
         </div>
-        <div class="box-plot-legend-item">
+        <div class={style['box-plot-legend-item']}>
           <div class="bg-smoke-10 box-plot-legend-color" />
           <div>
             <span class="type-body-3">{props.data.values?.min} </span>
             <span class="type-body-1">µg/m³</span>
           </div>
-          <div class="box-plot-legend-item-label">
+          <div class={style['box-plot-legend-item-label']}>
             <span class="type-body-1">
               2<sup>nd</sup> percentile
             </span>
@@ -104,15 +105,7 @@ export default function Boxplot(props) {
     },
   });
 
-  const days = {
-    1: 'Monday',
-    2: 'Tuesday',
-    3: 'Wednesday',
-    4: 'Thursday',
-    5: 'Friday',
-    6: 'Saturday',
-    7: 'Sunday',
-  };
+  const [data, setData] = createSignal([]);
 
   const hoursKeys = [
     '01',
@@ -140,6 +133,7 @@ export default function Boxplot(props) {
     '23',
     '00',
   ];
+
   const hoursValues = [
     '01:00',
     '02:00',
@@ -173,14 +167,13 @@ export default function Boxplot(props) {
   const orderHours = (values) =>
     Object.keys(values).sort((a, b) => parseInt(a) - parseInt(b));
 
-  const periods =
-    props.period == 'day' ? Object.keys(days) : orderHours(hours);
-  const lookup = props.period == 'day' ? days : hours;
+  const periods = orderHours(hours);
+  const lookup = hours;
   const boxWidth = props.width / periods.length - 5;
 
   const onMouseEnter = (e, d) => {
     setTooltip({
-      period: lookup[d.factor.label],
+      period: lookup[d.period.label],
       values: {
         max: parseFloat(d.summary.q98.toFixed(3)),
         interquartileTop: parseFloat(d.summary.q75.toFixed(3)),
@@ -207,16 +200,18 @@ export default function Boxplot(props) {
   };
 
   const x = scaleBand().range([0, props.width]).domain(periods);
-
-  const [chartData, setChartData] = createSignal();
-
   const y = scaleLinear().range([props.height, 0]);
 
   const yDomain = () => {
-    const minimumValue = min(chartData(), (d) => d.summary.q02);
+    const minimumValue =
+      props.data == undefined
+        ? 0
+        : min(props.data, (d) => d.summary.q02);
     y.domain([
       minimumValue < 0 ? minimumValue : 0,
-      max(chartData(), (d) => d.summary.q98 * 1.1),
+      props.data == undefined
+        ? 0
+        : max(props.data, (d) => d.summary.q98 * 1.1),
     ]);
   };
 
@@ -239,7 +234,7 @@ export default function Boxplot(props) {
 
   createEffect(() => {
     if (props.data) {
-      setChartData(props.data);
+      setData(props.data);
       yDomain();
       select(`.box-plot-x-axis-${props.name}`).call(xAxis);
       select(`.box-plot-y-axis-${props.name}`).call(yAxis);
@@ -268,56 +263,65 @@ export default function Boxplot(props) {
             props.margin / 1.8 + boxWidth / 2
           } ${props.margin / 2})`}
         >
-          <For each={chartData()}>
+          <Show when={props.loading}>
+            <text
+              text-anchor="middle"
+              x={props.width / 2}
+              y={props.height / 2}
+            >
+              Loading...
+            </text>
+          </Show>
+          <For each={data()}>
             {(d) => {
               return (
                 <g
-                  class="box-plot-bar"
+                  class={style['box-plot-bar']}
                   onMouseEnter={(e) => onMouseEnter(e, d)}
                   onMouseLeave={onMouseLeave}
                 >
                   <line
                     stroke-width={2}
                     stroke="#CCCCCC"
-                    class="whiskers"
-                    x1={x(d.factor.label)}
-                    x2={x(d.factor.label)}
+                    class={style['whiskers']}
+                    x1={x(d.period.label)}
+                    x2={x(d.period.label)}
                     y1={y(d.summary.q02)}
                     y2={y(d.summary.q98)}
                   />
                   <line
                     stroke-width={boxWidth}
                     stroke="#EAE7FF"
-                    class="box"
-                    x1={x(d.factor.label)}
-                    x2={x(d.factor.label)}
+                    class={style['box']}
+                    x1={x(d.period.label)}
+                    x2={x(d.period.label)}
                     y1={y(d.summary.q25)}
                     y2={y(d.summary.q75)}
                   />
                   <line
                     stroke-width={2}
                     stroke="#8576ED"
-                    class="q3"
-                    x1={x(d.factor.label) - boxWidth / 2}
-                    x2={x(d.factor.label) + boxWidth / 2}
+                    class={style['q3']}
+                    x1={x(d.period.label) - boxWidth / 2}
+                    x2={x(d.period.label) + boxWidth / 2}
                     y1={y(d.summary.q75)}
                     y2={y(d.summary.q75)}
                   />
                   <line
                     stroke-width={2}
                     stroke="#8576ED"
-                    class="q1"
-                    x1={x(d.factor.label) - boxWidth / 2}
-                    x2={x(d.factor.label) + boxWidth / 2}
+                    class={style['q1']}
+                    x1={x(d.period.label) - boxWidth / 2}
+                    x2={x(d.period.label) + boxWidth / 2}
                     y1={y(d.summary.q25)}
                     y2={y(d.summary.q25)}
                   />
                   <line
                     stroke-width={4}
                     stroke="#584DAE"
-                    class="median"
-                    x1={x(d.factor.label) - boxWidth / 2}
-                    x2={x(d.factor.label) + boxWidth / 2}
+                    class={style['median']}
+                    x1={x(d.period.label) - boxWidth / 2}
+                    x2={x(d.period.label) + boxWidth / 2}
                     y1={y(d.summary.median)}
                     y2={y(d.summary.median)}
                   />

@@ -21,7 +21,13 @@ import {
 } from 'd3';
 
 import { createSignal, Show, For, createEffect } from 'solid-js';
-import { useStore } from '../../stores';
+import style from './LineChart.module.scss';
+import dayjs from 'dayjs';
+import tz from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
+dayjs.extend(tz);
 
 const formatMillisecond = timeFormat('.%L');
 const formatSecond = timeFormat(':%S');
@@ -32,7 +38,7 @@ const formatWeek = timeFormat('%b %d');
 const formatMonth = timeFormat('%B');
 const formatYear = timeFormat('%Y');
 
-const multiFormat = (date) =>
+const multiFormat = (date, timezone) =>
   (timeSecond(date) < date
     ? formatMillisecond
     : timeMinute(date) < date
@@ -47,22 +53,28 @@ const multiFormat = (date) =>
       : formatWeek
     : timeYear(date) < date
     ? formatMonth
-    : formatYear)(date);
+    : formatYear)(
+    new Date(
+      date.toLocaleString('en-US', {
+        timeZone: timezone,
+      })
+    )
+  );
 
 // splits single measurements series into multiple subseries
 // if dates are not continuous
-function splitMeasurements(measurements) {
+function splitMeasurements(measurements, timezone) {
   let result = [];
   let lastDate;
-  if (measurements.length === 0) {
+  if (!measurements || measurements.length === 0) {
     return [[]];
   }
   measurements.reduce((acc, curr, idx, arr) => {
-    const date = new Date(curr.period.datetimeTo.local);
+    const date = dayjs(curr.period.datetimeTo.local, timezone);
     if (
       !(
         lastDate === undefined ||
-        parseInt((date - lastDate) / (60 * 60 * 1000)) === 1
+        (date - lastDate) / (60 * 60 * 1000) === 1
       )
     ) {
       result.push(acc);
@@ -79,12 +91,16 @@ function splitMeasurements(measurements) {
 }
 
 export default function LineChart(props) {
-  const [tooltipValue, setTooltipValue] = createSignal();
-  const [store] = useStore();
+  const [tooltipValue, setTooltipValue] = createSignal({});
 
   const xScale = (width, dateFrom, dateTo) => {
     const x = scaleTime().range([0, width]);
-    x.domain(extent([new Date(dateFrom), new Date(dateTo)]));
+    x.domain(
+      extent([
+        dayjs(dateFrom, props.timezone),
+        dayjs(dateTo, props.timezone),
+      ])
+    );
     return x;
   };
 
@@ -96,12 +112,14 @@ export default function LineChart(props) {
       y = scaleSymlog().range([height, 0]);
     }
 
-    const minimumValue = min(data, (d) => d.value);
+    const minimumValue =
+      data == undefined ? 0 : min(data, (d) => d.value);
     const domainMin = minimumValue < 0 ? minimumValue : 0;
-    y.domain([
-      domainMin,
-      max(data, () => max(data, (d) => d.value) * 1.2),
-    ]);
+    const domainMax =
+      data == undefined
+        ? 0
+        : max(data, () => max(data, (d) => d.value)) * 1.2;
+    y.domain([domainMin, domainMax]);
     return y;
   };
 
@@ -112,27 +130,27 @@ export default function LineChart(props) {
   const xAxis = (x) =>
     axisBottom(x)
       .ticks(24)
-      .tickFormat((d) => multiFormat(d));
+      .tickFormat((d) => multiFormat(d, props.timezone));
 
   const points = (data, x, y) =>
     data.map((o) => {
       return {
         value: o.value,
-        cx: x(new Date(o.period.datetimeTo.local)),
+        cx: x(dayjs(o.period.datetimeTo.local, props.timezone)),
         cy: y(o.value),
         unit: o.parameter.units,
-        date: new Date(o.period.datetimeTo.local),
+        date: dayjs(o.period.datetimeTo.local, props.timezone),
       };
     });
 
   const line = (x, y) =>
     d3Line()
-      .x((d) => x(new Date(d.period.datetimeTo.local)))
+      .x((d) => x(dayjs(d.period.datetimeTo.local, props.timezone)))
       .y((d) => y(d.value));
 
   const area = (x, y) =>
     d3Area()
-      .x((d) => x(new Date(d.period.datetimeTo.local)))
+      .x((d) => x(dayjs(d.period.datetimeTo.local, props.timezone)))
       .y0(props.height)
       .y1((d) => y(d.value));
 
@@ -144,10 +162,11 @@ export default function LineChart(props) {
     if (props.data) {
       const x = xScale(props.width, props.dateFrom, props.dateTo);
       const y = yScale(props.scale, props.height, props.data);
+      const f = yAxisGrid(y, props.width);
       select(xAxisRef).call(xAxis(x));
       select(yAxisRef).call(yAxis(y));
       select(gridRef)
-        .call(yAxisGrid(y, props.width))
+        .call(f)
         .selectAll('line,path')
         .style('stroke', '#d4d8dd');
     }
@@ -159,17 +178,17 @@ export default function LineChart(props) {
     <>
       <div style={{ position: 'relative' }}>
         <div
-          class="line-chart-tooltip"
+          class={style['line-chart-tooltip']}
           style={{
             display: tooltipValue()?.visible ? 'flex' : 'none',
             left: `${tooltipValue()?.x - 65}px`,
             top: `${tooltipValue()?.y + 5}px`,
           }}
         >
-          <span class="line-chart-tooltip__value">
+          <span class={style['line-chart-tooltip__value']}>
             {tooltipValue()?.value}
           </span>{' '}
-          <span class="line-chart-tooltip__unit">
+          <span class={style['line-chart-tooltip__unit']}>
             {tooltipValue()?.unit}
           </span>
         </div>
@@ -212,10 +231,10 @@ export default function LineChart(props) {
               props.margin / 2
             })`}
           >
-            <For each={splitMeasurements(props.data)}>
+            <For each={splitMeasurements(props.data, props.timezone)}>
               {(d) => (
                 <path
-                  class="line-chart-area"
+                  class={style['line-chart-area']}
                   d={area(
                     xScale(props.width, props.dateFrom, props.dateTo),
                     yScale(props.scale, props.height, props.data)
@@ -239,7 +258,7 @@ export default function LineChart(props) {
             <For each={splitMeasurements(props.data)}>
               {(lineData) => (
                 <path
-                  class="line-chart-line"
+                  class={style['line-chart-line']}
                   d={line(
                     xScale(props.width, props.dateFrom, props.dateTo),
                     yScale(props.scale, props.height, props.data)
@@ -257,7 +276,7 @@ export default function LineChart(props) {
                 stroke-width={1}
               />
               <circle
-                class="line-chart-point-highlight"
+                class={style['line-chart-point-highlight']}
                 cx={tooltipValue()?.x}
                 cy={tooltipValue()?.y}
                 r={9}
@@ -277,14 +296,14 @@ export default function LineChart(props) {
             </Show>
             <For
               each={points(
-                props.data,
+                props.data ?? [],
                 xScale(props.width, props.dateFrom, props.dateTo),
                 yScale(props.scale, props.height, props.data)
               )}
             >
               {(item) => (
                 <circle
-                  class="line-chart-point"
+                  class={style['line-chart-point']}
                   cx={item.cx}
                   cy={item.cy}
                   r={item.cx == tooltipValue()?.x ? 5 : 3}
@@ -304,7 +323,7 @@ export default function LineChart(props) {
                 />
               )}
             </For>
-            <Show when={store.measurements.loading}>
+            <Show when={props.loading}>
               <text
                 text-anchor="middle"
                 x={props.width / 2}
@@ -315,8 +334,8 @@ export default function LineChart(props) {
             </Show>
             <Show
               when={
-                store.measurements.state == 'ready' &&
-                props.data.length === 0
+                props.data == undefined ||
+                (props.data.length === 0 && props.loading === false)
               }
             >
               <text
@@ -329,14 +348,14 @@ export default function LineChart(props) {
             </Show>
           </g>
           <g
-            class="y-axis"
+            class={style['y-axis']}
             transform={`translate(${props.margin / 2} ${
               props.margin / 2
             })`}
             ref={yAxisRef}
           />
           <g
-            class="x-axis"
+            class={style['x-axis']}
             transform={`translate(${props.margin / 2} ${
               props.height + props.margin / 2
             })`}

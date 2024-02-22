@@ -1,0 +1,50 @@
+@use 'openaq-design-system/scss/variables' as variables;
+
+.box-plot-tooltip {
+  position: absolute;
+  z-index: 9999;
+  background: #ffffff;
+  border: 1px solid #dbdae1;
+  box-shadow: 0px 7px 20px rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+  overflow: hidden;
+
+  &--visible {
+    display: block;
+  }
+
+  &__head {
+    padding: 10px 22px;
+    background-color: variables.$sky120;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__body {
+    display: grid;
+    grid-template-rows: 30px 30px 40px 30px 30px;
+    gap: 4px;
+
+    padding: 4px 0;
+
+    .box-plot-legend-item {
+      display: grid;
+      grid-template-columns: 12px 90px 110px;
+      align-items: center;
+      gap: 8px;
+      padding: 0 6px;
+
+      &-label {
+        justify-self: end;
+      }
+    }
+
+    .box-plot-legend-color {
+      width: 12px;
+      height: 100%;
+      border-radius: 3px;
+    }
+  }
+}

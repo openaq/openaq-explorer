@@ -1,0 +1,26 @@
+@use 'openaq-design-system/scss/bubbles' as bubbles;
+
+.main {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 80px);
+
+  .bubble-lg {
+    z-index: -1;
+    position: absolute;
+    left: -100px;
+    top: 30px;
+  }
+
+  .bubble-sm {
+    z-index: -1;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+  }
+}

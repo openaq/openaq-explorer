@@ -1,0 +1,52 @@
+@use 'openaq-design-system/scss/variables';
+
+.list-card {
+  position: relative;
+
+  display: flex;
+  padding: 20px;
+  border-radius: 22px;
+  border: 1px solid variables.$smoke10;
+
+  a {
+    text-decoration: inherit;
+    color: inherit;
+  }
+
+  &__body {
+    display: flex;
+    flex: 1;
+    justify-content: space-between;
+    .list-content {
+      display: flex;
+      flex-direction: row;
+      gap: 36px;
+      .list-info {
+        display: flex;
+        flex-direction: column;
+        gap: 13px;
+      }
+    }
+  }
+}
+
+.list-card-delete-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  border: none;
+  margin: 0;
+  padding: 0;
+  width: auto;
+  overflow: visible;
+  cursor: pointer;
+
+  background: transparent;
+
+  color: inherit;
+  font: inherit;
+
+  line-height: normal;
+  -webkit-font-smoothing: inherit;
+  -moz-osx-font-smoothing: inherit;
+}

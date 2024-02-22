@@ -1,0 +1,10 @@
+@use 'openaq-design-system/scss/variables';
+
+.no-locations-fallback {
+  background-color: variables.$corn10;
+  padding: 30px 50px;
+  border-radius: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
