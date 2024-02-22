@@ -21,15 +21,38 @@
   }
 }
 
-.overlay-section {
+// .overlay-section {
+//   &__header {
+//     height: 50px;
+//     display: flex;
+//     justify-content: space-between;
+//     align-items: center;
+//     background: variables.$sky120;
+//     padding: 0 20px;
+//     cursor: pointer;
+
+//     .card-title {
+//       display: flex;
+//       gap: 8px;
+//       h3 {
+//         @include mixins.heading3(white);
+//       }
+//     }
+//   }
+
+// }
+
+.filter-section {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
   &__header {
+    background: variables.$sky120;
     height: 50px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: variables.$sky120;
     padding: 0 20px;
-    cursor: pointer;
 
     .card-title {
       display: flex;
@@ -44,26 +67,8 @@
     display: flex;
     gap: 12px;
     flex-direction: column;
-    padding: 10px;
-  }
-}
-
-.filter-section {
-  &__header {
-    background: variables.$sky100;
-    height: 44px;
-    display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 0 20px;
-
-    .card-title {
-      display: flex;
-      gap: 8px;
-      h3 {
-        @include mixins.heading3(white);
-      }
-    }
+    padding: 0 10px;
   }
 
   &__body {

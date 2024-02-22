@@ -10,7 +10,6 @@ import {
   changePassword,
   userLists,
   regenerateKey,
-  resendEmail,
   listLocations,
   list,
   sensorNodesLists,
@@ -31,7 +30,6 @@ export const loginAction = action(login, 'login');
 export const logoutAction = action(logout, 'logout');
 export const registerAction = action(register, 'register');
 export const nameChangeAction = action(nameChange, 'name-change');
-export const resendEmailAction = action(resendEmail, 'resend-email')
 export const passwordChangeAction = action(
   changePassword,
   'password-change'

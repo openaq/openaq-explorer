@@ -77,7 +77,7 @@ export function LocationDetailCard() {
       <header class={style['location-detail-card__header']}>
         <div>
           <h3 class="type-heading-3 text-white">
-            {location()?.results?.[0].name}
+            {location()?.results?.[0].name.slice(0,20)}
           </h3>
         </div>
         <div>

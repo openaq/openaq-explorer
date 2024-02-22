@@ -24,19 +24,20 @@ export function OverlayCard() {
 
   return (
     <div class={styles['overlay-card']}>
-      <section class={styles['overlay-section']}>
-        <header class={styles['overlay-section__header']}>
+      <section class={styles['filter-section']}>
+        <header class={styles['filter-section__header']}>
           <div class={styles['card-title']}>
-            <img src="/svgs/layers_white.svg" alt="layers icon" />
-            <h3>Overlay</h3>
+            <img src="/svgs/filter_white.svg" alt="filter icon" />
+            <h3>Filters</h3>
           </div>
         </header>
         <div class={styles['pollutant-select']}>
+          <label for="parameter-select" class="type-subtitle-2">Choose a pollutant</label>
           <select
             class="select"
-            name=""
-            id=""
-            onChange={(e) => setParameter(e.target.value)}
+            name="parameter-select"
+            id="parameter-select"
+            onChange={(e) => setSelectedMapParameter(e.target.value)}
             value={parameter()}
           >
             <option value="all">Any pollutant</option>
@@ -47,17 +48,14 @@ export function OverlayCard() {
             <option value="so2">SO2</option>
             <option value="co">CO</option>
           </select>
-          <button class="btn btn-secondary" onClick={() => setSelectedMapParameter(parameter())}>Update</button>
         </div>
-      </section>
-      <section class={styles['filter-section']}>
-        <header class={styles['filter-section__header']}>
-          <div class={styles['card-title']}>
-            <img src="/svgs/filter_white.svg" alt="filter icon" />
-            <h3>Filters</h3>
-          </div>
-        </header>
+        <hr class="hr" />
+        <div>
+        <span class="type-subtitle-2">Choose location type</span>
+
+   
         <div class={styles['filter-section__body']}>
+
           <ReferenceGradeMarker />
           <label
             class={styles['marker-legend-item']}
@@ -105,13 +103,14 @@ export function OverlayCard() {
               onInput={toggleShowOnlyActiveLocations}
             />
           </label>
-        </div>
+          </div>
+          </div>
       </section>
       <footer class={styles['overlay-card__footer']}>
         <span class="type-body-1">
           Showing data from{' '}
           {store.providers.length == 0
-            ? 'all provider'
+            ? 'all providers'
             : store.providers.length == 1
             ? '1 provider'
             : `${store.providers.length} providers`}

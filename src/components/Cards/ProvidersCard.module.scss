@@ -27,30 +27,31 @@
   }
 
   &__body {
-    padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    flex: 1;
-    overflow-y: scroll;
-  }
-
-  &__footer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-top: 1px solid #e8ebed;
-    min-height: 76px;
-
-    button {
-      width: 90%;
-    }
+    overflow-y: hidden;
   }
 }
 
+.providers-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top: 1px solid #e8ebed;
+  min-height: 76px;
+
+  button {
+    width: 90%;
+  }
+}
+
+.list-container {
+  overflow-y: scroll;
+}
 .providers-list {
-  width: 100%;
-  padding: 20px;
+  margin: 0;
+  padding: 0 20px;
   list-style: none;
   &-item {
     text-align: left;
@@ -83,4 +84,11 @@
   display: flex;
   gap: 8px;
   padding: 10px 0;
+}
+
+.list-header {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
