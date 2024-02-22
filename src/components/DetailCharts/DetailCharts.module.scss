@@ -1,6 +1,7 @@
 @use 'openaq-design-system/scss/variables';
 @use 'openaq-design-system/scss/mixins/index' as mixins;
 @use 'openaq-design-system/scss/horizontal-rule';
+@use '~/assets/scss/media-queries.scss' as f;
 
 .detail-charts {
   border: 1px solid variables.$smoke30;
@@ -8,8 +9,27 @@
   overflow: hidden;
   padding: 50px;
 
-  .heading {
-    @include mixins.heading1(variables.$sky120);
+  @include f.respond(medium) {
+    padding: 0px;
+    border: none;
+    border-radius: 0px;
+  }
+
+  &__header {
+    @include f.respond(medium) {
+      height: 45px;
+      padding: 20px;
+
+      background-color: variables.$sky120;
+    }
+
+    .heading {
+      @include mixins.heading1(variables.$sky120);
+
+      @include f.respond(medium) {
+        @include mixins.heading1(white);
+      }
+    }
   }
 
   .horizontal-rule {
@@ -24,7 +44,22 @@
   gap: 8px;
 }
 
+.chart-container {
+  @include f.respond(medium) {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+}
+
 .chart-controls {
   display: flex;
   gap: 8px;
+
+  @include f.respond(medium) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: variables.$sky10;
+    padding: 16px 20px;
+  }
 }

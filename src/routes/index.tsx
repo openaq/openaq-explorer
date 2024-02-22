@@ -2,7 +2,6 @@ import { Header } from '~/components/Header';
 import { Map } from '~/components/Map';
 import { getUser } from '~/db';
 
-import '~/assets/scss/map.scss';
 
 import { LocationDetailCard } from '~/components/Cards/LocationDetailCard';
 

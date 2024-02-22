@@ -151,7 +151,9 @@ export function DownloadCard(props) {
 
   return (
     <section id="download-card" class={style['download-card']}>
-      <h3 class="type-heading-1 text-sky-120">Download</h3>
+      <header class={style['download-card__header']}>
+        <h3 class={style['heading']}>Download</h3>
+      </header>
       <Show when={user()} fallback={<NotLoggedInFallback />}>
         <h3 class="type-subtitle-1 text-sky-120">
           Download Data CSV

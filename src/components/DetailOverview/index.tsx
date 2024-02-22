@@ -94,45 +94,6 @@ function SensorType(props: SensorTypeDefintion) {
   );
 }
 
-function LocationLists(props: LocationsListDefinition) {
-  const pageLocation = useLocation();
-
-  const [toggleDropdown, setToggleDropdown] = createSignal(false);
-
-  return (
-    <>
-    <button class="icon-btn btn-secondary" onClick={() => setToggleDropdown(!toggleDropdown())}>
-    Add to list <img src="/svgs/lists.svg" alt="" />
-    </button>
-    <form action="" class={`${style['location-list-form']} ${toggleDropdown() ? style['location-list-form--open'] : ''}`}>
-      <input
-        type="hidden"
-        name="redirect"
-        value={pageLocation.pathname}
-      />
-      <input
-        type="hidden"
-        name="sensornodesid-input"
-        value={props.locationsId}
-      />
-      <div class="dropdown">
-        <For each={props.lists}>
-          {(list, i) => (
-            <button
-              type="submit"
-              name={`list${list.id}submit`}
-              value={list.id}
-            >
-              {list.name}
-            </button>
-          )}
-        </For>
-      </div>
-    </form>
-    </>
-  );
-}
-
 function LocationListsFallback() {
   const pageLocation = useLocation();
 
@@ -234,7 +195,11 @@ export function DetailOverview(props: DetailOverviewDefinition) {
               </tr>
               <tr>
                 <td>Provider</td>
-                <td>{props.provider?.name}</td>
+                <td>
+                  
+                  {props.provider?.name}
+                  
+                  </td>
               </tr>
             </tbody>
           </table>

@@ -129,7 +129,7 @@ export default function LineChart(props) {
 
   const xAxis = (x) =>
     axisBottom(x)
-      .ticks(24)
+      .ticks(props.xTicks)
       .tickFormat((d) => multiFormat(d, props.timezone));
 
   const points = (data, x, y) =>
