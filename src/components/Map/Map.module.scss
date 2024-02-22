@@ -1,14 +1,12 @@
 @use 'openaq-design-system/scss/mixins/index' as mixins;
+@use '../../assets/scss/media-queries.scss' as f;
 
 .map {
   height: calc(100vh - 80px);
   width: 100vw;
-}
 
-@media (max-width: 1000px) {
-  .map {
-    height: calc(100vh - 60px - 90px);
-    width: 100vw;
+  @include f.respond(medium) {
+    height: calc(100vh - 60px);
   }
 }
 

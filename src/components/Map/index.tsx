@@ -4,10 +4,10 @@ import { useMapContext } from 'solid-map-gl';
 import * as maplibre from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { useStore } from '~/stores';
+import style from './Map.module.scss';
 
 import { Geocoder } from '../Geocoder';
-import { Show, createEffect, createSignal, onMount } from 'solid-js';
-import { getLocation } from '~/client';
+import { createEffect, createSignal } from 'solid-js';
 
 function calculateFlyToDuration(zoom: number) {
   return 2500 / (zoom / 5);
@@ -76,7 +76,7 @@ export function Map() {
 
   return (
     <MapGL
-      class="map"
+      class={style["map"]}
       mapLib={maplibre}
       options={{
         accessToken: import.meta.env.VITE_MAPBOX_ACCESS_TOKEN,
