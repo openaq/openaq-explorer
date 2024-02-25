@@ -412,8 +412,11 @@ export async function regenerateKey(formData: FormData) {
 export async function resendVerificationEmail(formData) {
   const verificationCode = String(formData.get('verification-code'));
   const user = await db.user.getUserByVerificationCode(verificationCode);
-  if (!user) {
+  if (!user[0]) {
     return new Error("Not a valid code");
+  }
+  if (user[0].active) {
+    throw redirect(`/login`);
   }
   try {
     const url = new URL(import.meta.env.VITE_API_BASE_URL);

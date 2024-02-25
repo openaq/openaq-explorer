@@ -41,7 +41,7 @@ export default function VerifyEmail() {
                 {resendingVerificationEmail.result!.message}
               </p>
             </Show>
-            <button type="submit">Request new code</button>
+            <button class="btn btn-primary" type="submit">Request new code</button>
           </form>
         </div>
         <div class={style['bubble-lg']} />
