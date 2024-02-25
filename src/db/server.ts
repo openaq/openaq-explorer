@@ -409,6 +409,33 @@ export async function regenerateKey(formData: FormData) {
   }
 }
 
+export async function resendVerificationEmail(formData) {
+  const verificationCode = String(formData.get('verification-code'));
+  const user = await db.user.getUserByVerificationCode(verificationCode);
+  if (!user) {
+    return new Error("Not a valid code");
+  }
+  try {
+    const url = new URL(import.meta.env.VITE_API_BASE_URL);
+    url.pathname = `/auth/resend-verification-code`;
+    const data = { 
+      usersId: user[0].usersId,
+      verificationCode: verificationCode
+    }
+    const res = await fetch(url.href, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-Key': `${import.meta.env.VITE_EXPLORER_API_KEY}`,
+      },
+      body: JSON.stringify(data)
+    });
+  } catch (err) {
+    return err as Error;
+  }
+  throw redirect(`/verify-email?email=${user[0].emailAddress}`);
+}
+
 export async function newList(formData: FormData) {
   const usersId = Number(formData.get('users-id'));
   const label = String(formData.get('list-name'));
@@ -523,7 +550,7 @@ export async function verifyEmail(verificationCode: string) {
   }
   if (dayjs(user[0].expiresOn) < dayjs(new Date())) {
     // expired
-    throw redirect('/expired');
+    throw redirect(`/expired?code=${verificationCode}`);
   }
   await db.user.verifyUserEmail(user[0].usersId);
   throw redirect('/email-verified');

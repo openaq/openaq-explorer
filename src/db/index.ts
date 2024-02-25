@@ -21,7 +21,8 @@ import {
   verifyEmail,
   forgotPassword,
   forgotPasswordLink,
-  deleteListLocation
+  deleteListLocation,
+  resendVerificationEmail
 } from './server';
 
 export const getUserId = cache(gUi, 'user');
@@ -59,4 +60,6 @@ export const deleteListLocationAction = action(deleteListLocation, 'delete-locat
 export const forgotPasswordAction = action(forgotPassword, 'forgot-password')
 export const forgotPasswordLinkAction = action(forgotPasswordLink, 'forgot-password-link')
 
-export const verify = cache(verifyEmail, 'verify-email')
+export const verify = cache(verifyEmail, 'verify-email');
+
+export const resendVerificationEmailAction = action(resendVerificationEmail, 'resend-verification-email')
