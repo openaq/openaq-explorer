@@ -184,8 +184,8 @@ export async function register(formData: FormData) {
   'use server';
 
   const event = getRequestEvent();
-  const ip = event?.clientAddress
-  const clientAddress = `${ip == '::1' ? '0.0.0.0' : ip}/32`; // does not work on localhost returns ::1/32
+  const ip = event?.clientAddress // ned to get nginx proxy forward header 
+  const clientAddress = `0.0.0.0`;
   const fullName = String(formData.get('fullname'));
   const emailAddress = String(formData.get('email-address'));
   const password = String(formData.get('password'));
@@ -224,14 +224,14 @@ export async function register(formData: FormData) {
         throw redirect(`/verify-email?email=${emailAddress}`);
       }
     }
-    await db.user.create(
+    const token = await db.user.create(
       fullName,
       emailAddress,
       passwordHash,
       clientAddress
     );
-    user = await db.user.getUser(emailAddress);
-    await sendVerificationEmail(user[0].usersId);
+    const record = await db.user.getUser(emailAddress);
+    await sendVerificationEmail(record[0].usersId);
   } catch (err) {
     return err as Error;
   }

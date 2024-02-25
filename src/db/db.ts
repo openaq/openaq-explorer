@@ -70,6 +70,10 @@ interface UserByVerificationCodeDefinition {
   emailAddress: string;
 }
 
+interface CreateUserDefinition {
+  token : string;
+}
+
 interface UserByIdDefinition {
   usersId : number; 
   active : boolean;
@@ -131,10 +135,10 @@ export const db = {
       ipAddress: string | undefined
     ) {
       if (!ipAddress) {
-        ipAddress = '';
+        ipAddress = '0.0.0.0';
       }
       try {
-        const user = await sql`
+        const user = await sql<CreateUserDefinition[]>`
                 SELECT * FROM create_user(
                     ${fullName}
                     , ${emailAddress}
