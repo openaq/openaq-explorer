@@ -42,6 +42,7 @@ interface LocationListItemDefinition {
   id: number;
   name: string;
   country: string;
+  timezone: string;
   ismonitor: boolean;
   provider: string;
   sensors: SensorDefinition[];
@@ -301,6 +302,7 @@ export const db = {
         , lvc.name
         , lvc.country->>'name' as country
         , lvc.ismonitor 
+        , lvc.timezone
         , lvc.provider->>'name' as provider
         , lvc.sensors
         , lvc.parameter_ids

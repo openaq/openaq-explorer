@@ -41,11 +41,11 @@ export function OverlayCard() {
             value={parameter()}
           >
             <option value="all">Any pollutant</option>
-            <option value="pm25">PM2.5</option>
-            <option value="pm10">PM10</option>
-            <option value="o3">O3</option>
-            <option value="no2">NO2</option>
-            <option value="so2">SO2</option>
+            <option value="pm25">PM&#8322;&#8325;</option>
+            <option value="pm10">PM&#8321;&#8320;</option>
+            <option value="o3">O&#8323;</option>
+            <option value="no2">NO&#8322;</option>
+            <option value="so2">SO&#8322;</option>
             <option value="co">CO</option>
           </select>
         </div>

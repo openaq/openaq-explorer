@@ -37,7 +37,9 @@ export function ListCard(props: ListCardDefintion) {
               </p>
             </div>
           </div>
-          <div></div>
+          <div>
+            
+          </div>
         </div>
       </A>
       <button

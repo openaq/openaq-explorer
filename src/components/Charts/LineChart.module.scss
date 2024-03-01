@@ -45,3 +45,29 @@
   fill: white;
   filter: url(#shadow);
 }
+
+.y-axis {
+  color: #5a6672;
+
+  text {
+    stroke-width: 0.2;
+  }
+}
+
+.x-axis {
+  color: #5a6672;
+
+  text {
+    stroke-width: 0.2;
+  }
+}
+
+.grid {
+  color: #d4d8dd;
+
+  path,
+  line {
+    stroke-width: 1;
+    stroke-dasharray: 4;
+  }
+}

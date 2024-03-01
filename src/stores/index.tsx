@@ -8,6 +8,9 @@ type Store = [
     mapParameter: string;
     listsId: number | undefined;
     listLocationsId: number | undefined;
+    listParametersId: number | undefined;
+    listParameter: string | undefined;
+
 
     deleteListModalOpen: boolean;
     deleteListLocationModalOpen: boolean;
@@ -31,6 +34,10 @@ type Store = [
     setSelectedMapParameter?: () => void;
     setDeleteListsId?: () => void;
     setDeleteListLocationsId? : () => void;
+
+
+    setListParametersId? : () => void;
+    setListParameter? : () => void;
 
     clearDeleteListsId?: () => void;
     toggleDeleteListModalOpen?: () => void;
@@ -79,6 +86,7 @@ export const StoreProvider: Component<{}> = (props) => {
     recentMeasurements: [],
     toastOpen: false,
     apiKeyRegenerateModalOpen: false,
+    listParametersId: undefined,
   });
 
   const store = [
@@ -162,6 +170,12 @@ export const StoreProvider: Component<{}> = (props) => {
       },
       setDeleteListLocationsId(listLocationsId: number) {
         setState({listLocationsId: listLocationsId})
+      },
+      setListParametersId(parametersId: number) {
+        setState({listParametersId: parametersId})
+      },
+      setListParameter(parameter:string ) {
+        setState({listParameter: parameter})
       }
     },
   ];
