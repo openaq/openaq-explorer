@@ -9,10 +9,11 @@
 
 .location-list-item {
   position: relative;
-  height: 200px;
+  min-height: 200px;
   border-radius: 22px;
   border: 1px solid variables.$smoke10;
   margin: 20px 0 0 0;
+  padding: 20px 0;
 
   a {
     text-decoration: none;
@@ -28,7 +29,6 @@
   &__title {
     display: flex;
     align-items: center;
-    margin-bottom: 20px;
 
     h3 {
       @include mixins.heading3(variables.$sky120);
@@ -36,9 +36,18 @@
     }
   }
 
+  .location-characteristics {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    width: 400px;
+    row-gap: 6px;
+  }
+
   &__body {
     display: flex;
     margin: 0 0 0 70px;
+    justify-content: space-between;
+    padding: 0 50px 0 0;
 
     .locality {
       @include mixins.subtitle3(variables.$smoke120);

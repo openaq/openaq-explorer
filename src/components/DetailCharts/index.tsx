@@ -243,6 +243,7 @@ export function DetailCharts(props: DetailChartsDefinition) {
               scale={scaleType()}
               loading={loading()}
               timezone={props.timezone}
+              noDataMessage={'  No data in selected time range'}
             />
             <p class={styles.timezone}>
               <img

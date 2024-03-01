@@ -165,10 +165,7 @@ export default function LineChart(props) {
       const f = yAxisGrid(y, props.width);
       select(xAxisRef).call(xAxis(x));
       select(yAxisRef).call(yAxis(y));
-      select(gridRef)
-        .call(f)
-        .selectAll('line,path')
-        .style('stroke', '#d4d8dd');
+      select(gridRef).call(f);
     }
   }
 
@@ -244,7 +241,7 @@ export default function LineChart(props) {
             </For>
           </g>
           <g
-            class="chart-grid line-chart-grid"
+            class={style['grid']}
             transform={`translate(${props.margin / 2} ${
               props.margin / 2
             } )`}
@@ -343,7 +340,7 @@ export default function LineChart(props) {
                 x={props.width / 2}
                 y={props.height / 2}
               >
-                No data in selected time range
+                {props.noDataMessage}
               </text>
             </Show>
           </g>

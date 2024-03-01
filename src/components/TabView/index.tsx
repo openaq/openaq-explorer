@@ -1,18 +1,33 @@
-import { Show, createSignal } from 'solid-js';
+import { Show, createEffect, createSignal } from 'solid-js';
 import style from './TabView.module.scss';
 import { ListMap } from '../ListMap';
 import { LocationList } from '../LocationList';
 import { LocationDetailCardMini } from '../Cards/LocationDetailCardMini';
 import { A } from '@solidjs/router';
-
+import { useStore } from '../../stores';
 
 interface TabViewDefintion {
-  locations: any[]
-  list: any
+  locations: any[];
+  list: any;
 }
 
 export function TabView(props: TabViewDefintion) {
   const [activeTab, setActiveTab] = createSignal('list');
+  const [parameters, setParameters] = createSignal([]);
+  const [store, { setListParametersId, setListParameter }] = useStore();
+
+  createEffect(() => {
+    if (props.locations) {
+      setParameters([
+        ...new Set(
+          ...props.locations.map((o) =>
+            o.sensors.map((x) => x.parameter)
+          )
+        ),
+      ]);
+      setListParametersId(parameters()[0].id);
+    }
+  });
 
   return (
     <div class={style['tab-view']}>
@@ -55,16 +70,32 @@ export function TabView(props: TabViewDefintion) {
             </div>
           </a>
         </nav>
-        <Show when={activeTab() == 'list' && props.locations.length > 0}>
-        <div class={style['list-controls']}>
-
-          <label for=""></label>
-          <select name="" id="" class="select">
-
-          </select>
-        </div>
+        <Show
+          when={activeTab() == 'list' && props.locations.length > 0}
+        >
+          <div class={style['list-controls']}>
+            <label for="parameter-select">Parameters</label>
+            <select
+              name="parameter-select"
+              id=""
+              class="select"
+              value={store.listParametersId}
+              onChange={(e) => {
+                setListParametersId(e.target.value)
+                setListParameter(e.target.options[e.target.selectedIndex].text)
+              }
+              }
+            >
+              <For each={parameters()}>
+                {(parameter, i) => (
+                  <option value={parameter.id}>
+                    {parameter.display_name} {parameter.units}{' '}
+                  </option>
+                )}
+              </For>
+            </select>
+          </div>
         </Show>
-
       </header>
       <section>
         <Show when={activeTab() == 'list'}>
@@ -74,10 +105,8 @@ export function TabView(props: TabViewDefintion) {
         </Show>
         <Show when={activeTab() == 'map'}>
           <div id="map-view">
-                <ListMap {...props}/>
-                <LocationDetailCardMini />
-
-                
+            <ListMap {...props} />
+            <LocationDetailCardMini />
           </div>
         </Show>
       </section>
