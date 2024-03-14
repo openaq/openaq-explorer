@@ -1,6 +1,6 @@
 // @refresh reload
 import { Router } from '@solidjs/router';
-import { FileRoutes } from '@solidjs/start';
+import { FileRoutes } from "@solidjs/start/router";
 import '~/assets/scss/main.scss';
 import { Suspense } from 'solid-js';
 import './App.module.scss';

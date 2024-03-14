@@ -1,7 +1,5 @@
 import MapGL, {
-  Control,
   Layer,
-  Marker,
   Source,
   Viewport,
 } from 'solid-map-gl';
@@ -10,6 +8,7 @@ import { createSignal, Show } from 'solid-js';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import styles from './ListCardMap.module.scss';
 import destination from '@turf/destination';
+
 
 interface Coordinates {
   latitude: number;
@@ -28,7 +27,7 @@ function bounds(bbox: number[][]) {
   return [...sw.geometry.coordinates, ...ne.geometry.coordinates];
 }
 
-export function ListCardMap(props: DetailMapDefinition) {
+export default function ListCardMap(props: DetailMapDefinition) {
   const [viewport] = createSignal({
     bounds: bounds(props.bbox),
   } as Viewport);

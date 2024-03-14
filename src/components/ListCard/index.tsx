@@ -1,7 +1,8 @@
 import style from './ListCard.module.scss';
-import { ListCardMap } from '~/components/ListCardMap';
 import { A } from '@solidjs/router';
 import { useStore } from '~/stores';
+import { clientOnly } from "@solidjs/start";
+const ListCardMap = clientOnly(() => import("~/components/ListCardMap"));
 
 interface ListCardDefintion {
   listsId: number;
