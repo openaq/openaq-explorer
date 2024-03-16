@@ -19,6 +19,8 @@
   },
   "dependencies": {
     "@babel/preset-env": "^7.23.6",
+    "@fontsource-variable/space-grotesk": "^5.0.17",
+    "@fontsource/space-grotesk": "^5.0.17",
     "@maplibre/maplibre-gl-geocoder": "^1.5.0",
     "@solidjs/meta": "^0.29.3",
     "@solidjs/router": "^0.13.0",
