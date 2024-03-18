@@ -385,28 +385,26 @@ export async function nameChange(formData: FormData) {
 export async function regenerateKey(formData: FormData) {
   'use server';
   const usersId = Number(formData.get('users-id'));
-  const user = db.user.getUserById(usersId)
+  const user = await db.user.getUserById(usersId)
   try {
-    await db.user.regenerateKey(usersId);
-    try {
-      const url = new URL(import.meta.env.VITE_API_BASE_URL);
-      url.pathname = `/auth/regenerate-token`;
-      const data = { usersId: usersId, token: user[0].token }
-      const res = await fetch(url.href, {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-          'X-API-Key': `${import.meta.env.VITE_EXPLORER_API_KEY}`,
-        },
-        body: JSON.stringify(data)
-      });
-    } catch (err) {
-      return err as Error;
-    }
-    throw redirect('/account');
+    const url = new URL(import.meta.env.VITE_API_BASE_URL);
+    url.pathname = `/auth/regenerate-token`;
+    const data = { usersId: usersId, token: user[0].token }
+    console.log("data",data)
+    const res = await fetch(url.href, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-Key': `${import.meta.env.VITE_EXPLORER_API_KEY}`,
+      },
+      body: JSON.stringify(data)
+    });
+    const d = await res.json()
+    console.log("res",d)
   } catch (err) {
     return err as Error;
   }
+  throw redirect('/account');
 }
 
 export async function resendVerificationEmail(formData) {
@@ -540,6 +538,25 @@ export async function sendVerificationEmail(usersId: number) {
   });
 }
 
+
+async function registerToken(usersId: any){
+    const url = new URL(import.meta.env.VITE_API_BASE_URL);
+    url.pathname = `/auth/register-token`;
+    const data = { 
+      usersId: usersId
+    }
+    const res = await fetch(url.href, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-Key': `${import.meta.env.VITE_EXPLORER_API_KEY}`,
+      },
+      body: JSON.stringify(data)
+    });
+}
+
+
+
 export async function verifyEmail(verificationCode: string) {
   'use server';
   const user = await db.user.getUserByVerificationCode(verificationCode);
@@ -556,6 +573,11 @@ export async function verifyEmail(verificationCode: string) {
     throw redirect(`/expired?code=${verificationCode}`);
   }
   await db.user.verifyUserEmail(user[0].usersId);
+  try {
+    await registerToken(user[0].usersId)
+  } catch (err) {
+    return err as Error;
+  }
   throw redirect('/email-verified');
 }
 

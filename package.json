@@ -19,10 +19,12 @@
   },
   "dependencies": {
     "@babel/preset-env": "^7.23.6",
+    "@fontsource-variable/space-grotesk": "^5.0.17",
+    "@fontsource/space-grotesk": "^5.0.17",
     "@maplibre/maplibre-gl-geocoder": "^1.5.0",
     "@solidjs/meta": "^0.29.3",
-    "@solidjs/router": "^0.11.4",
-    "@solidjs/start": "^0.5.9",
+    "@solidjs/router": "^0.13.0",
+    "@solidjs/start": "^0.7.5",
     "@turf/bbox": "^6.5.0",
     "@turf/destination": "^6.5.0",
     "@turf/helpers": "^6.5.0",
@@ -36,16 +38,15 @@
     "events": "^3.3.0",
     "jest": "^29.7.0",
     "mapbox-gl": "npm:empty-npm-package@^1.0.0",
-    "maplibre-gl": "^3.6.2",
+    "maplibre-gl": "^4.1.0",
     "minisearch": "^6.3.0",
     "nanoid": "^5.0.4",
     "openaq-design-system": "github:openaq/openaq-design-system#v-4.0.0",
     "postgres": "^3.4.3",
-    "redis": "^4.6.12",
     "solid-js": "^1.8.15",
-    "solid-map-gl": "1.10.1",
+    "solid-map-gl": "1.10.0",
     "ts-node": "^10.9.2",
-    "vinxi": "^0.2.1"
+    "vinxi": "^0.3.10"
   },
   "engines": {
     "node": ">=20"

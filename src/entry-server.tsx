@@ -11,10 +11,6 @@ export default createHandler(() => (
             content="width=device-width, initial-scale=1"
           />
           <link rel="icon" href="/favicon.ico" />
-          <link
-            href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap"
-            rel="stylesheet"
-          />
           {import.meta.env.VITE_ENV == 'prod' ? (
             <script
               defer

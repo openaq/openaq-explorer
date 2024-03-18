@@ -4,7 +4,6 @@ import style from './ProvidersCard.module.scss';
 import {
   For,
   Show,
-  createEffect,
   createSignal,
   onMount,
 } from 'solid-js';
@@ -34,7 +33,6 @@ export function ProvidersCard() {
   ] = useStore();
 
   const [count, setCount] = createSignal();
-  // const [totalProviders, setTotalProviders] = createSignal();
   const [selectedProviders, setSelectedProviders] = createStore<
     ProvidersStoreDefinition[]
   >([]);
@@ -129,7 +127,7 @@ export function ProvidersCard() {
         <h3 class="type-heading-3 text-white">Data providers</h3>
       </header>
       <div class={style['providers-card__body']}>
-        <div class={style["list-header"]}>
+        <div class={style['list-header']}>
           <div class={style['select-helpers']}>
             <button
               class="button-reset type-link-1 providers-list-select-all"
