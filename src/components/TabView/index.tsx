@@ -25,7 +25,9 @@ export function TabView(props: TabViewDefintion) {
           )
         ),
       ]);
-      setListParametersId(parameters()[0].id);
+      if( parameters.length > 0) {
+        setListParametersId(parameters()[0].id);
+      }
     }
   });
 
