@@ -160,4 +160,11 @@ html body {
   .maplibregl-ctrl-top-left {
     width: 95% !important;
   }
+
+  .maplibregl-ctrl-bottom-left {
+    margin: 0 0 80px 0;
+  }
+  .maplibregl-ctrl-bottom-right {
+    margin: 0 0 80px 0;
+  }
 }
