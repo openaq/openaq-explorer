@@ -54,15 +54,10 @@ export class LambdaStack extends cdk.Stack {
         memorySize: 1536,
         runtime: lambda.Runtime.NODEJS_20_X,
         timeout: cdk.Duration.seconds(15),
-        
       }
     );
 
-    const lambdaFunctionUrl = lambdaFunction.addFunctionUrl({
-      authType: lambda.FunctionUrlAuthType.NONE,
-    });
-
-    const bucket = new s3.Bucket(this, 'explorer-assets', {
+    const bucket = new s3.Bucket(this, `${id}-explorer-assets`, {
       encryption: s3.BucketEncryption.S3_MANAGED,
       enforceSSL: true,
       removalPolicy: RemovalPolicy.DESTROY,
@@ -71,7 +66,7 @@ export class LambdaStack extends cdk.Stack {
 
     const deployment = new aws_s3_deployment.BucketDeployment(
       this,
-      'deployExplorerAssets',
+      `${id}-deployExplorerAssets`,
       {
         sources: [
           aws_s3_deployment.Source.asset('../.output/public'),
@@ -83,13 +78,13 @@ export class LambdaStack extends cdk.Stack {
     const certificate =
       certificateManager.Certificate.fromCertificateArn(
         this,
-        `explorer-certificate`,
+        `${id}-explorer-certificate`,
         certificateArn
       );
 
     const apiGatewayDomainName = new DomainName(
       this,
-      `explorer-http-api-domain`,
+      `${id}-explorer-http-api-domain`,
       {
         domainName: domainName,
         certificate: certificate,
@@ -100,7 +95,7 @@ export class LambdaStack extends cdk.Stack {
 
     const apiGateway = new cdk.aws_apigatewayv2.HttpApi(
       this,
-      'explorerHttpApi',
+      `${id}-explorerHttpApi`,
       {
         description: `Connects the httpapiCloudFront distribution with the Lambda function to make it publicly available.`,
         corsPreflight: undefined,
@@ -112,7 +107,7 @@ export class LambdaStack extends cdk.Stack {
 
     apiGateway.addRoutes({
       integration: new HttpLambdaIntegration(
-        'explorerHttpApiIntegration',
+        `${id}explorerHttpApiIntegration`,
         lambdaFunction
       ),
       path: '/{proxy+}',
@@ -125,7 +120,7 @@ export class LambdaStack extends cdk.Stack {
 
     const originAccessIdentity = new cloudfront.OriginAccessIdentity(
       this,
-      'explorerOriginAccessIdentity'
+      `${id}explorerOriginAccessIdentity`
     );
 
     bucket.grantRead(originAccessIdentity);
@@ -133,9 +128,9 @@ export class LambdaStack extends cdk.Stack {
     const distributionOriginRequestPolicy =
       new cloudfront.OriginRequestPolicy(
         this,
-        `ExplorerSolidStartOriginRequestPolicy`,
+        `${id}-ExplorerSolidStartOriginRequestPolicy`,
         {
-          originRequestPolicyName: `ExplorerSolidStartOriginRequestPolicy`,
+          originRequestPolicyName: `${id}ExplorerSolidStartOriginRequestPolicy`,
           queryStringBehavior: cloudfront.OriginRequestQueryStringBehavior.all(),
           cookieBehavior: cloudfront.OriginRequestCookieBehavior.all(),
           headerBehavior: cloudfront.OriginRequestHeaderBehavior.all(),
@@ -144,7 +139,7 @@ export class LambdaStack extends cdk.Stack {
 
     const defaultCachePolicy = new cloudfront.CachePolicy(
       this,
-      'explorerCachePolicy',
+      `${id}explorerCachePolicy`,
       {
         defaultTtl: cdk.Duration.minutes(5),
         queryStringBehavior: cloudfront.CacheQueryStringBehavior.all()
@@ -153,7 +148,7 @@ export class LambdaStack extends cdk.Stack {
 
     const distribution = new cdk.aws_cloudfront.Distribution(
       this,
-      'explorerTestDistribution',
+      `${id}explorerTestDistribution`,
       {
         httpVersion: cloudfront.HttpVersion.HTTP2_AND_3,
         priceClass: cloudfront.PriceClass.PRICE_CLASS_ALL,
@@ -192,7 +187,7 @@ export class LambdaStack extends cdk.Stack {
 
     const hostedZone = route53.HostedZone.fromHostedZoneAttributes(
       this,
-      `explorerHostedZone`,
+      `${id}explorerHostedZone`,
       {
         hostedZoneId: hostedZoneId,
         zoneName: hostedZoneName,
@@ -201,7 +196,7 @@ export class LambdaStack extends cdk.Stack {
 
     const aliasRecord = new route53.ARecord(
       this,
-      `explorerAliasRecord-test`,
+      `${id}explorerAliasRecord`,
       {
         target: route53.RecordTarget.fromAlias(
           new targets.CloudFrontTarget(distribution)
