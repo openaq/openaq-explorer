@@ -3,6 +3,8 @@ import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
 import { LambdaStack } from '../lib/lambda-stack';
 import * as dotenv from 'dotenv'
+import { AwsSolutionsChecks } from 'cdk-nag'
+import { Aspects } from 'aws-cdk-lib';
 
 declare var process : {
   env: {
@@ -28,3 +30,5 @@ const stack = new LambdaStack(app, 'ExplorerLambdaStack', {
 cdk.Tags.of(stack).add('project', 'openaq');
 cdk.Tags.of(stack).add('product', 'explorer');
 cdk.Tags.of(stack).add('env', process.env.ENV_NAME);
+
+Aspects.of(app).add(new AwsSolutionsChecks({ verbose: true }))
