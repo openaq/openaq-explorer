@@ -122,6 +122,17 @@
 
   .header {
     height: $header-height;
+    padding: 0 10px;
+  }
+
+  .header-contents {
+    flex-direction: row-reverse;
+  }
+
+  .menu-button-container {
+    input {
+      display: none;
+    }
   }
 
   .spacer {
@@ -131,7 +142,8 @@
   }
 
   .header-logo {
-    order: 2;
+    justify-content: center;
+    order: 1;
   }
   .nav {
     order: 1;

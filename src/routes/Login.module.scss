@@ -8,3 +8,9 @@
   align-items: center;
   gap: 8px;
 }
+
+.info-message {
+  @include mixins.body3(variables.$sky120);
+  max-width: 500px;
+  margin: 0 15px;
+}
