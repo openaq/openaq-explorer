@@ -1,6 +1,8 @@
 import { useSearchParams, useSubmission } from '@solidjs/router';
 import { forgotPasswordAction } from '~/db';
-import { Show } from 'solid-js';
+import { Show, createSignal } from 'solid-js';
+import PasswordScore from '~/components/PasswordScore';
+import { evaluatePassword } from '~/lib/password';
 
 import '~/assets/scss/routes/new-password.scss';
 import { Header } from '~/components/Header';
@@ -8,6 +10,49 @@ import { Header } from '~/components/Header';
 export default function VerifyEmail() {
   const [searchParams] = useSearchParams();
   const settingNewPassword = useSubmission(forgotPasswordAction);
+
+  const [passwordInputValue, setPasswordInputValue] = createSignal<string>();
+  const [passwordConfirmInputValue, setPasswordConfirmInputValue] =
+    createSignal<string>();
+
+  const [passwordScore, setPasswordScore] = createSignal();
+  const [passwordWarning, setPasswordWarning] = createSignal();
+  const [passwordsDoNotMatch, setPasswordsDoNotMatch] =
+    createSignal('');
+
+  let passwordInputTimeout: number;
+
+  const onPasswordInput = (e: InputEvent) => {
+    const target = e.target as HTMLInputElement;
+    setPasswordInputValue(target.value);
+    clearTimeout(passwordInputTimeout);
+    passwordInputTimeout = window.setTimeout(() => {
+      const result = evaluatePassword(target.value);
+      if (target.value !== '') {
+        setPasswordScore(result.score);
+        setPasswordWarning(result.feedback.warning);
+      } else {
+        setPasswordScore(-1);
+        setPasswordWarning('');
+      }
+    }, 500);
+  };
+
+  let passwordConfirmInputTimeout: number;
+
+  const onPasswordConfirmInput = (e: InputEvent) => {
+    const target = e.target as HTMLInputElement;
+    setPasswordConfirmInputValue(target.value);
+    clearTimeout(passwordConfirmInputTimeout);
+    passwordConfirmInputTimeout = window.setTimeout(() => {
+      if (passwordInputValue() !== passwordConfirmInputValue()) {
+        setPasswordsDoNotMatch('passwords must match');
+      } else {
+        setPasswordsDoNotMatch('');
+      }
+    }, 500);
+  };
+
 
   return (
     <>

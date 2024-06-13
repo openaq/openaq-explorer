@@ -15,7 +15,8 @@ interface TabViewDefintion {
 export function TabView(props: TabViewDefintion) {
   const [activeTab, setActiveTab] = createSignal('list');
   const [parameters, setParameters] = createSignal([]);
-  const [store, { setListParametersId, setListParameter }] = useStore();
+  const [store, { setListParametersId, setListParameter }] =
+    useStore();
 
   createEffect(() => {
     if (props.locations) {
@@ -84,10 +85,11 @@ export function TabView(props: TabViewDefintion) {
               class="select"
               value={store.listParametersId}
               onChange={(e) => {
-                setListParametersId(e.target.value)
-                setListParameter(e.target.options[e.target.selectedIndex].text)
-              }
-              }
+                setListParametersId(e.target.value);
+                setListParameter(
+                  e.target.options[e.target.selectedIndex].text
+                );
+              }}
             >
               <For each={parameters()}>
                 {(parameter, i) => (
