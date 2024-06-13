@@ -8,7 +8,6 @@ import '@fontsource/space-grotesk/400.css';
 import '@fontsource/space-grotesk/500.css';
 import '@fontsource/space-grotesk/600.css';
 import '@fontsource/space-grotesk/700.css';
-import './App.module.scss';
 import { StoreProvider } from '~/stores';
 
 export default function App() {

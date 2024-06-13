@@ -1,7 +1,8 @@
 import { useSearchParams, useSubmission, A } from '@solidjs/router';
-import { Header } from '~/components/Header';
-import style from './Expired.module.scss';
 import { resendVerificationEmailAction } from '~/db';
+
+import '~/assets/scss/routes/expired.scss';
+import { Header } from '~/components/Header';
 
 export default function VerifyEmail() {
   const [searchParams] = useSearchParams();
@@ -12,7 +13,7 @@ export default function VerifyEmail() {
   return (
     <>
       <Header />
-      <main class={style['main']}>
+      <main class='main'>
         <h1 class="type-heading-1 text-sky-120">
           Verification token expired
         </h1>
@@ -35,7 +36,7 @@ export default function VerifyEmail() {
               <p
                 role="alert"
                 id="error-message"
-                class={style['error-message']}
+                class='error-message'
               >
                 <img src="/svgs/error_fire100.svg" alt="error icon" />
                 {resendingVerificationEmail.result!.message}
@@ -44,9 +45,9 @@ export default function VerifyEmail() {
             <button class="btn btn-primary" type="submit">Request new code</button>
           </form>
         </div>
-        <div class={style['bubble-lg']} />
-        <div class={style['bubble-sm']} />
+        <div class='bubble-lg' />
+        <div class='bubble-sm' />
       </main>
-    </>
+      </>
   );
 }

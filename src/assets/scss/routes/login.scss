@@ -1,0 +1,45 @@
+@use 'openaq-design-system/scss/mixins/index' as mixins;
+@use 'openaq-design-system/scss/variables';
+
+.login-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 70px 0;
+  gap: 12px;
+
+  .login-form {
+    width: 360px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .form-element {
+      display: flex;
+      flex-direction: column;
+      margin: 9px 0;
+      gap: 8px;
+    }
+
+    .form-element-row {
+      display: flex;
+      margin: 9px 0;
+      gap: 8px;
+    }
+  }
+}
+
+.error-message {
+  @include mixins.body3(variables.$smoke120);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.info-message {
+  @include mixins.body3(variables.$sky120);
+  max-width: 500px;
+  margin: 0 15px;
+}

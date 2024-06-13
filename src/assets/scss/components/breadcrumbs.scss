@@ -1,0 +1,22 @@
+@use '~/assets/scss/media-queries.scss' as f;
+@use 'openaq-design-system/scss/mixins/index' as mixins;
+@use 'openaq-design-system/scss/variables';
+
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+
+  @include f.respond(medium) {
+    display: none;
+  }
+  @include f.respond(small) {
+    display: none;
+  }
+  a {
+    @include mixins.link3(variables.$sky120);
+  }
+
+  span {
+    @include mixins.body3(variables.$sky120);
+  }
+}

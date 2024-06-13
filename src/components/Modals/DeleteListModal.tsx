@@ -1,8 +1,8 @@
 import { useSubmission } from '@solidjs/router';
-import style from './NewListModal.module.scss';
 import { deleteListAction } from '~/db';
 import { JSX, Show, createEffect } from 'solid-js';
 import { useStore } from '~/stores';
+import '~/assets/scss/components/modal.scss';
 
 
 
@@ -39,7 +39,7 @@ export function DeleteListModal() {
     <dialog class="modal" ref={ref}>
       <form action={deleteListAction} method="post">
         <header class="modal__header">
-          <h2 class={style['title']}>
+          <h2 class='title'>
             <img
               src="/svgs/delete_forever_white.svg"
               alt="add icon"
@@ -48,7 +48,7 @@ export function DeleteListModal() {
           </h2>
           <button
             id="close"
-            class={style['close-btn']}
+            class='close-btn'
             aria-label="close"
             formnovalidate
             onClick={onClickClose}

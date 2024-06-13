@@ -1,17 +1,19 @@
 import { A } from '@solidjs/router';
 import { For, Show, createEffect, createSignal } from 'solid-js';
-import style from './LocationList.module.scss';
 import {
   ReferenceGradeMarker,
   LowCostSensorMarker,
 } from '../LocationMarker';
 import { NoLocationsFallback } from './NoLocationsFallback';
 import { useStore } from '~/stores';
-import LineChart from '../Charts/LineChart';
+import LineChart from '~/components/Charts/LineChart';
 import dayjs from 'dayjs';
 import tz from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import { getSensorMeasurements } from '~/client';
+
+import '~/assets/scss/components/location-list.scss';
+
 
 
 dayjs.extend(utc);
@@ -87,10 +89,10 @@ export function LocationListItem(props: LocationListItemDefinition) {
   })
 
   return (
-    <li class={style['location-list-item']}>
+    <li class='location-list-item'>
       <A href={`/locations/${props.id}`}>
-        <div class={style['location-info']}>
-          <div class={style['location-info__title']}>
+        <div class='location-info'>
+          <div class='location-info__title'>
             {props.ismonitor ? (
               <ReferenceGradeMarker />
             ) : (
@@ -98,10 +100,10 @@ export function LocationListItem(props: LocationListItemDefinition) {
             )}
             <h3>{props.name}</h3>
           </div>
-          <div class={style['location-info__body']}>
+          <div class='location-info__body'>
             <div>
-              <div class={style['locality']}>{props.country}</div>
-              <div class={style['location-characteristics']}>
+              <div class='locality'>{props.country}</div>
+              <div class='location-characteristics'>
                 <div class="type-body-1">Provider</div>
                 <div class="type-body-2">{props.provider}</div>
 
@@ -122,7 +124,7 @@ export function LocationListItem(props: LocationListItemDefinition) {
               </div>
             </div>
 
-            <div class={style['location-measurements']}>
+            <div class='location-measurements'>
               <LineChart
                 width={400}
                 height={200}
@@ -148,7 +150,7 @@ export function LocationListItem(props: LocationListItemDefinition) {
         </div>
       </A>
       <button
-        class={style['location-card-delete-btn']}
+        class='location-card-delete-btn'
         type="button"
         onClick={() => {
           setDeleteListLocationsId(props.id);
@@ -166,7 +168,7 @@ export function LocationListItem(props: LocationListItemDefinition) {
 
 export function LocationList(props: LocationListItems) {
   return (
-    <ul class={style['location-list']}>
+    <ul class='location-list'>
       <Show
         when={props.locations.length > 0}
         fallback={<NoLocationsFallback />}

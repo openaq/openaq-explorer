@@ -1,14 +1,16 @@
 import { useSubmission } from '@solidjs/router';
 import { Show } from 'solid-js';
 import { passwordChangeAction } from '~/db';
-import style from './PasswordForm.module.scss'
+
+import '~/assets/scss/components/password-form.scss';
+
 
 export function PasswordForm() {
     const changingPassword = useSubmission(passwordChangeAction);
   
     return (
-      <form action={passwordChangeAction} method="post">
-        <div class={style["form-element"]}>
+      <form class="password-form" action={passwordChangeAction} method="post">
+        <div class="form-element">
           <label for="current-password">Current password</label>
           <input
             type="password"
@@ -17,7 +19,7 @@ export function PasswordForm() {
             class="text-input"
           />
         </div>
-        <div class={style["form-element"]}>
+        <div class="form-element">
           <label for="new-password">New password</label>
           <input
             type="password"
@@ -26,7 +28,7 @@ export function PasswordForm() {
             class="text-input"
           />
         </div>
-        <div class={style["form-element"]}>
+        <div class="form-element">
           <label for="confirm-new-password">Confirm new password</label>
           <input
             type="password"
@@ -35,7 +37,7 @@ export function PasswordForm() {
             class="text-input"
           />
         </div>
-        <div class={style["form-element"]}>
+        <div class="form-element">
         <Show when={changingPassword.result}>
           <p style={{color: "red"}} role="alert" id="error-message">
             {changingPassword.result!.message}

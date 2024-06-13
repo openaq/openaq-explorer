@@ -1,13 +1,14 @@
 import { createAsync, useParams } from '@solidjs/router';
-import { Header } from '~/components/Header';
 import { TabView } from '~/components/TabView';
 import { EditListModal } from '~/components/Modals/EditListModal';
 import { DeleteLocationModal } from '~/components/Modals/DeleteLocationModal';
 import { getLocationsByListId, getList, getUser } from '~/db';
-import style from './ListsDetail.module.scss';
-import { Show, createEffect } from 'solid-js';
+import { Show } from 'solid-js';
 import { A } from '@solidjs/router';
 import { useStore } from '~/stores';
+import { Header } from '~/components/Header';
+
+import '~/assets/scss/routes/list-detail.scss';
 
 export const route = {
   load: ({ params }) => {
@@ -30,15 +31,15 @@ export default function List() {
   return (
     <>
       <Header />
-      <main class={style.main}>
-        <header class={style.header}>
+      <main class="list-detail-main">
+        <header class="header">
           <Show when={list()}>
-            <div class={style.title}>
+            <div class="title">
               <A href="/lists">
                 <img src="/svgs/arrow_left_sky120.svg" alt="" />
               </A>{' '}
               <div>
-                <div class={style['list-name']}>
+                <div class="list-name">
                   <h1 class="type-display-1 gradient-title">
                     {list().label}
                   </h1>

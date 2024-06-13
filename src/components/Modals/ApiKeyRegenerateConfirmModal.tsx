@@ -1,8 +1,10 @@
 import { useSubmission } from '@solidjs/router';
 import { JSX, Show, createEffect } from 'solid-js';
-import style from './ApiKeyRegenerateModal.module.scss';
 import { regenerateKeyAction } from '~/db';
 import { useStore } from '~/stores';
+
+import '~/assets/scss/components/modal.scss';
+
 
 interface ApiKeyModalDefinition {
   usersId: number;
@@ -47,7 +49,7 @@ export function ApiKeyRegenerateConfirmModal(
           <h2>Regenerate API Key</h2>
           <button
             id="close"
-            class={style['close-btn']}
+            class='close-btn'
             aria-label="close"
             formnovalidate
             onClick={onClickClose}

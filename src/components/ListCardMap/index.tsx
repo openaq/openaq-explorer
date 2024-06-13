@@ -6,8 +6,8 @@ import MapGL, {
 import * as maplibre from 'maplibre-gl';
 import { createSignal, Show } from 'solid-js';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import styles from './ListCardMap.module.scss';
 import destination from '@turf/destination';
+import '~/assets/scss/components/list-card-map.scss';
 
 
 interface Coordinates {
@@ -18,7 +18,6 @@ interface Coordinates {
 interface DetailMapDefinition {
   bbox: number[][];
   sensorNodesIds: number[];
-  locations: Location[];
 }
 
 function bounds(bbox: number[][]) {
@@ -27,15 +26,15 @@ function bounds(bbox: number[][]) {
   return [...sw.geometry.coordinates, ...ne.geometry.coordinates];
 }
 
-export default function ListCardMap(props: DetailMapDefinition) {
+export function ListCardMap(props: DetailMapDefinition) {
   const [viewport] = createSignal({
     bounds: bounds(props.bbox),
   } as Viewport);
 
   return (
-    <div class={styles['map-container']}>
+    <div class='list-card-map-container'>
       <MapGL
-        class={styles.map}
+        class="map"
         mapLib={maplibre}
         options={{
           accessToken: import.meta.env.VITE_MAPBOX_ACCESS_TOKEN,

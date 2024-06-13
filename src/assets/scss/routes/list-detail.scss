@@ -1,0 +1,22 @@
+.list-detail-main {
+  margin: 40px 50px 0px 50px;
+
+  .header {
+    display: flex;
+    margin: 0 0 50px 0;
+
+    .title {
+      display: flex;
+      align-items: center;
+
+      a {
+        height: 48px;
+      }
+    }
+  }
+  .list-name {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+}
