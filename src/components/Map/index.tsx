@@ -4,10 +4,12 @@ import { useMapContext } from 'solid-map-gl';
 import * as maplibre from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { useStore } from '~/stores';
-import style from './Map.module.scss';
 
 import { Geocoder } from '../Geocoder';
 import { createEffect, createSignal } from 'solid-js';
+
+import '~/assets/scss/components/map.scss';
+
 
 function calculateFlyToDuration(zoom: number) {
   return 2500 / (zoom / 5);
@@ -52,6 +54,7 @@ export function Map() {
     if (store.showMonitors && !store.showAirSensors) {
       return true;
     }
+    return false;
   };
 
   const setVisibility = () => {
@@ -76,7 +79,7 @@ export function Map() {
 
   return (
     <MapGL
-      class={style["map"]}
+      class="map"
       mapLib={maplibre}
       options={{
         accessToken: import.meta.env.VITE_MAPBOX_ACCESS_TOKEN,

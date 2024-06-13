@@ -1,0 +1,13 @@
+@use 'openaq-design-system/scss/variables';
+
+.list-card-map-container {
+  border-radius: 12px;
+  overflow: hidden;
+  width: 280px;
+  border: 1px solid variables.$smoke30;
+  background-color: #7fd2ce;
+
+  .map {
+    height: 170px;
+  }
+}

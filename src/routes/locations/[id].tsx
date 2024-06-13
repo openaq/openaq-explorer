@@ -1,13 +1,15 @@
 import { createAsync, useParams } from '@solidjs/router';
-import { Header } from '~/components/Header';
 import { DetailOverview } from '~/components/DetailOverview';
 import { DetailCharts } from '~/components/DetailCharts';
 import { getLocation, getUser, getListsBySensorNodesId } from '~/db';
-import styles from './locationDetail.module.scss';
 import { Breadcrumbs } from '~/components/Breadcrumbs';
 import { DownloadCard } from '~/components/DownloadCard';
 import { Show } from 'solid-js';
 import { useStore } from '~/stores';
+import 'maplibre-gl/dist/maplibre-gl.css';
+import '~/assets/scss/routes/location.scss'
+import { Header } from '~/components/Header';
+
 
 export const route = {
   load({ params} : any ) {
@@ -30,8 +32,8 @@ export default function Location() {
 
   return (
     <>
-      <Header/>
-      <main class={styles.main}>
+      <Header />
+      <main class="location-main">
         <Show when={location()}>
           <Breadcrumbs pageName={location()?.name} />
           <DetailOverview {...location()} lists={lists()}/>
@@ -39,6 +41,6 @@ export default function Location() {
           <DownloadCard {...location()} />
         </Show>
       </main>
-    </>
+      </>
   );
 }

@@ -1,15 +1,16 @@
 import { defineConfig } from '@solidjs/start/config';
+import autoprefixer from 'autoprefixer';
 
 export default defineConfig({
-  
   server: {
     preset: 'aws-lambda',
-    routeRules: {
-      '/_build/assets/**': { headers: { 'cache-control': `s-maxage=${60*60}; max-age:${60*60};` } },
-    }
   },
   vite: {
-    inlineDynamicImports: true
+    css: {
+      postcss: {
+        plugins: [autoprefixer({})],
+      },
+    },
   },
   middleware: './src/middleware.ts',
 });

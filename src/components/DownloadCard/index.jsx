@@ -2,11 +2,12 @@ import { createSignal, For, Show } from 'solid-js';
 import dayjs from 'dayjs';
 import tz from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
-import style from './DownloadCard.module.scss';
 import { getSensorMeasurements } from '~/client';
 import { getUser } from '~/db';
 
 import { createAsync, useLocation, A } from '@solidjs/router';
+
+import '~/assets/scss/components/download-card.scss';
 
 dayjs.extend(utc);
 dayjs.extend(tz);
@@ -150,9 +151,9 @@ export function DownloadCard(props) {
   };
 
   return (
-    <section id="download-card" class={style['download-card']}>
-      <header class={style['download-card__header']}>
-        <h3 class={style['heading']}>Download</h3>
+    <section id="download-card" class="download-card">
+      <header class="download-card__header">
+        <h3 class="heading">Download</h3>
       </header>
       <Show when={user()} fallback={<NotLoggedInFallback />}>
         <h3 class="type-subtitle-1 text-sky-120">
@@ -193,7 +194,7 @@ export function DownloadCard(props) {
               'YYYY-MM-DD'
             )}
             onInput={onDateFromInput}
-            class={style['date-input']}
+            class="date-input"
           />
           <label for="">End date</label>
           <input
@@ -207,9 +208,9 @@ export function DownloadCard(props) {
               'YYYY-MM-DD'
             )}
             onInput={onDateToInput}
-            class={style['date-input']}
+            class="date-input"
           />
-          <div class={style['parameter-inputs']}>
+          <div class="parameter-inputs">
             <For each={props.sensors}>
               {(sensor, i) => (
                 <>

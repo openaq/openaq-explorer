@@ -13,6 +13,8 @@ import { getUser } from '~/db';
 
 import PasswordScore from '~/components/PasswordScore';
 import { evaluatePassword } from '~/lib/password';
+
+import '~/assets/scss/routes/register.scss';
 import { Header } from '~/components/Header';
 
 export const route = {
@@ -21,9 +23,6 @@ export const route = {
 
 export default function Register() {
   const [searchParams] = useSearchParams();
-
-
-  const user = createAsync(() => getUser(), { deferStream: true });
 
   const [passwordInputValue, setPasswordInputValue] = createSignal();
   const [passwordConfirmInputValue, setPasswordConfirmInputValue] =
@@ -69,7 +68,7 @@ export default function Register() {
 
   return (
     <>
-      <Header loggedIn={user() ? true : false} />
+      <Header />
       <main class="register-page">
         <h1 class="type-display-1 text-sky-120">Create an account</h1>
         <form
@@ -170,7 +169,7 @@ export default function Register() {
         </form>
 
         <Show when={registering.result}>
-          <p style={{color: "red"}} role="alert" id="error-message">
+          <p style={{ color: 'red' }} role="alert" id="error-message">
             {registering.result!.message}
           </p>
         </Show>
@@ -184,7 +183,9 @@ export default function Register() {
         </div>
         <div>
           <p style="width: 500px;" class="type-body-3 text-sky-120">
-            If you had previously registered for an OpenAQ API key you already have an OpenAQ Explorer account! use the email and password you previously signed up with to get started.
+            If you had previously registered for an OpenAQ API key you
+            already have an OpenAQ Explorer account! use the email and
+            password you previously signed up with to get started.
           </p>
         </div>
       </main>

@@ -1,16 +1,16 @@
-import { Show, createEffect } from 'solid-js';
-import style from './PasswordScore.module.scss';
+import { Show } from 'solid-js';
+
+import '~/assets/scss/components/password-score.scss';
+
 
 const errorSvg = 'warning_fire100.svg';
 const checkSvg = 'check_mantis100.svg'
 
 
-
-
 function passwordValues(score: number) {
-  let color;
-  let message;
-  let symbol;
+  let color: string;
+  let message: string;
+  let symbol: string;
   switch (score) {
     case 0:
       color = 'warning';
@@ -60,9 +60,9 @@ function StrengthBar(props: StrengthBarDefinition) {
 
   return (
     <div
-      class={`${style['strength-meter__bar']} ${
+      class={`'strength-meter__bar' ${
         props.index + 1 <= props.score
-          ?  style[`strength-meter__bar--${props.color}`]
+          ?  `strength-meter__bar--${props.color}`
           : ''
       }`
       }
@@ -77,10 +77,10 @@ interface PasswordScoreDefinition {
 
 export default function PasswordScore(props: PasswordScoreDefinition) {
   return (
-    <div class={style["password-strength"]}>
-      <div class={style["strength-meter"]}>
+    <div class="password-strength">
+      <div class="strength-meter-container">
         <span class="type-body-1">Password strength</span>
-        <div class={style["strength-meter-bars"]}>
+        <div class="strength-meter">
           <StrengthBar
             index={0}
             color={passwordValues(props.score).color}
@@ -110,11 +110,11 @@ export default function PasswordScore(props: PasswordScoreDefinition) {
       </div>
       <div>
         <Show when={props.score < 4}>
-        <span class={style["strength-message"]}>
+        <span class="strength-message">
           Please choose a stronger password
         </span>
         </Show>
-        <span class={style["strength-message"]}>
+        <span class="strength-message">
           {passwordValues(props.score).message}
           {passwordValues(props.score).symbol ? <img src={`/svgs/${passwordValues(props.score).symbol }`} alt="" /> : ''}
         </span>

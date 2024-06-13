@@ -1,4 +1,3 @@
-import styles from './OverlayCard.module.scss';
 
 import {
   NoRecentUpdateMarker,
@@ -7,6 +6,9 @@ import {
 } from '../LocationMarker';
 import { useStore } from '~/stores';
 import { createSignal } from 'solid-js';
+
+import '~/assets/scss/components/overlay-card.scss';
+
 
 export function OverlayCard() {
   const [
@@ -23,15 +25,15 @@ export function OverlayCard() {
   const [parameter, setParameter] = createSignal("all")
 
   return (
-    <div class={styles['overlay-card']}>
-      <section class={styles['filter-section']}>
-        <header class={styles['filter-section__header']}>
-          <div class={styles['card-title']}>
+    <div class='overlay-card'>
+      <section class='filter-section'>
+        <header class='filter-section__header'>
+          <div class='card-title'>
             <img src="/svgs/filter_white.svg" alt="filter icon" />
             <h3>Filters</h3>
           </div>
         </header>
-        <div class={styles['pollutant-select']}>
+        <div class='pollutant-select'>
           <label for="parameter-select" class="type-subtitle-2">Choose a pollutant</label>
           <select
             class="select"
@@ -54,11 +56,11 @@ export function OverlayCard() {
         <span class="type-subtitle-2">Choose location type</span>
 
    
-        <div class={styles['filter-section__body']}>
+        <div class='filter-section__body'>
 
           <ReferenceGradeMarker />
           <label
-            class={styles['marker-legend-item']}
+            class='marker-legend-item'
             for="reference-grade"
           >
             <span>Reference monitor locations</span>
@@ -74,7 +76,7 @@ export function OverlayCard() {
           </label>
           <LowCostSensorMarker />
           <label
-            class={styles['marker-legend-item']}
+            class='marker-legend-item'
             for="low-cost-sensor"
           >
             Air sensors locations
@@ -90,7 +92,7 @@ export function OverlayCard() {
           </label>
           <NoRecentUpdateMarker />
           <label
-            class={styles['marker-legend-item']}
+            class='marker-legend-item'
             for="no-recent-updates"
           >
             Show locations with no recent updates
@@ -106,7 +108,7 @@ export function OverlayCard() {
           </div>
           </div>
       </section>
-      <footer class={styles['overlay-card__footer']}>
+      <footer class='overlay-card__footer'>
         <span class="type-body-1">
           Showing data from{' '}
           {store.providers.length == 0

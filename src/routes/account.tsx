@@ -1,11 +1,10 @@
 import { getUser } from '~/db';
-import {Toast } from '~/components/Toast';
+import { Toast } from '~/components/Toast';
 import { createAsync } from '@solidjs/router';
-import { Header } from '~/components/Header';
 import { PasswordForm } from '~/components/Account/PasswordForm';
 import { ApiKeyRegenerateConfirmModal } from '~/components/Modals/ApiKeyRegenerateConfirmModal';
-import style from './Account.module.scss';
 import { useStore } from '~/stores';
+import { Header } from '~/components/Header';
 
 export const route = {
   load: () => getUser(),
@@ -17,20 +16,18 @@ function copyApiKey(token: string) {
 
 export default function Acount() {
   const user = createAsync(() => getUser(), { deferStream: true });
-  const [store, {openToast, toggleRegenerateKeyModalOpen}] = useStore();
-
+  const [store, { openToast, toggleRegenerateKeyModalOpen }] =
+    useStore();
 
   return (
     <>
       <Header />
-      <main class={style['account-page']}>
-        <ApiKeyRegenerateConfirmModal
-          usersId={user()?.usersId!}
-        />
+      <main class="account-page">
+        <ApiKeyRegenerateConfirmModal usersId={user()?.usersId!} />
         <h1 class="type-display-1 text-sky-120">OpenAQ Account</h1>
-        <section class={style['account-page__section']}>
+        <section class="account-page__section">
           <h2 class="type-heading-2  text-sky-120">Basics</h2>
-          <div class={style['form-element']}>
+          <div class="form-element">
             <label for="name">Name</label>
             <input
               type="text"
@@ -41,7 +38,7 @@ export default function Acount() {
             />
           </div>
 
-          <div class={style['form-element']}>
+          <div class="form-element">
             <label for="name">Email</label>
             <input
               type="email"
@@ -52,21 +49,19 @@ export default function Acount() {
             />
           </div>
         </section>
-        <section class={style['account-page__section']}>
+        <section class="account-page__section">
           {' '}
-          <h2 class="type-heading-2  text-sky-120">
-            Change password
-          </h2>
+          <h2 class="type-heading-2 text-sky-120">Change password</h2>
           <PasswordForm />
         </section>
-        <section class={style['account-page__section']}>
-            <h2 class="type-heading-2 text-sky-120">API Key</h2>
-            <input class="text-input" value={user()?.token}></input>
-            <div class={style['api-key-buttons']}>
+        <section class="account-page__section">
+          <h2 class="type-heading-2 text-sky-120">API Key</h2>
+          <input class="text-input" value={user()?.token}></input>
+          <div class="api-key-buttons">
             <button
               class="btn btn-primary"
               onClick={() => {
-                copyApiKey(user()?.token)
+                copyApiKey(user()?.token!);
                 openToast();
               }}
             >
@@ -75,12 +70,12 @@ export default function Acount() {
             <button
               class="btn btn-primary"
               onClick={() => toggleRegenerateKeyModalOpen()}
-              >
+            >
               Regenerate
             </button>
-            </div>
+          </div>
         </section>
-        <Toast message={'API Key copied to clipboard'}/>
+        <Toast message={'API Key copied to clipboard'} />
       </main>
     </>
   );

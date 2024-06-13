@@ -1,6 +1,6 @@
 import { useSearchParams } from '@solidjs/router';
 import { Header } from '~/components/Header';
-import style from './VerifyEmail.module.scss';
+import '~/assets/scss/routes/verify-email.scss';
 
 export default function VerifyEmail() {
   const [searchParams] = useSearchParams();
@@ -8,7 +8,7 @@ export default function VerifyEmail() {
   return (
     <>
       <Header />
-      <main class={style['main']}>
+      <main class="main">
         <h1 class="type-heading-1 text-sky-120">Verify your email</h1>
         <p class="type-body-1">
           We just sent an email to{' '}
@@ -19,8 +19,8 @@ export default function VerifyEmail() {
           account.
         </p>
         <div></div>
-        <div class={style['bubble-lg']} />
-        <div class={style['bubble-sm']} />
+        <div class="bubble-lg" />
+        <div class="bubble-sm" />
       </main>
     </>
   );

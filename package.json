@@ -3,6 +3,7 @@
   "scripts": {
     "dev": "vinxi dev",
     "build": "vinxi build",
+    "build-node": "vinxi build --config app.config.node.ts",
     "start": "node ./.output/server/index.mjs",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest"
   },
@@ -13,7 +14,9 @@
     "@types/d3": "^7.4.3",
     "@types/events": "^3.0.3",
     "@types/node": "^20.11.19",
-    "postcss": "^8.4.28",
+    "autoprefixer": "^10.4.19",
+    "lightningcss": "^1.25.1",
+    "postcss": "^8.4.38",
     "sass": "^1.69.5",
     "ts-jest": "^29.1.1"
   },
@@ -24,7 +27,7 @@
     "@maplibre/maplibre-gl-geocoder": "^1.5.0",
     "@solidjs/meta": "^0.29.4",
     "@solidjs/router": "^0.13.3",
-    "@solidjs/start": "^1.0.0",
+    "@solidjs/start": "^1.0.1",
     "@turf/bbox": "^6.5.0",
     "@turf/destination": "^6.5.0",
     "@turf/helpers": "^6.5.0",

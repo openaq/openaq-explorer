@@ -1,0 +1,15 @@
+@use '~/assets/scss/media-queries.scss' as f;
+
+.location-main {
+  margin: 30px 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+
+  @include f.respond(medium) {
+    margin: 30px 0px;
+  }
+  @include f.respond(small) {
+    margin: 30px 0px;
+  }
+}

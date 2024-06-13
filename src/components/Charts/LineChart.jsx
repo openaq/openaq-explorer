@@ -21,10 +21,11 @@ import {
 } from 'd3';
 
 import { createSignal, Show, For, createEffect } from 'solid-js';
-import style from './LineChart.module.scss';
 import dayjs from 'dayjs';
 import tz from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
+
+import '~/assets/scss/components/line-chart.scss';
 
 dayjs.extend(utc);
 dayjs.extend(tz);
@@ -175,17 +176,17 @@ export default function LineChart(props) {
     <>
       <div style={{ position: 'relative' }}>
         <div
-          class={style['line-chart-tooltip']}
+          class="line-chart-tooltip"
           style={{
             display: tooltipValue()?.visible ? 'flex' : 'none',
             left: `${tooltipValue()?.x - 65}px`,
             top: `${tooltipValue()?.y + 5}px`,
           }}
         >
-          <span class={style['line-chart-tooltip__value']}>
+          <span class="line-chart-tooltip__value">
             {tooltipValue()?.value}
           </span>{' '}
-          <span class={style['line-chart-tooltip__unit']}>
+          <span class="line-chart-tooltip__unit">
             {tooltipValue()?.unit}
           </span>
         </div>
@@ -231,7 +232,7 @@ export default function LineChart(props) {
             <For each={splitMeasurements(props.data, props.timezone)}>
               {(d) => (
                 <path
-                  class={style['line-chart-area']}
+                  class="line-chart-area"
                   d={area(
                     xScale(props.width, props.dateFrom, props.dateTo),
                     yScale(props.scale, props.height, props.data)
@@ -241,7 +242,7 @@ export default function LineChart(props) {
             </For>
           </g>
           <g
-            class={style['grid']}
+            class="grid"
             transform={`translate(${props.margin / 2} ${
               props.margin / 2
             } )`}
@@ -255,7 +256,7 @@ export default function LineChart(props) {
             <For each={splitMeasurements(props.data)}>
               {(lineData) => (
                 <path
-                  class={style['line-chart-line']}
+                  class="line-chart-line"
                   d={line(
                     xScale(props.width, props.dateFrom, props.dateTo),
                     yScale(props.scale, props.height, props.data)
@@ -273,7 +274,7 @@ export default function LineChart(props) {
                 stroke-width={1}
               />
               <circle
-                class={style['line-chart-point-highlight']}
+                class="line-chart-point-highlight"
                 cx={tooltipValue()?.x}
                 cy={tooltipValue()?.y}
                 r={9}
@@ -300,7 +301,7 @@ export default function LineChart(props) {
             >
               {(item) => (
                 <circle
-                  class={style['line-chart-point']}
+                  class="line-chart-point"
                   cx={item.cx}
                   cy={item.cy}
                   r={item.cx == tooltipValue()?.x ? 5 : 3}
@@ -345,14 +346,14 @@ export default function LineChart(props) {
             </Show>
           </g>
           <g
-            class={style['y-axis']}
+            class="y-axis"
             transform={`translate(${props.margin / 2} ${
               props.margin / 2
             })`}
             ref={yAxisRef}
           />
           <g
-            class={style['x-axis']}
+            class="x-axis"
             transform={`translate(${props.margin / 2} ${
               props.height + props.margin / 2
             })`}

@@ -1,0 +1,56 @@
+@use 'openaq-design-system/scss/variables';
+@use 'openaq-design-system/scss/mixins/index.scss' as mixins;
+
+.modal {
+  width: 600px;
+  border: none;
+  border-radius: 20px;
+  padding: 0;
+  box-shadow: 0px 7px 20px 0px #00000026;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: variables.$lavender120;
+
+    .title {
+      @include mixins.heading3(white);
+
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    h2 {
+      margin: 0;
+      color: white;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      outline: inherit;
+    }
+  }
+
+  &__body {
+    padding: 30px;
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: end;
+    gap: 8px;
+    padding: 20px;
+    border-top: 1px solid variables.$ocean10;
+  }
+}
+
+.form-input {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}

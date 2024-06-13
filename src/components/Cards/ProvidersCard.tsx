@@ -1,6 +1,5 @@
 import { useStore } from '~/stores';
 
-import style from './ProvidersCard.module.scss';
 import {
   For,
   Show,
@@ -11,6 +10,9 @@ import { getProviders } from '~/client';
 import MiniSearch from 'minisearch';
 import bbox from '@turf/bbox';
 import { createStore, produce } from 'solid-js/store';
+
+import '~/assets/scss/components/providers-card.scss';
+
 
 interface ProvidersStoreDefinition {
   name: string;
@@ -117,8 +119,8 @@ export function ProvidersCard() {
   }
 
   return (
-    <div class={style['providers-card']}>
-      <header class={style['providers-card__header']}>
+    <div class="providers-card">
+      <header class="providers-card__header">
         <img
           src="/svgs/arrow_left_white.svg"
           alt=""
@@ -126,9 +128,9 @@ export function ProvidersCard() {
         />
         <h3 class="type-heading-3 text-white">Data providers</h3>
       </header>
-      <div class={style['providers-card__body']}>
-        <div class={style['list-header']}>
-          <div class={style['select-helpers']}>
+      <div class="providers-card__body">
+        <div class="list-header">
+          <div class="select-helpers">
             <button
               class="button-reset type-link-1 providers-list-select-all"
               onClick={() =>
@@ -169,7 +171,7 @@ export function ProvidersCard() {
             type="text"
             name="search-input"
             id="search-input"
-            class={style['search-input']}
+            class="search-input"
             onInput={(e) => onSearchInput(e)}
           />
           <span>
@@ -182,15 +184,15 @@ export function ProvidersCard() {
                 } of ${count()} providers`}
           </span>
         </div>
-        <div class={style['list-container']}>
-          <ul class={style['providers-list']}>
+        <div class="list-container">
+          <ul class="providers-list">
             <For
               each={selectedProviders.filter((o) => o.matchesQuery)}
             >
               {(provider, i) => {
                 if (provider.matchesQuery) {
                   return (
-                    <li class={style['providers-list-item']}>
+                    <li class="providers-list-item">
                       <label
                         for={`${provider.name}-checkbox`}
                         class="type-body-1 text-smoke-120"
@@ -220,7 +222,7 @@ export function ProvidersCard() {
           </ul>
         </div>
       </div>
-      <footer class={style['providers-card__footer']}>
+      <footer class="providers-card__footer">
         <button
           class={`btn btn-primary ${
             selectedProviders.filter((o) => o.checked).length > 0

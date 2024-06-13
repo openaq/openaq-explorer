@@ -1,0 +1,13 @@
+@use 'openaq-design-system/scss/variables';
+
+.detail-map-container {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid variables.$smoke30;
+  background-color: #7fd2ce;
+
+  .detail-map {
+    height: 270px;
+    width: 100%;
+  }
+}
