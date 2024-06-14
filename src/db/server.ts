@@ -7,7 +7,7 @@ import { db } from './db';
 import crypto from 'crypto';
 import { promisify } from 'util';
 import { Buffer } from 'buffer';
-import { encode, passlibify } from '~/lib/auth';
+import { encode, passlibify, verify } from '~/lib/auth';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import {validatePassword} from '~/lib/password';
@@ -31,6 +31,7 @@ async function checkPassword(password: string, hash: string) {
     32,
     parts[1].split('-')[1]
   );
+
   const hashedPasswordB64 = passlibify(hashedPassword);
   return parts[4] == hashedPasswordB64;
 }
@@ -253,7 +254,7 @@ export async function login(formData: FormData) {
     if (!user[0].active) {
       throw redirect('/verify-email');
     }
-    const isCorrectPassword = await checkPassword(
+    const isCorrectPassword = await verify(
       password,
       user[0].passwordHash
     );
@@ -390,7 +391,6 @@ export async function regenerateKey(formData: FormData) {
     const url = new URL(import.meta.env.VITE_API_BASE_URL);
     url.pathname = `/auth/regenerate-token`;
     const data = { usersId: usersId, token: user[0].token }
-    console.log("data",data)
     const res = await fetch(url.href, {
       method: "POST",
       headers: {
@@ -400,7 +400,6 @@ export async function regenerateKey(formData: FormData) {
       body: JSON.stringify(data)
     });
     const d = await res.json()
-    console.log("res",d)
   } catch (err) {
     return err as Error;
   }

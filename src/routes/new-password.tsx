@@ -8,6 +8,7 @@ import '~/assets/scss/routes/new-password.scss';
 import { Header } from '~/components/Header';
 import { Score } from '@zxcvbn-ts/core/dist/types';
 
+
 export default function VerifyEmail() {
   const [searchParams] = useSearchParams();
   const settingNewPassword = useSubmission(forgotPasswordAction);
@@ -126,6 +127,6 @@ export default function VerifyEmail() {
         <div class="bubble-lg" />
         <div class="bubble-sm" />
       </main>
-    </>
+      </>
   );
 }
