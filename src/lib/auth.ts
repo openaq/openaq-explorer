@@ -17,9 +17,7 @@ export function passlibify(passhwordHash: Buffer): string {
 export function depasslibifySalt(salt: string): Buffer {
   'use server';
 
-  const b64Salt =
-    salt.replace(/\./g, '+') + '='.repeat(salt.length % 3);
-  const buf = Buffer.from(b64Salt, 'base64');
+  const buf = Buffer.from(salt, 'base64');
   return buf;
 }
 
@@ -38,10 +36,9 @@ function generateSalt(): string {
   return salt;
 }
 
-export async function encode(password: string): Promise<string> {
+export async function encode(password: string, salt?: string): Promise<string> {
   'use server';
-
-  const salt = generateSalt();
+  salt = salt || generateSalt();
   const encodedSalt = Buffer.from(salt, 'base64');
   const iterations = 29000;
   const digest = 'sha256';
@@ -88,7 +85,7 @@ export async function verify(
   );
   const hashedPassword = await pbkdf2Async(
     password,
-    depasslibifySalt(salt),
+    Buffer.from(salt, 'base64'),
     iterations,
     32,
     digest
