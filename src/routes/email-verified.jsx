@@ -1,12 +1,12 @@
 import { A } from '@solidjs/router';
 import { Header } from '~/components/Header';
-import style from './EmailVerified.module.scss';
+import '~/assets/scss/routes/email-verified.scss';
 
 export default function EmailVerified() {
   return (
     <>
       <Header />
-      <main class={style['main']}>
+      <main class="main">
         <h1 class="type-heading-1 text-sky-120">
           Email address verified
         </h1>
@@ -20,8 +20,8 @@ export default function EmailVerified() {
           </A>{' '}
           to your account
         </p>
-        <div class={style['bubble-lg']} />
-        <div class={style['bubble-sm']} />
+        <div class="bubble-lg" />
+        <div class="bubble-sm" />
       </main>
     </>
   );

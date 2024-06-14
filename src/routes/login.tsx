@@ -1,31 +1,31 @@
 import { Show } from 'solid-js';
-import {
-  A,
-  useSubmission,
-  useSearchParams,
-} from '@solidjs/router';
+import { A, useSubmission, useSearchParams } from '@solidjs/router';
 import { loginAction } from '~/db';
-import { Header } from '~/components/Header';
 import { getUser } from '~/db';
-import style from './Login.module.scss'
+import '~/assets/scss/routes/login.scss';
+import { Header } from '~/components/Header';
 
 export const route = {
   load: () => getUser(),
 };
 
 export default function Login() {
-  const [searchParams] = useSearchParams()
+  const [searchParams] = useSearchParams();
 
   const loggingIn = useSubmission(loginAction);
-
-
 
   return (
     <>
       <Header />
+
       <main class="login-page">
         <h1 class="type-display-1 text-sky-120">Login</h1>
-        <form action={loginAction} class="login-form" method="post" enctype='multipart/form-data'>
+        <form
+          action={loginAction}
+          class="login-form"
+          method="post"
+          enctype="multipart/form-data"
+        >
           <input
             type="hidden"
             name="redirect"
@@ -38,7 +38,11 @@ export default function Login() {
             >
               Email Address
             </label>
-            <input name="email-address" class="text-input" type="email" />
+            <input
+              name="email-address"
+              class="text-input"
+              type="email"
+            />
           </div>
           <div class="form-element">
             <label
@@ -54,7 +58,7 @@ export default function Login() {
             />
           </div>
           <div class="form-element-row">
-          <input
+            <input
               type="checkbox"
               name="remember-me"
               id="remember-me"
@@ -66,11 +70,11 @@ export default function Login() {
             >
               Remember me for 30 days
             </label>
-
           </div>
           <Show when={loggingIn.result}>
-            <p role="alert" id="error-message" class={style['error-message']}>
-              <img src="/svgs/error_fire100.svg" alt="error icon" />{loggingIn.result!.message}
+            <p role="alert" id="error-message" class="error-message">
+              <img src="/svgs/error_fire100.svg" alt="error icon" />
+              {loggingIn.result!.message}
             </p>
           </Show>
           <div class="form-element">
@@ -91,15 +95,20 @@ export default function Login() {
         <div>
           <span class="type-subtitle-3 text-sky-120">
             Forgot your password?{' '}
-            <A class="type-link-3 text-sky-120" href="/forgot-password">
+            <A
+              class="type-link-3 text-sky-120"
+              href="/forgot-password"
+            >
               Reset password
             </A>
           </span>
         </div>
 
         <div>
-          <p style="width: 500px;" class="type-body-3 text-sky-120">
-            If you had previously registered for an OpenAQ API key you already have an OpenAQ Explorer account! use the email and password you previously signed up with to get started.
+          <p class="info-message">
+            If you had previously registered for an OpenAQ API key you
+            already have an OpenAQ Explorer account! use the email and
+            password you previously signed up with to get started.
           </p>
         </div>
       </main>

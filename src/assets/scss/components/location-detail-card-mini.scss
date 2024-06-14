@@ -1,0 +1,83 @@
+@use 'openaq-design-system/scss/mixins/index' as mixins;
+@use 'openaq-design-system/scss/variables';
+@use '~/assets/scss/cards';
+
+.location-detail-card-mini {
+  @extend .dismissable-card;
+  background-color: white;
+  width: 280px;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  bottom: 20px;
+  right: 48px;
+  height: calc(100vh - 350px);
+  border: 6px solid variables.$ocean10;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 7px 20px #00000026;
+
+  &--translate {
+    @extend .dismissable-card--translate;
+  }
+
+  &__header {
+    background-color: variables.$sky120;
+    display: flex;
+    justify-content: space-between;
+    padding: 11px 20px;
+  }
+
+  &__body {
+    flex: 1;
+    overflow-y: scroll;
+
+    .section {
+      padding: 12px 20px;
+      border-bottom: 1px dashed variables.$smoke30;
+    }
+    .section-grid {
+      @extend .section;
+      display: grid;
+      row-gap: 10px;
+      column-gap: 10px;
+      grid-template-columns: 1fr 2fr;
+
+      .reporting-cell {
+        display: flex;
+        flex-direction: column;
+      }
+    }
+  }
+
+  &__footer {
+    display: flex;
+    flex-direction: column;
+    min-height: 45px;
+    padding: 20px;
+    gap: 15px;
+    border-top: 1px dashed variables.$smoke30;
+  }
+}
+
+.close-btn {
+  border: none;
+  margin: 0;
+  padding: 0;
+  width: auto;
+  overflow: visible;
+
+  background: transparent;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+
+  line-height: normal;
+
+  -webkit-font-smoothing: inherit;
+  -moz-osx-font-smoothing: inherit;
+  appearance: none;
+
+  -webkit-appearance: none;
+}

@@ -1,0 +1,59 @@
+name: Build and deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+    deploy:
+        name: Build application
+        if: "!contains(github.event.head_commit.message, 'ci skip')"
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+        
+            - name: Use Node.js 20
+              uses: actions/setup-node@v4
+              with:
+                node-version: 20
+            
+            - name: Install dependencies
+              run: npm install --frozen-lockfile
+
+            - name: Build app
+              run: npm run build
+              env:
+                VITE_SESSION_SECRET: ${{ secrets.VITE_SESSION_SECRET }}
+                VITE_DB_HOST: ${{ secrets.VITE_DB_HOST }}
+                VITE_DB_PORT: ${{ secrets.VITE_DB_PORT }}
+                VITE_DB_DATABASE: ${{ secrets.VITE_DB_DATABASE }}
+                VITE_DB_USER: ${{ secrets.VITE_DB_USER }}
+                VITE_DB_PASSWORD: ${{ secrets.VITE_DB_PASSWORD }}
+                VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+                VITE_MAP_STYLE: ${{ secrets.VITE_MAP_STYLE }}
+                VITE_TILES_URL: ${{ secrets.VITE_TILES_URL }}
+                VITE_TILES_API_KEY: ${{ secrets.VITE_TILES_API_KEY }}
+                VITE_EXPLORER_API_KEY: ${{ secrets.VITE_EXPLORER_API_KEY }}
+                VITE_GEOCODE_URL: ${{ secrets.VITE_GEOCODE_URL }}
+                VITE_GEOCDE_API_KEY: ${{ secrets.VITE_GEOCDE_API_KEY }}
+                VITE_ENV: ${{ secrets.VITE_ENV }}
+
+            - name: Configure aws credentials
+              uses: aws-actions/configure-aws-credentials@master
+              with:
+                aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_PROD }}
+                aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY_PROD }}
+                aws-region: ${{ secrets.AWS_REGION }}
+
+            - name: Deploy stack
+              working-directory: ./cdk
+              run: |
+                  npm install 
+                  cdk deploy ExplorerLambdaStack --require-approval never 
+              env:
+                HOSTED_ZONE_ID: ${{ secrets.HOSTED_ZONE_ID }}
+                HOSTED_ZONE_NAME: ${{ secrets.HOSTED_ZONE_NAME }}
+                DOMAIN_NAME: ${{ secrets.DOMAIN_NAME }}
+                CERTIFICATE_ARN: ${{ secrets.CERTIFICATE_ARN }}
+                ENV_NAME: ${{ secrets.ENV_NAME }}

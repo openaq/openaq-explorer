@@ -187,6 +187,7 @@ export const StoreProvider: Component<{}> = (props) => {
   );
 };
 
+
 export function useStore() {
   return useContext(StoreContext);
 }

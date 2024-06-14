@@ -1,8 +1,9 @@
 import { useSearchParams, useSubmission } from '@solidjs/router';
 import { forgotPasswordAction } from '~/db';
+import { Show } from 'solid-js';
+
+import '~/assets/scss/routes/new-password.scss';
 import { Header } from '~/components/Header';
-import style from './NewPassword.module.scss';
-import { For, Show } from 'solid-js';
 
 export default function VerifyEmail() {
   const [searchParams] = useSearchParams();
@@ -11,17 +12,17 @@ export default function VerifyEmail() {
   return (
     <>
       <Header />
-      <main class={style['main']}>
+      <main class='main'>
         <h1 class="type-heading-1 text-sky-120">
           Forgot your password?
         </h1>
         <form
           action={forgotPasswordAction}
           method="post"
-          class={style['new-password-form']}
+          class='new-password-form'
         >
           <input type="hidden" name="verification-code" value={searchParams.code} />
-          <div class={style['form-element']}>
+          <div class='form-element'>
             <label for="new-password">New password</label>
             <input
               class="text-input"
@@ -29,7 +30,7 @@ export default function VerifyEmail() {
               name="new-password"
             />
           </div>
-          <div class={style['form-element']}>
+          <div class='form-element'>
             <label for="confirm-new-password">
               Confirm new password
             </label>
@@ -43,7 +44,7 @@ export default function VerifyEmail() {
             <p
               role="alert"
               id="error-message"
-              class={style['error-message']}
+              class='error-message'
             >
               <img src="/svgs/error_fire100.svg" alt="error icon" />
               {settingNewPassword.result!.message}
@@ -53,9 +54,9 @@ export default function VerifyEmail() {
             Submit
           </button>
         </form>
-        <div class={style['bubble-lg']} />
-        <div class={style['bubble-sm']} />
+        <div class='bubble-lg' />
+        <div class='bubble-sm' />
       </main>
-    </>
+      </>
   );
 }

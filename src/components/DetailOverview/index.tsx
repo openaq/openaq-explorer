@@ -1,16 +1,18 @@
-import { For, Show, createSignal } from 'solid-js';
+import { For, Show } from 'solid-js';
 import { A, createAsync, useLocation } from '@solidjs/router';
 import {
   LowCostSensorMarker,
   ReferenceGradeMarker,
 } from '../LocationMarker';
-import style from './DetailOverview.module.scss';
 import { getUser } from '~/db';
-import { clientOnly } from '@solidjs/start';
 import { timeFromNow, since } from '~/lib/utils';
 import { ListsForm } from '../Cards/ListsForm';
 
-const DetailMap = clientOnly(() => import('~/components/DetailMap'));
+import {DetailMap} from '~/components/DetailMap';
+
+
+import '~/assets/scss/components/detail-overview.scss';
+
 
 interface SensorsDefinition {
   name: string;
@@ -70,18 +72,13 @@ interface DetailOverviewDefinition {
   lists: any[];
 }
 
-interface LocationsListDefinition {
-  locationsId: number;
-  lists: any[];
-}
-
 interface SensorTypeDefintion {
   isMonitor: boolean;
 }
 
 function SensorType(props: SensorTypeDefintion) {
   return (
-    <div class={` ${style['location-type']}`}>
+    <div class='location-type'>
       <span class="type-body-3">
         {props.isMonitor ? 'Reference grade' : 'Air sensor'}
       </span>
@@ -129,8 +126,8 @@ export function DetailOverview(props: DetailOverviewDefinition) {
 
 
   return (
-    <section class={style['detail-overview']}>
-      <div class={style['detail-overview__title']}>
+    <section class='detail-overview'>
+      <div class='detail-overview__title'>
         <div>
           <span class="type-subtitle-3 text-smoke-120">
             {props.country?.name}
@@ -140,21 +137,21 @@ export function DetailOverview(props: DetailOverviewDefinition) {
         <div>
           <a
             href="#download-card"
-            class={`icon-btn btn-tertiary ${style['download-anchor']}`}
+            class='icon-btn btn-tertiary download-anchor'
           >
             Download data
             <img src="/svgs/download_ocean.svg" alt="" />
           </a>
         </div>
       </div>
-      <div class={style['detail-overview__body']}>
-        <div class={style['location-map']}>
+      <div class='detail-overview__body'>
+        <div class='location-map'>
           <DetailMap coordinates={props.coordinates} />
         </div>
-        <div class={style.divider}> </div>
-        <div class={style['location-characteristics']}>
+        <div class='divider'> </div>
+        <div class='location-characteristics'>
           <h3>CHARACTERISTICS</h3>
-          <table class={style['characteristics-table']}>
+          <table class='characteristics-table'>
             <tbody>
               <tr>
                 <td>Type</td>{' '}
@@ -204,18 +201,18 @@ export function DetailOverview(props: DetailOverviewDefinition) {
             </tbody>
           </table>
         </div>
-        <div class={style.divider}> </div>
-        <div class={style['location-lists']}>
+        <div class='divider'> </div>
+        <div class='location-lists'>
           <h3 class="type-subtitle-3 text-smoke-180">LISTS</h3>
           <Show
             when={user() && props.lists}
             fallback={<LocationListsFallback />}
           >
-            <ul class={style['lists-list']}>
+            <ul class='lists-list'>
               <For each={props.lists}>
                 {(list, i) => (
                   <A
-                    class={style['list-link']}
+                    class='list-link'
                     href={`/lists/${list.listsId}`}
                   >
                     <li class="btn btn-tertiary">{list.label}</li>
@@ -223,7 +220,6 @@ export function DetailOverview(props: DetailOverviewDefinition) {
                 )}
               </For>
               <ListsForm redirect={pageLocation.pathname}/>
-              {/* <LocationLists locationsId={props.id} /> */}
             </ul>
           </Show>
         </div>

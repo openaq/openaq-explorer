@@ -1,10 +1,11 @@
 import { Show, createEffect, createSignal } from 'solid-js';
-import style from './TabView.module.scss';
-import { ListMap } from '../ListMap';
-import { LocationList } from '../LocationList';
-import { LocationDetailCardMini } from '../Cards/LocationDetailCardMini';
-import { A } from '@solidjs/router';
-import { useStore } from '../../stores';
+import { ListMap } from '~/components/ListMap';
+import { LocationList } from '~/components/LocationList';
+import { LocationDetailCardMini } from '~/components/Cards/LocationDetailCardMini';
+import { useStore } from '~/stores';
+
+import '~/assets/scss/components/tab-view.scss';
+
 
 interface TabViewDefintion {
   locations: any[];
@@ -32,20 +33,20 @@ export function TabView(props: TabViewDefintion) {
   });
 
   return (
-    <div class={style['tab-view']}>
-      <header class={style['tab-view__header']}>
-        <nav class={style['tab-nav']}>
+    <div class='tab-view'>
+      <header class='tab-view__header'>
+        <nav class='tab-nav'>
           <a href="#" onClick={() => setActiveTab('list')}>
             <div
-              class={`${style['tab']} ${
-                activeTab() == 'list' ? style['tab--active'] : ''
+              class={`tab ${
+                activeTab() == 'list' ? 'tab--active' : ''
               }`}
             >
               <img
                 src="/svgs/view_list_black.svg"
-                class={`${style['tab-icon']} ${
+                class={`tab-icon ${
                   activeTab() == 'list'
-                    ? style['tab-icon--active']
+                    ? 'tab-icon--active'
                     : ''
                 }`}
                 alt=""
@@ -55,15 +56,15 @@ export function TabView(props: TabViewDefintion) {
           </a>
           <a href="#" onClick={() => setActiveTab('map')}>
             <div
-              class={`${style['tab']} ${
-                activeTab() == 'map' ? style['tab--active'] : ''
+              class={`tab ${
+                activeTab() == 'map' ? 'tab--active' : ''
               }`}
             >
               <img
                 src="/svgs/map_black.svg"
-                class={`${style['tab-icon']} ${
+                class={`$'tab-icon' ${
                   activeTab() == 'map'
-                    ? style['tab-icon--active']
+                    ? 'tab-icon--active'
                     : ''
                 }`}
                 alt="map icon"
@@ -75,7 +76,7 @@ export function TabView(props: TabViewDefintion) {
         <Show
           when={activeTab() == 'list' && props.locations.length > 0}
         >
-          <div class={style['list-controls']}>
+          <div class='list-controls'>
             <label for="parameter-select">Parameters</label>
             <select
               name="parameter-select"

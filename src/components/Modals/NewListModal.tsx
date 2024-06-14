@@ -1,8 +1,8 @@
 import { useSubmission } from '@solidjs/router';
-import style from './NewListModal.module.scss';
 import { newListAction } from '~/db';
 import { JSX, Show, createEffect } from 'solid-js';
 import { useStore } from '~/stores';
+import '~/assets/scss/components/modal.scss';
 
 interface NewListModalDefinition {
   usersId: number;
@@ -35,13 +35,13 @@ export function NewListModal(props: NewListModalDefinition) {
     <dialog class="modal" ref={ref}>
       <form action={newListAction} method="post">
         <header class="modal__header">
-          <h2 class={style['title']}>
+          <h2 class='title'>
             <img src="/svgs/add_white.svg" alt="add icon" />
             New list
           </h2>
           <button
             id="close"
-            class={style['close-btn']}
+            class='close-btn'
             aria-label="close"
             formnovalidate
             onClick={onClickClose}
@@ -51,7 +51,7 @@ export function NewListModal(props: NewListModalDefinition) {
         </header>
 
         <div class="modal__body">
-          <div class={style['form-input']}>
+          <div class='form-input'>
             <input
               type="hidden"
               name="users-id"
@@ -59,7 +59,7 @@ export function NewListModal(props: NewListModalDefinition) {
             />
             <label for="list-name">Name</label>
 
-            <div class={style['form-input']}>
+            <div class='form-input'>
               <input
                 type="text"
                 name="list-name"

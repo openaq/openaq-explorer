@@ -177,7 +177,7 @@ export async function sensorNodesLists(
     );
     return lists;
   } catch {
-    throw new Error('Foo');
+    throw new Error('');
   }
 }
 

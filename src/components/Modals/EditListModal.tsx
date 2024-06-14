@@ -1,8 +1,8 @@
 import { useSubmission } from '@solidjs/router';
-import style from './EditListModal.module.scss';
 import { updateListAction } from '~/db';
 import { JSX, Show, createEffect } from 'solid-js';
 import { useStore } from '~/stores';
+import '~/assets/scss/components/modal.scss';
 
 interface EditListModalDefinition {
   listsId: number;
@@ -43,13 +43,13 @@ export function EditListModal(props: EditListModalDefinition) {
       <form action={updateListAction} method="post">
         <input type="hidden" name="lists-id" value={props.listsId} />
         <header class="modal__header">
-          <h2 class={style['title']}>
+          <h2 class='title'>
             <img src="/svgs/edit_white.svg" alt="add icon" />
             Edit list
           </h2>
           <button
             id="close"
-            class={style['close-btn']}
+            class='close-btn'
             aria-label="close"
             formnovalidate
             onClick={onClickClose}
@@ -59,10 +59,10 @@ export function EditListModal(props: EditListModalDefinition) {
         </header>
 
         <div class="modal__body">
-          <div class={style['form-input']}>
+          <div class='form-input'>
             <label for="list-name">Name</label>
 
-            <div class={style['form-input']}>
+            <div class='form-input'>
               <input
                 type="text"
                 name="list-name"

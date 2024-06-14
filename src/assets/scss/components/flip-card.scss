@@ -1,0 +1,55 @@
+@use '~/assets/scss/cards';
+@use '~/assets/scss/media-queries.scss' as f;
+
+.flip-card {
+  @extend .dismissable-card;
+
+  width: 300px;
+  position: absolute;
+  top: 100px;
+  right: 48px;
+  background-color: transparent;
+  perspective: 3000px;
+
+  &--translate {
+    @extend .dismissable-card--translate;
+  }
+
+  @include f.respond(medium) {
+    display: none;
+  }
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  text-align: center;
+}
+
+.flip-card--active .flip-card-inner {
+  transform: rotateY(180deg);
+
+  .flip-card-front {
+    pointer-events: none;
+  }
+}
+
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  backface-visibility: hidden;
+}
+
+.flip-card-front {
+  color: black;
+}
+
+.flip-card-back {
+  transform: rotateY(180deg);
+}

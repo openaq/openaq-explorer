@@ -8,9 +8,11 @@ import * as maplibre from 'maplibre-gl';
 import { createSignal } from 'solid-js';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
-import styles from './ListMap.module.scss';
 import destination from '@turf/destination';
 import { useStore } from '~/stores';
+
+import '~/assets/scss/components/list-map.scss';
+
 
 interface ListDefinition {
   listsId: number;
@@ -57,7 +59,7 @@ export function ListMap(props: ListMapDefinition) {
 
   return (
     <MapGL
-      class={styles.map}
+      class="list-map"
       mapLib={maplibre}
       options={{
         accessToken: import.meta.env.VITE_MAPBOX_ACCESS_TOKEN,

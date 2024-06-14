@@ -1,0 +1,118 @@
+@use 'openaq-design-system/scss/variables';
+@use '~/assets/scss/media-queries.scss' as f;
+@use 'openaq-design-system/scss/mixins/index' as mixins;
+
+.location-list {
+  list-style: none;
+  padding: 0;
+
+  .location-list-item {
+    position: relative;
+    min-height: 200px;
+    border-radius: 22px;
+    border: 1px solid variables.$smoke10;
+    margin: 20px 0 0 0;
+    padding: 20px 0;
+
+    a {
+      text-decoration: none;
+
+      .location-info {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        margin: 0 0 0 20px;
+
+        &__title {
+          display: flex;
+          align-items: center;
+
+          h3 {
+            @include mixins.heading3(variables.$sky120);
+            margin-left: 20px;
+          }
+        }
+
+        .location-characteristics {
+          display: grid;
+          grid-template-columns: 1fr 4fr;
+          width: 400px;
+          row-gap: 6px;
+        }
+
+        &__body {
+          display: flex;
+          margin: 0 0 0 70px;
+          justify-content: space-between;
+          padding: 0 50px 0 0;
+
+          .locality {
+            @include mixins.subtitle3(variables.$smoke120);
+            margin-bottom: 12px;
+          }
+
+          .characteristics-table {
+            tbody {
+              tr {
+                td:nth-child(1) {
+                  @include mixins.body1(variables.$smoke100);
+                  width: 100px;
+                  height: 17px;
+                  padding-bottom: 6px;
+                }
+                td:nth-child(2) {
+                  @include mixins.body2(variables.$smoke100);
+                  height: 17px;
+                  padding-bottom: 6px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .location-card-delete-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      border: none;
+      margin: 0;
+      padding: 0;
+      width: auto;
+      overflow: visible;
+      cursor: pointer;
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      line-height: normal;
+      -webkit-font-smoothing: inherit;
+      -moz-osx-font-smoothing: inherit;
+    }
+  }
+}
+
+.latest-measurement {
+  display: flex;
+  flex-direction: column;
+  .parameter {
+    @include mixins.subtitle3(variables.$smoke120);
+    margin-left: auto;
+  }
+
+  .last-value {
+    display: flex;
+    align-items: end;
+  }
+}
+.value {
+  @include mixins.heading1(variables.$smoke100);
+}
+
+.units {
+  @include mixins.body1(variables.$smoke100);
+}
+
+.last-updated {
+  @include mixins.body2(variables.$smoke100);
+}

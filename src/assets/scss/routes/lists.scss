@@ -1,0 +1,27 @@
+.lists-main {
+  .header {
+    margin: 40px 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .title {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .list-length-alert {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+  }
+
+  .lists-list {
+    padding: 0;
+    margin: 0 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+}

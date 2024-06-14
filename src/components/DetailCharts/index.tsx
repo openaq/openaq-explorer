@@ -1,11 +1,13 @@
 import { For, createEffect, createSignal, onMount } from 'solid-js';
-import styles from './DetailCharts.module.scss';
 import { getSensorMeasurements, getSensorTrends } from '~/client';
 import LineChart from '../Charts/LineChart';
 import Boxplot from '../Charts/BoxPlot';
 import dayjs from 'dayjs';
 import tz from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
+
+import '~/assets/scss/components/detail-charts.scss';
+
 
 dayjs.extend(utc);
 dayjs.extend(tz);
@@ -174,14 +176,14 @@ export function DetailCharts(props: DetailChartsDefinition) {
   };
 
   return (
-    <section class={styles['detail-charts']}>
+    <section class='detail-charts'>
       <div>
-        <header class={styles['detail-charts__header']}>
-        <h1 class={styles.heading}>Latest Readings</h1>
+        <header class='detail-charts__header'>
+        <h1 class="heading">Latest Readings</h1>
         </header>
         
-        <div class={styles['chart-container']}>
-          <div class={styles['chart-controls']}>
+        <div class='chart-container'>
+          <div class='chart-controls'>
             <select
               name="sensor-select"
               id="sensor-select"
@@ -245,7 +247,7 @@ export function DetailCharts(props: DetailChartsDefinition) {
               timezone={props.timezone}
               noDataMessage={'  No data in selected time range'}
             />
-            <p class={styles.timezone}>
+            <p class="timezone">
               <img
                 src="/svgs/nest_clock_smoke120.svg"
                 alt="nest clock icon"
@@ -255,13 +257,13 @@ export function DetailCharts(props: DetailChartsDefinition) {
           </div>
         </div>
       </div>
-      <hr class={styles['horizontal-rule']} />
+      <hr class='horizontal-rule' />
       <div>
-      <header class={styles['detail-charts__header']}>
-        <h1 class={styles.heading}>Patterns</h1>
+      <header class='detail-charts__header'>
+        <h1 class='heading'>Patterns</h1>
         </header>
-        <div class={styles['chart-container']}>
-          <div class={styles['chart-controls']}>
+        <div class='chart-container'>
+          <div class='chart-controls'>
             <select
               name="sensor-select"
               id="sensor-select"
@@ -310,7 +312,7 @@ export function DetailCharts(props: DetailChartsDefinition) {
                 loading={patternsLoading()}
             />
             </div>
-            <p class={styles.timezone}>
+            <p class='timezone'>
               <img
                 src="/svgs/nest_clock_smoke120.svg"
                 alt="nest clock icon"

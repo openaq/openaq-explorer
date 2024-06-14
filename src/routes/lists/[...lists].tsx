@@ -1,13 +1,14 @@
-import { Header } from '~/components/Header';
 import { ListCard } from '~/components/ListCard';
 import { getUser, getUserLists } from '~/db';
 import { createAsync } from '@solidjs/router';
-import style from './Lists.module.scss';
 import { NewListModal } from '~/components/Modals/NewListModal';
 import { DeleteListModal } from '~/components/Modals/DeleteListModal';
-import { For, createSignal, onMount } from 'solid-js';
+import { For, createSignal } from 'solid-js';
 import { Show } from 'solid-js';
 import { useStore } from '~/stores';
+
+import '~/assets/scss/routes/lists.scss';
+import { Header } from '~/components/Header';
 
 export const route = {
   load: () => {
@@ -24,18 +25,17 @@ export default function Lists() {
     deferStream: true,
   });
   const user = createAsync(() => getUser(), { deferStream: true });
-  const [listsId, setListsId] = createSignal();
 
   return (
     <>
       <Header />
-      <main>
+      <main class="lists-main">
 
-        <header class={style['lists-header']}>
-          <div class={style['title']}>
+        <header class='header'>
+          <div class='title'>
             <h1 class="type-display-1 gradient-title">My lists</h1>
             <Show when={userLists() && userLists()!.length === 5}>
-              <span class={style['list-length-alert']}>
+              <span class='list-length-alert'>
                 <img
                   src="/svgs/warning_corn100.svg"
                   alt="warning icon"
@@ -56,9 +56,9 @@ export default function Lists() {
             </button>
           </Show>
         </header>
-        <ul class={style['lists-list']}>
+        <ul class='lists-list'>
           <Show when={userLists()}>
-            { userLists().length === 0 ? 
+            { userLists()?.length === 0 ? 
             <span class="type-body-3">You have no lists. Click "Create new list" button above to get started </span>
             :
             <For each={userLists()}>
@@ -74,9 +74,9 @@ export default function Lists() {
         </ul>
         <Show when={user()}>
           <DeleteListModal />
-          <NewListModal usersId={user()?.usersId} />
+          <NewListModal usersId={user()?.usersId!} />
         </Show>
       </main>
-    </>
+      </>
   );
 }

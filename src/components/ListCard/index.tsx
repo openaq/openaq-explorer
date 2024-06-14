@@ -1,8 +1,9 @@
-import style from './ListCard.module.scss';
 import { A } from '@solidjs/router';
 import { useStore } from '~/stores';
-import { clientOnly } from "@solidjs/start";
-const ListCardMap = clientOnly(() => import("~/components/ListCardMap"));
+import {ListCardMap} from '~/components/ListCardMap'
+
+import '~/assets/scss/components/list-card.scss';
+
 
 interface ListCardDefintion {
   listsId: number;
@@ -16,19 +17,19 @@ interface ListCardDefintion {
   locationsCount: number;
   sensorNodesIds: number[];
   bbox: number[][];
-  deleteListModalDialog: HTMLDialogElement;
 }
 
 export function ListCard(props: ListCardDefintion) {
-  const [store, { setDeleteListsId, toggleDeleteListModalOpen }] = useStore();
+  const [store, { setDeleteListsId, toggleDeleteListModalOpen }] =
+    useStore();
 
   return (
-    <div class={style['list-card']}>
+    <div class='list-card'>
       <A href={`/lists/${props.listsId}`}>
-        <div class={style['list-card__body']}>
-          <div class={style['list-content']}>
+        <div class='list-card__body'>
+          <div class='list-content'>
             <ListCardMap {...props}></ListCardMap>
-            <div class={style['list-info']}>
+            <div class='list-info'>
               <h1 class="type-heading-1 text-sky-120">
                 {props.label}
               </h1>
@@ -38,13 +39,11 @@ export function ListCard(props: ListCardDefintion) {
               </p>
             </div>
           </div>
-          <div>
-            
-          </div>
+          <div></div>
         </div>
       </A>
       <button
-        class={style['list-card-delete-btn']}
+        class='list-card-delete-btn'
         type="button"
         onClick={() => {
           setDeleteListsId(props.listsId);

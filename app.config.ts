@@ -1,11 +1,17 @@
 import { defineConfig } from '@solidjs/start/config';
 import { configDefaults } from 'vitest/config'
+import autoprefixer from 'autoprefixer';
 
 export default defineConfig({
-  start: {
-    middleware: './src/middleware.ts',
+  server: {
+    preset: 'aws-lambda',
   },
   vite: {
+    css: {
+      postcss: {
+        plugins: [autoprefixer({})],
+      },
+    },
     test: {
       exclude:[
         ...configDefaults.exclude, 
@@ -16,5 +22,6 @@ export default defineConfig({
       setupFiles: ['node_modules/@testing-library/jest-dom/vitest'],
       isolate: false,
     },
-  }
+  },
+  middleware: './src/middleware.ts',
 });

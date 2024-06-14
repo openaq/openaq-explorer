@@ -1,13 +1,13 @@
 import {
   A,
   createAsync,
-  redirect,
-  useLocation,
 } from '@solidjs/router';
-import { For, JSX, createEffect, createSignal } from 'solid-js';
+import { For, JSX, createSignal } from 'solid-js';
 import { getUserLists, sensorNodesListModifyAction } from '~/db';
 import { useStore } from '~/stores';
-import style from './ListsForm.module.scss';
+
+
+import '~/assets/scss/components/lists-form.scss';
 
 interface ListsFormDefinition {
   redirect: string | undefined;
@@ -36,15 +36,15 @@ function ListToggle(props: any) {
   };
 
   return (
-    <div>
+    <div class="list-toggle">
       <label
         for={`list-${props.list.listsId}`}
-        class={style['list-item-toggle']}
+        class='list-item-toggle'
       >
         {props.list.label}
         <button
           onClick={(e) => onButtonClick(e)}
-          class={style['list-btn']}
+          class='list-btn'
           value={String(
             props.list.sensorNodesIds.indexOf(store.locationsId) ===
               -1
@@ -60,7 +60,7 @@ function ListToggle(props: any) {
       </label>
 
       <input
-        class={style['radio-input']}
+        class='radio-input'
         type="radio"
         ref={radioOnRef}
         name={`list-${props.list.listsId}`}
@@ -72,7 +72,7 @@ function ListToggle(props: any) {
         // onChange={onInputChange}
       />
       <input
-        class={style['radio-input']}
+        class='radio-input'
         type="radio"
         ref={radioOffRef}
         name={`list-${props.list.listsId}`}
@@ -99,13 +99,13 @@ export function ListsForm(props: ListsFormDefinition) {
   };
 
   return (
-    <div class={style['list-form-container']}>
+    <div class='list-form-container'>
       <div
-        class={`${style['lists-form']} ${
-          toggleDropdown() ? style['lists-form--open'] : ''
+        class={`lists-form ${
+          toggleDropdown() ? 'lists-form--open' : ''
         }`}
       >
-        <form action={sensorNodesListModifyAction} method="post">
+        <form action={sensorNodesListModifyAction} method="post" class="list-modify-form">
           <input
             type="hidden"
             name="sensor-nodes-id"
@@ -116,7 +116,7 @@ export function ListsForm(props: ListsFormDefinition) {
             name="redirect"
             value={props.redirect}
           />
-          <div class={style['lists-list']}>
+          <div class='lists-list'>
             <For each={lists()}>
               {(list, i) => <ListToggle list={list} />}
             </For>

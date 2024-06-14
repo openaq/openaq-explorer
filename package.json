@@ -3,6 +3,7 @@
   "scripts": {
     "dev": "vinxi dev",
     "build": "vinxi build",
+    "build-node": "vinxi build --config app.config.node.ts",
     "start": "node ./.output/server/index.mjs",
     "test": "vitest"
   },
@@ -13,7 +14,9 @@
     "@types/d3": "^7.4.3",
     "@types/events": "^3.0.3",
     "@types/node": "^20.11.19",
-    "postcss": "^8.4.28",
+    "autoprefixer": "^10.4.19",
+    "lightningcss": "^1.25.1",
+    "postcss": "^8.4.38",
     "sass": "^1.69.5",
     "ts-jest": "^29.1.1",
     "@solidjs/testing-library": "^0.8.5",
@@ -28,9 +31,9 @@
     "@fontsource-variable/space-grotesk": "^5.0.17",
     "@fontsource/space-grotesk": "^5.0.17",
     "@maplibre/maplibre-gl-geocoder": "^1.5.0",
-    "@solidjs/meta": "^0.29.3",
-    "@solidjs/router": "^0.13.0",
-    "@solidjs/start": "^0.7.5",
+    "@solidjs/meta": "^0.29.4",
+    "@solidjs/router": "^0.13.3",
+    "@solidjs/start": "^1.0.1",
     "@turf/bbox": "^6.5.0",
     "@turf/destination": "^6.5.0",
     "@turf/helpers": "^6.5.0",
@@ -49,10 +52,10 @@
     "nanoid": "^5.0.4",
     "openaq-design-system": "github:openaq/openaq-design-system#v-4.0.0",
     "postgres": "^3.4.3",
-    "solid-js": "^1.8.15",
+    "solid-js": "^1.8.17",
     "solid-map-gl": "1.10.0",
     "ts-node": "^10.9.2",
-    "vinxi": "^0.3.10"
+    "vinxi": "^0.3.11"
   },
   "engines": {
     "node": ">=20"

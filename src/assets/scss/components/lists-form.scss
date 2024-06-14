@@ -1,0 +1,73 @@
+.list-form-container {
+  position: relative;
+
+  .lists-form {
+    z-index: 1000;
+    background-color: white;
+    position: absolute;
+    bottom: 45px;
+    display: none;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0px 7px 20px 0px #00000026;
+    background-color: '#ffffff';
+
+    &--open {
+      display: flex;
+    }
+
+    form.list-modify-form {
+      .lists-list {
+        list-style: none;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+
+        li {
+          display: flex;
+          align-items: center;
+          width: 240px;
+          padding: 16px 18px;
+        }
+      }
+    }
+  }
+}
+
+.list-toggle {
+  .list-item-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 4px;
+    gap: 8px;
+
+    .list-btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      display: inline-block;
+      border: none;
+      margin: 0;
+      text-decoration: none;
+
+      font-size: 1rem;
+      line-height: 1;
+      cursor: pointer;
+      text-align: center;
+      transition: background 250ms ease-in-out, transform 150ms ease;
+      width: 40px;
+      height: 40px;
+      border-radius: 20px;
+      background-color: #e6f8f8;
+
+      &--active {
+        background-color: #33a3a1;
+      }
+    }
+  }
+
+  .radio-input {
+    display: none;
+  }
+}
