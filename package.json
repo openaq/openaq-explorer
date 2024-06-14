@@ -5,7 +5,7 @@
     "build": "vinxi build",
     "build-node": "vinxi build --config app.config.node.ts",
     "start": "node ./.output/server/index.mjs",
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest"
+    "test": "vitest"
   },
   "type": "module",
   "devDependencies": {
@@ -18,7 +18,13 @@
     "lightningcss": "^1.25.1",
     "postcss": "^8.4.38",
     "sass": "^1.69.5",
-    "ts-jest": "^29.1.1"
+    "ts-jest": "^29.1.1",
+    "@solidjs/testing-library": "^0.8.5",
+    "@testing-library/jest-dom": "^6.2.0",
+    "@types/testing-library__jest-dom": "^5.14.9",
+    "jsdom": "^23.2.0",
+    "vitest": "^1.2.1"
+
   },
   "dependencies": {
     "@babel/preset-env": "^7.23.6",
