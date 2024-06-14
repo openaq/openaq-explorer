@@ -57,10 +57,9 @@ interface StrengthBarDefinition {
 
 function StrengthBar(props: StrengthBarDefinition) {
 
-
   return (
     <div
-      class={`'strength-meter__bar' ${
+      class={`strength-meter__bar ${
         props.index + 1 <= props.score
           ?  `strength-meter__bar--${props.color}`
           : ''
@@ -71,8 +70,8 @@ function StrengthBar(props: StrengthBarDefinition) {
 }
 
 interface PasswordScoreDefinition {
-  score: number;
-  warning: string;
+  score: number | undefined;
+  warning: string | undefined;
 }
 
 export default function PasswordScore(props: PasswordScoreDefinition) {
@@ -83,40 +82,40 @@ export default function PasswordScore(props: PasswordScoreDefinition) {
         <div class="strength-meter">
           <StrengthBar
             index={0}
-            color={passwordValues(props.score).color}
-            score={props.score}
+            color={passwordValues(props.score!).color}
+            score={props.score!}
           />
           <StrengthBar
             index={1}
-            color={passwordValues(props.score).color}
-            score={props.score}
+            color={passwordValues(props.score!).color}
+            score={props.score!}
           />
           <StrengthBar
             index={2}
-            color={passwordValues(props.score).color}
-            score={props.score}
+            color={passwordValues(props.score!).color}
+            score={props.score!}
           />
           <StrengthBar
             index={3}
-            color={passwordValues(props.score).color}
-            score={props.score}
+            color={passwordValues(props.score!).color}
+            score={props.score!}
           />
           <StrengthBar
             index={4}
-            color={passwordValues(props.score).color}
-            score={props.score}
+            color={passwordValues(props.score!).color}
+            score={props.score!}
           />
         </div>
       </div>
       <div>
-        <Show when={props.score < 4}>
+        <Show when={props.score! < 4}>
         <span class="strength-message">
           Please choose a stronger password
         </span>
         </Show>
         <span class="strength-message">
-          {passwordValues(props.score).message}
-          {passwordValues(props.score).symbol ? <img src={`/svgs/${passwordValues(props.score).symbol }`} alt="" /> : ''}
+          {passwordValues(props.score!).message}
+          {passwordValues(props.score!).symbol ? <img src={`/svgs/${passwordValues(props.score!).symbol }`} alt="" /> : ''}
         </span>
         <span class="type-body-1">
           {props.warning}

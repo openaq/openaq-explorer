@@ -2,7 +2,6 @@ import { Show, createSignal } from 'solid-js';
 
 import {
   A,
-  createAsync,
   useSearchParams,
   useSubmission,
 } from '@solidjs/router';
@@ -16,6 +15,7 @@ import { evaluatePassword } from '~/lib/password';
 
 import '~/assets/scss/routes/register.scss';
 import { Header } from '~/components/Header';
+import { Score } from '@zxcvbn-ts/core/dist/types';
 
 export const route = {
   load: () => getUser(),
@@ -24,42 +24,44 @@ export const route = {
 export default function Register() {
   const [searchParams] = useSearchParams();
 
-  const [passwordInputValue, setPasswordInputValue] = createSignal();
+  const [passwordInputValue, setPasswordInputValue] = createSignal<string>();
   const [passwordConfirmInputValue, setPasswordConfirmInputValue] =
-    createSignal();
+    createSignal<string>();
 
-  const [passwordScore, setPasswordScore] = createSignal();
-  const [passwordWarning, setPasswordWarning] = createSignal();
+  const [passwordScore, setPasswordScore] = createSignal<Score>();
+  const [passwordWarning, setPasswordWarning] = createSignal<string>();
   const [passwordsDoNotMatch, setPasswordsDoNotMatch] =
-    createSignal('');
+    createSignal<boolean>();
 
-  let passwordInputTimeout;
+  let passwordInputTimeout: number;
 
-  const onPasswordInput = (e) => {
-    setPasswordInputValue(e.target.value);
+  const onPasswordInput = (e: InputEvent) => {
+    const target = e.target as HTMLInputElement;
+    setPasswordInputValue(target.value);
     clearTimeout(passwordInputTimeout);
-    passwordInputTimeout = setTimeout(() => {
-      const result = evaluatePassword(e.target.value);
-      if (e.target.value !== '') {
+    passwordInputTimeout = window.setTimeout(() => {
+      const result = evaluatePassword(target!.value);
+      if (target!.value !== '') {
         setPasswordScore(result.score);
         setPasswordWarning(result.feedback.warning);
       } else {
-        setPasswordScore(-1);
+        setPasswordScore(undefined);
         setPasswordWarning('');
       }
     }, 500);
   };
 
-  let passwordConfirmInputTimeout;
+  let passwordConfirmInputTimeout: number;
 
-  const onPasswordConfirmInput = (e) => {
-    setPasswordConfirmInputValue(e.target.value);
+  const onPasswordConfirmInput = (e: InputEvent) => {
+    const target = e.target as HTMLInputElement;
+    setPasswordConfirmInputValue(target.value);
     clearTimeout(passwordConfirmInputTimeout);
-    passwordConfirmInputTimeout = setTimeout(() => {
+    passwordConfirmInputTimeout = window.setTimeout(() => {
       if (passwordInputValue() !== passwordConfirmInputValue()) {
-        setPasswordsDoNotMatch('passwords must match');
+        setPasswordsDoNotMatch(false);
       } else {
-        setPasswordsDoNotMatch('');
+        setPasswordsDoNotMatch(true);
       }
     }, 500);
   };
@@ -155,14 +157,14 @@ export default function Register() {
           />
           <Show when={passwordsDoNotMatch()}>
             <p class="type-body-2" role="alert">
-              {passwordsDoNotMatch()}
+              Passwords must match
             </p>
           </Show>
 
           <button
             class="btn btn-primary"
             type="submit"
-            disabled={passwordScore() < 4 || passwordsDoNotMatch()}
+            disabled={passwordScore()! < 4 || passwordsDoNotMatch()}
           >
             Get started
           </button>
