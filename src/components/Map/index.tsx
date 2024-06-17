@@ -78,6 +78,7 @@ export function Map() {
   };
 
   return (
+    <div className="map-container">
     <MapGL
       class="map"
       mapLib={maplibre}
@@ -311,5 +312,6 @@ export function Map() {
       </Source>
       <Bounds />
     </MapGL>
+    </div>
   );
 }

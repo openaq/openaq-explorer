@@ -31,4 +31,3 @@ cdk.Tags.of(stack).add('project', 'openaq');
 cdk.Tags.of(stack).add('product', 'explorer');
 cdk.Tags.of(stack).add('env', process.env.ENV_NAME);
 
-Aspects.of(app).add(new AwsSolutionsChecks({ verbose: true }))

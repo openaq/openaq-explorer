@@ -1,66 +1,67 @@
 @use 'openaq-design-system/scss/mixins/index' as mixins;
 @use '~/assets/scss/media-queries.scss' as f;
 
-.map {
-  height: calc(100vh - 80px);
-  width: 100vw;
-
-  @include f.respond(medium) {
-    height: calc(100vh - 60px);
+.map-container {
+  .map {
+    height: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
   }
-}
 
-.mapboxgl-ctrl-top-left {
-  width: 50% !important;
-}
+  .mapboxgl-ctrl-top-left {
+    width: 50% !important;
+  }
 
-.mapboxgl-ctrl-geocoder {
-  width: 100% !important;
-  max-width: 500px !important;
-  border-radius: 14px !important;
-}
+  .mapboxgl-ctrl-geocoder {
+    width: 100% !important;
+    max-width: 500px !important;
+    border-radius: 14px !important;
+  }
 
-.mapboxgl-ctrl-geocoder--input::placeholder {
-  @include mixins.body2;
-}
+  .mapboxgl-ctrl-geocoder--input::placeholder {
+    @include mixins.body2;
+  }
 
-.mapboxgl-ctrl-geocoder--icon-search {
-  right: 12px !important;
-}
+  .mapboxgl-ctrl-geocoder--icon-search {
+    right: 12px !important;
+  }
 
-.maplibregl-ctrl-top-left {
-  width: 50% !important;
-}
+  .maplibregl-ctrl-top-left {
+    width: 50% !important;
+  }
 
-.maplibregl-ctrl-geocoder {
-  width: 100% !important;
-  max-width: 500px !important;
-  border-radius: 14px !important;
-}
+  .maplibregl-ctrl-geocoder {
+    width: 100% !important;
+    max-width: 500px !important;
+    border-radius: 14px !important;
+  }
 
-.maplibregl-ctrl-geocoder--input::placeholder {
-  @include mixins.body2;
-}
+  .maplibregl-ctrl-geocoder--input::placeholder {
+    @include mixins.body2;
+  }
 
-.maplibregl-ctrl-geocoder--icon-search {
-  right: 12px !important;
-}
-
-@media screen and (min-width: 640px) {
   .maplibregl-ctrl-geocoder--icon-search {
     right: 12px !important;
   }
-}
 
-@media (max-width: 1000px) {
-  .maplibregl-ctrl-top-left {
-    width: 95% !important;
+  @media screen and (min-width: 640px) {
+    .maplibregl-ctrl-geocoder--icon-search {
+      right: 12px !important;
+    }
   }
 
-  .maplibregl-ctrl-bottom-left {
-    margin: 0 0 80px 0;
-  }
-  .maplibregl-ctrl-bottom-right {
-    margin: 0 0 80px 0;
+  @media (max-width: 1000px) {
+    .maplibregl-ctrl-top-left {
+      width: 95% !important;
+    }
+
+    .maplibregl-ctrl-bottom-left {
+      margin: 0 0 80px 0;
+    }
+    .maplibregl-ctrl-bottom-right {
+      margin: 0 0 80px 0;
+    }
   }
 }

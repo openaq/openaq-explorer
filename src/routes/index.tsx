@@ -4,6 +4,9 @@ import { LocationDetailCard } from '~/components/Cards/LocationDetailCard';
 import { FlipCard } from '~/components/Cards/FlipCard';
 import { Header } from '~/components/Header';
 
+
+import '~/assets/scss/routes/index.scss';
+
 export const route = {
   load: () => getUser(),
 };
