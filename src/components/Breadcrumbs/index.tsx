@@ -14,7 +14,7 @@ export function Breadcrumbs(props: BreadcrumbsDefinition) {
             <img src="/svgs/chevron_right_smoke_100.svg" alt="chevron right" />
             <A href="/">Explore the data</A>
             <img src="/svgs/chevron_right_smoke_100.svg" alt="chevron right" />
-            <span class="">{props.pageName}</span>
+            <span class="" data-testid="page-name">{props.pageName}</span>
         </div>
     )
 }

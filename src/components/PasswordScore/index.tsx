@@ -1,16 +1,15 @@
 import { Show } from 'solid-js';
+import { StrengthBarDefinition, PasswordScoreDefinition, Color, SvgSymbol, PasswordValue } from './types';
 
 import '~/assets/scss/components/password-score.scss';
 
+const errorSvg = 'warning_fire100.svg' as SvgSymbol;
+const checkSvg = 'check_mantis100.svg' as SvgSymbol;
 
-const errorSvg = 'warning_fire100.svg';
-const checkSvg = 'check_mantis100.svg'
-
-
-function passwordValues(score: number) {
-  let color: string;
+function passwordValues(score: number) : PasswordValue  {
+  let color: Color;
   let message: string;
-  let symbol: string;
+  let symbol: SvgSymbol;
   switch (score) {
     case 0:
       color = 'warning';
@@ -38,8 +37,8 @@ function passwordValues(score: number) {
       symbol = checkSvg;
       break;
     default:
-      color = 'red';
-      symbol = '';
+      color = 'warning';
+      symbol = errorSvg;
       message = '';
   }
   return {
@@ -49,32 +48,21 @@ function passwordValues(score: number) {
   };
 }
 
-interface StrengthBarDefinition {
-  index: number;
-  score: number;
-  color: string;
-}
-
-function StrengthBar(props: StrengthBarDefinition) {
-
+export function StrengthBar(props: StrengthBarDefinition) {
   return (
     <div
       class={`strength-meter__bar ${
         props.index + 1 <= props.score
-          ?  `strength-meter__bar--${props.color}`
+          ? `strength-meter__bar--${props.color}`
           : ''
-      }`
-      }
+      }`}
     ></div>
   );
 }
 
-interface PasswordScoreDefinition {
-  score: number | undefined;
-  warning: string | undefined;
-}
-
-export default function PasswordScore(props: PasswordScoreDefinition) {
+export default function PasswordScore(
+  props: PasswordScoreDefinition
+) {
   return (
     <div class="password-strength">
       <div class="strength-meter-container">
@@ -109,17 +97,22 @@ export default function PasswordScore(props: PasswordScoreDefinition) {
       </div>
       <div>
         <Show when={props.score! < 4}>
-        <span class="strength-message">
-          Please choose a stronger password
-        </span>
+          <span class="strength-message">
+            Please choose a stronger password
+          </span>
         </Show>
         <span class="strength-message">
           {passwordValues(props.score!).message}
-          {passwordValues(props.score!).symbol ? <img src={`/svgs/${passwordValues(props.score!).symbol }`} alt="" /> : ''}
+          {passwordValues(props.score!).symbol ? (
+            <img
+              src={`/svgs/${passwordValues(props.score!).symbol}`}
+              alt=""
+            />
+          ) : (
+            ''
+          )}
         </span>
-        <span class="type-body-1">
-          {props.warning}
-        </span>
+        <span class="type-body-1">{props.warning}</span>
       </div>
     </div>
   );

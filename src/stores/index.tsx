@@ -187,7 +187,14 @@ export const StoreProvider: Component<{}> = (props) => {
   );
 };
 
+function useStoreContext() {
+  const context = useContext(StoreContext)
+  if (!context) {
+    throw new Error("useStoreContext: cannot find a StoreContext")
+  }
+  return context
+}
 
-export function useStore() {
-  return useContext(StoreContext);
+export function useStore() : Store  {
+  return useStoreContext();
 }

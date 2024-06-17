@@ -9,7 +9,7 @@ import {
 } from 'd3';
 import { createEffect, createSignal, For, Show } from 'solid-js';
 
-// import '~/assets/scss/components/box-plot.scss';
+import '~/assets/scss/components/box-plot.scss';
 
 function BoxPlotTooltip(props) {
   return (

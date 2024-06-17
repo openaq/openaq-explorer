@@ -22,7 +22,6 @@ export function OverlayCard() {
     },
   ] = useStore();
 
-  const [parameter, setParameter] = createSignal("all")
 
   return (
     <div class='overlay-card'>
@@ -40,7 +39,7 @@ export function OverlayCard() {
             name="parameter-select"
             id="parameter-select"
             onChange={(e) => setSelectedMapParameter(e.target.value)}
-            value={parameter()}
+            value={'all'}
           >
             <option value="all">Any pollutant</option>
             <option value="pm25">PM&#8322;&#8325;</option>

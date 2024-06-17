@@ -51,10 +51,11 @@ export function ProvidersCard() {
 
   let timeout: ReturnType<typeof setTimeout>;
 
-  const onSearchInput = (e) => {
+  const onSearchInput = (e: InputEvent) => {
     clearTimeout(timeout);
     timeout = setTimeout(() => {
-      const value = e.target.value;
+      const target = e.target as HTMLInputElement
+      const value = target.value;
       const res = miniSearch.search(value, { prefix: true });
       setSelectedProviders(
         () => true,

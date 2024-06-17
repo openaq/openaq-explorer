@@ -22,7 +22,7 @@ const options = {
     passwordConfirm: string
   ) {
     'use server';
-    let errors = [];
+    let errors : Error[] = []; 
     if (password.length < 8) {
       errors.push(
         new Error('Passwords must be at least 8 characters long')

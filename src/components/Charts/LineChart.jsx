@@ -39,7 +39,7 @@ const formatWeek = timeFormat('%b %d');
 const formatMonth = timeFormat('%B');
 const formatYear = timeFormat('%Y');
 
-const multiFormat = (date, timezone) =>
+export function multiFormat(date, timezone) {
   (timeSecond(date) < date
     ? formatMillisecond
     : timeMinute(date) < date
@@ -61,10 +61,11 @@ const multiFormat = (date, timezone) =>
       })
     )
   );
+}
 
 // splits single measurements series into multiple subseries
 // if dates are not continuous
-function splitMeasurements(measurements, timezone) {
+export function splitMeasurements(measurements, timezone) {
   let result = [];
   let lastDate;
   if (!measurements || measurements.length === 0) {

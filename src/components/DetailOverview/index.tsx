@@ -1,95 +1,16 @@
 import { For, Show } from 'solid-js';
 import { A, createAsync, useLocation } from '@solidjs/router';
-import {
-  LowCostSensorMarker,
-  ReferenceGradeMarker,
-} from '../LocationMarker';
+
 import { getUser } from '~/db';
 import { timeFromNow, since } from '~/lib/utils';
-import { ListsForm } from '../Cards/ListsForm';
+import { ListsForm } from '~/components/Cards/ListsForm';
 
 import {DetailMap} from '~/components/DetailMap';
-
+import { SensorType } from './SensorType';
 
 import '~/assets/scss/components/detail-overview.scss';
+import { DetailOverviewDefinition } from './types';
 
-
-interface SensorsDefinition {
-  name: string;
-}
-
-interface Coordinates {
-  latitude: number;
-  longitude: number;
-}
-
-interface Owner {
-  id: number;
-  name: string;
-}
-
-interface Provider {
-  id: number;
-  name: string;
-}
-
-interface Country {
-  id: number;
-  code: string;
-  name: string;
-}
-
-interface Parameter {
-  id: number;
-  name: string;
-  units: string;
-  displayName: string;
-}
-
-interface Sensor {
-  id: number;
-  name: string;
-  parameter: Parameter;
-}
-
-interface Datetime {
-  utc: string;
-  local: string;
-}
-
-interface DetailOverviewDefinition {
-  id: number;
-  name: string;
-  coordinates: Coordinates;
-  country: Country;
-  owner: Owner;
-  provider: Provider;
-  isMonitor: boolean;
-  sensors: Sensor[];
-  datetimeFirst: Datetime;
-  datetimeLast: Datetime;
-  isMobile: boolean;
-  lists: any[];
-}
-
-interface SensorTypeDefintion {
-  isMonitor: boolean;
-}
-
-function SensorType(props: SensorTypeDefintion) {
-  return (
-    <div class='location-type'>
-      <span class="type-body-3">
-        {props.isMonitor ? 'Reference grade' : 'Air sensor'}
-      </span>
-      {props.isMonitor ? (
-        <ReferenceGradeMarker />
-      ) : (
-        <LowCostSensorMarker />
-      )}
-    </div>
-  );
-}
 
 function LocationListsFallback() {
   const pageLocation = useLocation();
