@@ -11,6 +11,7 @@ import { encode, passlibify, verify } from '~/lib/auth';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { validatePassword } from '~/lib/password';
+import { disposableDomains } from '~/data/auth';
 
 const pbkdf2Async = promisify(crypto.pbkdf2);
 
@@ -188,11 +189,16 @@ export async function sensorNodesLists(
   }
 }
 
+export function isValidEmailDomain(email: string): boolean {
+  const emailDomain = email.split('@')[1];
+  if (disposableDomains.has(emailDomain)) {
+    return false;
+  }
+  return true
+}
+
 export async function register(formData: FormData) {
   'use server';
-
-  const event = getRequestEvent();
-  const ip = event?.clientAddress; // ned to get nginx proxy forward header
   const clientAddress = `0.0.0.0`;
   const fullName = String(formData.get('fullname'));
   const emailAddress = String(formData.get('email-address'));
@@ -211,6 +217,9 @@ export async function register(formData: FormData) {
   if (emailAddress === '') {
     throw new Error('Valid email address required');
   }
+  if (isValidEmailDomain(emailAddress)) {
+    throw new Error('Valid email address required - disposable email domains not allowed.');
+  }
   if (fullName === '') {
     throw new Error(`Name is required`);
   }
@@ -219,7 +228,7 @@ export async function register(formData: FormData) {
   }
   if (password !== passwordConfirm) {
     throw new Error('Passwords must match');
-  }
+  } 
   const passwordHash = await encode(password);
   try {
     let user = await db.user.getUser(emailAddress);
