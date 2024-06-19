@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import tz from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import { getSensorMeasurements } from '~/client';
-import { getUser } from '~/db';
+import { getUserId } from '~/db';
 
 import { createAsync, useLocation, A } from '@solidjs/router';
 
@@ -88,7 +88,9 @@ function NotLoggedInFallback() {
 }
 
 export function DownloadCard(props) {
-  const user = createAsync(() => getUser(), { deferStream: true });
+  const usersId = createAsync(() => getUserId(), {
+    deferStream: true,
+  });
 
   const [downloading, setDownloading] = createSignal(false);
 
@@ -155,7 +157,7 @@ export function DownloadCard(props) {
       <header class="download-card__header">
         <h3 class="heading">Download</h3>
       </header>
-      <Show when={user()} fallback={<NotLoggedInFallback />}>
+      <Show when={usersId()} fallback={<NotLoggedInFallback />}>
         <h3 class="type-subtitle-1 text-sky-120">
           Download Data CSV
         </h3>

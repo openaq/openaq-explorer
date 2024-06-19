@@ -78,7 +78,7 @@ export function Map() {
   };
 
   return (
-    <div className="map-container">
+    <div class="map-container">
     <MapGL
       class="map"
       mapLib={maplibre}

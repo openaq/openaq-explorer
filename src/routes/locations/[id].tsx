@@ -1,7 +1,7 @@
 import { createAsync, useParams } from '@solidjs/router';
 import { DetailOverview } from '~/components/DetailOverview';
 import { DetailCharts } from '~/components/DetailCharts';
-import { getLocation, getUser, getListsBySensorNodesId } from '~/db';
+import { getLocation, getUserId, getListsBySensorNodesId } from '~/db';
 import { Breadcrumbs } from '~/components/Breadcrumbs';
 import { DownloadCard } from '~/components/DownloadCard';
 import { Show } from 'solid-js';
@@ -14,8 +14,8 @@ import { Header } from '~/components/Header';
 export const route = {
   load({ params} : any ) {
     void getLocation(params.id);
-    void getUser();
-    void getListsBySensorNodesId(params.id)
+    void getListsBySensorNodesId(params.id);
+    void getUserId();
   },
 };
 
@@ -28,7 +28,6 @@ export default function Location() {
   const location = createAsync(() => getLocation(Number(id)), {
     deferStream: true,
   });
-  let lists = createAsync(() => getListsBySensorNodesId(Number(id)),{initialValue: [],deferStream: true})
 
   return (
     <>
@@ -36,7 +35,7 @@ export default function Location() {
       <main class="location-main">
         <Show when={location()}>
           <Breadcrumbs pageName={location()?.name} />
-          <DetailOverview {...location()} lists={lists()}/>
+          <DetailOverview {...location()}/>
           <DetailCharts {...location()} />
           <DownloadCard {...location()} />
         </Show>

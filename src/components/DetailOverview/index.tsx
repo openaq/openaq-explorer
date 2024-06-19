@@ -1,7 +1,6 @@
 import { For, Show } from 'solid-js';
 import { A, createAsync, useLocation } from '@solidjs/router';
 
-import { getUser } from '~/db';
 import { timeFromNow, since } from '~/lib/utils';
 import { ListsForm } from '~/components/Cards/ListsForm';
 
@@ -10,7 +9,38 @@ import { SensorType } from './SensorType';
 
 import '~/assets/scss/components/detail-overview.scss';
 import { DetailOverviewDefinition } from './types';
+import { getListsBySensorNodesId, getUserId } from '~/db';
 
+
+interface ListsDefinition {
+  sensorNodesId: number
+  pathname: string
+}
+
+
+function LocationLists(props: ListsDefinition) {
+
+
+  let lists = createAsync(() => getListsBySensorNodesId(Number(props.sensorNodesId)),{initialValue: [],deferStream: true})
+
+  return (
+    <ul class='lists-list'>
+    <For each={lists()}>
+      {(list, i) => (
+        <A
+          class='list-link'
+          href={`/lists/${list.listsId}`}
+        >
+          <li class="btn btn-tertiary">{list.label}</li>
+        </A>
+      )}
+    </For>
+    <ListsForm redirect={props.pathname}/>
+    </ul>
+  )
+
+
+}
 
 function LocationListsFallback() {
   const pageLocation = useLocation();
@@ -41,7 +71,7 @@ function LocationListsFallback() {
 }
 
 export function DetailOverview(props: DetailOverviewDefinition) {
-  const user = createAsync(() => getUser(), { deferStream: true });
+  const usersId = createAsync(() => getUserId(), { deferStream: true });
 
   const pageLocation = useLocation();
 
@@ -126,22 +156,10 @@ export function DetailOverview(props: DetailOverviewDefinition) {
         <div class='location-lists'>
           <h3 class="type-subtitle-3 text-smoke-180">LISTS</h3>
           <Show
-            when={user() && props.lists}
+            when={usersId()}
             fallback={<LocationListsFallback />}
           >
-            <ul class='lists-list'>
-              <For each={props.lists}>
-                {(list, i) => (
-                  <A
-                    class='list-link'
-                    href={`/lists/${list.listsId}`}
-                  >
-                    <li class="btn btn-tertiary">{list.label}</li>
-                  </A>
-                )}
-              </For>
-              <ListsForm redirect={pageLocation.pathname}/>
-            </ul>
+            <LocationLists sensorNodesId={props.id} pathname={pageLocation.pathname} />
           </Show>
         </div>
       </div>

@@ -22,10 +22,11 @@ import {
   forgotPassword,
   forgotPasswordLink,
   deleteListLocation,
-  resendVerificationEmail
+  resendVerificationEmail,
+  redirectIfLoggedIn as redirect
 } from './server';
 
-export const getUserId = cache(gUi, 'user');
+export const getUserId = cache(gUi, 'user-id');
 export const getUser = cache(gU, 'user');
 export const loginAction = action(login, 'login');
 export const logoutAction = action(logout, 'logout');
@@ -57,9 +58,11 @@ export const regenerateKeyAction = action(
 export const deleteListLocationAction = action(deleteListLocation, 'delete-location-list');
 
 
-export const forgotPasswordAction = action(forgotPassword, 'forgot-password')
-export const forgotPasswordLinkAction = action(forgotPasswordLink, 'forgot-password-link')
+export const forgotPasswordAction = action(forgotPassword, 'forgot-password');
+export const forgotPasswordLinkAction = action(forgotPasswordLink, 'forgot-password-link');
 
 export const verify = cache(verifyEmail, 'verify-email');
 
-export const resendVerificationEmailAction = action(resendVerificationEmail, 'resend-verification-email')
+export const resendVerificationEmailAction = action(resendVerificationEmail, 'resend-verification-email');
+
+export const redirectIfLoggedIn = cache(redirect,'redirect-if-logged-in')

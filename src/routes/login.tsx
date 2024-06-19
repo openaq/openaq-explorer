@@ -1,15 +1,21 @@
 import { Show } from 'solid-js';
-import { A, useSubmission, useSearchParams } from '@solidjs/router';
-import { loginAction } from '~/db';
-import { getUser } from '~/db';
+import { A, useSubmission, useSearchParams, createAsync } from '@solidjs/router';
+import { getUserId, loginAction, redirectIfLoggedIn } from '~/db';
 import '~/assets/scss/routes/login.scss';
 import { Header } from '~/components/Header';
 
 export const route = {
-  load: () => getUser(),
+  load() {
+    void redirectIfLoggedIn();
+    void getUserId();
+  },
 };
 
+
 export default function Login() {
+
+  createAsync(() => redirectIfLoggedIn());
+
   const [searchParams] = useSearchParams();
 
   const loggingIn = useSubmission(loginAction);
@@ -17,7 +23,6 @@ export default function Login() {
   return (
     <>
       <Header />
-
       <main class="login-page">
         <h1 class="type-display-1 text-sky-120">Login</h1>
         <form

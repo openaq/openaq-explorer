@@ -6,6 +6,9 @@ import { ApiKeyRegenerateConfirmModal } from '~/components/Modals/ApiKeyRegenera
 import { useStore } from '~/stores';
 import { Header } from '~/components/Header';
 
+import '~/assets/scss/routes/account.scss';
+import { Suspense } from 'solid-js';
+
 export const route = {
   load: () => getUser(),
 };
@@ -15,15 +18,16 @@ function copyApiKey(token: string) {
 }
 
 export default function Acount() {
-  const user = createAsync(() => getUser(), { deferStream: true });
+  const user = createAsync(() => getUser());
   const [store, { openToast, toggleRegenerateKeyModalOpen }] =
     useStore();
 
   return (
     <>
       <Header />
+      <Suspense >
       <main class="account-page">
-        <ApiKeyRegenerateConfirmModal usersId={user()?.usersId!} />
+        <ApiKeyRegenerateConfirmModal />
         <h1 class="type-display-1 text-sky-120">OpenAQ Account</h1>
         <section class="account-page__section">
           <h2 class="type-heading-2  text-sky-120">Basics</h2>
@@ -77,6 +81,7 @@ export default function Acount() {
         </section>
         <Toast message={'API Key copied to clipboard'} />
       </main>
+      </Suspense>
     </>
   );
 }

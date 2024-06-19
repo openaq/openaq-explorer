@@ -38,7 +38,7 @@ function passwordValues(score: number) : PasswordValue  {
       break;
     default:
       color = 'warning';
-      symbol = errorSvg;
+      symbol;
       message = '';
   }
   return {

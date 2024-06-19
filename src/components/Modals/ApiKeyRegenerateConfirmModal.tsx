@@ -6,13 +6,7 @@ import { useStore } from '~/stores';
 import '~/assets/scss/components/modal.scss';
 
 
-interface ApiKeyModalDefinition {
-  usersId: number;
-}
-
-export function ApiKeyRegenerateConfirmModal(
-  props: ApiKeyModalDefinition
-) {
+export function ApiKeyRegenerateConfirmModal() {
   const [store, { toggleRegenerateKeyModalOpen }] = useStore();
 
   const onClickClose: JSX.EventHandler<
@@ -72,7 +66,6 @@ export function ApiKeyRegenerateConfirmModal(
           >
             Cancel
           </button>
-          <input type="hidden" name="users-id" value={props.usersId} />
           <Show when={regeneratingKey.result}>
             <p
               style={{ color: 'red' }}

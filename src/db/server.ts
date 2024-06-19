@@ -10,8 +10,7 @@ import { Buffer } from 'buffer';
 import { encode, passlibify, verify } from '~/lib/auth';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import {validatePassword} from '~/lib/password';
-
+import { validatePassword } from '~/lib/password';
 
 const pbkdf2Async = promisify(crypto.pbkdf2);
 
@@ -44,8 +43,7 @@ async function getSession() {
 
   return useSession({
     name: 'oaq_explorer_session',
-    password:
-      SESSION_SECRET,
+    password: SESSION_SECRET,
     maxAge: USER_SESSION_MAX_AGE,
   });
 }
@@ -59,19 +57,23 @@ export async function getUsersId(): Promise<number | undefined> {
   return Number(usersId);
 }
 
-export async function getUser() {
+export async function getUser()  {
   'use server';
-
-  const usersId = await getUsersId();
-
-  if (typeof usersId !== 'number') {
-    return null;
-  }
   try {
+    const usersId = await getUsersId();
+    console.log("getUser",usersId)
+    if (usersId === undefined) {
+      throw new Error('User not found');
+    }
     const user = await db.user.getUserById(usersId);
+    if (!user) {
+      throw new Error('User not found');
+    }
+    console.log("getUser",user[0])
+
     return user[0];
   } catch {
-    throw new Error();
+    throw redirect('/login');
   }
 }
 
@@ -116,31 +118,32 @@ interface ListItemDefinition {
 
 export async function userLists(): Promise<ListDefinition[]> {
   'use server';
-
-  const usersId = await getUsersId();
-  if (typeof usersId !== 'number') {
-    throw new Error('');
-  }
   try {
+    const usersId = await getUsersId();
+    if (typeof usersId !== 'number') {
+      throw new Error('User not found');
+    }
     const lists = await db.lists.getListsByUserId(usersId);
     return lists;
   } catch {
-    throw new Error('');
+    return [];
   }
 }
 
 export async function list(listsId: number): Promise<ListDefinition> {
   'use server';
-
-  const usersId = await getUsersId();
-  if (typeof usersId !== 'number') {
-    throw new Error('');
-  }
   try {
+    const usersId = await getUsersId();
+    if (usersId === undefined) {
+      throw new Error('User not found');
+    }
+    if (typeof usersId !== 'number') {
+      throw new Error('User not found');
+    }
     const list = db.lists.getListById(usersId, listsId);
     return list;
   } catch {
-    throw new Error('');
+    throw redirect('/login');
   }
 }
 
@@ -148,16 +151,18 @@ export async function listLocations(
   listsId: number
 ): Promise<ListItemDefinition[]> {
   'use server';
-
-  const usersId = await getUsersId();
-  if (typeof usersId !== 'number') {
-    throw new Error('');
-  }
   try {
+    const usersId = await getUsersId();
+    if (usersId === undefined) {
+      throw new Error('User not found');
+    }
+    if (typeof usersId !== 'number') {
+      throw new Error('User not found');
+    }
     const lists = db.lists.getLocationsByListId(usersId, listsId);
     return lists;
   } catch {
-    throw new Error('');
+    throw redirect('/login');
   }
 }
 
@@ -165,19 +170,21 @@ export async function sensorNodesLists(
   sensorNodesId: number
 ): Promise<ListDefinition[]> {
   'use server';
-
-  const usersId = await getUsersId();
-  if (!usersId) {
-    return []
-  }
   try {
+    const usersId = await getUsersId();
+    if (usersId === undefined) {
+      throw new Error('User not found');
+    }
+    if (typeof usersId !== 'number') {
+      throw new Error('User not found');
+    }
     const lists = db.lists.getListsBySensorNodesId(
       Number(usersId),
       Number(sensorNodesId)
     );
     return lists;
   } catch {
-    throw new Error('');
+    return [];
   }
 }
 
@@ -185,7 +192,7 @@ export async function register(formData: FormData) {
   'use server';
 
   const event = getRequestEvent();
-  const ip = event?.clientAddress // ned to get nginx proxy forward header 
+  const ip = event?.clientAddress; // ned to get nginx proxy forward header
   const clientAddress = `0.0.0.0`;
   const fullName = String(formData.get('fullname'));
   const emailAddress = String(formData.get('email-address'));
@@ -210,14 +217,12 @@ export async function register(formData: FormData) {
   if (password === '' || passwordConfirm === '') {
     throw new Error(`Password fields required`);
   }
-  if (
-    password !== passwordConfirm
-  ) {
+  if (password !== passwordConfirm) {
     throw new Error('Passwords must match');
   }
   const passwordHash = await encode(password);
   try {
-   let user = await db.user.getUser(emailAddress);
+    let user = await db.user.getUser(emailAddress);
     if (user[0]) {
       if (user[0].active) {
         throw redirect('/login');
@@ -275,18 +280,20 @@ export async function login(formData: FormData) {
 export async function changePassword(formData: FormData) {
   'use server';
 
-  let usersId = await getUsersId()
+  let usersId = await getUsersId();
   if (!usersId) {
     throw redirect(`/`);
   }
   const password = String(formData.get('current-password'));
   const newPassword = String(formData.get('new-password'));
-  const newPasswordConfirm = String(formData.get('confirm-new-password'));
+  const newPasswordConfirm = String(
+    formData.get('confirm-new-password')
+  );
   if (newPassword != newPasswordConfirm) {
-    return new Error('New password fields must match');  
+    return new Error('New password fields must match');
   }
   try {
-    const user = await db.user.getUserById(usersId)
+    const user = await db.user.getUserById(usersId);
     if (!user[0]) {
       throw redirect('/');
     }
@@ -305,7 +312,7 @@ export async function changePassword(formData: FormData) {
   } catch (err) {
     return err as Error;
   }
-  throw redirect('/account')
+  throw redirect('/account');
 }
 
 export async function forgotPasswordLink(formData: FormData) {
@@ -314,19 +321,19 @@ export async function forgotPasswordLink(formData: FormData) {
   const emailAddress = String(formData.get('email-address'));
   const user = await db.user.getUser(emailAddress);
   if (!user[0]) {
-    throw redirect('/check-email')
+    throw redirect('/check-email');
   }
   try {
     const url = new URL(import.meta.env.VITE_API_BASE_URL);
     url.pathname = `/auth/send-password-email`;
-    const data = { emailAddress: emailAddress }
+    const data = { emailAddress: emailAddress };
     const res = await fetch(url.href, {
-      method: "POST",
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'X-API-Key': `${import.meta.env.VITE_EXPLORER_API_KEY}`,
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     });
   } catch (err) {
     return err as Error;
@@ -339,13 +346,19 @@ export async function forgotPassword(formData: FormData) {
 
   const verificationCode = String(formData.get('verification-code'));
   const newPassword = String(formData.get('new-password'));
-  const newPasswordConfirm = String(formData.get('confirm-new-password'));
-  const user = await db.user.getUserByVerificationCode(verificationCode);
-  if(new Date(user[0].expiresOn) < new Date()) {
-    return new Error('Verification code expired, request a new password change email.')
+  const newPasswordConfirm = String(
+    formData.get('confirm-new-password')
+  );
+  const user = await db.user.getUserByVerificationCode(
+    verificationCode
+  );
+  if (new Date(user[0].expiresOn) < new Date()) {
+    return new Error(
+      'Verification code expired, request a new password change email.'
+    );
   }
   try {
-    validatePassword(newPassword, newPasswordConfirm)
+    validatePassword(newPassword, newPasswordConfirm);
     const newPasswordHash = await encode(newPassword);
     await db.user.changePassword(user[0].usersId, newPasswordHash);
   } catch (err) {
@@ -354,14 +367,14 @@ export async function forgotPassword(formData: FormData) {
   try {
     const url = new URL(import.meta.env.VITE_API_BASE_URL);
     url.pathname = `/auth/send-password-changed-email`;
-    const data = { emailAddress: user[0].emailAddress }
+    const data = { emailAddress: user[0].emailAddress };
     const res = await fetch(url.href, {
-      method: "POST",
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'X-API-Key': `${import.meta.env.VITE_EXPLORER_API_KEY}`,
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     });
   } catch (err) {
     return err as Error;
@@ -385,32 +398,42 @@ export async function nameChange(formData: FormData) {
 
 export async function regenerateKey(formData: FormData) {
   'use server';
-  const usersId = Number(formData.get('users-id'));
-  const user = await db.user.getUserById(usersId)
   try {
+    const usersId = await getUsersId();
+
+    if (usersId === undefined) {
+      throw new Error('User not found');
+    }
+    if (typeof usersId !== 'number') {
+      throw new Error('User not found');
+    }
+
+    const user = await db.user.getUserById(usersId);
     const url = new URL(import.meta.env.VITE_API_BASE_URL);
     url.pathname = `/auth/regenerate-token`;
-    const data = { usersId: usersId, token: user[0].token }
+    const data = { usersId: usersId, token: user[0].token };
     const res = await fetch(url.href, {
-      method: "POST",
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'X-API-Key': `${import.meta.env.VITE_EXPLORER_API_KEY}`,
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     });
-    const d = await res.json()
+    const d = await res.json();
   } catch (err) {
-    return err as Error;
+    throw redirect('/login');
   }
   throw redirect('/account');
 }
 
 export async function resendVerificationEmail(formData) {
   const verificationCode = String(formData.get('verification-code'));
-  const user = await db.user.getUserByVerificationCode(verificationCode);
+  const user = await db.user.getUserByVerificationCode(
+    verificationCode
+  );
   if (!user[0]) {
-    return new Error("Not a valid code");
+    return new Error('Not a valid code');
   }
   if (user[0].active) {
     throw redirect(`/login`);
@@ -418,17 +441,17 @@ export async function resendVerificationEmail(formData) {
   try {
     const url = new URL(import.meta.env.VITE_API_BASE_URL);
     url.pathname = `/auth/resend-verification-code`;
-    const data = { 
+    const data = {
       usersId: user[0].usersId,
-      verificationCode: verificationCode
-    }
+      verificationCode: verificationCode,
+    };
     const res = await fetch(url.href, {
-      method: "POST",
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'X-API-Key': `${import.meta.env.VITE_EXPLORER_API_KEY}`,
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     });
   } catch (err) {
     return err as Error;
@@ -441,10 +464,14 @@ export async function newList(formData: FormData) {
   const label = String(formData.get('list-name'));
   const description = String(formData.get('list-description'));
   if (!label || label == '') {
-    throw Error('Name required')
+    throw Error('Name required');
   }
   try {
-    const listsId = await db.lists.createList(usersId, label, description);
+    const listsId = await db.lists.createList(
+      usersId,
+      label,
+      description
+    );
     throw redirect(`/lists/${listsId[0].create_list}`);
   } catch (err) {
     return err as Error;
@@ -456,7 +483,7 @@ export async function updateList(formData: FormData) {
   const label = String(formData.get('list-name'));
   const description = String(formData.get('list-description'));
   try {
-    await db.lists.updateList(listsId, label, description)
+    await db.lists.updateList(listsId, label, description);
     throw redirect(`/lists/${listsId}`);
   } catch (err) {
     return err as Error;
@@ -465,6 +492,19 @@ export async function updateList(formData: FormData) {
 
 export async function deleteList(formData: FormData) {
   const listsId = Number(formData.get('lists-id'));
+
+  try {
+    const usersId = await getUsersId();
+    if (usersId === undefined) {
+      throw new Error('User not found');
+    }
+    if (typeof usersId !== 'number') {
+      throw new Error('User not found');
+    }
+  } catch {
+    throw redirect('/login');
+  }
+
   try {
     await db.lists.deleteList(listsId);
     throw redirect(`/lists`);
@@ -484,38 +524,43 @@ export async function getLocationById(locationsId: number) {
     },
   });
   const data = await res.json();
-    return data.results[0];
-
+  return data.results[0];
 }
 
-export async function removeSensorNodesList(listsId: number, sensorNodesId: number) {
-  const usersId = await getUsersId()
+export async function removeSensorNodesList(
+  listsId: number,
+  sensorNodesId: number
+) {
+  const usersId = await getUsersId();
   if (!usersId) {
     throw redirect(`/lists/${listsId}`);
   }
-  await db.lists.removeSensorNodeToList(listsId, sensorNodesId)
+  await db.lists.removeSensorNodeToList(listsId, sensorNodesId);
   throw redirect(`/lists/${listsId}`);
 }
 
 export async function addRemoveSensorNodesList(formData: FormData) {
-  const usersId = await getUsersId()
+  const usersId = await getUsersId();
   if (!usersId) {
     throw redirect('/');
   }
   const redirectTo = String(formData.get('redirect'));
   const sensorNodesId = Number(formData.get('sensor-nodes-id'));
-  for (const [k,v] of formData.entries()) {
+  for (const [k, v] of formData.entries()) {
     if (k.includes('list-')) {
-      const listsId = Number(k.split('-')[1])
-      const isOn = Number(v) == 1
-      const locations = await db.lists.getLocationsByListId(usersId, listsId);
-      const locationIds = locations.map(o => o.id);
+      const listsId = Number(k.split('-')[1]);
+      const isOn = Number(v) == 1;
+      const locations = await db.lists.getLocationsByListId(
+        usersId,
+        listsId
+      );
+      const locationIds = locations.map((o) => o.id);
       if (locationIds.indexOf(sensorNodesId) === -1 && isOn) {
-        await db.lists.addSensorNodeToList(listsId, sensorNodesId)
+        await db.lists.addSensorNodeToList(listsId, sensorNodesId);
         throw redirect(`/lists/${listsId}`);
       }
       if (locationIds.indexOf(sensorNodesId) != -1 && !isOn) {
-        await db.lists.removeSensorNodeToList(listsId, sensorNodesId)
+        await db.lists.removeSensorNodeToList(listsId, sensorNodesId);
         throw redirect(redirectTo);
       }
     }
@@ -526,39 +571,38 @@ export async function sendVerificationEmail(usersId: number) {
   'use server';
   const url = new URL(import.meta.env.VITE_API_BASE_URL);
   url.pathname = `/auth/send-verification`;
-  const data = { usersId: usersId }
+  const data = { usersId: usersId };
   const res = await fetch(url.href, {
-    method: "POST",
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'X-API-Key': `${import.meta.env.VITE_EXPLORER_API_KEY}`,
     },
-    body: JSON.stringify(data)
+    body: JSON.stringify(data),
   });
 }
 
-
-async function registerToken(usersId: any){
-    const url = new URL(import.meta.env.VITE_API_BASE_URL);
-    url.pathname = `/auth/register-token`;
-    const data = { 
-      usersId: usersId
-    }
-    const res = await fetch(url.href, {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-        'X-API-Key': `${import.meta.env.VITE_EXPLORER_API_KEY}`,
-      },
-      body: JSON.stringify(data)
-    });
+async function registerToken(usersId: any) {
+  const url = new URL(import.meta.env.VITE_API_BASE_URL);
+  url.pathname = `/auth/register-token`;
+  const data = {
+    usersId: usersId,
+  };
+  const res = await fetch(url.href, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-API-Key': `${import.meta.env.VITE_EXPLORER_API_KEY}`,
+    },
+    body: JSON.stringify(data),
+  });
 }
-
-
 
 export async function verifyEmail(verificationCode: string) {
   'use server';
-  const user = await db.user.getUserByVerificationCode(verificationCode);
+  const user = await db.user.getUserByVerificationCode(
+    verificationCode
+  );
   if (!user[0]) {
     //not a valid code
     throw redirect('/');
@@ -573,7 +617,7 @@ export async function verifyEmail(verificationCode: string) {
   }
   await db.user.verifyUserEmail(user[0].usersId);
   try {
-    await registerToken(user[0].usersId)
+    await registerToken(user[0].usersId);
   } catch (err) {
     return err as Error;
   }
@@ -585,6 +629,18 @@ export async function deleteListLocation(formData: FormData) {
   const locationsId = Number(formData.get('locations-id'));
 
   try {
+    const usersId = await getUsersId();
+    if (usersId === undefined) {
+      throw new Error('User not found');
+    }
+    if (typeof usersId !== 'number') {
+      throw new Error('User not found');
+    }
+  } catch {
+    throw redirect('/login');
+  }
+
+  try {
     await db.lists.deleteListLocation(listsId, locationsId);
     throw redirect(`/lists/${listsId}`);
   } catch (err) {
@@ -592,3 +648,15 @@ export async function deleteListLocation(formData: FormData) {
   }
 }
 
+
+export async function redirectIfLoggedIn() {
+  try {
+    const usersId = await getUsersId();
+    if (usersId !== undefined) {
+      throw new Error('User not found');
+    }
+    return
+  } catch {
+    throw redirect('/');
+  }
+}

@@ -2,13 +2,12 @@ import { Show, createSignal } from 'solid-js';
 
 import {
   A,
+  createAsync,
   useSearchParams,
   useSubmission,
 } from '@solidjs/router';
 
-import { registerAction } from '~/db';
-
-import { getUser } from '~/db';
+import { registerAction, redirectIfLoggedIn, getUserId } from '~/db';
 
 import PasswordScore from '~/components/PasswordScore';
 import { evaluatePassword } from '~/lib/password';
@@ -17,11 +16,19 @@ import '~/assets/scss/routes/register.scss';
 import { Header } from '~/components/Header';
 import { Score } from '@zxcvbn-ts/core/dist/types';
 
+
 export const route = {
-  load: () => getUser(),
+  load() {
+    void redirectIfLoggedIn();
+    void getUserId();
+  },
 };
 
+
 export default function Register() {
+  createAsync(() => redirectIfLoggedIn());
+
+
   const [searchParams] = useSearchParams();
 
   const [passwordInputValue, setPasswordInputValue] = createSignal<string>();

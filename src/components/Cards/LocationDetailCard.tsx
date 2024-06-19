@@ -11,7 +11,7 @@ import {
 } from '~/client';
 import { A, createAsync, useLocation } from '@solidjs/router';
 import { since, timeFromNow } from '~/lib/utils';
-import { getUser } from '~/db';
+import { getUserId } from '~/db';
 import { ListsForm } from './ListsForm';
 import { Sparkline } from '~/components/Charts/Sparkline';
 
@@ -19,7 +19,7 @@ import '~/assets/scss/components/location-detail-card.scss';
 
 
 export function LocationDetailCard() {
-  const user = createAsync(() => getUser(), { deferStream: true });
+  const usersId = createAsync(() => getUserId());
 
   const pageLocation = useLocation();
 
@@ -175,7 +175,7 @@ export function LocationDetailCard() {
         </section>
       </div>
       <footer class='location-detail-card__footer'>
-        <Show when={user()}>
+        <Show when={usersId()}>
           <ListsForm redirect={pageLocation.pathname} />
         </Show>
         <A

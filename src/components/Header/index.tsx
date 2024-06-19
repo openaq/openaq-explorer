@@ -1,8 +1,8 @@
-import { getUser, logoutAction } from '~/db';
+import { getUser, getUserId, logoutAction } from '~/db';
 
 import { createAsync, useLocation } from '@solidjs/router';
 
-import { createMemo, createSignal } from 'solid-js';
+import {  createMemo, createSignal } from 'solid-js';
 
 import { A } from '@solidjs/router';
 import '~/assets/scss/components/header.scss';
@@ -11,7 +11,7 @@ import '~/assets/scss/components/header.scss';
 function Account() {
   const location = useLocation();
   const pathname = createMemo(() => location.pathname);
-  
+
   const re = /\/lists[\/\d+]*|\/account/;
   const match = pathname().match(re);
 
@@ -56,16 +56,13 @@ function Account() {
   );
 }
 
-
-
-
 export function Header() {
   const pageLocation = useLocation();
 
 
   const [open, setOpen] = createSignal();
 
-  const user = createAsync(() => getUser(), { deferStream: true });
+  const userId = createAsync(() => getUserId());
 
 
   return (
@@ -228,21 +225,21 @@ export function Header() {
           </ul>
         </nav>
         <div class="account-nav">
-          {user() ? (
+          {userId() ? (
             ''
           ) : (
             <A href={`/register?redirect=${pageLocation.pathname}`} class="type-link-3 text-smoke-120">
               Sign up
             </A>
           )}
-          {user() ? (
+          {userId() ? (
             ''
           ) : (
             <A href={`/login?redirect=${pageLocation.pathname}`} class="btn btn-secondary">
               Login{' '}
             </A>
           )}
-          {user() ? (
+          {userId() ? (
             <A href="/lists" class="type-link-3 list-link">
               <img
                 width="24px"
@@ -255,8 +252,7 @@ export function Header() {
           ) : (
             ''
           )}
-          {user() ? <Account /> : ''}
-
+          {userId() ? <Account /> : ''}
           <A
             href="https://secure.givelively.org/donate/openaq-inc/"
             class={`btn btn-primary ${"donate-btn"}`}
