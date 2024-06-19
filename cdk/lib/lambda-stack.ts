@@ -148,7 +148,7 @@ export class LambdaStack extends cdk.Stack {
 
     const distribution = new cdk.aws_cloudfront.Distribution(
       this,
-      `${id}explorerTestDistribution`,
+      `${id}OpenAQexplorerDistribution`,
       {
         httpVersion: cloudfront.HttpVersion.HTTP2_AND_3,
         priceClass: cloudfront.PriceClass.PRICE_CLASS_ALL,

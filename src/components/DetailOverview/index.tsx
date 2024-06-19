@@ -63,9 +63,6 @@ function LocationListsFallback() {
         </A>{' '}
         to add this location to a list.
       </span>
-      <A href="/" class="icon-btn btn-secondary">
-        Add to list <img src="/svgs/lists.svg" alt="" />
-      </A>
     </div>
   );
 }
