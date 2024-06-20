@@ -51,9 +51,9 @@ export class LambdaStack extends cdk.Stack {
         description: `lambda function explorer solid start ${id}`,
         code: lambda.Code.fromAsset('../.output'),
         handler: 'server/index.handler',
-        memorySize: 1536,
+        memorySize: 512,
         runtime: lambda.Runtime.NODEJS_20_X,
-        timeout: cdk.Duration.seconds(15),
+        timeout: cdk.Duration.seconds(10),
       }
     );
 
@@ -69,7 +69,7 @@ export class LambdaStack extends cdk.Stack {
       `${id}-deployExplorerAssets`,
       {
         sources: [
-          aws_s3_deployment.Source.asset('../.output/public'),
+          aws_s3_deployment.Source.asset('../.output/public')
         ],
         destinationBucket: bucket,
       }
@@ -159,12 +159,14 @@ export class LambdaStack extends cdk.Stack {
           cachePolicy: defaultCachePolicy,
           originRequestPolicy: distributionOriginRequestPolicy,
           allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
+          viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
           origin: new cdk.aws_cloudfront_origins.HttpOrigin(
             originUrl, {
               connectionAttempts: 2,
               connectionTimeout: cdk.Duration.seconds(2),
               readTimeout: cdk.Duration.seconds(10),
               protocolPolicy: OriginProtocolPolicy.HTTPS_ONLY,
+
           }
           ),
         },

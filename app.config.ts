@@ -1,11 +1,11 @@
 import { defineConfig } from '@solidjs/start/config';
 import { configDefaults } from 'vitest/config'
 import autoprefixer from 'autoprefixer';
-import path from 'path';
 
 export default defineConfig({
   server: {
     preset: 'aws-lambda',
+    inlineDynamicImports: true
   },
   vite: {
     css: {
