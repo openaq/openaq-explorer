@@ -74,7 +74,7 @@ export async function parsePasswordHash(
   };
 }
 
-export async function verify(
+export async function verifyPassword(
   password: string,
   passwordHash: string
 ): Promise<boolean> {

@@ -23,7 +23,7 @@ import {
   forgotPasswordLink,
   deleteListLocation,
   resendVerificationEmail,
-  redirectIfLoggedIn as redirect
+  redirectIfLoggedIn as redirectLoggedIn
 } from './server';
 
 export const getUserId = cache(gUi, 'user-id');
@@ -65,4 +65,4 @@ export const verify = cache(verifyEmail, 'verify-email');
 
 export const resendVerificationEmailAction = action(resendVerificationEmail, 'resend-verification-email');
 
-export const redirectIfLoggedIn = cache(redirect,'redirect-if-logged-in')
+export const redirectIfLoggedIn = cache(redirectLoggedIn,'redirect-if-logged-in')

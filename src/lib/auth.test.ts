@@ -1,15 +1,15 @@
 import { describe, test, expect } from 'vitest';
-import { encode, parsePasswordHash, verify } from './auth';
+import { encode, parsePasswordHash, verifyPassword } from './auth';
 
-describe('verify', async () => {
-    test('verify works with salt without periods',async  () => {
+describe('verifyPassword', async () => {
+    test('verifyPassword works with salt without periods',async  () => {
         const encodedPassword = await encode('Qmx3zNPkj8kh6zmjcL5q', 'JMFYF2zN2bsb4sxMqPXoev');
-        let match = await verify('Qmx3zNPkj8kh6zmjcL5q', encodedPassword)
+        let match = await verifyPassword('Qmx3zNPkj8kh6zmjcL5q', encodedPassword)
         expect(match).toBe(true);
     });
-    test('verify works with salt with periods',async  () => {
+    test('verifyPassword works with salt with periods',async  () => {
         const encodedPassword = await encode('Qmx3zNPkj8kh6zmjcL5q', 'GT2pGKvbcxXcNfwL.Lo.VE');
-        let match = await verify('Qmx3zNPkj8kh6zmjcL5q', encodedPassword)
+        let match = await verifyPassword('Qmx3zNPkj8kh6zmjcL5q', encodedPassword)
         expect(match).toBe(true);
     });
 });

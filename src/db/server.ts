@@ -7,7 +7,7 @@ import { db } from './db';
 import crypto from 'crypto';
 import { promisify } from 'util';
 import { Buffer } from 'buffer';
-import { encode, passlibify, verify } from '~/lib/auth';
+import { encode, passlibify, verifyPassword } from '~/lib/auth';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { validatePassword } from '~/lib/password';
@@ -62,7 +62,6 @@ export async function getUser()  {
   'use server';
   try {
     const usersId = await getUsersId();
-    console.log("getUser",usersId)
     if (usersId === undefined) {
       throw new Error('User not found');
     }
@@ -70,8 +69,6 @@ export async function getUser()  {
     if (!user) {
       throw new Error('User not found');
     }
-    console.log("getUser",user[0])
-
     return user[0];
   } catch {
     throw redirect('/login');
@@ -217,7 +214,7 @@ export async function register(formData: FormData) {
   if (emailAddress === '') {
     throw new Error('Valid email address required');
   }
-  if (isValidEmailDomain(emailAddress)) {
+  if (!isValidEmailDomain(emailAddress)) {
     throw new Error('Valid email address required - disposable email domains not allowed.');
   }
   if (fullName === '') {
@@ -268,7 +265,7 @@ export async function login(formData: FormData) {
     if (!user[0].active) {
       throw redirect('/verify-email');
     }
-    const isCorrectPassword = await verify(
+    const isCorrectPassword = await verifyPassword(
       password,
       user[0].passwordHash
     );
@@ -622,6 +619,7 @@ export async function verifyEmail(verificationCode: string) {
   }
   if (dayjs(user[0].expiresOn) < dayjs(new Date())) {
     // expired
+
     throw redirect(`/expired?code=${verificationCode}`);
   }
   await db.user.verifyUserEmail(user[0].usersId);

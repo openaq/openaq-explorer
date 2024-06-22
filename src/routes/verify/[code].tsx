@@ -1,4 +1,5 @@
 
+import { createAsync, useParams } from '@solidjs/router';
 import {verify} from '~/db';
 
 export const route = {
@@ -7,7 +8,8 @@ export const route = {
 
 
 export default function Verify() {
-
+    const {code} = useParams();
+    createAsync(() => verify(code));
 
     return (
         <>

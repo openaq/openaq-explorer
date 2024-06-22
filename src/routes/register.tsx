@@ -66,9 +66,9 @@ export default function Register() {
     clearTimeout(passwordConfirmInputTimeout);
     passwordConfirmInputTimeout = window.setTimeout(() => {
       if (passwordInputValue() !== passwordConfirmInputValue()) {
-        setPasswordsDoNotMatch(false);
-      } else {
         setPasswordsDoNotMatch(true);
+      } else {
+        setPasswordsDoNotMatch(false);
       }
     }, 500);
   };
