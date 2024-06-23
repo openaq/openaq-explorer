@@ -138,8 +138,8 @@ export function DownloadCard(props) {
     for (const sensorId of sensorIds) {
       const measurements = await getSensorMeasurements(
         sensorId,
-        dayjs(new Date(dateFromValue), props.timezone),
-        dayjs(new Date(dateToValue), props.timezone)
+        dayjs(new Date(dateFromValue), props.timezone).toISOString(),
+        dayjs(new Date(dateToValue), props.timezone).toISOString()
       );
       data = data.concat(measurements);
       await sleep(300);

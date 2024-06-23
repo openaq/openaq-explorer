@@ -89,7 +89,6 @@ export const getSensorMeasurements = GET(
     limit: number = 1000
   ) => {
     'use server';
-
     const data = await fetchSensorMeasurements(
       sensorsId,
       datetimeFrom,
