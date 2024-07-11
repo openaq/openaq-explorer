@@ -1,25 +1,26 @@
 'use server';
+
 import { redirect } from '@solidjs/router';
 import { useSession } from 'vinxi/http';
 
-import { getRequestEvent } from 'solid-js/web';
-import { db } from './db';
 import crypto from 'crypto';
 import { promisify } from 'util';
 import { Buffer } from 'buffer';
 import { encode, passlibify, verifyPassword } from '~/lib/auth';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
+import {getRequestEvent} from "solid-js/web";
 import { validatePassword } from '~/lib/password';
 import { disposableDomains } from '~/data/auth';
+import { ListDefinition, ListItemDefinition, UserByIdDefinition } from './types';
+import { db } from '~/client/backend';
 
 const pbkdf2Async = promisify(crypto.pbkdf2);
 
 dayjs.extend(utc);
 
-async function checkPassword(password: string, hash: string) {
-  'use server';
 
+async function checkPassword(password: string, hash: string) {
   const parts = hash.split('$');
   let hashedPassword = await pbkdf2Async(
     password,
@@ -40,8 +41,6 @@ const SESSION_SECRET = import.meta.env.VITE_SESSION_SECRET;
 const USER_SESSION_MAX_AGE = 60 * 60 * 24;
 
 async function getSession() {
-  'use server';
-
   return useSession({
     name: 'oaq_explorer_session',
     password: SESSION_SECRET,
@@ -51,68 +50,36 @@ async function getSession() {
 
 export async function getUsersId(): Promise<number | undefined> {
   'use server';
-
   const session = await getSession();
   const usersId = session.data.usersId;
   if (!usersId || usersId === 'undefined') return;
   return Number(usersId);
 }
 
-export async function getUser()  {
+export async function getUser(): Promise<UserByIdDefinition> {
   'use server';
   try {
     const usersId = await getUsersId();
     if (usersId === undefined) {
       throw new Error('User not found');
     }
-    const user = await db.user.getUserById(usersId);
-    if (!user) {
+    const res = await db.getUserById(usersId);
+    if (res.status == 404) {
+    }
+    let user;
+    const rows = await res.json();
+    if (rows.length === 0) {
       throw new Error('User not found');
     }
-    return user[0];
-  } catch {
+    user = rows[0] as UserByIdDefinition
+    return user;
+  } catch (err) {
+    console.info(err);
     throw redirect('/login');
   }
 }
 
-interface ListDefinition {
-  listsId: number;
-  ownersId: number;
-  usersId: number;
-  role: string;
-  label: string;
-  description: string;
-  visibility: boolean;
-  userCount: number;
-  locationsCount: number;
-  sensorNodesIds: number[];
-  bbox: number[][];
-}
 
-export interface SensorDefinition {
-  id: number;
-  name: string;
-  parameter: ParameterDefinition;
-}
-
-export interface ParameterDefinition {
-  id: number;
-  name: string;
-  units: string;
-  value_last: number;
-  display_name: string;
-  datetime_last: string;
-}
-
-interface ListItemDefinition {
-  id: number;
-  name: string;
-  country: string;
-  ismonitor: boolean;
-  provider: string;
-  sensors: SensorDefinition[];
-  parameterIds: number[];
-}
 
 export async function userLists(): Promise<ListDefinition[]> {
   'use server';
@@ -121,15 +88,21 @@ export async function userLists(): Promise<ListDefinition[]> {
     if (typeof usersId !== 'number') {
       throw new Error('User not found');
     }
-    const lists = await db.lists.getListsByUserId(usersId);
-    return lists;
-  } catch {
+    const res =  await db.getUserLists(usersId);
+    if (res.status !== 200) {
+      throw new Error();
+    }
+    const lists = await res.json();
+    return lists as ListDefinition[];
+  } catch(err) {
+    console.error(err)
     return [];
   }
 }
 
 export async function list(listsId: number): Promise<ListDefinition> {
   'use server';
+
   try {
     const usersId = await getUsersId();
     if (usersId === undefined) {
@@ -138,7 +111,15 @@ export async function list(listsId: number): Promise<ListDefinition> {
     if (typeof usersId !== 'number') {
       throw new Error('User not found');
     }
-    const list = db.lists.getListById(usersId, listsId);
+    const res = await db.getList(listsId); 
+    const rows = await res.json();
+    if (rows.length === 0) {
+      throw new Error('List not found');
+    }
+    const list = rows[0] as ListDefinition;
+    if (list.ownersId !== usersId) {
+      throw redirect('/lists');
+    }
     return list;
   } catch {
     throw redirect('/login');
@@ -149,6 +130,7 @@ export async function listLocations(
   listsId: number
 ): Promise<ListItemDefinition[]> {
   'use server';
+
   try {
     const usersId = await getUsersId();
     if (usersId === undefined) {
@@ -157,7 +139,8 @@ export async function listLocations(
     if (typeof usersId !== 'number') {
       throw new Error('User not found');
     }
-    const lists = db.lists.getLocationsByListId(usersId, listsId);
+    const res  = await db.getListLocations(listsId);
+    const lists = await res.json() as ListItemDefinition[];
     return lists;
   } catch {
     throw redirect('/login');
@@ -176,10 +159,8 @@ export async function sensorNodesLists(
     if (typeof usersId !== 'number') {
       throw new Error('User not found');
     }
-    const lists = db.lists.getListsBySensorNodesId(
-      Number(usersId),
-      Number(sensorNodesId)
-    );
+    const res = await db.getLocationLists(usersId,sensorNodesId);
+    const lists = await res.json();
     return lists;
   } catch {
     return [];
@@ -196,7 +177,11 @@ export function isValidEmailDomain(email: string): boolean {
 
 export async function register(formData: FormData) {
   'use server';
-  const clientAddress = `0.0.0.0`;
+
+  const event = getRequestEvent()
+  const xForwardedFor = event?.request.headers.get("x-forwarded-for") || '';
+  const ips = xForwardedFor?.split(', ');
+  const ipAddress = ips[0] || '0.0.0.0';
   const fullName = String(formData.get('fullname'));
   const emailAddress = String(formData.get('email-address'));
   const password = String(formData.get('password'));
@@ -215,6 +200,7 @@ export async function register(formData: FormData) {
     throw new Error('Valid email address required');
   }
   if (!isValidEmailDomain(emailAddress)) {
+    console.info(`invalid email domain attempt: ${emailAddress}`);
     throw new Error('Valid email address required - disposable email domains not allowed.');
   }
   if (fullName === '') {
@@ -228,23 +214,33 @@ export async function register(formData: FormData) {
   } 
   const passwordHash = await encode(password);
   try {
-    let user = await db.user.getUser(emailAddress);
-    if (user[0]) {
-      if (user[0].active) {
+    let res = await db.getUserByEmailAddress(emailAddress);
+    if (res.status == 200) {
+      const user = await res.json();
+      if (user.active) {
         throw redirect('/login');
       } else {
         throw redirect(`/verify-email?email=${emailAddress}`);
       }
     }
-    const token = await db.user.create(
+    const createUserRes = await db.createUser({
       fullName,
       emailAddress,
       passwordHash,
-      clientAddress
-    );
-    const record = await db.user.getUser(emailAddress);
-    await sendVerificationEmail(record[0].usersId);
+      ipAddress
+    })
+    const newUser = await createUserRes.json();
+    console.info(newUser)
+    res = await db.getUserByEmailAddress(emailAddress);
+    if (res.status === 200) {
+      const user = await res.json()
+      await sendVerificationEmail(user.usersId);
+    }
+    if (res.status === 404) {
+      throw new Error("failed to create new user")
+    }
   } catch (err) {
+    console.error(err);
     return err as Error;
   }
   throw redirect(`/verify-email?email=${emailAddress}`);
@@ -252,22 +248,25 @@ export async function register(formData: FormData) {
 
 export async function login(formData: FormData) {
   'use server';
-
   const email = String(formData.get('email-address'));
   const password = String(formData.get('password'));
   const rememberMe = String(formData.get('remember-me'));
   const redirectTo = String(formData.get('redirect'));
   try {
-    const user = await db.user.getUser(email);
-    if (!user[0]) {
+    const res = await db.getUserByEmailAddress(email);
+    if (res.status !== 200) {
+    }
+    const rows = await res.json()
+    if (rows.length == 0) {
       throw new Error('Invalid credentials');
     }
-    if (!user[0].active) {
+    const user = rows[0]
+    if (!user.isActive) {
       throw redirect('/verify-email');
     }
     const isCorrectPassword = await verifyPassword(
       password,
-      user[0].passwordHash
+      user.passwordHash
     );
     if (!isCorrectPassword) {
       throw new Error('Invalid credentials');
@@ -275,7 +274,7 @@ export async function login(formData: FormData) {
     const remember = rememberMe == 'on' ? true : false;
     const maxAge = remember ? 60 * 60 * 24 * 30 : 60 * 60 * 24;
     const session = await getSession();
-    await session.update((d) => (d.usersId = user[0].usersId));
+    await session.update((d) => (d.usersId = user.usersId));
     await session.update((d) => (d.maxAge = maxAge));
   } catch (err) {
     return err as Error;
@@ -299,11 +298,12 @@ export async function changePassword(formData: FormData) {
     return new Error('New password fields must match');
   }
   try {
-    const user = await db.user.getUserById(usersId);
-    if (!user[0]) {
+    const res = await db.getUserById(usersId);
+    if (res.status === 404) {
       throw redirect('/');
     }
-    if (!user[0].active) {
+    const user = await res.json();
+    if (!user.active) {
       throw redirect('/verify-email');
     }
     const newPasswordHash = await encode(newPassword);
@@ -314,7 +314,10 @@ export async function changePassword(formData: FormData) {
     if (!isCorrectPassword) {
       return new Error('Invalid credentials');
     }
-    await db.user.changePassword(user[0].usersId, newPasswordHash);
+    await db.updateUserPassword({
+      usersId: user.usersId, 
+      passwordHash: newPasswordHash
+    });
   } catch (err) {
     return err as Error;
   }
@@ -325,8 +328,8 @@ export async function forgotPasswordLink(formData: FormData) {
   'use server';
 
   const emailAddress = String(formData.get('email-address'));
-  const user = await db.user.getUser(emailAddress);
-  if (!user[0]) {
+  const res = await db.getUserByEmailAddress(emailAddress);
+  if (res.status === 404) {
     throw redirect('/check-email');
   }
   try {
@@ -349,16 +352,17 @@ export async function forgotPasswordLink(formData: FormData) {
 
 export async function forgotPassword(formData: FormData) {
   'use server';
-
   const verificationCode = String(formData.get('verification-code'));
   const newPassword = String(formData.get('new-password'));
   const newPasswordConfirm = String(
     formData.get('confirm-new-password')
   );
-  const user = await db.user.getUserByVerificationCode(
-    verificationCode
-  );
-  if (new Date(user[0].expiresOn) < new Date()) {
+  const res = await db.getUserByVerificationCode(verificationCode);
+  if (res.status !== 200) {
+    throw redirect('/login');
+  }
+  const user = await res.json();
+  if (new Date(user.expiresOn) < new Date()) {
     return new Error(
       'Verification code expired, request a new password change email.'
     );
@@ -366,7 +370,10 @@ export async function forgotPassword(formData: FormData) {
   try {
     validatePassword(newPassword, newPasswordConfirm);
     const newPasswordHash = await encode(newPassword);
-    await db.user.changePassword(user[0].usersId, newPasswordHash);
+    const res = await db.updateUserPassword({
+      usersId: user.usersId, 
+      passwordHash: newPasswordHash
+    })
   } catch (err) {
     return err as Error;
   }
@@ -389,20 +396,14 @@ export async function forgotPassword(formData: FormData) {
 }
 
 export async function logout(formData: FormData) {
+  'use server';
   const redirectTo = String(formData.get('redirect'));
-
   const session = await getSession();
   await session.update((d) => (d.usersId = undefined));
   throw redirect(redirectTo);
 }
 
-export async function nameChange(formData: FormData) {
-  const email = String(formData.get('email-address'));
-  const password = String(formData.get('fullname'));
-  const rememberMe = String(formData.get('new-fullname'));
-}
-
-export async function regenerateKey(formData: FormData) {
+export async function regenerateKey() {
   'use server';
   try {
     const usersId = await getUsersId();
@@ -413,11 +414,18 @@ export async function regenerateKey(formData: FormData) {
     if (typeof usersId !== 'number') {
       throw new Error('User not found');
     }
-
-    const user = await db.user.getUserById(usersId);
+    const userRes = await db.getUserById(usersId);
+    if (userRes.status === 404) {
+      throw new Error('User not found');
+    }
+    const rows = await userRes.json()
+    if (rows.length === 0) {
+      throw redirect('/login');
+    }
+    const user = rows[0]
     const url = new URL(import.meta.env.VITE_API_BASE_URL);
     url.pathname = `/auth/regenerate-token`;
-    const data = { usersId: usersId, token: user[0].token };
+    const data = { usersId: usersId, token: user.token };
     const res = await fetch(url.href, {
       method: 'POST',
       headers: {
@@ -427,21 +435,22 @@ export async function regenerateKey(formData: FormData) {
       body: JSON.stringify(data),
     });
     const d = await res.json();
+    console.log(d)
   } catch (err) {
     throw redirect('/login');
   }
   throw redirect('/account');
 }
 
-export async function resendVerificationEmail(formData) {
+export async function resendVerificationEmail(formData: FormData) {
+  'use server';
   const verificationCode = String(formData.get('verification-code'));
-  const user = await db.user.getUserByVerificationCode(
-    verificationCode
-  );
-  if (!user[0]) {
-    return new Error('Not a valid code');
+  const res = await db.getUserByVerificationCode(verificationCode);
+  if (res.status === 404) {
+    throw redirect(`/login`);
   }
-  if (user[0].active) {
+  const user = await res.json();
+  if (user.active) {
     throw redirect(`/login`);
   }
   try {
@@ -466,30 +475,42 @@ export async function resendVerificationEmail(formData) {
 }
 
 export async function newList(formData: FormData) {
-  const usersId = Number(formData.get('users-id'));
+  'use server';
+  const usersId = await getUsersId();
+  if (!usersId) {
+    throw redirect(`/login`);
+  }
   const label = String(formData.get('list-name'));
   const description = String(formData.get('list-description'));
   if (!label || label == '') {
     throw Error('Name required');
   }
   try {
-    const listsId = await db.lists.createList(
+    const res = await db.createList({
       usersId,
       label,
       description
-    );
-    throw redirect(`/lists/${listsId[0].create_list}`);
+    });
+    const newList = await res.json();
+    console.log(newList)
+    throw redirect(`/lists/${newList.create_list}`);
+
   } catch (err) {
     return err as Error;
   }
 }
 
 export async function updateList(formData: FormData) {
+  'use server';
   const listsId = Number(formData.get('lists-id'));
   const label = String(formData.get('list-name'));
   const description = String(formData.get('list-description'));
   try {
-    await db.lists.updateList(listsId, label, description);
+    console.log(listsId, label, description)
+    const res = await db.updateList({
+      listsId, label, description
+    });
+    console.log(res.status)
     throw redirect(`/lists/${listsId}`);
   } catch (err) {
     return err as Error;
@@ -497,6 +518,7 @@ export async function updateList(formData: FormData) {
 }
 
 export async function deleteList(formData: FormData) {
+  'use server';
   const listsId = Number(formData.get('lists-id'));
 
   try {
@@ -512,7 +534,7 @@ export async function deleteList(formData: FormData) {
   }
 
   try {
-    await db.lists.deleteList(listsId);
+    await db.deleteList(listsId);
     throw redirect(`/lists`);
   } catch (err) {
     return err as Error;
@@ -520,6 +542,7 @@ export async function deleteList(formData: FormData) {
 }
 
 export async function getLocationById(locationsId: number) {
+  'use server';
   const url = new URL(import.meta.env.VITE_API_BASE_URL);
   url.pathname = `/v3/locations/${locationsId}`;
 
@@ -537,15 +560,18 @@ export async function removeSensorNodesList(
   listsId: number,
   sensorNodesId: number
 ) {
+  'use server';
   const usersId = await getUsersId();
   if (!usersId) {
     throw redirect(`/lists/${listsId}`);
   }
-  await db.lists.removeSensorNodeToList(listsId, sensorNodesId);
+  await db.deleteListLocation(listsId, sensorNodesId);
   throw redirect(`/lists/${listsId}`);
 }
 
 export async function addRemoveSensorNodesList(formData: FormData) {
+  'use server';
+
   const usersId = await getUsersId();
   if (!usersId) {
     throw redirect('/');
@@ -556,17 +582,17 @@ export async function addRemoveSensorNodesList(formData: FormData) {
     if (k.includes('list-')) {
       const listsId = Number(k.split('-')[1]);
       const isOn = Number(v) == 1;
-      const locations = await db.lists.getLocationsByListId(
-        usersId,
+      const res = await db.getListLocations(
         listsId
       );
+      const locations = await res.json();
       const locationIds = locations.map((o) => o.id);
       if (locationIds.indexOf(sensorNodesId) === -1 && isOn) {
-        await db.lists.addSensorNodeToList(listsId, sensorNodesId);
+        await db.createListLocation(listsId, {locationsId: sensorNodesId});
         throw redirect(`/lists/${listsId}`);
       }
       if (locationIds.indexOf(sensorNodesId) != -1 && !isOn) {
-        await db.lists.removeSensorNodeToList(listsId, sensorNodesId);
+        await db.deleteListLocation(listsId, sensorNodesId);
         throw redirect(redirectTo);
       }
     }
@@ -589,6 +615,7 @@ export async function sendVerificationEmail(usersId: number) {
 }
 
 async function registerToken(usersId: any) {
+  'use server';
   const url = new URL(import.meta.env.VITE_API_BASE_URL);
   url.pathname = `/auth/register-token`;
   const data = {
@@ -606,23 +633,23 @@ async function registerToken(usersId: any) {
 
 export async function verifyEmail(verificationCode: string) {
   'use server';
-  const user = await db.user.getUserByVerificationCode(
+  const res = await db.getUserByVerificationCode(
     verificationCode
   );
-  if (!user[0]) {
-    //not a valid code
+  if (res.status == 404) {
     throw redirect('/');
   }
+  const user = await res.json()
   if (user[0].active) {
     // already verified
     throw redirect('/login');
   }
-  if (dayjs(user[0].expiresOn) < dayjs(new Date())) {
+  if (dayjs(user.expiresOn) < dayjs(new Date())) {
     // expired
 
     throw redirect(`/expired?code=${verificationCode}`);
   }
-  await db.user.verifyUserEmail(user[0].usersId);
+  await db.verifyUser(user[0].usersId)
   try {
     await registerToken(user[0].usersId);
   } catch (err) {
@@ -632,9 +659,9 @@ export async function verifyEmail(verificationCode: string) {
 }
 
 export async function deleteListLocation(formData: FormData) {
+  'use server';
   const listsId = Number(formData.get('lists-id'));
   const locationsId = Number(formData.get('locations-id'));
-
   try {
     const usersId = await getUsersId();
     if (usersId === undefined) {
@@ -648,7 +675,7 @@ export async function deleteListLocation(formData: FormData) {
   }
 
   try {
-    await db.lists.deleteListLocation(listsId, locationsId);
+    await db.deleteListLocation(listsId, locationsId);
     throw redirect(`/lists/${listsId}`);
   } catch (err) {
     return err as Error;
@@ -657,6 +684,7 @@ export async function deleteListLocation(formData: FormData) {
 
 
 export async function redirectIfLoggedIn() {
+  'use server';
   try {
     const usersId = await getUsersId();
     if (usersId !== undefined) {

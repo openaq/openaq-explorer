@@ -62,7 +62,9 @@ export function Header() {
 
   const [open, setOpen] = createSignal();
 
-  const userId = createAsync(() => getUserId());
+    const userId = createAsync(() => getUserId());
+  
+
 
 
   return (

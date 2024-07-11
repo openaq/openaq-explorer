@@ -30,7 +30,7 @@ export interface ParameterDefinition {
   name: string;
   units: string;
   value_last: number;
-  display_name: string;
+  displayName: string;
   datetime_last: string;
 }
 
@@ -117,7 +117,7 @@ export function LocationListItem(props: LocationListItemDefinition) {
                   {props.sensors
                     .map(
                       (o) =>
-                        `${o.parameter.display_name} ${o.parameter.units}`
+                        `${o.parameter.displayName} ${o.parameter.units}`
                     )
                     .join(', ')}
                 </div>

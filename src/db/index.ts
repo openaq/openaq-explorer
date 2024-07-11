@@ -6,7 +6,6 @@ import {
   logout,
   login,
   register,
-  nameChange,
   changePassword,
   userLists,
   regenerateKey,
@@ -31,7 +30,6 @@ export const getUser = cache(gU, 'user');
 export const loginAction = action(login, 'login');
 export const logoutAction = action(logout, 'logout');
 export const registerAction = action(register, 'register');
-export const nameChangeAction = action(nameChange, 'name-change');
 export const passwordChangeAction = action(
   changePassword,
   'password-change'

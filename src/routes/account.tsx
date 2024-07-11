@@ -38,7 +38,7 @@ export default function Acount() {
               name="name"
               id="name"
               class="text-input"
-              value={user()?.fullName}
+              value={user()?.fullname}
             />
           </div>
 

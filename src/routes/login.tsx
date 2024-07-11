@@ -1,13 +1,12 @@
 import { Show } from 'solid-js';
 import { A, useSubmission, useSearchParams, createAsync } from '@solidjs/router';
-import { getUserId, loginAction, redirectIfLoggedIn } from '~/db';
+import { loginAction, redirectIfLoggedIn } from '~/db';
 import '~/assets/scss/routes/login.scss';
 import { Header } from '~/components/Header';
 
 export const route = {
   load() {
     void redirectIfLoggedIn();
-    void getUserId();
   },
 };
 

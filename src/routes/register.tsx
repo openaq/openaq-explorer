@@ -7,7 +7,7 @@ import {
   useSubmission,
 } from '@solidjs/router';
 
-import { registerAction, redirectIfLoggedIn, getUserId } from '~/db';
+import { registerAction, redirectIfLoggedIn } from '~/db';
 
 import PasswordScore from '~/components/PasswordScore';
 import { evaluatePassword } from '~/lib/password';
@@ -20,7 +20,6 @@ import { Score } from '@zxcvbn-ts/core/dist/types';
 export const route = {
   load() {
     void redirectIfLoggedIn();
-    void getUserId();
   },
 };
 
