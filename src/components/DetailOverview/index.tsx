@@ -80,7 +80,7 @@ export function DetailOverview(props: DetailOverviewDefinition) {
           <span class="type-subtitle-3 text-smoke-120">
             {props.country?.name}
           </span>
-          <h1 class="type-display-1 text-sky-120">{props.name}</h1>
+          <h1 class="type-display-1 text-sky-120">{props.name || 'No label'}</h1>
         </div>
         <div>
           <a
