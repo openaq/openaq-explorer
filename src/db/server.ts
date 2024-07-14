@@ -435,7 +435,6 @@ export async function regenerateKey() {
       body: JSON.stringify(data),
     });
     const d = await res.json();
-    console.log(d)
   } catch (err) {
     throw redirect('/login');
   }
@@ -492,7 +491,6 @@ export async function newList(formData: FormData) {
       description
     });
     const newList = await res.json();
-    console.log(newList)
     throw redirect(`/lists/${newList.create_list}`);
 
   } catch (err) {
@@ -506,11 +504,9 @@ export async function updateList(formData: FormData) {
   const label = String(formData.get('list-name'));
   const description = String(formData.get('list-description'));
   try {
-    console.log(listsId, label, description)
     const res = await db.updateList({
       listsId, label, description
     });
-    console.log(res.status)
     throw redirect(`/lists/${listsId}`);
   } catch (err) {
     return err as Error;

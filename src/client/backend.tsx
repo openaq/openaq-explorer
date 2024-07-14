@@ -50,14 +50,12 @@ export const db = {
   getUserByEmailAddress: async (
     emailAddress: string
   ): Promise<Response> => {
-    console.log(`${baseUrl}/users/email/${emailAddress}`)
     const res = await fetch(
       `${baseUrl}/users/email/${emailAddress}`,
       {
         method: 'GET',
       }
     );
-    console.log(res)
     return res;
   },
 
@@ -110,7 +108,6 @@ export const db = {
   },
 
   createList: async (list: CreateListDefinition): Promise<Response> => {
-    console.log(list)
     const res = await fetch(`${baseUrl}/lists`, {
       method: 'POST',
       headers: {
