@@ -36,6 +36,10 @@ export const db = {
     const res = await fetch(`${baseUrl}/users`, {
       method: 'POST',
       body: JSON.stringify(user),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
     });
     return res;
   },

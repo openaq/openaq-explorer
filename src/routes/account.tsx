@@ -10,7 +10,9 @@ import '~/assets/scss/routes/account.scss';
 import { Suspense } from 'solid-js';
 
 export const route = {
-  load: () => getUser(),
+  load: () => {
+    getUser();
+  },
 };
 
 function copyApiKey(token: string) {

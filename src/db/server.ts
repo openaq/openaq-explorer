@@ -65,6 +65,7 @@ export async function getUser(): Promise<UserByIdDefinition> {
     }
     const res = await db.getUserById(usersId);
     if (res.status == 404) {
+      throw new Error('User not found');
     }
     let user;
     const rows = await res.json();
@@ -232,9 +233,10 @@ export async function register(formData: FormData) {
     const newUser = await createUserRes.json();
     console.info(newUser)
     res = await db.getUserByEmailAddress(emailAddress);
+
     if (res.status === 200) {
       const user = await res.json()
-      await sendVerificationEmail(user.usersId);
+      await sendVerificationEmail(user[0].usersId);
     }
     if (res.status === 404) {
       throw new Error("failed to create new user")
@@ -602,7 +604,8 @@ export async function sendVerificationEmail(usersId: number) {
   const data = { usersId: usersId };
   const res = await fetch(url.href, {
     method: 'POST',
-    headers: {
+    headers: {  
+      'Accept': 'application/json',
       'Content-Type': 'application/json',
       'X-API-Key': `${import.meta.env.VITE_EXPLORER_API_KEY}`,
     },

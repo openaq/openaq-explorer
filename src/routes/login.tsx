@@ -17,6 +17,14 @@ export default function Login() {
 
   const [searchParams] = useSearchParams();
 
+  let redirect;
+  if (['/login', '/verify-email', '/register'].includes(searchParams.redirect ?? '/')) {
+    redirect = '/'
+  } else {
+    redirect = searchParams.redirect;
+  }
+
+
   const loggingIn = useSubmission(loginAction);
 
   return (
@@ -33,7 +41,7 @@ export default function Login() {
           <input
             type="hidden"
             name="redirect"
-            value={searchParams.redirect ?? '/'}
+            value={redirect}
           />
           <div class="form-element">
             <label

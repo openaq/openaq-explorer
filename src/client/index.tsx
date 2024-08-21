@@ -33,12 +33,17 @@ async function fetchSensorMeasurements(
     ' ',
     '%2b'
   )}&date_to=${datetimeTo.replace(' ', '%2b')}&limit=${limit}`;
+  console.info(`fetching ${url.href}`)
   const res = await fetch(url.href, {
     headers: {
       'Content-Type': 'application/json',
       'X-API-Key': `${import.meta.env.VITE_EXPLORER_API_KEY}`,
     },
   });
+  if (res.status !== 200) {
+    console.error(`${url.href} failed with HTTP ${res.status}`);
+    throw new Error('failed to fetch')
+  }
   const data = await res.json();
   return data.results;
 }
