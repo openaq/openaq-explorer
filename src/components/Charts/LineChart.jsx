@@ -63,6 +63,63 @@ export function multiFormat(date, timezone) {
   );
 }
 
+function fillHourlyGaps(data) {
+  if (data.length === 0) return [];
+
+  const oneHour = 60 * 60 * 1000; // One hour in milliseconds
+  const filledData = [];
+
+  data.forEach((currentItem, index) => {
+    // Push the current item to the filledData array
+    filledData.push(currentItem);
+
+    // Check if this is the last item, skip adding gaps if so
+    if (index === data.length - 1) return;
+
+    const currentEndTime = new Date(
+      currentItem.period.datetimeTo.utc
+    ).getTime();
+    const nextStartTime = new Date(
+      data[index + 1].period.datetimeFrom.utc
+    ).getTime();
+
+    // Calculate the number of missing hours between the current item and the next one
+    const missingHours = (nextStartTime - currentEndTime) / oneHour;
+
+    // If there's a gap, create new objects with value null for each missing hour
+    Array.from({ length: missingHours - 1 }).forEach(
+      (_, gapIndex) => {
+        const newTimeFrom = new Date(
+          currentEndTime + oneHour * (gapIndex + 1)
+        ).toISOString();
+        const newTimeTo = new Date(
+          currentEndTime + oneHour * (gapIndex + 2)
+        ).toISOString();
+
+        const gapItem = {
+          ...currentItem,
+          value: null,
+          period: {
+            ...currentItem.period,
+            datetimeFrom: {
+              utc: newTimeFrom,
+              local: newTimeFrom, // Adjust the local time as needed
+            },
+            datetimeTo: {
+              utc: newTimeTo,
+              local: newTimeTo, // Adjust the local time as needed
+            },
+          },
+        };
+
+        // Push the gap item into the filledData array
+        filledData.push(gapItem);
+      }
+    );
+  });
+
+  return filledData;
+}
 // splits single measurements series into multiple subseries
 // if dates are not continuous
 export function splitMeasurements(measurements, timezone) {
@@ -71,24 +128,26 @@ export function splitMeasurements(measurements, timezone) {
   if (!measurements || measurements.length === 0) {
     return [[]];
   }
-  measurements.reduce((acc, curr, idx, arr) => {
-    const date = dayjs(curr.period.datetimeTo.local, timezone);
-    if (
-      !(
-        lastDate === undefined ||
-        (date - lastDate) / (60 * 60 * 1000) === 1
-      )
-    ) {
-      result.push(acc);
-      acc = [];
-    }
-    acc.push(curr);
-    if (idx === arr.length - 1 && acc.length > 0) {
-      result.push(acc);
-    }
-    lastDate = date;
-    return acc;
-  }, []);
+  measurements
+    .filter((o) => o.value !== null)
+    .reduce((acc, curr, idx, arr) => {
+      const date = dayjs(curr.period.datetimeTo.local, timezone);
+      if (
+        !(
+          lastDate === undefined ||
+          (date - lastDate) / (60 * 60 * 1000) === 1
+        )
+      ) {
+        result.push(acc);
+        acc = [];
+      }
+      acc.push(curr);
+      if (idx === arr.length - 1 && acc.length > 0) {
+        result.push(acc);
+      }
+      lastDate = date;
+      return acc;
+    }, []);
   return result;
 }
 
@@ -254,7 +313,7 @@ export default function LineChart(props) {
               props.margin / 2
             })`}
           >
-            <For each={splitMeasurements(props.data)}>
+            <For each={splitMeasurements(props.data, props.timezone)}>
               {(lineData) => (
                 <path
                   class="line-chart-line"
@@ -295,7 +354,7 @@ export default function LineChart(props) {
             </Show>
             <For
               each={points(
-                props.data ?? [],
+                props.data.filter((o) => o.value !== null) ?? [],
                 xScale(props.width, props.dateFrom, props.dateTo),
                 yScale(props.scale, props.height, props.data)
               )}

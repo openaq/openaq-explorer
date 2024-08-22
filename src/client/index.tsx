@@ -28,11 +28,11 @@ async function fetchSensorMeasurements(
 ) {
   'use server';
   const url = new URL(import.meta.env.VITE_API_BASE_URL);
-  url.pathname = `/v3/sensors/${sensorsId}/measurements`;
-  url.search = `?date_from=${datetimeFrom.replace(
+  url.pathname = `/v3/sensors/${sensorsId}/hours`;
+  url.search = `?datetime_from=${datetimeFrom.replace(
     ' ',
     '%2b'
-  )}&date_to=${datetimeTo.replace(' ', '%2b')}&limit=${limit}`;
+  )}&datetime_to=${datetimeTo.replace(' ', '%2b')}&limit=${limit}`;
   console.info(`fetching ${url.href}`)
   const res = await fetch(url.href, {
     headers: {
@@ -56,12 +56,13 @@ async function fetchSensorTrends(
 ) {
   'use server';
   const url = new URL(import.meta.env.VITE_API_BASE_URL);
-  url.pathname = `/v3/sensors/${sensorsId}/measurements`;
-  url.search = `?period_name=${periodName}&date_from=${datetimeFrom.replace(
+  url.pathname = `/v3/sensors/${sensorsId}/hours/${periodName}`;
+  url.search = `?datetime_from=${datetimeFrom.replace(
     ' ',
-    '%2b')}&date_to=${datetimeTo.replace(
+    '%2b')}&datetime_to=${datetimeTo.replace(
       ' ',
       '%2b')}`;
+  console.info(`fetching ${url.href}`)
   const res = await fetch(url.href, {
     headers: {
       'Content-Type': 'application/json',

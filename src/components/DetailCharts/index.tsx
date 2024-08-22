@@ -130,7 +130,7 @@ export function DetailCharts(props: DetailChartsDefinition) {
       )
     );
     setLoading(false);
-    setPatterns(await getSensorTrends(patternsSensorsId(), 'hod', calculateDatetimeFrom(), calculateDatetimeTo()));
+    setPatterns(await getSensorTrends(patternsSensorsId(), 'hourofday', calculateDatetimeFrom(), calculateDatetimeTo()));
     setPatternsLoading(false);
   });
 
@@ -142,7 +142,7 @@ export function DetailCharts(props: DetailChartsDefinition) {
   });
 
   createEffect(async () => {
-    setPatterns(await getSensorTrends(patternsSensorsId(), 'hod', calculateDatetimeFrom(),calculateDatetimeTo()));
+    setPatterns(await getSensorTrends(patternsSensorsId(), 'hourofday', calculateDatetimeFrom(),calculateDatetimeTo()));
     setPatternsLoading(false);
   });
 
