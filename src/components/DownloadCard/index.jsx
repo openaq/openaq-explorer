@@ -2,7 +2,7 @@ import { createSignal, For, Show } from 'solid-js';
 import dayjs from 'dayjs';
 import tz from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
-import { getSensorMeasurements } from '~/client';
+import { getSensorMeasurementsDownload } from '~/client';
 import { getUserId } from '~/db';
 
 import { createAsync, useLocation, A } from '@solidjs/router';
@@ -136,7 +136,7 @@ export function DownloadCard(props) {
     );
     let data = [];
     for (const sensorId of sensorIds) {
-      const measurements = await getSensorMeasurements(
+      const measurements = await getSensorMeasurementsDownload(
         sensorId,
         dayjs(new Date(dateFromValue), props.timezone).toISOString(),
         dayjs(new Date(dateToValue), props.timezone).toISOString()
