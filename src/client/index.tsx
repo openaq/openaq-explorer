@@ -20,7 +20,7 @@ export async function fetchLocation(locationsId: number) {
   return await res.json();
 }
 
-async function fetchSensorMeasurements(
+async function fetchSensorMeasurementsDownload(
   sensorsId: number,
   datetimeFrom: string,
   datetimeTo: string,
@@ -29,16 +29,49 @@ async function fetchSensorMeasurements(
   'use server';
   const url = new URL(import.meta.env.VITE_API_BASE_URL);
   url.pathname = `/v3/sensors/${sensorsId}/measurements`;
-  url.search = `?date_from=${datetimeFrom.replace(
+  url.search = `?datetime_from=${datetimeFrom.replace(
     ' ',
     '%2b'
-  )}&date_to=${datetimeTo.replace(' ', '%2b')}&limit=${limit}`;
+  )}&datetime_to=${datetimeTo.replace(' ', '%2b')}&limit=${limit}`;
+  console.info(`fetching ${url.href}`)
   const res = await fetch(url.href, {
     headers: {
       'Content-Type': 'application/json',
       'X-API-Key': `${import.meta.env.VITE_EXPLORER_API_KEY}`,
     },
   });
+  if (res.status !== 200) {
+    console.error(`${url.href} failed with HTTP ${res.status}`);
+    throw new Error('failed to fetch')
+  }
+  const data = await res.json();
+  return data.results;
+}
+
+async function fetchSensorMeasurements(
+  sensorsId: number,
+  datetimeFrom: string,
+  datetimeTo: string,
+  limit: number
+) {
+  'use server';
+  const url = new URL(import.meta.env.VITE_API_BASE_URL);
+  url.pathname = `/v3/sensors/${sensorsId}/hours`;
+  url.search = `?datetime_from=${datetimeFrom.replace(
+    ' ',
+    '%2b'
+  )}&datetime_to=${datetimeTo.replace(' ', '%2b')}&limit=${limit}`;
+  console.info(`fetching ${url.href}`)
+  const res = await fetch(url.href, {
+    headers: {
+      'Content-Type': 'application/json',
+      'X-API-Key': `${import.meta.env.VITE_EXPLORER_API_KEY}`,
+    },
+  });
+  if (res.status !== 200) {
+    console.error(`${url.href} failed with HTTP ${res.status}`);
+    throw new Error('failed to fetch')
+  }
   const data = await res.json();
   return data.results;
 }
@@ -51,12 +84,13 @@ async function fetchSensorTrends(
 ) {
   'use server';
   const url = new URL(import.meta.env.VITE_API_BASE_URL);
-  url.pathname = `/v3/sensors/${sensorsId}/measurements`;
-  url.search = `?period_name=${periodName}&date_from=${datetimeFrom.replace(
+  url.pathname = `/v3/sensors/${sensorsId}/hours/${periodName}`;
+  url.search = `?datetime_from=${datetimeFrom.replace(
     ' ',
-    '%2b')}&date_to=${datetimeTo.replace(
+    '%2b')}&datetime_to=${datetimeTo.replace(
       ' ',
       '%2b')}`;
+  console.info(`fetching ${url.href}`)
   const res = await fetch(url.href, {
     headers: {
       'Content-Type': 'application/json',
@@ -90,6 +124,24 @@ export const getSensorMeasurements = GET(
   ) => {
     'use server';
     const data = await fetchSensorMeasurements(
+      sensorsId,
+      datetimeFrom,
+      datetimeTo,
+      limit
+    );
+    return json(data, { headers: { 'cache-control': 'max-age=60' } });
+  }
+);
+
+export const getSensorMeasurementsDownload = GET(
+  async (
+    sensorsId: number,
+    datetimeFrom: string,
+    datetimeTo: string,
+    limit: number = 1000
+  ) => {
+    'use server';
+    const data = await fetchSensorMeasurementsDownload(
       sensorsId,
       datetimeFrom,
       datetimeTo,

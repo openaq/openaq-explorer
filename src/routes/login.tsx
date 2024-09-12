@@ -1,13 +1,12 @@
 import { Show } from 'solid-js';
 import { A, useSubmission, useSearchParams, createAsync } from '@solidjs/router';
-import { getUserId, loginAction, redirectIfLoggedIn } from '~/db';
+import { loginAction, redirectIfLoggedIn } from '~/db';
 import '~/assets/scss/routes/login.scss';
 import { Header } from '~/components/Header';
 
 export const route = {
   load() {
     void redirectIfLoggedIn();
-    void getUserId();
   },
 };
 
@@ -17,6 +16,14 @@ export default function Login() {
   createAsync(() => redirectIfLoggedIn());
 
   const [searchParams] = useSearchParams();
+
+  let redirect;
+  if (['/login', '/verify-email', '/register'].includes(searchParams.redirect ?? '/')) {
+    redirect = '/'
+  } else {
+    redirect = searchParams.redirect;
+  }
+
 
   const loggingIn = useSubmission(loginAction);
 
@@ -34,7 +41,7 @@ export default function Login() {
           <input
             type="hidden"
             name="redirect"
-            value={searchParams.redirect ?? '/'}
+            value={redirect}
           />
           <div class="form-element">
             <label

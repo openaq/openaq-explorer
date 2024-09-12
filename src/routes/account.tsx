@@ -10,7 +10,9 @@ import '~/assets/scss/routes/account.scss';
 import { Suspense } from 'solid-js';
 
 export const route = {
-  load: () => getUser(),
+  load: () => {
+    getUser();
+  },
 };
 
 function copyApiKey(token: string) {
@@ -38,7 +40,7 @@ export default function Acount() {
               name="name"
               id="name"
               class="text-input"
-              value={user()?.fullName}
+              value={user()?.fullname}
             />
           </div>
 

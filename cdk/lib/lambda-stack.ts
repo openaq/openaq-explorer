@@ -7,6 +7,7 @@ import {
   aws_lambda as lambda,
   aws_s3 as s3,
   aws_s3_deployment,
+  aws_ec2 as ec2, 
 } from 'aws-cdk-lib';
 import { RemovalPolicy } from 'aws-cdk-lib';
 import {
@@ -20,13 +21,21 @@ import { HttpLambdaIntegration } from 'aws-cdk-lib/aws-apigatewayv2-integrations
 import { OriginProtocolPolicy } from 'aws-cdk-lib/aws-cloudfront';
 import { Construct } from 'constructs';
 
+interface LambdaEnv { 
+  [key: string]: string; 
+}
+
 interface StackProps extends cdk.StackProps {
   hostedZoneId: string;
   hostedZoneName: string;
   domainName: string;
   envName: string;
   certificateArn: string;
+  vpcId: string;
+  lambdaEnv: LambdaEnv;
 }
+
+
 
 
 export class LambdaStack extends cdk.Stack {
@@ -39,10 +48,18 @@ export class LambdaStack extends cdk.Stack {
       domainName,
       envName,
       certificateArn,
+      vpcId, 
+      lambdaEnv,
       ...props
     }: StackProps
     ) {
     super(scope, id, props);
+
+
+    const vpc = ec2.Vpc.fromLookup(this, `${id}-explorer-vpc`, {
+      vpcId: vpcId
+    });
+
 
     const lambdaFunction = new lambda.Function(
       this,
@@ -53,7 +70,11 @@ export class LambdaStack extends cdk.Stack {
         handler: 'server/index.handler',
         memorySize: 512,
         runtime: lambda.Runtime.NODEJS_20_X,
+        vpc: vpc,
+        allowPublicSubnet: true,
+        vpcSubnets: {subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS},
         timeout: cdk.Duration.seconds(10),
+        environment: lambdaEnv
       }
     );
 

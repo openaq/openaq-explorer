@@ -94,7 +94,7 @@ export function TabView(props: TabViewDefintion) {
               <For each={parameters()}>
                 {(parameter, i) => (
                   <option value={parameter.id}>
-                    {parameter.display_name} {parameter.units}{' '}
+                    {parameter.displayName} {parameter.units}{' '}
                   </option>
                 )}
               </For>

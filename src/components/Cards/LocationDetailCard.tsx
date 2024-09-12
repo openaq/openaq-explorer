@@ -76,7 +76,7 @@ export function LocationDetailCard() {
       <header class='location-detail-card__header'>
         <div>
           <h3 class="type-heading-3 text-white">
-            {location()?.results?.[0].name.slice(0,20)}
+            {location()?.results?.[0].name?.slice(0,20) || 'No label'}
           </h3>
         </div>
         <div>

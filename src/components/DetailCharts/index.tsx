@@ -98,10 +98,10 @@ export function DetailCharts(props: DetailChartsDefinition) {
         Date.now() - calculateTimeDiff(defaultTimePeriod),
         props.timezone
       )
-      .format()
+      .toISOString()
   );
   const [dateTo] = createSignal(
-    dayjs.tz(Date.now(), props.timezone).format()
+    dayjs.tz(Date.now(), props.timezone).toISOString()
   ); // static for now
   const [measurements, setMeasurements] = createSignal([]);
 
@@ -111,12 +111,12 @@ export function DetailCharts(props: DetailChartsDefinition) {
 
   function calculateDatetimeFrom() {
     const year = patternPeriod()
-    return dayjs(`${year}-01-01T00:00:00`).tz(props.timezone).format()
+    return dayjs(new Date(`${year}-01-01`)).tz(props.timezone).toISOString()
   }
 
   function calculateDatetimeTo() {
     const year = patternPeriod()
-    return dayjs(`${Number(year) + 1}-01-01T00:00:00`).tz(props.timezone).format()
+    return dayjs(new Date(`${Number(year) + 1}-01-01`)).tz(props.timezone).toISOString()
   }
 
 
@@ -130,7 +130,7 @@ export function DetailCharts(props: DetailChartsDefinition) {
       )
     );
     setLoading(false);
-    setPatterns(await getSensorTrends(patternsSensorsId(), 'hod', calculateDatetimeFrom(),calculateDatetimeTo() ));
+    setPatterns(await getSensorTrends(patternsSensorsId(), 'hourofday', calculateDatetimeFrom(), calculateDatetimeTo()));
     setPatternsLoading(false);
   });
 
@@ -142,7 +142,7 @@ export function DetailCharts(props: DetailChartsDefinition) {
   });
 
   createEffect(async () => {
-    setPatterns(await getSensorTrends(patternsSensorsId(), 'hod', calculateDatetimeFrom(),calculateDatetimeTo()));
+    setPatterns(await getSensorTrends(patternsSensorsId(), 'hourofday', calculateDatetimeFrom(),calculateDatetimeTo()));
     setPatternsLoading(false);
   });
 
@@ -152,9 +152,9 @@ export function DetailCharts(props: DetailChartsDefinition) {
     setSensorsId(selectedSensor());
     setScaleType(selectedScale());
     setDateFrom(
-      new Date(
+      dayjs(
         Date.now() - calculateTimeDiff(selectedTimePeriod())
-      ).toISOString()
+      ).tz(props.timezone).toISOString()
     );
   };
 
