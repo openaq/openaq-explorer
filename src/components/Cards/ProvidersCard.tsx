@@ -35,6 +35,7 @@ export function ProvidersCard() {
   ] = useStore();
 
   const [count, setCount] = createSignal();
+
   const [selectedProviders, setSelectedProviders] = createStore<
     ProvidersStoreDefinition[]
   >([]);

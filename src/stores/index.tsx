@@ -1,6 +1,16 @@
-import { createContext, useContext, Component } from 'solid-js';
-import { createStore } from 'solid-js/store';
-import { Viewport } from 'solid-map-gl';
+import { createContext, useContext, Component } from "solid-js";
+import { createStore, produce } from "solid-js/store";
+import { Viewport } from "solid-map-gl";
+// import MiniSearch from "minisearch";
+
+// export interface ProvidersStoreDefinition {
+//   name: string;
+//   locationsCount: number;
+//   id: number;
+//   checked: boolean;
+//   matchesQuery: boolean;
+//   bbox: number[];
+// }
 
 type Store = [
   {
@@ -31,26 +41,25 @@ type Store = [
   {
     setSelectedLocationsId: () => void;
     clearLocationsId?: () => void;
-    setSelectedMapParameter?: () => void;
+    setSelectedMapParameter: (mapParameter: string) => void;
     setDeleteListsId?: () => void;
-    setDeleteListLocationsId? : () => void;
+    setDeleteListLocationsId?: () => void;
 
-
-    setListParametersId? : () => void;
-    setListParameter? : () => void;
+    setListParametersId?: () => void;
+    setListParameter?: () => void;
 
     clearDeleteListsId?: () => void;
     toggleDeleteListModalOpen?: () => void;
     toggleNewListModalOpen?: () => void;
     toggleEditListModalOpen?: () => void;
-    toggleShowProvidersCard?: () => void;
+    toggleShowProvidersCard: () => void;
     toggleRegenerateKeyModalOpen?: () => void;
-    toggleDeleteListLocationModalOpen? : () => void;
+    toggleDeleteListLocationModalOpen?: () => void;
     setViewport?: () => void;
     toggleMonitor?: () => void;
     toggleAirSensor?: () => void;
     toggleMapIsActive?: () => void;
-    setProviders?: () => void;
+    setProviders: (providers: any[]) => void;
     setRecentMeasurements?: () => void;
     addRecentMeasurements?: () => void;
     updateRecentMeasurements?: () => void;
@@ -134,6 +143,7 @@ export const StoreProvider: Component<{}> = (props) => {
         });
       },
       setProviders(providers) {
+        console.log("providers in store function", providers);
         setState({ providers: providers });
       },
       setTotalProviders(totalProviders: number) {
@@ -166,17 +176,19 @@ export const StoreProvider: Component<{}> = (props) => {
         });
       },
       toggleDeleteListLocationModalOpen() {
-        setState({deleteListLocationModalOpen: !state.deleteListLocationModalOpen})
+        setState({
+          deleteListLocationModalOpen: !state.deleteListLocationModalOpen,
+        });
       },
       setDeleteListLocationsId(listLocationsId: number) {
-        setState({listLocationsId: listLocationsId})
+        setState({ listLocationsId: listLocationsId });
       },
       setListParametersId(parametersId: number) {
-        setState({listParametersId: parametersId})
+        setState({ listParametersId: parametersId });
       },
-      setListParameter(parameter:string ) {
-        setState({listParameter: parameter})
-      }
+      setListParameter(parameter: string) {
+        setState({ listParameter: parameter });
+      },
     },
   ];
 
@@ -188,13 +200,13 @@ export const StoreProvider: Component<{}> = (props) => {
 };
 
 function useStoreContext() {
-  const context = useContext(StoreContext)
+  const context = useContext(StoreContext);
   if (!context) {
-    throw new Error("useStoreContext: cannot find a StoreContext")
+    throw new Error("useStoreContext: cannot find a StoreContext");
   }
-  return context
+  return context;
 }
 
-export function useStore() : Store  {
+export function useStore(): Store {
   return useStoreContext();
 }
