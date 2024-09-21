@@ -30,7 +30,7 @@ export default function Home() {
     }
 
     if (location.query?.parameter) {
-      setSelectedMapParameter(Number(location.query.parameter));
+      setSelectedMapParameter(location.query.parameter);
     }
 
     if (location.query?.provider) {
@@ -44,8 +44,6 @@ export default function Home() {
     const getProviders = createMemo(() => store.providers);
     const providers = getProviders();
     
-    console.log("store providers in the index route", store.providers);
-
     const searchParams = new URLSearchParams();
 
     if (store.locationsId !== undefined) {
@@ -53,11 +51,10 @@ export default function Home() {
     }
 
     if (store.mapParameter !== "all") {
-      searchParams.append("parameter", store.mapParameter);
+      searchParams.append("parameter", store.mapParameter.toString());
     }
 
     if (providers.length > 0) {
-      console.log("providers in the index route", providers);
       searchParams.append("provider", store.providers.join(","));
     }
 

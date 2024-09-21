@@ -143,7 +143,6 @@ export const StoreProvider: Component<{}> = (props) => {
         });
       },
       setProviders(providers) {
-        console.log("providers in store function", providers);
         setState({ providers: providers });
       },
       setTotalProviders(totalProviders: number) {
