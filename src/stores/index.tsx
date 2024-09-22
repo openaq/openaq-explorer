@@ -1,16 +1,6 @@
 import { createContext, useContext, Component } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 import { Viewport } from "solid-map-gl";
-// import MiniSearch from "minisearch";
-
-// export interface ProvidersStoreDefinition {
-//   name: string;
-//   locationsCount: number;
-//   id: number;
-//   checked: boolean;
-//   matchesQuery: boolean;
-//   bbox: number[];
-// }
 
 type Store = [
   {

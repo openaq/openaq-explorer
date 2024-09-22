@@ -1,19 +1,12 @@
-import { useStore } from '~/stores';
+import { useStore } from "~/stores";
 
-import {
-  For,
-  Show,
-  createSignal,
-  onMount,
-  createEffect,
-} from 'solid-js';
-import { getProviders } from '~/client';
-import MiniSearch from 'minisearch';
-import bbox from '@turf/bbox';
-import { createStore, produce } from 'solid-js/store';
+import { For, Show, createSignal, onMount, createEffect } from "solid-js";
+import { getProviders } from "~/client";
+import MiniSearch from "minisearch";
+import bbox from "@turf/bbox";
+import { createStore, produce } from "solid-js/store";
 
-import '~/assets/scss/components/providers-card.scss';
-
+import "~/assets/scss/components/providers-card.scss";
 
 interface ProvidersStoreDefinition {
   name: string;
@@ -27,12 +20,7 @@ interface ProvidersStoreDefinition {
 export function ProvidersCard() {
   const [
     store,
-    {
-      toggleShowProvidersCard,
-      setViewport,
-      setProviders,
-      setTotalProviders,
-    },
+    { toggleShowProvidersCard, setViewport, setProviders, setTotalProviders },
   ] = useStore();
 
   const [count, setCount] = createSignal();
@@ -47,8 +35,8 @@ export function ProvidersCard() {
   };
 
   const miniSearch = new MiniSearch({
-    fields: ['name'],
-    storeFields: ['name'],
+    fields: ["name"],
+    storeFields: ["name"],
   });
 
   let timeout: ReturnType<typeof setTimeout>;
@@ -56,13 +44,13 @@ export function ProvidersCard() {
   const onSearchInput = (e: InputEvent) => {
     clearTimeout(timeout);
     timeout = setTimeout(() => {
-      const target = e.target as HTMLInputElement
+      const target = e.target as HTMLInputElement;
       const value = target.value;
       const res = miniSearch.search(value, { prefix: true });
       setSelectedProviders(
         () => true,
         produce((provider) =>
-          value != ''
+          value != ""
             ? (provider.matchesQuery =
                 res.map((o) => o.id).indexOf(provider.id) != -1)
             : (provider.matchesQuery = true)
@@ -82,7 +70,10 @@ export function ProvidersCard() {
           return {
             name: o.name,
             id: o.id,
-            checked: store.providers.includes(o.id),
+            checked:
+              store.providers.length === 0
+                ? "true"
+                : store.providers.includes(o.id),
             matchesQuery: true,
             bbox: o.bbox,
           };
