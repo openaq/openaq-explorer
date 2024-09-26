@@ -5,7 +5,6 @@ import {
   LowCostSensorMarker,
 } from '../LocationMarker';
 import { useStore } from '~/stores';
-import { createSignal } from 'solid-js';
 
 import '~/assets/scss/components/overlay-card.scss';
 
@@ -39,7 +38,7 @@ export function OverlayCard() {
             name="parameter-select"
             id="parameter-select"
             onChange={(e) => setSelectedMapParameter(e.target.value)}
-            value={'all'}
+            value={store.mapParameter.toString()}
           >
             <option value="all">Any pollutant</option>
             <option value="pm25">PM&#8322;&#8325;</option>
