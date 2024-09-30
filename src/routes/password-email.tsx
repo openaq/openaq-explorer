@@ -15,7 +15,7 @@ export default function PasswordEmail() {
         Please check you email and click the provided link to change
         your password
       </p>
-      <div></div>
+      <div />
       <div class="bubble-lg" />
       <div class="bubble-sm" />
     </main>

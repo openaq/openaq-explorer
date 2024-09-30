@@ -18,7 +18,7 @@ export default function VerifyEmail() {
           Please click on the link in the email to verify your
           account.
         </p>
-        <div></div>
+        <div />
         <div class="bubble-lg" />
         <div class="bubble-sm" />
       </main>

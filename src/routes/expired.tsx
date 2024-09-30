@@ -1,3 +1,4 @@
+import { Show } from "solid-js";
 import { useSearchParams, useSubmission, A } from '@solidjs/router';
 import { resendVerificationEmailAction } from '~/db';
 
