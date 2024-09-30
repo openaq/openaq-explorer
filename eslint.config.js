@@ -1,46 +1,68 @@
 import js from '@eslint/js';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
-import solidPlugin from 'eslint-plugin-solid';
-import prettier from 'eslint-config-prettier';
+import importPlugin from 'eslint-plugin-import';
+import prettierConfig from 'eslint-config-prettier';
 
 export default [
   js.configs.recommended,
   {
-    files: ['**/*.{js,jsx,ts,tsx}'],
+    files: ['**/*.ts'],
     plugins: {
       '@typescript-eslint': tsPlugin,
-      solid: solidPlugin,
+      import: importPlugin,
     },
     languageOptions: {
       parser: tsParser,
       parserOptions: {
         ecmaVersion: 'latest',
         sourceType: 'module',
-        ecmaFeatures: {
-          jsx: true,
-        },
+        project: './tsconfig.json',
       },
     },
     rules: {
-      ...tsPlugin.configs.recommended.rules,
-      ...solidPlugin.configs.recommended.rules,
-      'solid/reactivity': 'warn',
-      'solid/no-destructure': 'warn',
-      'solid/jsx-no-undef': 'error',
+      ...tsPlugin.configs['recommended'].rules,
+      'import/no-extraneous-dependencies': [
+        'error',
+        {
+          devDependencies: ['**/*test.ts'],
+        },
+      ],
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/explicit-function-return-type': [
+        'warn',
+        {
+          allowExpressions: true,
+          allowTypedFunctionExpressions: true,
+        },
+      ],
+      'no-shadow': 'off',
+      '@typescript-eslint/no-shadow': ['error'],
+      'import/prefer-default-export': 'off',
+      'import/extensions': [
+        'error',
+        'ignorePackages',
+        {
+          js: 'never',
+          ts: 'never',
+        },
+      ],
     },
+    settings: {
+      'import/resolver': {
+        typescript: true,
+        node: true,
+      },
+    },
+  },
+  {
     ignores: [
       '**/node_modules/**',
+      '**/cdk.out/**',
       '**/dist/**',
-      '**/.vinxi/**',
-      '**/.output/**',
-      '**/build/**',
-      '**/*.config.js',
-      '**/*.config.ts',
-      '**/public/**',
+      '**/*.js',
       '**/*.d.ts',
-      '**/coverage/**',
     ],
   },
-  prettier,
+  prettierConfig,
 ];
