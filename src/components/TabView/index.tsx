@@ -1,4 +1,4 @@
-import { Show, createEffect, createSignal } from 'solid-js';
+import { Show, createEffect, createSignal, For } from 'solid-js';
 import { ListMap } from '~/components/ListMap';
 import { LocationList } from '~/components/LocationList';
 import { LocationDetailCardMini } from '~/components/Cards/LocationDetailCardMini';

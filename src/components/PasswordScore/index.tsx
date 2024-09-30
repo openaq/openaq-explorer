@@ -56,7 +56,7 @@ export function StrengthBar(props: StrengthBarDefinition) {
           ? `strength-meter__bar--${props.color}`
           : ''
       }`}
-    ></div>
+     />
   );
 }
 

@@ -28,7 +28,7 @@ export function ListCard(props: ListCardDefintion) {
       <A href={`/lists/${props.listsId}`}>
         <div class='list-card__body'>
           <div class='list-content'>
-            <ListCardMap {...props}></ListCardMap>
+            <ListCardMap {...props} />
             <div class='list-info'>
               <h1 class="type-heading-1 text-sky-120">
                 {props.label}
@@ -39,7 +39,7 @@ export function ListCard(props: ListCardDefintion) {
               </p>
             </div>
           </div>
-          <div></div>
+          <div />
         </div>
       </A>
       <button

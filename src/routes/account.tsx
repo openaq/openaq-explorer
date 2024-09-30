@@ -62,7 +62,7 @@ export default function Acount() {
         </section>
         <section class="account-page__section">
           <h2 class="type-heading-2 text-sky-120">API Key</h2>
-          <input class="text-input" value={user()?.token}></input>
+          <input class="text-input" value={user()?.token} />
           <div class="api-key-buttons">
             <button
               class="btn btn-primary"
