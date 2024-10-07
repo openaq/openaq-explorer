@@ -167,6 +167,67 @@ export class LambdaStack extends cdk.Stack {
       }
     )
 
+    let cspString = `
+      default-src 'self';
+      script-src 'self' 'unsafe-inline' 'unsafe-eval' https://plausible.io/js/script.js;
+      style-src 'self' 'unsafe-inline';
+      base-uri 'self';
+      connect-src 'self' https://api.geocode.earth https://basemap.openaq.org https://plausible.io https://protomaps.github.io https://tiles.openaq.org;
+      font-src 'self';
+      frame-src 'none';
+      img-src 'self' data:;
+      worker-src blob:;`;
+
+    cspString = cspString
+      .split('\n')
+      .map((s) => s.trim())
+      .filter(Boolean)
+      .join(' ');
+
+
+    // cloudfront response headers
+    const responseHeadersPolicy =
+      new cloudfront.ResponseHeadersPolicy(
+        this,
+        `ExploreResponseHeadersPolicy-${envName}`,
+        {
+          responseHeadersPolicyName: `ExploreResponseHeaderPolicy${envName}`,
+          comment: 'Explore response header policy',
+          corsBehavior: {
+            accessControlAllowCredentials: false,
+            accessControlAllowHeaders: ['*'],
+            accessControlAllowMethods: ['GET', 'HEAD', 'OPTIONS'],
+            accessControlAllowOrigins: ['*'],
+            accessControlMaxAge: cdk.Duration.seconds(5),
+            originOverride: true,
+          },
+          securityHeadersBehavior: {
+            contentSecurityPolicy: {
+              contentSecurityPolicy: cspString,
+              override: true,
+            },
+            contentTypeOptions: { override: true },
+            frameOptions: {
+              frameOption: cloudfront.HeadersFrameOption.DENY,
+              override: true,
+            },
+            referrerPolicy: {
+              referrerPolicy:
+                cloudfront.HeadersReferrerPolicy.NO_REFERRER,
+              override: true,
+            },
+            strictTransportSecurity: {
+              accessControlMaxAge: cdk.Duration.days(365),
+              preload: true,
+              includeSubdomains: true,
+              override: true,
+            },
+            xssProtection: { protection: true, override: true },
+          },
+        }
+      );
+
+
     const distribution = new cdk.aws_cloudfront.Distribution(
       this,
       `${id}OpenAQexplorerDistribution`,
@@ -181,13 +242,13 @@ export class LambdaStack extends cdk.Stack {
           originRequestPolicy: distributionOriginRequestPolicy,
           allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
           viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+          responseHeadersPolicy: responseHeadersPolicy,
           origin: new cdk.aws_cloudfront_origins.HttpOrigin(
             originUrl, {
               connectionAttempts: 2,
               connectionTimeout: cdk.Duration.seconds(2),
               readTimeout: cdk.Duration.seconds(10),
               protocolPolicy: OriginProtocolPolicy.HTTPS_ONLY,
-
           }
           ),
         },
