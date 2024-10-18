@@ -79,6 +79,7 @@ export class LambdaStack extends cdk.Stack {
     );
 
     const bucket = new s3.Bucket(this, `${id}-explorer-assets`, {
+      bucketName: "openaq-explorer-assets",
       encryption: s3.BucketEncryption.S3_MANAGED,
       enforceSSL: true,
       removalPolicy: RemovalPolicy.DESTROY,
@@ -213,7 +214,7 @@ export class LambdaStack extends cdk.Stack {
             },
             referrerPolicy: {
               referrerPolicy:
-                cloudfront.HeadersReferrerPolicy.NO_REFERRER,
+                cloudfront.HeadersReferrerPolicy.ORIGIN,
               override: true,
             },
             strictTransportSecurity: {
@@ -260,6 +261,18 @@ export class LambdaStack extends cdk.Stack {
             allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
           },
           '/svgs/*': {
+            origin: new cdk.aws_cloudfront_origins.S3Origin(bucket, {
+              originAccessIdentity: originAccessIdentity,
+            }),
+            allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
+          },
+          '/favicon.ico': {
+            origin: new cdk.aws_cloudfront_origins.S3Origin(bucket, {
+              originAccessIdentity: originAccessIdentity,
+            }),
+            allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
+          },
+          '/favicon.svg': {
             origin: new cdk.aws_cloudfront_origins.S3Origin(bucket, {
               originAccessIdentity: originAccessIdentity,
             }),

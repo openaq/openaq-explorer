@@ -5,7 +5,10 @@ import autoprefixer from 'autoprefixer';
 export default defineConfig({
   server: {
     preset: 'aws-lambda',
-    inlineDynamicImports: true
+    inlineDynamicImports: true,
+    prerender: {
+      routes: ["/", "/login", "/register"]
+    }
   },
   vite: {
     css: {

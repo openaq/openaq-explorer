@@ -29,7 +29,7 @@ type Store = [
     apiKeyRegenerateModalOpen: boolean;
   },
   {
-    setSelectedLocationsId: () => void;
+    setSelectedLocationsId: (locationsId: number) => void;
     clearLocationsId?: () => void;
     setSelectedMapParameter: (mapParameter: string) => void;
     setDeleteListsId?: () => void;
