@@ -18,7 +18,7 @@ export default createHandler(
                 defer
                 data-domain="explore.openaq.org"
                 src="https://plausible.io/js/script.js"
-              ></script>
+               />
             ) : (
               ''
             )}
