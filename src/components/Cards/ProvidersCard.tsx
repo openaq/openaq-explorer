@@ -1,18 +1,12 @@
-import { useStore } from '~/stores';
+import { useStore } from "~/stores";
 
-import {
-  For,
-  Show,
-  createSignal,
-  onMount,
-} from 'solid-js';
-import { getProviders } from '~/client';
-import MiniSearch from 'minisearch';
-import bbox from '@turf/bbox';
-import { createStore, produce } from 'solid-js/store';
+import { For, Show, createSignal, onMount, createEffect } from "solid-js";
+import { getProviders } from "~/client";
+import MiniSearch from "minisearch";
+import bbox from "@turf/bbox";
+import { createStore, produce } from "solid-js/store";
 
-import '~/assets/scss/components/providers-card.scss';
-
+import "~/assets/scss/components/providers-card.scss";
 
 interface ProvidersStoreDefinition {
   name: string;
@@ -26,15 +20,11 @@ interface ProvidersStoreDefinition {
 export function ProvidersCard() {
   const [
     store,
-    {
-      toggleShowProvidersCard,
-      setViewport,
-      setProviders,
-      setTotalProviders,
-    },
+    { toggleShowProvidersCard, setViewport, setProviders, setTotalProviders },
   ] = useStore();
 
   const [count, setCount] = createSignal();
+
   const [selectedProviders, setSelectedProviders] = createStore<
     ProvidersStoreDefinition[]
   >([]);
@@ -45,8 +35,8 @@ export function ProvidersCard() {
   };
 
   const miniSearch = new MiniSearch({
-    fields: ['name'],
-    storeFields: ['name'],
+    fields: ["name"],
+    storeFields: ["name"],
   });
 
   let timeout: ReturnType<typeof setTimeout>;
@@ -54,13 +44,13 @@ export function ProvidersCard() {
   const onSearchInput = (e: InputEvent) => {
     clearTimeout(timeout);
     timeout = setTimeout(() => {
-      const target = e.target as HTMLInputElement
+      const target = e.target as HTMLInputElement;
       const value = target.value;
       const res = miniSearch.search(value, { prefix: true });
       setSelectedProviders(
         () => true,
         produce((provider) =>
-          value != ''
+          value != ""
             ? (provider.matchesQuery =
                 res.map((o) => o.id).indexOf(provider.id) != -1)
             : (provider.matchesQuery = true)
@@ -80,7 +70,10 @@ export function ProvidersCard() {
           return {
             name: o.name,
             id: o.id,
-            checked: true,
+            checked:
+              store.providers.length === 0
+                ? "true"
+                : store.providers.includes(o.id),
             matchesQuery: true,
             bbox: o.bbox,
           };
@@ -88,6 +81,10 @@ export function ProvidersCard() {
         .sort((a, b) => (a.name < b.name ? -1 : 1))
     );
     miniSearch.addAll(selectedProviders);
+  });
+
+  createEffect(() => {
+    setActiveProviders(selectedProviders.filter((p) => p.checked));
   });
 
   function zoomToExtent() {
@@ -110,12 +107,10 @@ export function ProvidersCard() {
     setBounds([minLeft, minBottom, maxRight, maxTop]);
   }
 
-  function onClickUpdate(selectedProviders: any) {
-    setActiveProviders(selectedProviders);
+  function onClickUpdate(selectedProviders: ProvidersStoreDefinition[]) {
+    const selectedIds = selectedProviders.map((p) => p.id);
     setProviders(
-      selectedProviders.length === store.totalProviders
-        ? []
-        : selectedProviders.map((o) => o.id)
+      selectedIds.length === store.totalProviders ? [] : selectedIds
     );
   }
 
@@ -134,9 +129,7 @@ export function ProvidersCard() {
           <div class="select-helpers">
             <button
               class="button-reset type-link-1 providers-list-select-all"
-              onClick={() =>
-                setSelectedProviders(() => true, 'checked', true)
-              }
+              onClick={() => setSelectedProviders(() => true, "checked", true)}
             >
               Select All
             </button>
@@ -144,15 +137,14 @@ export function ProvidersCard() {
             <button
               class="button-reset type-link-1 providers-list-select-none"
               onClick={() => {
-                setSelectedProviders(() => true, 'checked', false);
+                setSelectedProviders(() => true, "checked", false);
               }}
             >
               Select None
             </button>
           </div>
           <span>
-            {selectedProviders.filter((o) => o.checked).length}{' '}
-            providers selected
+            {activeProviders().length} of {`${count()}`} providers selected
           </span>
           <Show
             when={
@@ -176,20 +168,16 @@ export function ProvidersCard() {
             onInput={(e) => onSearchInput(e)}
           />
           <span>
-            {selectedProviders.filter((o) => o.matchesQuery).length ==
-            count()
+            {selectedProviders.filter((o) => o.matchesQuery).length == count()
               ? `Listing all ${count()} providers`
               : `Listing ${
-                  selectedProviders.filter((o) => o.matchesQuery)
-                    .length
+                  selectedProviders.filter((o) => o.matchesQuery).length
                 } of ${count()} providers`}
           </span>
         </div>
         <div class="list-container">
           <ul class="providers-list">
-            <For
-              each={selectedProviders.filter((o) => o.matchesQuery)}
-            >
+            <For each={selectedProviders.filter((o) => o.matchesQuery)}>
               {(provider, i) => {
                 if (provider.matchesQuery) {
                   return (
@@ -210,7 +198,7 @@ export function ProvidersCard() {
                         onChange={(e) => {
                           setSelectedProviders(
                             (p) => p.id == provider.id,
-                            'checked',
+                            "checked",
                             e.target.checked
                           );
                         }}
@@ -226,16 +214,10 @@ export function ProvidersCard() {
       <footer class="providers-card__footer">
         <button
           class={`btn btn-primary ${
-            selectedProviders.filter((o) => o.checked).length > 0
-              ? ''
-              : 'btn-primary--disabled'
+            activeProviders().length > 0 ? "" : "btn-primary--disabled"
           }`}
-          disabled={
-            selectedProviders.filter((o) => o.checked).length == 0
-          }
-          onClick={() =>
-            onClickUpdate(selectedProviders.filter((o) => o.checked))
-          }
+          disabled={activeProviders().length === 0}
+          onClick={() => onClickUpdate(activeProviders())}
         >
           Update
         </button>

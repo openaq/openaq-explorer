@@ -195,23 +195,23 @@ export async function register(formData: FormData) {
     typeof passwordConfirm !== 'string' ||
     typeof forwardParams !== 'string'
   ) {
-    throw new Error(`Form not submitted correctly.`);
+    return new Error(`Form not submitted correctly.`);
   }
   if (emailAddress === '') {
-    throw new Error('Valid email address required');
+    return new Error('Valid email address required');
   }
   if (!isValidEmailDomain(emailAddress)) {
     console.info(`invalid email domain attempt: ${emailAddress}`);
-    throw new Error('Valid email address required - disposable email domains not allowed.');
+    return new Error('Valid email address required - disposable email domains not allowed.');
   }
   if (fullName === '') {
-    throw new Error(`Name is required`);
+    return new Error(`Name is required`);
   }
   if (password === '' || passwordConfirm === '') {
-    throw new Error(`Password fields required`);
+    return new Error(`Password fields required`);
   }
   if (password !== passwordConfirm) {
-    throw new Error('Passwords must match');
+    return new Error('Passwords must match');
   } 
   const passwordHash = await encode(password);
   try {
@@ -239,7 +239,7 @@ export async function register(formData: FormData) {
       await sendVerificationEmail(user[0].usersId);
     }
     if (res.status === 404) {
-      throw new Error("failed to create new user")
+      return new Error("failed to create new user")
     }
   } catch (err) {
     console.error(err);

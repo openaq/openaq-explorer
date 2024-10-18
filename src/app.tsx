@@ -9,6 +9,8 @@ import '@fontsource/space-grotesk/500.css';
 import '@fontsource/space-grotesk/600.css';
 import '@fontsource/space-grotesk/700.css';
 import { StoreProvider } from '~/stores';
+import { MetaProvider, Title, Link, Meta } from "@solidjs/meta";
+
 
 export default function App() {
   return (
@@ -16,9 +18,9 @@ export default function App() {
       <Router
         singleFlight={true}
         root={(props) => (
-          <>
+          <MetaProvider>
             <Suspense>{props.children}</Suspense>
-          </>
+          </MetaProvider>
         )}
       >
         <FileRoutes />

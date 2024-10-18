@@ -2719,6 +2719,7 @@ export const disposableDomains: Set<string> = new Set<string>([
   'rotaniliam.com',
   'rover.info',
   'rowe-solutions.com',
+  'rowplant.com',
   'royal.net',
   'royaldoodles.org',
   'royalmarket.life',

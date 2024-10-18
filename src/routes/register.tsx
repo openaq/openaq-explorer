@@ -190,7 +190,11 @@ export default function Register() {
           </span>
         </div>
         <div>
-          <p style={{"width":"500px"}} class="type-body-3 text-sky-120">
+        <p style="width: 500px;" class="type-body-3 text-sky-120">
+          By registering and using OpenAQ services, you agree to the OpenAQ <A class="type-link-3 text-sky-120" href="https://docs.openaq.org/about/terms">
+          Terms of Use</A>, <A class="type-link-3 text-sky-120" href="https://openaq.org/privacy/">Privacy Policy</A> and <A class="type-link-3 text-sky-120" href="https://openaq.org/cookies/">Cookie Policy</A>.          
+        </p><br/>
+          <p style="width: 500px;" class="type-body-3 text-sky-120">
             If you had previously registered for an OpenAQ API key you
             already have an OpenAQ Explorer account! use the email and
             password you previously signed up with to get started.
