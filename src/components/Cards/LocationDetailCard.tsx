@@ -120,14 +120,14 @@ export function LocationDetailCard() {
           <span class="type-subtitle-3">Reporting</span>
           <div class='reporting-cell'>
             <span class="type-body-1">
-              Updated{' '}
-              {timeFromNow(
-                location()?.results?.[0].datetimeLast.local
-              )}
+              {location()?.results?.[0].datetimeLast ? `Updated ${timeFromNow(
+                location()?.results?.[0].datetimeLast?.local
+              )}` : 'No measurements' }
             </span>
             <span class="type-body-4">
-              Reporting since{' '}
-              {since(location()?.results?.[0].datetimeFirst.local)}
+            {location()?.results?.[0].datetimeLast ? `Reporting since ${since(
+                location()?.results?.[0].datetimeLast?.local
+              )}` : 'No measurements' }
             </span>
           </div>
         </section>
