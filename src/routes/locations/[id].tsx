@@ -38,8 +38,12 @@ export default function Location() {
         <Show when={location()}>
           <Breadcrumbs pageName={location()?.name} />
           <DetailOverview {...location()}/>
+          <Show
+            when={location().datetimeFirst}
+          >
           <DetailCharts {...location()} />
           <DownloadCard {...location()} />
+          </Show>
         </Show>
       </main>
       </>

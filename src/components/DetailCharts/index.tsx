@@ -161,7 +161,7 @@ export function DetailCharts(props: DetailChartsDefinition) {
   const [selectedPatternsSensorsId, setSelectedPatternsSensorsId] =
     createSignal(props.sensors?.[0].id);
     const [selectedPatternsPeriod, setSelectedPatternsPeriod] =
-    createSignal(getYears(props.datetimeFirst.utc, props.datetimeLast.utc)[0]);
+    createSignal(getYears(props.datetimeFirst?.utc, props.datetimeLast?.utc)[0]);
   const [patternsLoading, setPatternsLoading] = createSignal(true);
   const [patternsSensorsId, setPatternsSensorsId] = createSignal(
     props.sensors?.[0].id
@@ -287,7 +287,7 @@ export function DetailCharts(props: DetailChartsDefinition) {
               class="select"
               onChange={(e) => setSelectedPatternsPeriod(e.target.value)}
             >
-              <For each={getYears(props.datetimeFirst.utc, props.datetimeLast.utc)}>{(year,i) => 
+              <For each={getYears(props.datetimeFirst?.utc, props.datetimeLast?.utc)}>{(year,i) => 
                   <option value={year}>{year}</option>              
               }
               </For>
