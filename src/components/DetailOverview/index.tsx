@@ -4,42 +4,36 @@ import { A, createAsync, useLocation } from '@solidjs/router';
 import { timeFromNow, since } from '~/lib/utils';
 import { ListsForm } from '~/components/Cards/ListsForm';
 
-import {DetailMap} from '~/components/DetailMap';
+import { DetailMap } from '~/components/DetailMap';
 import { SensorType } from './SensorType';
 
 import '~/assets/scss/components/detail-overview.scss';
 import { DetailOverviewDefinition } from './types';
 import { getListsBySensorNodesId, getUserId } from '~/db';
 
-
 interface ListsDefinition {
-  sensorNodesId: number
-  pathname: string
+  sensorNodesId: number;
+  pathname: string;
 }
 
-
 function LocationLists(props: ListsDefinition) {
-
-
-  let lists = createAsync(() => getListsBySensorNodesId(Number(props.sensorNodesId)),{initialValue: [],deferStream: true})
+  let lists = createAsync(
+    () => getListsBySensorNodesId(Number(props.sensorNodesId)),
+    { initialValue: [], deferStream: true }
+  );
 
   return (
-    <ul class='lists-list'>
-    <For each={lists()}>
-      {(list, i) => (
-        <A
-          class='list-link'
-          href={`/lists/${list.listsId}`}
-        >
-          <li class="btn btn-tertiary">{list.label}</li>
-        </A>
-      )}
-    </For>
-    <ListsForm redirect={props.pathname}/>
+    <ul class="lists-list">
+      <For each={lists()}>
+        {(list, i) => (
+          <A class="list-link" href={`/lists/${list.listsId}`}>
+            <li class="btn btn-tertiary">{list.label}</li>
+          </A>
+        )}
+      </For>
+      <ListsForm redirect={props.pathname} />
     </ul>
-  )
-
-
+  );
 }
 
 function LocationListsFallback() {
@@ -72,34 +66,37 @@ export function DetailOverview(props: DetailOverviewDefinition) {
 
   const pageLocation = useLocation();
 
-
   return (
-    <section class='detail-overview'>
-      <div class='detail-overview__title'>
+    <section class="detail-overview">
+      <div class="detail-overview__title">
         <div>
           <span class="type-subtitle-3 text-smoke-120">
             {props.country?.name}
           </span>
-          <h1 class="type-display-1 text-sky-120">{props.name || 'No label'}</h1>
+          <h1 class="type-display-1 text-sky-120">
+            {props.name || 'No label'}
+          </h1>
         </div>
         <div>
-          <a
-            href="#download-card"
-            class='icon-btn btn-tertiary download-anchor'
-          >
-            Download data
-            <img src="/svgs/download_ocean.svg" alt="" />
-          </a>
+          <Show when={props.datetimeFirst}>
+            <a
+              href="#download-card"
+              class="icon-btn btn-tertiary download-anchor"
+            >
+              Download data
+              <img src="/svgs/download_ocean.svg" alt="" />
+            </a>
+          </Show>
         </div>
       </div>
-      <div class='detail-overview__body'>
-        <div class='location-map'>
+      <div class="detail-overview__body">
+        <div class="location-map">
           <DetailMap coordinates={props.coordinates} />
         </div>
-        <div class='divider'> </div>
-        <div class='location-characteristics'>
+        <div class="divider"> </div>
+        <div class="location-characteristics">
           <h3>CHARACTERISTICS</h3>
-          <table class='characteristics-table'>
+          <table class="characteristics-table">
             <tbody>
               <tr>
                 <td>Type</td>{' '}
@@ -119,8 +116,7 @@ export function DetailOverview(props: DetailOverviewDefinition) {
                 <td>
                   {props.sensors
                     ?.map(
-                      (o) =>
-                        `${o.parameter.displayName} ${o.parameter.units}`
+                      (o) => `${o.parameter.displayName} ${o.parameter.units}`
                     )
                     .join(', ')}
                 </td>
@@ -133,30 +129,32 @@ export function DetailOverview(props: DetailOverviewDefinition) {
                 <td>Reporting</td>
                 <td>
                   <p>
-                    Updated {timeFromNow(props.datetimeLast?.local)}
+                    {props.datetimeLast
+                      ? `Updated ${timeFromNow(props.datetimeLast?.local)}`
+                      : 'No measurements'}
                   </p>
-                  <p>Since {since(props.datetimeFirst?.local)}</p>
+                  <p>
+                    {props.datetimeLast
+                      ? `Reporting since ${since(props.datetimeLast?.local)}`
+                      : 'No measurements'}
+                  </p>
                 </td>
               </tr>
               <tr>
                 <td>Provider</td>
-                <td>
-                  
-                  {props.provider?.name}
-                  
-                  </td>
+                <td>{props.provider?.name}</td>
               </tr>
             </tbody>
           </table>
         </div>
-        <div class='divider'> </div>
-        <div class='location-lists'>
+        <div class="divider"> </div>
+        <div class="location-lists">
           <h3 class="type-subtitle-3 text-smoke-180">LISTS</h3>
-          <Show
-            when={usersId()}
-            fallback={<LocationListsFallback />}
-          >
-            <LocationLists sensorNodesId={props.id} pathname={pageLocation.pathname} />
+          <Show when={usersId()} fallback={<LocationListsFallback />}>
+            <LocationLists
+              sensorNodesId={props.id}
+              pathname={pageLocation.pathname}
+            />
           </Show>
         </div>
       </div>
