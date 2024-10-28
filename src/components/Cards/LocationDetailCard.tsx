@@ -125,8 +125,8 @@ export function LocationDetailCard() {
               )}` : 'No measurements' }
             </span>
             <span class="type-body-4">
-            {location()?.results?.[0].datetimeLast ? `Reporting since ${since(
-                location()?.results?.[0].datetimeLast?.local
+            {location()?.results?.[0].datetimeFirst ? `Reporting since ${since(
+                location()?.results?.[0].datetimeFirst?.local
               )}` : 'No measurements' }
             </span>
           </div>

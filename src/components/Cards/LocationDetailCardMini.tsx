@@ -76,12 +76,12 @@ export function LocationDetailCardMini() {
           <div class='reporting-cell'>
             <span class="type-body-1">
             {location()?.results?.[0].datetimeLast ? `Updated ${timeFromNow(
-                location()?.results?.[0].datetimeLast?.local
+                location()?.results?.[0].datetimeFirst?.local
               )}` : 'No measurements' }
             </span>
             <span class="type-body-4">
             {location()?.results?.[0].datetimeLast ? `Reporting since ${since(
-                location()?.results?.[0].datetimeLast?.local
+                location()?.results?.[0].datetimeFirst?.local
               )}` : 'No measurements' }
             </span>
           </div>
