@@ -135,7 +135,7 @@ export function DetailOverview(props: DetailOverviewDefinition) {
                   </p>
                   <p>
                     {props.datetimeLast
-                      ? `Reporting since ${since(props.datetimeLast?.local)}`
+                      ? `Reporting since ${since(props.datetimeFirst?.local)}`
                       : 'No measurements'}
                   </p>
                 </td>
