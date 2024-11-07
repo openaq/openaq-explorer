@@ -9,7 +9,7 @@ interface LocationDetailOpenGraphDefinition {
 
 export function LocationDetailOpenGraph(props :LocationDetailOpenGraphDefinition) {
 
-  const title = `OpenAQ Locaiton ID ${props.locationsId}`;
+  const title = `OpenAQ Location ID ${props.locationsId}`;
   const description = `Details about monitoring location, OpenAQ ID ${props.locationsId}. Browse the measurements data and download when logged in.`;
   const url = `https://explore.openaq.org/locations/${props.locationsId}`;
 
