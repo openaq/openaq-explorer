@@ -11,6 +11,7 @@ export default createHandler(
               name="viewport"
               content="width=device-width, initial-scale=1"
             />
+            <title>OpenAQ Explorer</title>
             <link rel="icon" href="/favicon.ico"  sizes="16x16 32x32"/>
             <link rel="shortcut icon" href="/favicon.svg" type="image/svg+xml"/>
             {import.meta.env.VITE_ENV == 'prod' ? (
