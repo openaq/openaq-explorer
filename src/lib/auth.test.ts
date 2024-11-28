@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { encode, parsePasswordHash, verifyPassword } from './auth';
+import { encode, parsePasswordHash, verifyPassword, isValidEmailDomain } from './auth';
 
 describe('verifyPassword', async () => {
     test('verifyPassword works with salt without periods',async  () => {
@@ -25,9 +25,21 @@ describe('parsePasswordHash', async () => {
     });
     test('parsePasswordHash correctly parses encoded password generated from encode',async  () => {
         const encodedPassword = await encode('Qmx3zNPkj8kh6zmjcL5q', 'GT2pGKvbcxXcNfwL.Lo.VE');
-        const { digest, iterations, salt, hash } = await parsePasswordHash(encodedPassword)
+        const { digest, iterations, salt } = await parsePasswordHash(encodedPassword)
         expect(digest).toBe('sha256');
         expect(iterations).toBe(29000);
         expect(salt).toBe('GT2pGKvbcxXcNfwL.Lo.VE');
     });
 })
+
+
+describe('isValidEmailDomain', async () => {
+    test('isValidEmailDomain allow non-blocklist domain',async  () => {
+        const email = 'test@gmail.com'
+        expect(isValidEmailDomain(email)).toBe(true)
+    });
+    test('isValidEmailDomain rejects blocklist domain',async  () => {
+        const email = 'test@sharkfaces.com'
+        expect(isValidEmailDomain(email)).toBe(false)
+    });
+});

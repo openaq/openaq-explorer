@@ -1,61 +1,63 @@
 import { createContext, useContext, Component } from "solid-js";
-import { createStore, produce } from "solid-js/store";
+import { createStore } from "solid-js/store";
 import { Viewport } from "solid-map-gl";
 
-type Store = [
-  {
-    locationsId: number | undefined;
-    mapParameter: string;
-    listsId: number | undefined;
-    listLocationsId: number | undefined;
-    listParametersId: number | undefined;
-    listParameter: string | undefined;
+
+interface StoreParameters {
+  locationsId: number | undefined;
+  mapParameter: string;
+  listsId: number | undefined;
+  listLocationsId: number | undefined;
+  listParametersId: number | undefined;
+  listParameter: string | undefined;
 
 
-    deleteListModalOpen: boolean;
-    deleteListLocationModalOpen: boolean;
-    newListModalOpen: boolean;
-    editListModalOpen: boolean;
-    deleteLocationModalOpen: boolean;
-    showProvidersCard: boolean;
-    viewport: Viewport | undefined;
-    showAirSensors: boolean;
-    showMonitors: boolean;
-    showOnlyActiveLocations: boolean;
-    totalProviders: number;
-    providers: any[];
-    recentMeasurements: any[];
-    toastOpen: boolean;
-    apiKeyRegenerateModalOpen: boolean;
-  },
+  deleteListModalOpen: boolean;
+  deleteListLocationModalOpen: boolean;
+  newListModalOpen: boolean;
+  editListModalOpen: boolean;
+  deleteLocationModalOpen: boolean;
+  showProvidersCard: boolean;
+  viewport: Viewport;
+  showAirSensors: boolean;
+  showMonitors: boolean;
+  showOnlyActiveLocations: boolean;
+  totalProviders: number;
+  providers: any[];
+  recentMeasurements: any[];
+  toastOpen: boolean;
+  apiKeyRegenerateModalOpen: boolean;
+  passwordChangeModalOpen: boolean;
+}
+
+type Store = [StoreParameters,
   {
     setSelectedLocationsId: (locationsId: number) => void;
-    clearLocationsId?: () => void;
+    clearLocationsId: () => void;
     setSelectedMapParameter: (mapParameter: string) => void;
-    setDeleteListsId?: () => void;
-    setDeleteListLocationsId?: () => void;
+    setDeleteListsId: () => void;
+    setDeleteListLocationsId: () => void;
 
-    setListParametersId?: () => void;
-    setListParameter?: () => void;
+    setListParametersId: (parametersId: number) => void;
+    setListParameter: (parameter: string) => void;
 
-    clearDeleteListsId?: () => void;
-    toggleDeleteListModalOpen?: () => void;
-    toggleNewListModalOpen?: () => void;
-    toggleEditListModalOpen?: () => void;
+    clearDeleteListsId: () => void;
+    toggleDeleteListModalOpen: () => void;
+    toggleNewListModalOpen: () => void;
+    toggleEditListModalOpen: () => void;
     toggleShowProvidersCard: () => void;
-    toggleRegenerateKeyModalOpen?: () => void;
-    toggleDeleteListLocationModalOpen?: () => void;
-    setViewport?: () => void;
-    toggleMonitor?: () => void;
-    toggleAirSensor?: () => void;
-    toggleMapIsActive?: () => void;
+    toggleRegenerateKeyModalOpen: () => void;
+    toggleDeleteListLocationModalOpen: () => void;
+    setViewport: (viewport: Viewport) => void;
+    toggleMonitor: () => void;
+    toggleAirSensor: () => void;
+    toggleMapIsActive: () => void;
     setProviders: (providers: any[]) => void;
-    setRecentMeasurements?: () => void;
-    addRecentMeasurements?: () => void;
-    updateRecentMeasurements?: () => void;
-    setTotalProviders?: () => void;
-    openToast?: () => void;
-
+    setRecentMeasurements: () => void;
+    addRecentMeasurements: () => void;
+    updateRecentMeasurements: (parameter: string, measurements) => void;
+    setTotalProviders: () => void;
+    openToast: () => void;
   }
 ];
 
@@ -147,7 +149,7 @@ export const StoreProvider: Component<{}> = (props) => {
           measurements,
         ]);
       },
-      updateRecentMeasurements(parameter, measurements) {
+      updateRecentMeasurements(parameter: string, measurements) {
         const idx = state.recentMeasurements.findIndex(
           (p) => p.parameter == parameter
         );

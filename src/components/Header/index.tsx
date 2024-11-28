@@ -1,11 +1,11 @@
-import { getUser, getUserId, logoutAction } from '~/db';
-
-import { createAsync, useLocation } from '@solidjs/router';
+import {  AccessorWithLatest, useLocation } from '@solidjs/router';
 
 import {  createMemo, createSignal } from 'solid-js';
 
 import { A } from '@solidjs/router';
 import '~/assets/scss/components/header.scss';
+import { SessionData } from '~/auth/session';
+import { logout } from '~/auth/user';
 
 
 function Account() {
@@ -28,7 +28,7 @@ function Account() {
       </A>
       <ul class="submenu" aria-label="submenu">
         <li class="submenu__item">
-          <A href="/account" class={`type-body-3 text-smoke-120 $"settings-link"`}>
+          <A href="/account" class={`type-body-3 text-smoke-120 settings-link`}>
             <img
               width="24px"
               height="24px"
@@ -39,7 +39,7 @@ function Account() {
           </A>
         </li>
         <li class="submenu__item">
-          <form action={logoutAction} method="post" class='logout-form'>
+          <form action={logout} method="post" class='logout-form'>
             <img src="/svgs/logout.svg" alt="logout icon" />
             <input
             type="hidden"
@@ -56,16 +56,14 @@ function Account() {
   );
 }
 
-export function Header() {
+interface Props {
+  user?: AccessorWithLatest<SessionData | undefined | null>;
+}
+
+export function Header(props: Props) {
   const pageLocation = useLocation();
 
-
   const [open, setOpen] = createSignal();
-
-    const userId = createAsync(() => getUserId());
-  
-
-
 
   return (
     <header class="header">
@@ -227,21 +225,21 @@ export function Header() {
           </ul>
         </nav>
         <div class="account-nav">
-          {userId() ? (
+          {props.user?.()?.usersId ? (
             ''
           ) : (
             <A href={`/register?redirect=${pageLocation.pathname}`} class="type-link-3 text-smoke-120">
               Sign up
             </A>
           )}
-          {userId() ? (
+          {props.user?.()?.usersId ? (
             ''
           ) : (
             <A href={`/login?redirect=${pageLocation.pathname}`} class="btn btn-secondary">
               Login{' '}
             </A>
           )}
-          {userId() ? (
+          {props.user?.()?.usersId ? (
             <A href="/lists" class="type-link-3 list-link">
               <img
                 width="24px"
@@ -254,7 +252,7 @@ export function Header() {
           ) : (
             ''
           )}
-          {userId() ? <Account /> : ''}
+          {props.user?.()?.usersId ? <Account /> : ''}
           <A
             href="https://secure.givelively.org/donate/openaq-inc/"
             class={`btn btn-primary ${"donate-btn"}`}

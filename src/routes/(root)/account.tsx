@@ -1,35 +1,28 @@
-import { getUser } from '~/db';
 import { Toast } from '~/components/Toast';
-import { createAsync } from '@solidjs/router';
+import { createAsync, type RouteDefinition } from '@solidjs/router';
 import { PasswordForm } from '~/components/Account/PasswordForm';
 import { ApiKeyRegenerateConfirmModal } from '~/components/Modals/ApiKeyRegenerateConfirmModal';
 import { useStore } from '~/stores';
-import { Header } from '~/components/Header';
 
 import '~/assets/scss/routes/account.scss';
-import { Suspense } from 'solid-js';
+import { getLoggedInUser } from '~/auth/user';
 
-export const route = {
-  load: () => {
-    getUser();
-  },
+export const route: RouteDefinition = {
+  preload: () => getLoggedInUser(),
 };
 
 function copyApiKey(token: string) {
   navigator.clipboard.writeText(token);
 }
 
-export default function Acount() {
-  const user = createAsync(() => getUser());
-  const [store, { openToast, toggleRegenerateKeyModalOpen }] =
-    useStore();
+export default function Account() {
+  const user = createAsync(() => getLoggedInUser(), { deferStream: true });
+  const [_, { openToast, toggleRegenerateKeyModalOpen }] = useStore();
 
   return (
     <>
-      <Header />
-      <Suspense >
       <main class="account-page">
-        <ApiKeyRegenerateConfirmModal />
+        <ApiKeyRegenerateConfirmModal token={user()?.token} />
         <h1 class="type-display-1 text-sky-120">OpenAQ Account</h1>
         <section class="account-page__section">
           <h2 class="type-heading-2  text-sky-120">Basics</h2>
@@ -51,12 +44,11 @@ export default function Acount() {
               name="email"
               id="email"
               class="text-input"
-              value={user()?.emailAddress}
+              value={user()?.email}
             />
           </div>
         </section>
         <section class="account-page__section">
-          {' '}
           <h2 class="type-heading-2 text-sky-120">Change password</h2>
           <PasswordForm />
         </section>
@@ -72,7 +64,7 @@ export default function Acount() {
               }}
             >
               Copy
-            </button>
+              </button>
             <button
               class="btn btn-primary"
               onClick={() => toggleRegenerateKeyModalOpen()}
@@ -83,7 +75,6 @@ export default function Acount() {
         </section>
         <Toast message={'API Key copied to clipboard'} />
       </main>
-      </Suspense>
     </>
   );
 }

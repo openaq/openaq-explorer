@@ -1,7 +1,28 @@
 import crypto from 'crypto';
 import { promisify } from 'util';
 import { customAlphabet } from 'nanoid';
+import { disposableDomains } from '~/data/auth';
 const pbkdf2Async = promisify(crypto.pbkdf2);
+
+
+export async function checkPassword(password: string, hash: string) {
+  'use server';
+  const parts = hash.split('$');
+  const salt = Buffer.from(
+    parts[3],
+    'base64'
+  )
+  let hashedPassword = await pbkdf2Async(
+    password,
+    salt,
+    +parts[2],
+    32,
+    parts[1].split('-')[1]
+  );
+  const hashedPasswordB64 = passlibify(hashedPassword);
+  return parts[4] == hashedPasswordB64;
+}
+
 
 export function passlibify(passhwordHash: Buffer): string {
   'use server';
@@ -93,14 +114,10 @@ export async function verifyPassword(
   return hash == passlibify(hashedPassword);
 }
 
-function validateFullName(fullName: string) {
-  if (typeof fullName !== 'string' || fullName !== '') {
-    throw new Error(`Name is required`);
+export function isValidEmailDomain(email: string): boolean {
+  const emailDomain = email.split('@')[1];
+  if (disposableDomains.has(emailDomain)) {
+    return false;
   }
-}
-
-function validateEmail(emailAddress: string) {
-  if (typeof emailAddress !== 'string' || emailAddress !== '') {
-    throw new Error(`Email address is required`);
-  }
+  return true
 }

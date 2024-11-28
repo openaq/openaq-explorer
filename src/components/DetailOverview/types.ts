@@ -1,3 +1,6 @@
+import { AccessorWithLatest } from "@solidjs/router";
+import { SessionData } from "~/auth/session";
+
 export interface SensorsDefinition {
   name: string;
 }
@@ -42,6 +45,7 @@ export interface Datetime {
 }
 
 export interface DetailOverviewDefinition {
+  user?: AccessorWithLatest<SessionData | undefined | null>;
   id: number;
   name: string;
   coordinates: Coordinates;

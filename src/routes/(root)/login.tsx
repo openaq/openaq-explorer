@@ -1,13 +1,11 @@
 import { Show } from 'solid-js';
 import { A, useSubmission, useSearchParams, createAsync } from '@solidjs/router';
-import { loginAction, redirectIfLoggedIn } from '~/db';
+import { redirectIfLoggedIn } from '~/auth/user';
+import { login } from '~/auth/user';
 import '~/assets/scss/routes/login.scss';
-import { Header } from '~/components/Header';
 
 export const route = {
-  load() {
-    void redirectIfLoggedIn();
-  },
+  preload: () => redirectIfLoggedIn()
 };
 
 
@@ -18,22 +16,21 @@ export default function Login() {
   const [searchParams] = useSearchParams();
 
   let redirect;
-  if (['/login', '/verify-email', '/register'].includes(searchParams.redirect ?? '/')) {
+  if (['/login', '/verify-email', '/register'].includes(searchParams.redirect as string ?? '/')) {
     redirect = '/'
   } else {
     redirect = searchParams.redirect;
   }
 
 
-  const loggingIn = useSubmission(loginAction);
+  const loggingIn = useSubmission(login);
 
   return (
     <>
-      <Header />
       <main class="login-page">
         <h1 class="type-display-1 text-sky-120">Login</h1>
         <form
-          action={loginAction}
+          action={login}
           class="login-form"
           method="post"
           enctype="multipart/form-data"
@@ -90,8 +87,8 @@ export default function Login() {
             </p>
           </Show>
           <div class="form-element">
-            <button class="btn btn-primary" type="submit">
-              Login
+            <button class="btn btn-primary" type="submit" disabled={loggingIn.pending}>
+              {loggingIn.pending ? 'Logging in' : 'Login'}
             </button>
           </div>
         </form>

@@ -1,7 +1,6 @@
 import { test, expect, vi, describe,  } from "vitest"
 import { render } from "@solidjs/testing-library"
 import { SensorType } from './SensorType';
-import exp from "constants";
 
 describe('<SensorType />', () => {
     vi.stubGlobal('URL.createObjectURL', vi.fn());

@@ -163,7 +163,8 @@ export class LambdaStack extends cdk.Stack {
       this,
       `${id}explorerCachePolicy`,
       {
-        defaultTtl: cdk.Duration.minutes(5),
+        defaultTtl: cdk.Duration.minutes(0),
+        minTtl: cdk.Duration.minutes(0),
         queryStringBehavior: cloudfront.CacheQueryStringBehavior.all()
       }
     )
