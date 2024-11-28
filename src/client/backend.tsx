@@ -28,6 +28,17 @@ interface ListLocationDefinition {
   locationsId: number;
 }
 
+export type UserResponse = UserRow[]
+
+export interface UserRow {
+    usersId: number
+    isActive: boolean
+    emailAddress: string
+    fullname: string
+    passwordHash: string
+    token: string
+}
+
 export const db = {
   createUser: async (user: CreateUserDefinition): Promise<Response> => {
     const res = await fetch(`${baseUrl}/users`, {
@@ -44,7 +55,9 @@ export const db = {
   getUserById: async (usersId: number): Promise<Response> => {
     const res = await fetch(`${baseUrl}/users/${usersId}`, {
       method: 'GET',
-      cache: 'no-store',
+      headers: {
+        'Cache-Control': 'no-cache, no-store'
+      }
     });
     return res;
   },
@@ -52,7 +65,9 @@ export const db = {
   getUserByEmailAddress: async (emailAddress: string): Promise<Response> => {
     const res = await fetch(`${baseUrl}/users/email/${emailAddress}`, {
       method: 'GET',
-      cache: 'no-store',
+      headers: {
+        'Cache-Control': 'no-cache, no-store'
+      }
     });
     return res;
   },
@@ -64,7 +79,9 @@ export const db = {
       `${baseUrl}/users/verification-code/${verificationCode}`,
       {
         method: 'GET',
-        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache, no-store'
+        }
       }
     );
     return res;
@@ -113,7 +130,9 @@ export const db = {
   getList: async (listsId: number): Promise<Response> => {
     const res = await fetch(`${baseUrl}/lists/${listsId}`, {
       method: 'GET',
-      cache: 'no-store',
+      headers: {
+        'Cache-Control': 'no-cache, no-store'
+      }
     });
     return res;
   },
@@ -153,7 +172,9 @@ export const db = {
   getUserLists: async (usersId: number): Promise<Response> => {
     const res = await fetch(`${baseUrl}/users/${usersId}/lists`, {
       method: 'GET',
-      cache: 'no-store',
+      headers: {
+        'Cache-Control': 'no-cache, no-store'
+      }
     });
     return res;
   },
@@ -166,7 +187,9 @@ export const db = {
       `${baseUrl}/users/${usersId}/locations/${locationsId}/lists`,
       {
         method: 'GET',
-        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache, no-store'
+        }
       }
     );
     return res;
@@ -174,7 +197,9 @@ export const db = {
   getListLocations: async (listsId: number): Promise<Response> => {
     const res = await fetch(`${baseUrl}/lists/${listsId}/locations`, {
       method: 'GET',
-      cache: 'no-store',
+      headers: {
+        'Cache-Control': 'no-cache, no-store'
+      }
     });
     return res;
   },

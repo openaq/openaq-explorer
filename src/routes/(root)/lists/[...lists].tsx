@@ -1,18 +1,21 @@
 import { ListCard } from '~/components/ListCard';
-import { getUser, getUserLists } from '~/db';
 import { createAsync } from '@solidjs/router';
 import { NewListModal } from '~/components/Modals/NewListModal';
 import { DeleteListModal } from '~/components/Modals/DeleteListModal';
-import { For, createSignal } from 'solid-js';
+import { For } from 'solid-js';
 import { Show } from 'solid-js';
 import { useStore } from '~/stores';
 
 import '~/assets/scss/routes/lists.scss';
-import { Header } from '~/components/Header';
+import { getUserLists } from '~/db/lists';
+import { getSessionUser } from '~/auth/session';
+import { getLoggedInUser } from '~/auth/user';
 
 export const route = {
-  load: () => {
-    getUser(), getUserLists();
+  preload: () => {
+    getLoggedInUser(),
+    getSessionUser(), 
+    getUserLists();
   },
 };
 
@@ -20,15 +23,16 @@ export default function Lists() {
 
 
   const [store, {toggleNewListModalOpen}] = useStore();
-  
+
+  createAsync(() => getLoggedInUser(), { deferStream: true });
+
   const userLists = createAsync(() => getUserLists(), {
     deferStream: true,
   });
-  const user = createAsync(() => getUser(), { deferStream: true });
+  const user = createAsync(() => getSessionUser(), { deferStream: true });
 
   return (
     <>
-      <Header />
       <main class="lists-main">
 
         <header class='header'>

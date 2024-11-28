@@ -1,20 +1,21 @@
-import { Show, createEffect, createSignal } from 'solid-js';
+import { For, Show, createEffect, createSignal } from 'solid-js';
 import { ListMap } from '~/components/ListMap';
 import { LocationList } from '~/components/LocationList';
 import { LocationDetailCardMini } from '~/components/Cards/LocationDetailCardMini';
 import { useStore } from '~/stores';
 
 import '~/assets/scss/components/tab-view.scss';
+import { ListItemDefinition, ParameterDefinition } from '~/db/types';
 
 
 interface TabViewDefintion {
-  locations: any[];
+  locations: ListItemDefinition[];
   list: any;
 }
 
 export function TabView(props: TabViewDefintion) {
   const [activeTab, setActiveTab] = createSignal('list');
-  const [parameters, setParameters] = createSignal([]);
+  const [parameters, setParameters] = createSignal<ParameterDefinition[]>([]);
   const [store, { setListParametersId, setListParameter }] =
     useStore();
 
@@ -85,14 +86,14 @@ export function TabView(props: TabViewDefintion) {
               class="select"
               value={store.listParametersId}
               onChange={(e) => {
-                setListParametersId(e.target.value);
+                setListParametersId(Number(e.target.value));
                 setListParameter(
                   e.target.options[e.target.selectedIndex].text
                 );
               }}
             >
               <For each={parameters()}>
-                {(parameter, i) => (
+                {(parameter) => (
                   <option value={parameter.id}>
                     {parameter.displayName} {parameter.units}{' '}
                   </option>

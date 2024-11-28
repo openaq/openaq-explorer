@@ -1,23 +1,21 @@
 import {  useSubmission } from '@solidjs/router';
-import { forgotPasswordLinkAction } from '~/db';
 import { Show } from 'solid-js';
 import '~/assets/scss/routes/forgot-password.scss';
-import { Header } from '~/components/Header';
+import { forgotPasswordLink } from '~/auth/user';
 
 export default function VerifyEmail() {
-  const requestingPasswordReset = useSubmission(forgotPasswordLinkAction);
+  const requestingPasswordReset = useSubmission(forgotPasswordLink);
 
   return (
     <>
-      <Header />
       <main class='main'>
         <h1 class="type-heading-1 text-sky-120">Forgot your password?</h1>
         <span class="type-body-3">Enter your email address below and we will send you link to reset your password.</span>
-        <form action={forgotPasswordLinkAction} method='post'>
+        <form action={forgotPasswordLink} method='post'>
         <div class="form-element">
 
             <label for="email-address">Email address</label>
-            <input class="text-input" type="email" required name='email-address'/>
+            <input class="text-input" type="email" required name='email-address' disabled={requestingPasswordReset.pending}/>
             </div>
             <Show when={requestingPasswordReset.result}>
             <p
@@ -29,7 +27,10 @@ export default function VerifyEmail() {
               {requestingPasswordReset.result!.message}
             </p>
           </Show>
-            <button class="btn btn-primary" type="submit">Submit</button>
+            <button class="btn btn-primary" type="submit" disabled={requestingPasswordReset.pending}>
+            {requestingPasswordReset.pending ? 
+              'Requesting...' :'Submit'}
+            </button>
         </form>
 
         <div class='bubble-lg' />

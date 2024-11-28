@@ -1,18 +1,21 @@
-import { createSignal, For, Show } from 'solid-js';
+import { createSignal, For } from 'solid-js';
 import dayjs from 'dayjs';
 import tz from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import { getSensorMeasurementsDownload } from '~/client';
-import { getUserId } from '~/db';
 
-import { createAsync, useLocation, A } from '@solidjs/router';
+import {
+  useLocation,
+  A,
+} from '@solidjs/router';
 
 import '~/assets/scss/components/download-card.scss';
+import { Sensor } from '../DetailOverview/types';
 
 dayjs.extend(utc);
 dayjs.extend(tz);
 
-function downloadFile(filename, text) {
+function downloadFile(filename: string, text: string) {
   const element = document.createElement('a');
   element.setAttribute(
     'href',
@@ -51,7 +54,7 @@ function measurementsCsv(location, data) {
     };
   });
   const fields = Object.keys(values[0]);
-  const replacer = (key, value) => (value === null ? '' : value);
+  const replacer = (_, value) => (value === null ? '' : value);
   let csv = values.map((row) =>
     fields
       .map((fieldName) => JSON.stringify(row[fieldName], replacer))
@@ -62,7 +65,7 @@ function measurementsCsv(location, data) {
   return csv;
 }
 
-function NotLoggedInFallback() {
+export function NotLoggedInFallback() {
   const pageLocation = useLocation();
 
   return (
@@ -87,11 +90,13 @@ function NotLoggedInFallback() {
   );
 }
 
-export function DownloadCard(props) {
-  const usersId = createAsync(() => getUserId(), {
-    deferStream: true,
-  });
+interface Props {
+  id: number;
+  timezone: string;
+  sensors: Sensor[];
+}
 
+export function DownloadCard(props: Props) {
   const [downloading, setDownloading] = createSignal(false);
 
   const [formDisabled, setFormDisabled] = createSignal(false);
@@ -145,103 +150,84 @@ export function DownloadCard(props) {
       await sleep(300);
     }
     const csvData = measurementsCsv(props, data);
-    downloadFile(
-      `openaq_location_${props.id}_measurments.csv`,
-      csvData
-    );
+    downloadFile(`openaq_location_${props.id}_measurments.csv`, csvData);
     setDownloading(false);
   };
 
   return (
-    <section id="download-card" class="download-card">
-      <header class="download-card__header">
-        <h3 class="heading">Download</h3>
-      </header>
-      <Show when={usersId()} fallback={<NotLoggedInFallback />}>
-        <h3 class="type-subtitle-1 text-sky-120">
-          Download Data CSV
-        </h3>
-        <span class="type-body-1 text-smoke-120">
-          Data downloads on OpenAQ Explorer are limited to 1000
-          records per parameter or 30 days, whichever is larger. For
-          larger downloads use the OpenAQ API. Read more about the
-          OpenAQ API at{' '}
-          <a href="https://docs.openaq.org" target="_blank">
-            https://docs.openaq.org
-          </a>
-        </span>
-
-        <form
-          method="post"
-          class="download-form"
-          onSubmit={(e) => {
-            onFormSubmit(e);
-          }}
+    <>
+      <h3 class="type-subtitle-1 text-sky-120">Download Data CSV</h3>
+      <span class="type-body-1 text-smoke-120">
+        Data downloads on OpenAQ Explorer are limited to 1000 records per
+        parameter or 30 days, whichever is larger. For larger downloads use the
+        OpenAQ API. Read more about the OpenAQ API at{' '}
+        <a
+          href="https://docs.openaq.org"
+          target="_blank"
+          rel="noreferrer noopener"
         >
-          <input
-            type="hidden"
-            name="timezone"
-            value={props.timezone}
-          />
-          <label for="">Start date</label>
-          <input
-            type="date"
-            name="date-from"
-            id="date-from-input"
-            value={dayjs(
-              new Date() - 86400000,
-              props.timezone
-            ).format('YYYY-MM-DD')}
-            max={dayjs(new Date(), props.timezone).format(
-              'YYYY-MM-DD'
+          https://docs.openaq.org
+        </a>
+      </span>
+
+      <form
+        method="post"
+        class="download-form"
+        onSubmit={(e) => {
+          onFormSubmit(e);
+        }}
+      >
+        <input type="hidden" name="timezone" value={props.timezone} />
+        <label for="">Start date</label>
+        <input
+          type="date"
+          name="date-from"
+          id="date-from-input"
+          value={dayjs(+new Date() - 86400000, props.timezone).format(
+            'YYYY-MM-DD'
+          )}
+          max={dayjs(new Date(), props.timezone).format('YYYY-MM-DD')}
+          onInput={onDateFromInput}
+          class="date-input"
+        />
+        <label for="">End date</label>
+        <input
+          type="date"
+          name="date-to"
+          id="date-to-input"
+          value={dayjs(new Date(), props.timezone).format('YYYY-MM-DD')}
+          max={dayjs(new Date(), props.timezone).format('YYYY-MM-DD')}
+          onInput={onDateToInput}
+          class="date-input"
+        />
+        <div class="parameter-inputs">
+          <For each={props.sensors}>
+            {(sensor) => (
+              <>
+                <label for="">
+                  {sensor.parameter.displayName} {sensor.parameter.units}
+                </label>
+                <input
+                  checked
+                  type="checkbox"
+                  class="checkbox"
+                  name={`checkbox-sensor-${sensor.id}`}
+                  id={`checkbox-sensor-${sensor.id}`}
+                />
+              </>
             )}
-            onInput={onDateFromInput}
-            class="date-input"
-          />
-          <label for="">End date</label>
-          <input
-            type="date"
-            name="date-to"
-            id="date-to-input"
-            value={dayjs(new Date(), props.timezone).format(
-              'YYYY-MM-DD'
-            )}
-            max={dayjs(new Date(), props.timezone).format(
-              'YYYY-MM-DD'
-            )}
-            onInput={onDateToInput}
-            class="date-input"
-          />
-          <div class="parameter-inputs">
-            <For each={props.sensors}>
-              {(sensor, i) => (
-                <>
-                  <label for="">
-                    {sensor.parameter.displayName}{' '}
-                    {sensor.parameter.units}
-                  </label>
-                  <input
-                    checked
-                    type="checkbox"
-                    class="checkbox"
-                    name={`checkbox-sensor-${sensor.id}`}
-                    id={`checkbox-sensor-${sensor.id}`}
-                  />
-                </>
-              )}
-            </For>
-          </div>
-          <button
-            type="submit"
-            class={`icon-btn btn-secondary ${
-              downloading() ? 'btn-secondary--disabled' : ''
-            }`}
-            disabled={downloading() ? true : false}
-          >
-            Download CSV <img src="/svgs/download_ocean.svg" alt="" />
-          </button>
-        </form>
-      </Show>
-    </section>
+          </For>
+        </div>
+        <button
+          type="submit"
+          class={`icon-btn btn-secondary ${
+            downloading() ? 'btn-secondary--disabled' : ''
+          }`}
+          disabled={downloading() ? true : false}
+        >
+          Download CSV <img src="/svgs/download_ocean.svg" alt="" />
+        </button>
+      </form>
+    </>
   );
 }
