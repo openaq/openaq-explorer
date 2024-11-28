@@ -1,9 +1,9 @@
 import { useSubmission } from '@solidjs/router';
-import { deleteListLocationAction } from '~/db';
 import { JSX, Show, createEffect } from 'solid-js';
 import { useStore } from '~/stores';
 
 import '~/assets/scss/components/modal.scss';
+import { deleteListLocation } from '~/db/lists';
 
 
 interface DeleteLocationModalDefinition {
@@ -14,7 +14,7 @@ export function DeleteLocationModal(props: DeleteLocationModalDefinition) {
   let ref: HTMLDialogElement | undefined;
 
   const [store, { toggleDeleteListLocationModalOpen }] = useStore();
-  const deletingListLocation = useSubmission(deleteListLocationAction);
+  const deletingListLocation = useSubmission(deleteListLocation);
 
 
   const onClickClose: JSX.EventHandler<
@@ -42,7 +42,7 @@ export function DeleteLocationModal(props: DeleteLocationModalDefinition) {
 
   return (
     <dialog class="modal" ref={ref}>
-      <form action={deleteListLocationAction} method="post">
+      <form action={deleteListLocation} method="post">
         <header class="modal__header">
           <h2 class='title'>
             <img

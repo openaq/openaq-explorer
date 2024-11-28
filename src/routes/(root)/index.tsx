@@ -1,18 +1,12 @@
 import { Map } from "~/components/Map";
-import { getUserId } from "~/db";
 import { LocationDetailCard } from "~/components/Cards/LocationDetailCard";
 import { FlipCard } from "~/components/Cards/FlipCard";
-import { Header } from "~/components/Header";
 
 import "~/assets/scss/routes/index.scss";
 import { useLocation, useNavigate } from "@solidjs/router";
 import { useStore } from "~/stores";
 import { createEffect, createMemo, onMount } from "solid-js";
 
-
-export const route = {
-  load: () => getUserId(),
-};
 
 export default function Home() {
   const [store, actions] = useStore();
@@ -30,7 +24,11 @@ export default function Home() {
     }
 
     if (location.query?.parameter) {
-      setSelectedMapParameter(location.query.parameter);
+      if (Array.isArray(location.query.parameter) && location.query.parameter.length ===0) {
+        setSelectedMapParameter(location.query.parameter[0]);
+      } else if (typeof location.query.parameter == 'string') {
+        setSelectedMapParameter(location.query.parameter);
+      }
     }
 
     if (location.query?.provider) {
@@ -68,12 +66,9 @@ export default function Home() {
 
   return (
     <>
-      <Header />
-      <main>
         <Map />
         <FlipCard />
         <LocationDetailCard />
-      </main>
     </>
   );
 }

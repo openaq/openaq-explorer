@@ -67,7 +67,7 @@ export interface UserByIdDefinition {
   usersId: number;
   active: boolean;
   emailAddress: string;
-  fullName: string;
+  fullname: string;
   passwordHash: string;
   token: string;
 }

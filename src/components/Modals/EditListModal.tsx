@@ -1,8 +1,8 @@
 import { useSubmission } from '@solidjs/router';
-import { updateListAction } from '~/db';
 import { JSX, Show, createEffect } from 'solid-js';
 import { useStore } from '~/stores';
 import '~/assets/scss/components/modal.scss';
+import { updateList } from '~/db/lists';
 
 interface EditListModalDefinition {
   listsId: number;
@@ -12,7 +12,7 @@ interface EditListModalDefinition {
 
 export function EditListModal(props: EditListModalDefinition) {
   const [store, { toggleEditListModalOpen }] = useStore();
-  const updatingList = useSubmission(updateListAction);
+  const updatingList = useSubmission(updateList);
 
   const onClickClose: JSX.EventHandler<
     HTMLButtonElement,
@@ -40,7 +40,7 @@ export function EditListModal(props: EditListModalDefinition) {
 
   return (
     <dialog class="modal" ref={ref}>
-      <form action={updateListAction} method="post">
+      <form action={updateList} method="post">
         <input type="hidden" name="lists-id" value={props.listsId} />
         <header class="modal__header">
           <h2 class='title'>

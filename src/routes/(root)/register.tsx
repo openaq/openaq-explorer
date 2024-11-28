@@ -7,14 +7,13 @@ import {
   useSubmission,
 } from '@solidjs/router';
 
-import { registerAction, redirectIfLoggedIn } from '~/db';
 
 import PasswordScore from '~/components/PasswordScore';
 import { evaluatePassword } from '~/lib/password';
 
 import '~/assets/scss/routes/register.scss';
-import { Header } from '~/components/Header';
 import { Score } from '@zxcvbn-ts/core/dist/types';
+import { redirectIfLoggedIn, register } from '~/auth/user';
 
 
 export const route = {
@@ -72,15 +71,14 @@ export default function Register() {
     }, 500);
   };
 
-  const registering = useSubmission(registerAction);
+  const registering = useSubmission(register);
 
   return (
     <>
-      <Header />
       <main class="register-page">
         <h1 class="type-display-1 text-sky-120">Create an account</h1>
         <form
-          action={registerAction}
+          action={register}
           class="register-form"
           method="post"
         >
@@ -101,6 +99,7 @@ export default function Register() {
               name="fullname"
               autocomplete="on"
               placeholder=" "
+              disabled={registering.pending}
               required
             />
           </div>
@@ -117,6 +116,7 @@ export default function Register() {
               type="email"
               placeholder=" "
               autocomplete="on"
+              disabled={registering.pending}
               required
             />
           </div>
@@ -134,6 +134,7 @@ export default function Register() {
               minlength="8"
               placeholder=" "
               class="text-input"
+              disabled={registering.pending}
               required
               onInput={(e) => onPasswordInput(e)}
             />
@@ -152,6 +153,7 @@ export default function Register() {
               minlength="8"
               placeholder=" "
               class="text-input"
+              disabled={registering.pending}
               required
               onInput={(e) => onPasswordConfirmInput(e)}
             />
@@ -170,9 +172,9 @@ export default function Register() {
           <button
             class="btn btn-primary"
             type="submit"
-            disabled={passwordScore()! < 4 || passwordsDoNotMatch()}
+            disabled={registering.pending || passwordScore()! < 4 || passwordsDoNotMatch()}
           >
-            Get started
+            {registering.pending ? 'Registering...' : 'Get started'}
           </button>
         </form>
 
@@ -195,7 +197,7 @@ export default function Register() {
           Terms of Use</A>, <A class="type-link-3 text-sky-120" href="https://openaq.org/privacy/">Privacy Policy</A> and <A class="type-link-3 text-sky-120" href="https://openaq.org/cookies/">Cookie Policy</A>.          
         </p><br/>
           <p style="width: 500px;" class="type-body-3 text-sky-120">
-            If you had previously registered for an OpenAQ API key you
+            If you had registered for an OpenAQ API key prior to January 2024 you
             already have an OpenAQ Explorer account! use the email and
             password you previously signed up with to get started.
           </p>

@@ -1,5 +1,4 @@
-import { A } from "@solidjs/router";
-
+import { A } from '@solidjs/router';
 import '~/assets/scss/components/breadcrumbs.scss';
 
 

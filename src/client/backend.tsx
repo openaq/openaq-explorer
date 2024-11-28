@@ -13,32 +13,40 @@ interface UserPasswordDefinition {
 }
 
 interface CreateListDefinition {
-    usersId: number;
-    label: string;
-    description: string;
+  usersId: number;
+  label: string;
+  description: string;
 }
 
 interface UpdateListDefinition {
-    listsId: number;
-    label: string;
-    description: string;
-};
-
-interface ListLocationDefinition {
-    locationsId: number
+  listsId: number;
+  label: string;
+  description: string;
 }
 
+interface ListLocationDefinition {
+  locationsId: number;
+}
+
+export type UserResponse = UserRow[]
+
+export interface UserRow {
+    usersId: number
+    isActive: boolean
+    emailAddress: string
+    fullname: string
+    passwordHash: string
+    token: string
+}
 
 export const db = {
-  createUser: async (
-    user: CreateUserDefinition
-  ): Promise<Response> => {
+  createUser: async (user: CreateUserDefinition): Promise<Response> => {
     const res = await fetch(`${baseUrl}/users`, {
       method: 'POST',
       body: JSON.stringify(user),
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
     });
     return res;
@@ -47,19 +55,20 @@ export const db = {
   getUserById: async (usersId: number): Promise<Response> => {
     const res = await fetch(`${baseUrl}/users/${usersId}`, {
       method: 'GET',
+      headers: {
+        'Cache-Control': 'no-cache, no-store'
+      }
     });
     return res;
   },
 
-  getUserByEmailAddress: async (
-    emailAddress: string
-  ): Promise<Response> => {
-    const res = await fetch(
-      `${baseUrl}/users/email/${emailAddress}`,
-      {
-        method: 'GET',
+  getUserByEmailAddress: async (emailAddress: string): Promise<Response> => {
+    const res = await fetch(`${baseUrl}/users/email/${emailAddress}`, {
+      method: 'GET',
+      headers: {
+        'Cache-Control': 'no-cache, no-store'
       }
-    );
+    });
     return res;
   },
 
@@ -70,31 +79,26 @@ export const db = {
       `${baseUrl}/users/verification-code/${verificationCode}`,
       {
         method: 'GET',
-      }
-    );
-    return res;
-  },
-
-  verifyUser: async (
-    usersId: number
-  ): Promise<Response> => {
-    const res = await fetch(
-      `${baseUrl}/users/${usersId}/verification`,
-      {
-        method: 'PATCH',
-      }
-    );
-    return res;
-  },
-
-  createNewUserToken: async(usersId: number): Promise<Response> => {
-    const res = await fetch(
-        `${baseUrl}/users/${usersId}/token`,
-        {
-          method: 'POST',
+        headers: {
+          'Cache-Control': 'no-cache, no-store'
         }
-      );
-      return res;
+      }
+    );
+    return res;
+  },
+
+  verifyUser: async (usersId: number): Promise<Response> => {
+    const res = await fetch(`${baseUrl}/users/${usersId}/verification`, {
+      method: 'PATCH',
+    });
+    return res;
+  },
+
+  createNewUserToken: async (usersId: number): Promise<Response> => {
+    const res = await fetch(`${baseUrl}/users/${usersId}/token`, {
+      method: 'POST',
+    });
+    return res;
   },
 
   updateUserPassword: async (
@@ -103,8 +107,8 @@ export const db = {
     const res = await fetch(`${baseUrl}/users/password`, {
       method: 'PUT',
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(user),
     });
@@ -115,10 +119,10 @@ export const db = {
     const res = await fetch(`${baseUrl}/lists`, {
       method: 'POST',
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(list)
+      body: JSON.stringify(list),
     });
     return res;
   },
@@ -126,6 +130,9 @@ export const db = {
   getList: async (listsId: number): Promise<Response> => {
     const res = await fetch(`${baseUrl}/lists/${listsId}`, {
       method: 'GET',
+      headers: {
+        'Cache-Control': 'no-cache, no-store'
+      }
     });
     return res;
   },
@@ -134,10 +141,10 @@ export const db = {
     const res = await fetch(`${baseUrl}/lists`, {
       method: 'PUT',
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(list)
+      body: JSON.stringify(list),
     });
     return res;
   },
@@ -165,6 +172,9 @@ export const db = {
   getUserLists: async (usersId: number): Promise<Response> => {
     const res = await fetch(`${baseUrl}/users/${usersId}/lists`, {
       method: 'GET',
+      headers: {
+        'Cache-Control': 'no-cache, no-store'
+      }
     });
     return res;
   },
@@ -177,6 +187,9 @@ export const db = {
       `${baseUrl}/users/${usersId}/locations/${locationsId}/lists`,
       {
         method: 'GET',
+        headers: {
+          'Cache-Control': 'no-cache, no-store'
+        }
       }
     );
     return res;
@@ -184,18 +197,24 @@ export const db = {
   getListLocations: async (listsId: number): Promise<Response> => {
     const res = await fetch(`${baseUrl}/lists/${listsId}/locations`, {
       method: 'GET',
+      headers: {
+        'Cache-Control': 'no-cache, no-store'
+      }
     });
     return res;
   },
 
-  createListLocation: async (listsId: number, listLocation: ListLocationDefinition): Promise<Response> => {
+  createListLocation: async (
+    listsId: number,
+    listLocation: ListLocationDefinition
+  ): Promise<Response> => {
     const res = await fetch(`${baseUrl}/lists/${listsId}/locations`, {
       method: 'POST',
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(listLocation)
+      body: JSON.stringify(listLocation),
     });
     return res;
   },

@@ -1,12 +1,16 @@
 import { useSubmission } from '@solidjs/router';
 import { JSX, Show, createEffect } from 'solid-js';
-import { regenerateKeyAction } from '~/db';
 import { useStore } from '~/stores';
 
 import '~/assets/scss/components/modal.scss';
+import { regenerateKey } from '~/db/account';
 
 
-export function ApiKeyRegenerateConfirmModal() {
+interface Props {
+  token?: string;
+}
+
+export function ApiKeyRegenerateConfirmModal(props: Props) {
   const [store, { toggleRegenerateKeyModalOpen }] = useStore();
 
   const onClickClose: JSX.EventHandler<
@@ -34,11 +38,11 @@ export function ApiKeyRegenerateConfirmModal() {
     toggleRegenerateKeyModalOpen();
   };
 
-  const regeneratingKey = useSubmission(regenerateKeyAction);
+  const regeneratingKey = useSubmission(regenerateKey);
 
   return (
     <dialog class="modal" ref={ref}>
-      <form action={regenerateKeyAction} method="post">
+      <form action={regenerateKey} name="regenerate-key-form" id="regenerate-key-form" method="post">
         <header class="modal__header">
           <h2>Regenerate API Key</h2>
           <button
@@ -72,14 +76,15 @@ export function ApiKeyRegenerateConfirmModal() {
               role="alert"
               id="error-message"
             >
-              {regeneratingKey.result!.message}
+              {regeneratingKey.result?.message}
             </p>
           </Show>
+          <input type="hidden" name="token" value={props.token} />
           <button
             class="btn btn-primary"
             type="submit"
-            onClick={(e) => onSubmit(e)}
             autofocus
+            onClick={onSubmit}
           >
             Regenerate
           </button>
@@ -88,3 +93,4 @@ export function ApiKeyRegenerateConfirmModal() {
     </dialog>
   );
 }
+

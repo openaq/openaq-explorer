@@ -10,7 +10,8 @@
     "lint:fix": "eslint --fix .",
     "format": "npm run lint:fix && npm run prettier",
     "start": "node ./.output/server/index.mjs",
-    "test": "vitest"
+    "test": "vitest",
+    "knip": "knip"
   },
   "type": "module",
   "devDependencies": {
@@ -22,7 +23,7 @@
     "@testing-library/user-event": "^14.5.2",
     "@types/d3": "^7.4.3",
     "@types/events": "^3.0.3",
-    "@types/node": "^20.11.19",
+    "@types/node": "^22.10.0",
     "@types/pg": "^8.11.6",
     "@types/testing-library__jest-dom": "^5.14.9",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
@@ -35,11 +36,13 @@
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-solid": "^0.14.3",
     "jsdom": "^23.2.0",
+    "knip": "^5.38.1",
     "lightningcss": "^1.25.1",
     "postcss": "^8.4.38",
     "prettier": "^3.3.3",
     "sass": "^1.69.5",
     "ts-jest": "^29.1.1",
+    "typescript": "^5.7.2",
     "vitest": "^1.2.1"
   },
   "dependencies": {
@@ -48,8 +51,8 @@
     "@fontsource/space-grotesk": "^5.0.17",
     "@maplibre/maplibre-gl-geocoder": "^1.5.0",
     "@solidjs/meta": "^0.29.4",
-    "@solidjs/router": "^0.13.3",
-    "@solidjs/start": "^1.0.1",
+    "@solidjs/router": "^0.15.1",
+    "@solidjs/start": "^1.0.10",
     "@turf/bbox": "^6.5.0",
     "@turf/destination": "^6.5.0",
     "@turf/helpers": "^6.5.0",
@@ -69,10 +72,10 @@
     "openaq-design-system": "github:openaq/openaq-design-system#v-4.0.0",
     "pg": "^8.12.0",
     "postgres": "^3.4.3",
-    "solid-js": "^1.8.17",
+    "solid-js": "^1.9.0",
     "solid-map-gl": "1.10.0",
     "ts-node": "^10.9.2",
-    "vinxi": "^0.3.11"
+    "vinxi": "^0.4.1"
   },
   "engines": {
     "node": ">=20"

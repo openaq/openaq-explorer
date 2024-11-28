@@ -3,11 +3,11 @@ import {
   createAsync,
 } from '@solidjs/router';
 import { For, JSX, createSignal } from 'solid-js';
-import { getUserLists, sensorNodesListModifyAction } from '~/db';
 import { useStore } from '~/stores';
 
 
 import '~/assets/scss/components/lists-form.scss';
+import { addRemoveSensorNodesList, getUserLists } from '~/db/lists';
 
 interface ListsFormDefinition {
   redirect: string | undefined;
@@ -105,7 +105,7 @@ export function ListsForm(props: ListsFormDefinition) {
           toggleDropdown() ? 'lists-form--open' : ''
         }`}
       >
-        <form action={sensorNodesListModifyAction} method="post" class="list-modify-form">
+        <form action={addRemoveSensorNodesList} method="post" class="list-modify-form">
           <input
             type="hidden"
             name="sensor-nodes-id"
@@ -118,7 +118,7 @@ export function ListsForm(props: ListsFormDefinition) {
           />
           <div class='lists-list'>
             <For each={lists()}>
-              {(list, i) => <ListToggle list={list} />}
+              {(list) => <ListToggle list={list} />}
             </For>
           </div>
         </form>

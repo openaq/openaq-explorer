@@ -1,10 +1,8 @@
 import '~/assets/scss/routes/password-email.scss';
-import { Header } from '~/components/Header';
 
 export default function PasswordEmail() {
   return (
     <>
-      <Header />
     <main class="main">
       <h1 class="type-heading-1 text-sky-120">Check your email</h1>
       <p class="type-body-1">

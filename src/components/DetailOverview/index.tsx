@@ -9,7 +9,7 @@ import { SensorType } from './SensorType';
 
 import '~/assets/scss/components/detail-overview.scss';
 import { DetailOverviewDefinition } from './types';
-import { getListsBySensorNodesId, getUserId } from '~/db';
+import { sensorNodeLists } from '~/db/lists';
 
 interface ListsDefinition {
   sensorNodesId: number;
@@ -17,15 +17,12 @@ interface ListsDefinition {
 }
 
 function LocationLists(props: ListsDefinition) {
-  let lists = createAsync(
-    () => getListsBySensorNodesId(Number(props.sensorNodesId)),
-    { initialValue: [], deferStream: true }
-  );
+  const lists = createAsync(() => sensorNodeLists(props.sensorNodesId), { initialValue: [], deferStream: true })
 
   return (
     <ul class="lists-list">
       <For each={lists()}>
-        {(list, i) => (
+        {(list) => (
           <A class="list-link" href={`/lists/${list.listsId}`}>
             <li class="btn btn-tertiary">{list.label}</li>
           </A>
@@ -62,7 +59,6 @@ function LocationListsFallback() {
 }
 
 export function DetailOverview(props: DetailOverviewDefinition) {
-  const usersId = createAsync(() => getUserId(), { deferStream: true });
 
   const pageLocation = useLocation();
 
@@ -150,7 +146,8 @@ export function DetailOverview(props: DetailOverviewDefinition) {
         <div class="divider"> </div>
         <div class="location-lists">
           <h3 class="type-subtitle-3 text-smoke-180">LISTS</h3>
-          <Show when={usersId()} fallback={<LocationListsFallback />}>
+          <Show when={props.user?.()?.usersId} fallback={<LocationListsFallback />}>
+                      {props.lists}
             <LocationLists
               sensorNodesId={props.id}
               pathname={pageLocation.pathname}

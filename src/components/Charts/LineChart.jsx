@@ -40,21 +40,23 @@ const formatMonth = timeFormat('%B');
 const formatYear = timeFormat('%Y');
 
 export function multiFormat(date, timezone) {
-  (timeSecond(date) < date
-    ? formatMillisecond
-    : timeMinute(date) < date
-    ? formatSecond
-    : timeHour(date) < date
-    ? formatMinute
-    : timeDay(date) < date
-    ? formatHour
-    : timeMonth(date) < date
-    ? timeWeek(date) < date
-      ? formatDay
-      : formatWeek
-    : timeYear(date) < date
-    ? formatMonth
-    : formatYear)(
+  return (
+    timeSecond(date) < date
+      ? formatMillisecond
+      : timeMinute(date) < date
+      ? formatSecond
+      : timeHour(date) < date
+      ? formatMinute
+      : timeDay(date) < date
+      ? formatHour
+      : timeMonth(date) < date
+      ? timeWeek(date) < date
+        ? formatDay
+        : formatWeek
+      : timeYear(date) < date
+      ? formatMonth
+      : formatYear
+  )(
     new Date(
       date.toLocaleString('en-US', {
         timeZone: timezone,
@@ -87,35 +89,33 @@ function fillHourlyGaps(data) {
     const missingHours = (nextStartTime - currentEndTime) / oneHour;
 
     // If there's a gap, create new objects with value null for each missing hour
-    Array.from({ length: missingHours - 1 }).forEach(
-      (_, gapIndex) => {
-        const newTimeFrom = new Date(
-          currentEndTime + oneHour * (gapIndex + 1)
-        ).toISOString();
-        const newTimeTo = new Date(
-          currentEndTime + oneHour * (gapIndex + 2)
-        ).toISOString();
+    Array.from({ length: missingHours - 1 }).forEach((_, gapIndex) => {
+      const newTimeFrom = new Date(
+        currentEndTime + oneHour * (gapIndex + 1)
+      ).toISOString();
+      const newTimeTo = new Date(
+        currentEndTime + oneHour * (gapIndex + 2)
+      ).toISOString();
 
-        const gapItem = {
-          ...currentItem,
-          value: null,
-          period: {
-            ...currentItem.period,
-            datetimeFrom: {
-              utc: newTimeFrom,
-              local: newTimeFrom, // Adjust the local time as needed
-            },
-            datetimeTo: {
-              utc: newTimeTo,
-              local: newTimeTo, // Adjust the local time as needed
-            },
+      const gapItem = {
+        ...currentItem,
+        value: null,
+        period: {
+          ...currentItem.period,
+          datetimeFrom: {
+            utc: newTimeFrom,
+            local: newTimeFrom, // Adjust the local time as needed
           },
-        };
+          datetimeTo: {
+            utc: newTimeTo,
+            local: newTimeTo, // Adjust the local time as needed
+          },
+        },
+      };
 
-        // Push the gap item into the filledData array
-        filledData.push(gapItem);
-      }
-    );
+      // Push the gap item into the filledData array
+      filledData.push(gapItem);
+    });
   });
 
   return filledData;
@@ -133,10 +133,7 @@ export function splitMeasurements(measurements, timezone) {
     .reduce((acc, curr, idx, arr) => {
       const date = dayjs(curr.period.datetimeTo.local, timezone);
       if (
-        !(
-          lastDate === undefined ||
-          (date - lastDate) / (60 * 60 * 1000) === 1
-        )
+        !(lastDate === undefined || (date - lastDate) / (60 * 60 * 1000) === 1)
       ) {
         result.push(acc);
         acc = [];
@@ -157,10 +154,7 @@ export default function LineChart(props) {
   const xScale = (width, dateFrom, dateTo) => {
     const x = scaleTime().range([0, width]);
     x.domain(
-      extent([
-        dayjs(dateFrom, props.timezone),
-        dayjs(dateTo, props.timezone),
-      ])
+      extent([dayjs(dateFrom, props.timezone), dayjs(dateTo, props.timezone)])
     );
     return x;
   };
@@ -173,13 +167,10 @@ export default function LineChart(props) {
       y = scaleSymlog().range([height, 0]);
     }
 
-    const minimumValue =
-      data == undefined ? 0 : min(data, (d) => d.value);
+    const minimumValue = data == undefined ? 0 : min(data, (d) => d.value);
     const domainMin = minimumValue < 0 ? minimumValue : 0;
     const domainMax =
-      data == undefined
-        ? 0
-        : max(data, () => max(data, (d) => d.value)) * 1.2;
+      data == undefined ? 0 : max(data, () => max(data, (d) => d.value)) * 1.2;
     y.domain([domainMin, domainMax]);
     return y;
   };
@@ -243,12 +234,8 @@ export default function LineChart(props) {
             top: `${tooltipValue()?.y + 5}px`,
           }}
         >
-          <span class="line-chart-tooltip__value">
-            {tooltipValue()?.value}
-          </span>{' '}
-          <span class="line-chart-tooltip__unit">
-            {tooltipValue()?.unit}
-          </span>
+          <span class="line-chart-tooltip__value">{tooltipValue()?.value}</span>{' '}
+          <span class="line-chart-tooltip__unit">{tooltipValue()?.unit}</span>
         </div>
         <svg
           width={`${props.width + props.margin}px`}
@@ -263,16 +250,8 @@ export default function LineChart(props) {
               x2="0%"
               y2="100%"
             >
-              <stop
-                offset="0%"
-                stop-color="#d4cdf9"
-                stop-opacity="0.7"
-              />
-              <stop
-                offset="95%"
-                stop-color="white"
-                stop-opacity="0.7"
-              />
+              <stop offset="0%" stop-color="#d4cdf9" stop-opacity="0.7" />
+              <stop offset="95%" stop-color="white" stop-opacity="0.7" />
             </linearGradient>
           </defs>
           <filter id="shadow" color-interpolation-filters="sRGB">
@@ -284,11 +263,7 @@ export default function LineChart(props) {
             />
           </filter>
 
-          <g
-            transform={`translate(${props.margin / 2} ${
-              props.margin / 2
-            })`}
-          >
+          <g transform={`translate(${props.margin / 2} ${props.margin / 2})`}>
             <For each={splitMeasurements(props.data, props.timezone)}>
               {(d) => (
                 <path
@@ -303,16 +278,10 @@ export default function LineChart(props) {
           </g>
           <g
             class="grid"
-            transform={`translate(${props.margin / 2} ${
-              props.margin / 2
-            } )`}
+            transform={`translate(${props.margin / 2} ${props.margin / 2} )`}
             ref={gridRef}
           />
-          <g
-            transform={`translate(${props.margin / 2} ${
-              props.margin / 2
-            })`}
-          >
+          <g transform={`translate(${props.margin / 2} ${props.margin / 2})`}>
             <For each={splitMeasurements(props.data, props.timezone)}>
               {(lineData) => (
                 <path
@@ -375,9 +344,7 @@ export default function LineChart(props) {
                       date: item.date,
                     })
                   }
-                  onMouseLeave={() =>
-                    setTooltipValue({ visible: false })
-                  }
+                  onMouseLeave={() => setTooltipValue({ visible: false })}
                 />
               )}
             </For>
@@ -407,9 +374,7 @@ export default function LineChart(props) {
           </g>
           <g
             class="y-axis"
-            transform={`translate(${props.margin / 2} ${
-              props.margin / 2
-            })`}
+            transform={`translate(${props.margin / 2} ${props.margin / 2})`}
             ref={yAxisRef}
           />
           <g
@@ -419,11 +384,7 @@ export default function LineChart(props) {
             })`}
             ref={xAxisRef}
           />
-          <g
-            transform={`translate(${props.margin / 2} ${
-              props.margin / 2
-            })`}
-          >
+          <g transform={`translate(${props.margin / 2} ${props.margin / 2})`}>
             <Show when={tooltipValue()?.visible}>
               <text
                 x="0"

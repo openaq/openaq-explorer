@@ -1,8 +1,8 @@
 import { useSubmission } from '@solidjs/router';
-import { newListAction } from '~/db';
 import { JSX, Show, createEffect } from 'solid-js';
 import { useStore } from '~/stores';
 import '~/assets/scss/components/modal.scss';
+import { createList } from '~/db/lists';
 
 interface NewListModalDefinition {
   usersId: number;
@@ -11,7 +11,7 @@ interface NewListModalDefinition {
 export function NewListModal(props: NewListModalDefinition) {
 
   const [store, {toggleNewListModalOpen}] = useStore();
-  const creatingNewList = useSubmission(newListAction);
+  const creatingNewList = useSubmission(createList);
 
   const onClickClose: JSX.EventHandler<HTMLButtonElement, MouseEvent> = (e) => {
     toggleNewListModalOpen()
@@ -33,7 +33,7 @@ export function NewListModal(props: NewListModalDefinition) {
   
   return (
     <dialog class="modal" ref={ref}>
-      <form action={newListAction} method="post">
+      <form action={createList} method="post">
         <header class="modal__header">
           <h2 class='title'>
             <img src="/svgs/add_white.svg" alt="add icon" />

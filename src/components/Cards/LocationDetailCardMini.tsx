@@ -4,16 +4,16 @@ import { getLocation } from '~/client';
 import { A, createAsync, useLocation } from '@solidjs/router';
 import { since, timeFromNow } from '~/lib/utils';
 import {ListsForm} from './ListsForm';
-import { getUser } from '~/db';
 
 import '~/assets/scss/components/location-detail-card-mini.scss';
+import { getSessionUser } from '~/auth/session';
 
 
 export function LocationDetailCardMini() {
 
   const pageLocation = useLocation();
 
-  const user = createAsync(() => getUser(), { deferStream: true });
+  const user = createAsync(() => getSessionUser(), { deferStream: true });
 
 
   const [store, { clearLocationsId }] = useStore();
@@ -88,7 +88,7 @@ export function LocationDetailCardMini() {
         </section>
       </div>
       <footer class='location-detail-card-mini__footer'>
-        <Show when={user()} >    
+        <Show when={user()?.usersId} >    
             <ListsForm redirect={pageLocation.pathname}/>
         </Show>
         <A

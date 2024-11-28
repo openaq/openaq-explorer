@@ -1,36 +1,37 @@
-import { createAsync, useParams } from '@solidjs/router';
+import { createAsync, Params, useParams } from '@solidjs/router';
 import { TabView } from '~/components/TabView';
 import { EditListModal } from '~/components/Modals/EditListModal';
 import { DeleteLocationModal } from '~/components/Modals/DeleteLocationModal';
-import { getLocationsByListId, getList, getUser } from '~/db';
 import { Show } from 'solid-js';
 import { A } from '@solidjs/router';
 import { useStore } from '~/stores';
-import { Header } from '~/components/Header';
 
 import '~/assets/scss/routes/list-detail.scss';
+import { getLoggedInUser } from '~/auth/user';
+import { getList, listLocations } from '~/db/lists';
 
 export const route = {
-  load: ({ params }) => {
-    getUser();
-    getLocationsByListId(params.id);
-    getList(params.id);
+  preload: ({ params }: { params: Params }) => {
+    getLoggedInUser();
+    listLocations(Number(params.id));
+    getList(Number(params.id));
   },
 };
 
 export default function List() {
-  const [store, { toggleEditListModalOpen }] = useStore();
+  const [_, { toggleEditListModalOpen }] = useStore();
 
   const { id } = useParams();
 
-  const locations = createAsync(() => getLocationsByListId(id), {
+  createAsync(() => getLoggedInUser(), { deferStream: true });
+
+  const locations = createAsync(() => listLocations(Number(id)), {
     deferStream: true,
   });
-  const list = createAsync(() => getList(id), { deferStream: true });
+  const list = createAsync(() => getList(Number(id)), { deferStream: true });
 
   return (
     <>
-      <Header />
       <main class="list-detail-main">
         <header class="header">
           <Show when={list()}>
@@ -40,21 +41,16 @@ export default function List() {
               </A>{' '}
               <div>
                 <div class="list-name">
-                  <h1 class="type-display-1 gradient-title">
-                    {list().label}
-                  </h1>
+                  <h1 class="type-display-1 gradient-title">{list().label}</h1>
                   <button
                     class="button-reset"
                     onClick={() => toggleEditListModalOpen()}
                   >
-                    <img
-                      src="/svgs/edit_smoke120.svg"
-                      alt="edit icon"
-                    />
+                    <img src="/svgs/edit_smoke120.svg" alt="edit icon" />
                   </button>
                 </div>
                 <span class="type-subtitle-2 text-smoke-120">
-                  {list().description}
+                  {list()?.description}
                 </span>
               </div>
             </div>

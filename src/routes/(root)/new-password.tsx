@@ -1,17 +1,16 @@
 import { useSearchParams, useSubmission } from '@solidjs/router';
-import { forgotPasswordAction } from '~/db';
+import { forgotPassword } from '~/auth/user';
 import { Show, createSignal } from 'solid-js';
 import PasswordScore from '~/components/PasswordScore';
 import { evaluatePassword } from '~/lib/password';
 
 import '~/assets/scss/routes/new-password.scss';
-import { Header } from '~/components/Header';
 import { Score } from '@zxcvbn-ts/core/dist/types';
 
 
 export default function VerifyEmail() {
   const [searchParams] = useSearchParams();
-  const settingNewPassword = useSubmission(forgotPasswordAction);
+  const settingNewPassword = useSubmission(forgotPassword);
 
   const [passwordInputValue, setPasswordInputValue] =
     createSignal<string>();
@@ -64,13 +63,12 @@ export default function VerifyEmail() {
 
   return (
     <>
-      <Header />
       <main class="main">
         <h1 class="type-heading-1 text-sky-120">
           Forgot your password?
         </h1>
         <form
-          action={forgotPasswordAction}
+          action={forgotPassword}
           method="post"
           class="new-password-form"
         >
@@ -85,6 +83,7 @@ export default function VerifyEmail() {
               class="text-input"
               type="password"
               name="new-password"
+              disabled={settingNewPassword.pending}
               required
               onInput={(e) => onPasswordInput(e)}
             />
@@ -97,6 +96,7 @@ export default function VerifyEmail() {
               class="text-input"
               type="password"
               name="confirm-new-password"
+              disabled={settingNewPassword.pending}
               required
               onInput={(e) => onPasswordConfirmInput(e)}
             />
@@ -119,7 +119,7 @@ export default function VerifyEmail() {
           <button
             class="btn btn-primary"
             type="submit"
-            disabled={passwordScore()! < 4 || passwordsDoNotMatch()}
+            disabled={settingNewPassword.pending || passwordScore()! < 4 || passwordsDoNotMatch()}
           >
             Submit
           </button>
