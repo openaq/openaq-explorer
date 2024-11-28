@@ -42,7 +42,7 @@
     "@typescript-eslint/eslint-plugin": "^8.7.0",
     "@typescript-eslint/parser": "^8.7.0",
     "autoprefixer": "^10.4.19",
-    "eslint": "^9.11.1",
+    "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.1.0",
 >>>>>>> 5fc8c9f (rebase)
     "eslint-plugin-prettier": "^5.2.1",
