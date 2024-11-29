@@ -1,5 +1,5 @@
 import { useSubmission } from '@solidjs/router';
-import { JSX, Show, createEffect } from 'solid-js';
+import { JSX, Show, createEffect, createSignal } from 'solid-js';
 import { useStore } from '~/stores';
 import '~/assets/scss/components/modal.scss';
 import { deleteList } from '~/db/lists';
@@ -7,7 +7,7 @@ import { deleteList } from '~/db/lists';
 
 
 export function DeleteListModal() {
-  let ref: HTMLDialogElement | undefined;
+  const [ref, setRef ] = createSignal<HTMLDialogElement>()
 
   const [store, { toggleDeleteListModalOpen }] = useStore();
   const deletingList = useSubmission(deleteList);
@@ -31,12 +31,12 @@ export function DeleteListModal() {
 
   createEffect(() => {
     if (store.deleteListModalOpen) {
-      ref?.showModal();
+      ref()?.showModal();
     }
   });
 
   return (
-    <dialog class="modal" ref={ref}>
+    <dialog class="modal" ref={setRef}>
       <form action={deleteList} method="post">
         <header class="modal__header">
           <h2 class='title'>

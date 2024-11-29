@@ -1,5 +1,5 @@
 import { useSubmission } from '@solidjs/router';
-import { JSX, Show, createEffect } from 'solid-js';
+import { JSX, Show, createEffect, createSignal } from 'solid-js';
 import { useStore } from '~/stores';
 
 import '~/assets/scss/components/modal.scss';
@@ -22,11 +22,11 @@ export function ApiKeyRegenerateConfirmModal(props: Props) {
     e.target.closest('dialog')!.close();
   };
 
-  let ref: HTMLDialogElement | undefined;
+  const [ref, setRef ] = createSignal<HTMLDialogElement>()
 
   createEffect(() => {
     if (store.apiKeyRegenerateModalOpen) {
-      ref?.showModal();
+      ref()?.showModal();
     }
   });
 
@@ -41,7 +41,7 @@ export function ApiKeyRegenerateConfirmModal(props: Props) {
   const regeneratingKey = useSubmission(regenerateKey);
 
   return (
-    <dialog class="modal" ref={ref}>
+    <dialog class="modal" ref={setRef}>
       <form action={regenerateKey} name="regenerate-key-form" id="regenerate-key-form" method="post">
         <header class="modal__header">
           <h2>Regenerate API Key</h2>

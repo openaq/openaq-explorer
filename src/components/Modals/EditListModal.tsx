@@ -1,5 +1,5 @@
 import { useSubmission } from '@solidjs/router';
-import { JSX, Show, createEffect } from 'solid-js';
+import { JSX, Show, createEffect, createSignal } from 'solid-js';
 import { useStore } from '~/stores';
 import '~/assets/scss/components/modal.scss';
 import { updateList } from '~/db/lists';
@@ -23,11 +23,11 @@ export function EditListModal(props: EditListModalDefinition) {
     e.target.closest('dialog')!.close();
   };
 
-  let ref: HTMLDialogElement | undefined;
+  const [ref, setRef ] = createSignal<HTMLDialogElement>()
 
   createEffect(() => {
     if (store.editListModalOpen) {
-      ref?.showModal();
+      ref()?.showModal();
     }
   });
 
@@ -39,7 +39,7 @@ export function EditListModal(props: EditListModalDefinition) {
   };
 
   return (
-    <dialog class="modal" ref={ref}>
+    <dialog class="modal" ref={setRef}>
       <form action={updateList} method="post">
         <input type="hidden" name="lists-id" value={props.listsId} />
         <header class="modal__header">
