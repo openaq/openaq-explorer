@@ -11,6 +11,7 @@
   "type": "module",
   "devDependencies": {
     "@babel/preset-typescript": "^7.23.3",
+    "@eslint/js": "^9.15.0",
     "@jest/globals": "^29.7.0",
     "@solidjs/testing-library": "^0.8.5",
     "@testing-library/jest-dom": "^6.2.0",
@@ -21,13 +22,19 @@
     "@types/pg": "^8.11.6",
     "@types/testing-library__jest-dom": "^5.14.9",
     "autoprefixer": "^10.4.19",
+    "eslint": "^9.15.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-solid": "^0.14.4",
+    "globals": "^15.12.0",
     "jsdom": "^23.2.0",
     "knip": "^5.38.1",
     "lightningcss": "^1.25.1",
     "postcss": "^8.4.38",
+    "prettier": "3.4.1",
     "sass": "^1.69.5",
     "ts-jest": "^29.1.1",
     "typescript": "^5.7.2",
+    "typescript-eslint": "^8.16.0",
     "vitest": "^1.2.1"
   },
   "dependencies": {

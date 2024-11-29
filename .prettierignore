@@ -1,0 +1,46 @@
+# Dependency directories
+node_modules/
+
+# Build outputs
+.output/
+dist/
+build/
+
+# Vinxi specific
+.vinxi/
+
+# Cache directories
+.cache/
+
+# Logs
+*.log
+
+# Environment variables
+.env*
+
+# Editor directories and files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Test coverage output
+coverage/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Package lock files
+package-lock.json
+yarn.lock
+
+# Ignore artifacts
+*.html
+*.css
+*.scss
+*.sass
