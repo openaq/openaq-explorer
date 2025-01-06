@@ -129,7 +129,7 @@ export const StoreProvider: Component<{}> = (props) => {
       toggleAirSensor() {
         setState({ showAirSensors: !state.showAirSensors });
       },
-      toggleShowOnlyActiveLocations() {
+      toggleMapIsActive() {
         setState({
           showOnlyActiveLocations: !state.showOnlyActiveLocations,
         });
