@@ -14,6 +14,9 @@ export default function Home() {
   const setSelectedLocationsId = actions.setSelectedLocationsId;
   const setSelectedMapParameter = actions.setSelectedMapParameter;
   const setProviders = actions.setProviders;
+  const toggleMapIsActive = actions.toggleMapIsActive;
+  const toggleMonitor = actions.toggleMonitor;
+  const toggleAirSensor = actions.toggleAirSensor;
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -30,6 +33,20 @@ export default function Home() {
         setSelectedMapParameter(location.query.parameter);
       }
     }
+
+    if (location.query?.active === 'false') {
+      toggleMapIsActive()
+    }
+
+    if (location.query?.sensors === 'false') {
+      toggleAirSensor()
+    }
+
+
+    if (location.query?.monitors === 'false') {
+      toggleMonitor()
+    }
+
 
     if (location.query?.provider) {
       const params = new URLSearchParams(location.search);
@@ -54,6 +71,18 @@ export default function Home() {
 
     if (providers.length > 0) {
       searchParams.append("provider", store.providers.join(","));
+    }
+
+    if (store.showOnlyActiveLocations == false) {
+      searchParams.append("active", store.showOnlyActiveLocations.toString());
+    }
+
+    if (store.showMonitors == false) {
+      searchParams.append("monitors", store.showMonitors.toString());
+    }
+
+    if (store.showAirSensors == false) {
+      searchParams.append("sensors", store.showAirSensors.toString());
     }
 
     const queryString = searchParams.toString();

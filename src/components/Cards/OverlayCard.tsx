@@ -15,7 +15,7 @@ export function OverlayCard() {
     {
       toggleShowProvidersCard,
       setSelectedMapParameter,
-      toggleShowOnlyActiveLocations,
+      toggleMapIsActive,
       toggleAirSensor,
       toggleMonitor,
     },
@@ -100,7 +100,7 @@ export function OverlayCard() {
               id="no-recent-updates"
               class="checkbox"
               checked={!store.showOnlyActiveLocations}
-              onInput={toggleShowOnlyActiveLocations}
+              onInput={toggleMapIsActive}
             />
           </label>
           </div>
