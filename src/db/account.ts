@@ -55,6 +55,7 @@ export const changePassword = action(async (formData: FormData) => {
       passwordHash: newPasswordHash,
     });
     const d = await res.json()
+    console.info(`User ID ${d.usersid} changed password.`)
   } catch (err) {
     console.error(`password change failed: ${JSON.stringify(err)}`);
     return new Error('Failed to password change');

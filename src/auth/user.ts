@@ -299,7 +299,7 @@ export const forgotPassword = action(async (formData: FormData) => {
     throw redirect('/login');
   }
   const user = await res.json();
-  if (dayjs() < dayjs(user.expiresOn)) {
+  if (dayjs() > dayjs(user[0].expiresOn)) {
     return new Error(
       'Verification code expired, request a new password change email.'
     );
@@ -307,10 +307,17 @@ export const forgotPassword = action(async (formData: FormData) => {
   try {
     validatePassword(newPassword, newPasswordConfirm);
     const newPasswordHash = await encode(newPassword);
+    const { usersId } = user[0];
     const res = await db.updateUserPassword({
-      usersId: user.usersId, 
+      usersId: usersId, 
       passwordHash: newPasswordHash
     })
+    if (res.status !== 200) {
+      console.error(`Failed to update user password: ${res.url} HTTP ${res.status}`)
+      return new Error('Failed to update password');
+    }
+    const d = await res.json();
+    console.info(`User ID ${d.usersid} changed password.`)
   } catch (err) {
     return err as Error;
   }
