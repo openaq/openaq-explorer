@@ -59,11 +59,6 @@ to comply with the vite build process for reading and applying variables through
 ```sh
 # Explorer application vite variables
 
-VITE_DB_HOST=127.0.0.1
-VITE_DB_PORT=5432
-VITE_DB_DATABASE=openaq
-VITE_DB_USER=readuser
-VITE_DB_PASSWORD=readuserpassword
 VITE_API_BASE_URL=https://api.openaq.org
 VITE_MAP_STYLE=https://example.com/styles.json
 VITE_TILES_URL=https://example.com/locations/tiles
