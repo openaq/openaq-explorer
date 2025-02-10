@@ -24,11 +24,6 @@ jobs:
               run: npm run build
               env:
                 VITE_SESSION_SECRET: ${{ secrets.VITE_SESSION_SECRET }}
-                VITE_DB_HOST: ${{ secrets.VITE_DB_HOST }}
-                VITE_DB_PORT: ${{ secrets.VITE_DB_PORT }}
-                VITE_DB_DATABASE: ${{ secrets.VITE_DB_DATABASE }}
-                VITE_DB_USER: ${{ secrets.VITE_DB_USER }}
-                VITE_DB_PASSWORD: ${{ secrets.VITE_DB_PASSWORD }}
                 VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
                 VITE_MAP_STYLE: ${{ secrets.VITE_MAP_STYLE }}
                 VITE_TILES_URL: ${{ secrets.VITE_TILES_URL }}
