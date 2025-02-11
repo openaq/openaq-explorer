@@ -1,5 +1,5 @@
 import { For, Show } from 'solid-js';
-import { A, createAsync, useLocation } from '@solidjs/router';
+import { A, createAsync, useLocation, useParams } from '@solidjs/router';
 
 import { timeFromNow, since } from '~/lib/utils';
 import { ListsForm } from '~/components/Cards/ListsForm';
@@ -10,6 +10,7 @@ import { SensorType } from './SensorType';
 import '~/assets/scss/components/detail-overview.scss';
 import { DetailOverviewDefinition } from './types';
 import { sensorNodeLists } from '~/db/lists';
+import { getLicenses } from '~/client';
 
 interface ListsDefinition {
   sensorNodesId: number;
@@ -17,7 +18,10 @@ interface ListsDefinition {
 }
 
 function LocationLists(props: ListsDefinition) {
-  const lists = createAsync(() => sensorNodeLists(props.sensorNodesId), { initialValue: [], deferStream: true })
+  const lists = createAsync(() => sensorNodeLists(props.sensorNodesId), {
+    initialValue: [],
+    deferStream: true,
+  });
 
   return (
     <ul class="lists-list">
@@ -59,8 +63,10 @@ function LocationListsFallback() {
 }
 
 export function DetailOverview(props: DetailOverviewDefinition) {
-
   const pageLocation = useLocation();
+  const licenses = createAsync(() => getLicenses(props.id), {
+    deferStream: true,
+  });
 
   return (
     <section class="detail-overview">
@@ -140,14 +146,46 @@ export function DetailOverview(props: DetailOverviewDefinition) {
                 <td>Provider</td>
                 <td>{props.provider?.name}</td>
               </tr>
+              <tr>
+                <td>Licenses</td>
+                <For each={licenses()}>
+                  {(license) => (
+                    <>
+                        <td>
+                          <a target="_blank" href={license?.sourceUrl}>
+                            {license?.sourceUrl}
+                          </a>
+                          <br />
+                          Commercial use allowed:{' '}
+                          {license?.commercialUseAllowed ? '✅' : '❌'}
+                          <br />
+                          Attribution required:{' '}
+                          {license?.attributionRequired ? '✅' : '❌'}
+                          <br />
+                          Share alike required:{' '}
+                          {license?.shareAlikeRequired ? '✅' : '❌'}
+                          <br />
+                          Modification allowed:{' '}
+                          {license?.modificationAllowed ? '✅' : '❌'}
+                          <br />
+                          Redistribution allowed:{' '}
+                          {license?.redistributionAllowed ? '✅' : '❌'}
+                        </td>
+                    </>
+                  )}
+                </For>
+              </tr>
             </tbody>
           </table>
         </div>
         <div class="divider"> </div>
         <div class="location-lists">
           <h3 class="type-subtitle-3 text-smoke-180">LISTS</h3>
-          <Show when={props.user?.()?.usersId} fallback={<LocationListsFallback />}>
-                      {props.lists}
+          <Show
+            when={props.user?.()?.usersId}
+            fallback={<LocationListsFallback />}
+          >
+            {props.lists}
             <LocationLists
               sensorNodesId={props.id}
               pathname={pageLocation.pathname}
