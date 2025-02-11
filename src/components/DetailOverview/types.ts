@@ -39,6 +39,17 @@ export interface Sensor {
   parameter: Parameter;
 }
 
+export interface Licenses {
+  id: number;
+  name: string;
+  commercialUseAllowed: boolean;
+  attributionRequired: boolean;
+  shareAlikeRequired: boolean;
+  modificationAllowed: boolean;
+  redistributionAllowed: boolean;
+  sourceUrl: string;
+}
+
 export interface Datetime {
   utc: string;
   local: string;
@@ -58,6 +69,7 @@ export interface DetailOverviewDefinition {
   datetimeLast: Datetime;
   isMobile: boolean;
   lists: any[];
+  licenses: Licenses[];
 }
 
 export interface SensorTypeDefintion {
