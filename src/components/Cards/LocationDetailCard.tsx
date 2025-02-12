@@ -68,8 +68,8 @@ export function LocationDetailCard() {
     <div
       class={`location-detail-card ${
         store.locationsId
-          ? ''
-          : 'location-detail-card--translate'
+          ? 'visible'
+          : 'hidden'
       }`}
     >
       <header class='location-detail-card__header'>
