@@ -3,7 +3,7 @@ import { GET } from '@solidjs/start';
 import dayjs from 'dayjs';
 import tz from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
-import { query } from '@solidjs/router';
+
 
 dayjs.extend(utc);
 dayjs.extend(tz);
@@ -262,7 +262,7 @@ export const getProviders = GET(async () => {
   });
 });
 
-export const getLicenses = query(async (locationsId: number) => {
+export const getLicenses = GET(async (locationsId: number) => {
   'use server'
   const url = new URL(import.meta.env.VITE_API_BASE_URL);
   url.pathname = `/v3/licenses/${locationsId}`
@@ -276,4 +276,4 @@ export const getLicenses = query(async (locationsId: number) => {
   const data = await res.json();
   return data.results;
   
-  }, 'get-licenses-action')
+  });

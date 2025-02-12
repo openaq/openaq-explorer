@@ -69,7 +69,7 @@ export interface DetailOverviewDefinition {
   datetimeLast: Datetime;
   isMobile: boolean;
   lists: any[];
-  licenses: Licenses[];
+  licenses?: Licenses[];
 }
 
 export interface SensorTypeDefintion {

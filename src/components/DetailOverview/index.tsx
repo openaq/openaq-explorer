@@ -1,5 +1,5 @@
-import { For, Show } from 'solid-js';
-import { A, createAsync, useLocation, useParams } from '@solidjs/router';
+import { createEffect, createSignal, For, Show } from 'solid-js';
+import { A, createAsync, useLocation } from '@solidjs/router';
 
 import { timeFromNow, since } from '~/lib/utils';
 import { ListsForm } from '~/components/Cards/ListsForm';
@@ -8,7 +8,7 @@ import { DetailMap } from '~/components/DetailMap';
 import { SensorType } from './SensorType';
 
 import '~/assets/scss/components/detail-overview.scss';
-import { DetailOverviewDefinition } from './types';
+import { DetailOverviewDefinition, Licenses } from './types';
 import { sensorNodeLists } from '~/db/lists';
 import { getLicenses } from '~/client';
 
@@ -62,10 +62,22 @@ function LocationListsFallback() {
   );
 }
 
+type License = Licenses[]
+
 export function DetailOverview(props: DetailOverviewDefinition) {
   const pageLocation = useLocation();
-  const licenses = createAsync(() => getLicenses(props.id), {
-    deferStream: true,
+
+  const [licenses, setLicenses] = createSignal<License>([])
+
+  createEffect(() => {
+    const id = props.licenses?.[0]?.id;
+    if (id) {
+      getLicenses(id).then((data) => {
+         setLicenses(data)
+      }).catch((error) => {
+        console.error("Error fetching licenses", error);
+      });
+    }
   });
 
   return (
@@ -146,16 +158,21 @@ export function DetailOverview(props: DetailOverviewDefinition) {
                 <td>Provider</td>
                 <td>{props.provider?.name}</td>
               </tr>
+            <Show when={licenses().length > 0}>
               <tr>
                 <td>Licenses</td>
                 <For each={licenses()}>
                   {(license) => (
-                    <>
+                      <>
                         <td>
                           <a target="_blank" href={license?.sourceUrl}>
                             {license?.sourceUrl}
                           </a>
+                          <Show when={license?.name.includes("CC")}>
+                          <img class='cc-license-img' src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" loading='lazy' width={57.7} height={57.7} alt="logotype for cc license" />
+                          </Show>
                           <br />
+                        
                           Commercial use allowed:{' '}
                           {license?.commercialUseAllowed ? '✅' : '❌'}
                           <br />
@@ -175,6 +192,8 @@ export function DetailOverview(props: DetailOverviewDefinition) {
                   )}
                 </For>
               </tr>
+            </Show>
+
             </tbody>
           </table>
         </div>
