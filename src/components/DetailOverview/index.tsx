@@ -1,4 +1,4 @@
-import { For, Show } from 'solid-js';
+import { createEffect, createSignal, For, Show } from 'solid-js';
 import { A, createAsync, useLocation } from '@solidjs/router';
 
 import { timeFromNow, since } from '~/lib/utils';
@@ -8,8 +8,9 @@ import { DetailMap } from '~/components/DetailMap';
 import { SensorType } from './SensorType';
 
 import '~/assets/scss/components/detail-overview.scss';
-import { DetailOverviewDefinition } from './types';
+import { DetailOverviewDefinition, Licenses } from './types';
 import { sensorNodeLists } from '~/db/lists';
+import { getLicenses } from '~/client';
 
 interface ListsDefinition {
   sensorNodesId: number;
@@ -17,7 +18,10 @@ interface ListsDefinition {
 }
 
 function LocationLists(props: ListsDefinition) {
-  const lists = createAsync(() => sensorNodeLists(props.sensorNodesId), { initialValue: [], deferStream: true })
+  const lists = createAsync(() => sensorNodeLists(props.sensorNodesId), {
+    initialValue: [],
+    deferStream: true,
+  });
 
   return (
     <ul class="lists-list">
@@ -58,9 +62,23 @@ function LocationListsFallback() {
   );
 }
 
-export function DetailOverview(props: DetailOverviewDefinition) {
+type License = Licenses[]
 
+export function DetailOverview(props: DetailOverviewDefinition) {
   const pageLocation = useLocation();
+
+  const [licenses, setLicenses] = createSignal<License>([])
+
+  createEffect(() => {
+    const id = props.licenses?.[0]?.id;
+    if (id) {
+      getLicenses(id).then((data) => {
+         setLicenses(data)
+      }).catch((error) => {
+        console.error("Error fetching licenses", error);
+      });
+    }
+  });
 
   return (
     <section class="detail-overview">
@@ -140,14 +158,53 @@ export function DetailOverview(props: DetailOverviewDefinition) {
                 <td>Provider</td>
                 <td>{props.provider?.name}</td>
               </tr>
+            <Show when={licenses().length > 0}>
+              <tr>
+                <td>Licenses</td>
+                <For each={licenses()}>
+                  {(license) => (
+                      <>
+                        <td>
+                          <a target="_blank" href={license?.sourceUrl}>
+                            {license?.sourceUrl}
+                          </a>
+                          <Show when={license?.name.includes("CC")}>
+                          <img class='cc-license-img' src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" loading='lazy' width={57.7} height={57.7} alt="logotype for cc license" />
+                          </Show>
+                          <br />
+                        
+                          Commercial use allowed:{' '}
+                          {license?.commercialUseAllowed ? '✅' : '❌'}
+                          <br />
+                          Attribution required:{' '}
+                          {license?.attributionRequired ? '✅' : '❌'}
+                          <br />
+                          Share alike required:{' '}
+                          {license?.shareAlikeRequired ? '✅' : '❌'}
+                          <br />
+                          Modification allowed:{' '}
+                          {license?.modificationAllowed ? '✅' : '❌'}
+                          <br />
+                          Redistribution allowed:{' '}
+                          {license?.redistributionAllowed ? '✅' : '❌'}
+                        </td>
+                    </>
+                  )}
+                </For>
+              </tr>
+            </Show>
+
             </tbody>
           </table>
         </div>
         <div class="divider"> </div>
         <div class="location-lists">
           <h3 class="type-subtitle-3 text-smoke-180">LISTS</h3>
-          <Show when={props.user?.()?.usersId} fallback={<LocationListsFallback />}>
-                      {props.lists}
+          <Show
+            when={props.user?.()?.usersId}
+            fallback={<LocationListsFallback />}
+          >
+            {props.lists}
             <LocationLists
               sensorNodesId={props.id}
               pathname={pageLocation.pathname}
