@@ -167,6 +167,93 @@ export function DetailOverview(props: DetailOverviewDefinition) {
                     {(license) => (
                       <>
                         <td>
+                          <Show when={license?.name.includes('CC BY')}>
+                            <img
+                              src="/svgs/license-badges/by.svg"
+                              loading="lazy"
+                              alt="logotype for cc by sa license"
+                            />
+                          </Show>
+                          <Show when={license?.name.includes('CC BY-SA')}>
+                            <img
+                              src="/svgs/license-badges/by-sa.svg"
+                              loading="lazy"
+                              alt="logotype for cc by sa license"
+                            />
+                          </Show>
+                          <Show when={license?.name.includes('CC BY-ND')}>
+                            <img
+                              src="/svgs/license-badges/by-nd.svg"
+                              loading="lazy"
+                              alt="logotype for cc by nd license"
+                            />
+                          </Show>
+                          <Show when={license?.name.includes('CC BY-NC')}>
+                            <img
+                              src="/svgs/license-badges/by-nc.svg"
+                              loading="lazy"
+                              alt="logotype for cc by nc license"
+                            />
+                          </Show>
+                          <Show when={license?.name.includes('CC BY-NC-ND')}>
+                            <img
+                              src="/svgs/license-badges/by-nc-nd.svg"
+                              loading="lazy"
+                              alt="logotype for cc by nc nd license"
+                            />
+                          </Show>
+                          <Show when={license?.name.includes('CC BY-NC-SA')}>
+                            <img
+                              src="/svgs/license-badges/by-nc-sa.svg"
+                              loading="lazy"
+                              alt="logotype for cc by nc sa license"
+                            />
+                          </Show>
+                          <Show when={license?.name.includes('CC BY-NC-ND-EU')}>
+                            <img
+                              src="/svgs/license-badges/by-nc-nd.eu.svg"
+                              loading="lazy"
+                              alt="logotype for cc by nc nd eu license"
+                            />
+                          </Show>
+                          <Show when={license?.name.includes('CC BY-NC-EU')}>
+                            <img
+                              src="/svgs/license-badges/by-nc.eu.svg"
+                              loading="lazy"
+                              alt="logotype for cc by nc eu license"
+                            />
+                          </Show>
+                          <Show when={license?.name.includes('CC BY-NC-SA-EU')}>
+                            <img
+                              src="/svgs/license-badges/by-nc-sa.eu.svg"
+                              loading="lazy"
+                              alt="logotype for cc by nc sa eu license"
+                            />
+                          </Show>
+                          <br />
+                          Commercial use allowed:{' '}
+                          {license?.commercialUseAllowed
+                            ? '✅'
+                            : `${(<img src="/svgs/license-icons/nc-icon.svg" loading="lazy" alt="" class="cc-license-img" />)}`}
+                          <br />
+                          Attribution required:{' '}
+                          {license?.attributionRequired
+                            ? `${(<img src="/svgs/license-icons/by-icon.svg" loading="lazy" alt="" class="cc-license-img" />)}`
+                            : 'Not required'}
+                          <br />
+                          Share alike required:{' '}
+                          {license?.shareAlikeRequired
+                            ? `${(<img src="/svgs/license-icons/sa-icon.svg" loading="lazy" alt="" class="cc-license-img" />)}`
+                            : 'Not required'}
+                          <br />
+                          Modification allowed:{' '}
+                          {license?.modificationAllowed
+                            ? `${(<img src="/svgs/license-icons/nd-icon.svg" loading="lazy" alt="" class="cc-license-img" />)}`
+                            : 'Not required'}
+                          <br />
+                          Redistribution allowed:{' '}
+                          {license?.redistributionAllowed ? '✅' : '❌'}
+                          <br />
                           <a
                             rel="noopener noreferrer"
                             target="_blank"
@@ -174,31 +261,6 @@ export function DetailOverview(props: DetailOverviewDefinition) {
                           >
                             {license?.sourceUrl}
                           </a>
-                          <Show when={license?.name.includes('CC')}>
-                            <img
-                              class="cc-license-img"
-                              src="https://mirrors.creativecommons.org/presskit/icons/cc.svg"
-                              loading="lazy"
-                              width={57.7}
-                              height={57.7}
-                              alt="logotype for cc license"
-                            />
-                          </Show>
-                          <br />
-                          Commercial use allowed:{' '}
-                          {license?.commercialUseAllowed ? '✅' : '❌'}
-                          <br />
-                          Attribution required:{' '}
-                          {license?.attributionRequired ? '✅' : '❌'}
-                          <br />
-                          Share alike required:{' '}
-                          {license?.shareAlikeRequired ? '✅' : '❌'}
-                          <br />
-                          Modification allowed:{' '}
-                          {license?.modificationAllowed ? '✅' : '❌'}
-                          <br />
-                          Redistribution allowed:{' '}
-                          {license?.redistributionAllowed ? '✅' : '❌'}
                         </td>
                       </>
                     )}
