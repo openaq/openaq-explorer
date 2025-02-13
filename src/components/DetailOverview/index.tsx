@@ -1,5 +1,11 @@
 import { createEffect, createSignal, For, Show } from 'solid-js';
-import { A, createAsync, useLocation } from '@solidjs/router';
+import {
+  A,
+  createAsync,
+  Params,
+  useLocation,
+  useParams,
+} from '@solidjs/router';
 
 import { timeFromNow, since } from '~/lib/utils';
 import { ListsForm } from '~/components/Cards/ListsForm';
@@ -10,7 +16,7 @@ import { SensorType } from './SensorType';
 import '~/assets/scss/components/detail-overview.scss';
 import { DetailOverviewDefinition, Licenses } from './types';
 import { sensorNodeLists } from '~/db/lists';
-import { getLicenses } from '~/client';
+import { getLocationLicenses } from '~/client';
 
 interface ListsDefinition {
   sensorNodesId: number;
@@ -62,22 +68,18 @@ function LocationListsFallback() {
   );
 }
 
-type License = Licenses[]
+export const route = {
+  preload: ({ params }: { params: Params }) => {
+    getLocationLicenses(Number(params.id));
+  },
+};
 
 export function DetailOverview(props: DetailOverviewDefinition) {
+  const { id } = useParams();
   const pageLocation = useLocation();
 
-  const [licenses, setLicenses] = createSignal<License>([])
-
-  createEffect(() => {
-    const id = props.licenses?.[0]?.id;
-    if (id) {
-      getLicenses(id).then((data) => {
-         setLicenses(data)
-      }).catch((error) => {
-        console.error("Error fetching licenses", error);
-      });
-    }
+  const licenses = createAsync(() => getLocationLicenses(Number(id)), {
+    deferStream: true,
   });
 
   return (
@@ -158,21 +160,31 @@ export function DetailOverview(props: DetailOverviewDefinition) {
                 <td>Provider</td>
                 <td>{props.provider?.name}</td>
               </tr>
-            <Show when={licenses().length > 0}>
-              <tr>
-                <td>Licenses</td>
-                <For each={licenses()}>
-                  {(license) => (
+              <Show when={Array.isArray(licenses()) && licenses().length > 0}>
+                <tr>
+                  <td>Licenses</td>
+                  <For each={licenses()}>
+                    {(license) => (
                       <>
                         <td>
-                          <a target="_blank" href={license?.sourceUrl}>
+                          <a
+                            rel="noopener noreferrer"
+                            target="_blank"
+                            href={license?.sourceUrl}
+                          >
                             {license?.sourceUrl}
                           </a>
-                          <Show when={license?.name.includes("CC")}>
-                          <img class='cc-license-img' src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" loading='lazy' width={57.7} height={57.7} alt="logotype for cc license" />
+                          <Show when={license?.name.includes('CC')}>
+                            <img
+                              class="cc-license-img"
+                              src="https://mirrors.creativecommons.org/presskit/icons/cc.svg"
+                              loading="lazy"
+                              width={57.7}
+                              height={57.7}
+                              alt="logotype for cc license"
+                            />
                           </Show>
                           <br />
-                        
                           Commercial use allowed:{' '}
                           {license?.commercialUseAllowed ? '✅' : '❌'}
                           <br />
@@ -188,12 +200,11 @@ export function DetailOverview(props: DetailOverviewDefinition) {
                           Redistribution allowed:{' '}
                           {license?.redistributionAllowed ? '✅' : '❌'}
                         </td>
-                    </>
-                  )}
-                </For>
-              </tr>
-            </Show>
-
+                      </>
+                    )}
+                  </For>
+                </tr>
+              </Show>
             </tbody>
           </table>
         </div>
