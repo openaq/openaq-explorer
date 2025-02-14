@@ -17,6 +17,7 @@ import '~/assets/scss/components/detail-overview.scss';
 import { DetailOverviewDefinition, Licenses } from './types';
 import { sensorNodeLists } from '~/db/lists';
 import { getLocationLicenses } from '~/client';
+import { LocationLicenses } from '../LocationLicenses';
 
 interface ListsDefinition {
   sensorNodesId: number;
@@ -68,19 +69,8 @@ function LocationListsFallback() {
   );
 }
 
-export const route = {
-  preload: ({ params }: { params: Params }) => {
-    getLocationLicenses(Number(params.id));
-  },
-};
-
 export function DetailOverview(props: DetailOverviewDefinition) {
-  const { id } = useParams();
   const pageLocation = useLocation();
-
-  const licenses = createAsync(() => getLocationLicenses(Number(id)), {
-    deferStream: true,
-  });
 
   return (
     <section class="detail-overview">
@@ -160,113 +150,7 @@ export function DetailOverview(props: DetailOverviewDefinition) {
                 <td>Provider</td>
                 <td>{props.provider?.name}</td>
               </tr>
-              <Show when={Array.isArray(licenses()) && licenses().length > 0}>
-                <tr>
-                  <td>Licenses</td>
-                  <For each={licenses()}>
-                    {(license) => (
-                      <>
-                        <td>
-                          <Show when={license?.name.includes('CC BY')}>
-                            <img
-                              src="/svgs/license-badges/by.svg"
-                              loading="lazy"
-                              alt="logotype for cc by sa license"
-                            />
-                          </Show>
-                          <Show when={license?.name.includes('CC BY-SA')}>
-                            <img
-                              src="/svgs/license-badges/by-sa.svg"
-                              loading="lazy"
-                              alt="logotype for cc by sa license"
-                            />
-                          </Show>
-                          <Show when={license?.name.includes('CC BY-ND')}>
-                            <img
-                              src="/svgs/license-badges/by-nd.svg"
-                              loading="lazy"
-                              alt="logotype for cc by nd license"
-                            />
-                          </Show>
-                          <Show when={license?.name.includes('CC BY-NC')}>
-                            <img
-                              src="/svgs/license-badges/by-nc.svg"
-                              loading="lazy"
-                              alt="logotype for cc by nc license"
-                            />
-                          </Show>
-                          <Show when={license?.name.includes('CC BY-NC-ND')}>
-                            <img
-                              src="/svgs/license-badges/by-nc-nd.svg"
-                              loading="lazy"
-                              alt="logotype for cc by nc nd license"
-                            />
-                          </Show>
-                          <Show when={license?.name.includes('CC BY-NC-SA')}>
-                            <img
-                              src="/svgs/license-badges/by-nc-sa.svg"
-                              loading="lazy"
-                              alt="logotype for cc by nc sa license"
-                            />
-                          </Show>
-                          <Show when={license?.name.includes('CC BY-NC-ND-EU')}>
-                            <img
-                              src="/svgs/license-badges/by-nc-nd.eu.svg"
-                              loading="lazy"
-                              alt="logotype for cc by nc nd eu license"
-                            />
-                          </Show>
-                          <Show when={license?.name.includes('CC BY-NC-EU')}>
-                            <img
-                              src="/svgs/license-badges/by-nc.eu.svg"
-                              loading="lazy"
-                              alt="logotype for cc by nc eu license"
-                            />
-                          </Show>
-                          <Show when={license?.name.includes('CC BY-NC-SA-EU')}>
-                            <img
-                              src="/svgs/license-badges/by-nc-sa.eu.svg"
-                              loading="lazy"
-                              alt="logotype for cc by nc sa eu license"
-                            />
-                          </Show>
-                          <br />
-                          Commercial use allowed:{' '}
-                          {license?.commercialUseAllowed
-                            ? '✅'
-                            : `${(<img src="/svgs/license-icons/nc-icon.svg" loading="lazy" alt="" class="cc-license-img" />)}`}
-                          <br />
-                          Attribution required:{' '}
-                          {license?.attributionRequired
-                            ? `${(<img src="/svgs/license-icons/by-icon.svg" loading="lazy" alt="" class="cc-license-img" />)}`
-                            : 'Not required'}
-                          <br />
-                          Share alike required:{' '}
-                          {license?.shareAlikeRequired
-                            ? `${(<img src="/svgs/license-icons/sa-icon.svg" loading="lazy" alt="" class="cc-license-img" />)}`
-                            : 'Not required'}
-                          <br />
-                          Modification allowed:{' '}
-                          {license?.modificationAllowed
-                            ? `${(<img src="/svgs/license-icons/nd-icon.svg" loading="lazy" alt="" class="cc-license-img" />)}`
-                            : 'Not required'}
-                          <br />
-                          Redistribution allowed:{' '}
-                          {license?.redistributionAllowed ? '✅' : '❌'}
-                          <br />
-                          <a
-                            rel="noopener noreferrer"
-                            target="_blank"
-                            href={license?.sourceUrl}
-                          >
-                            {license?.sourceUrl}
-                          </a>
-                        </td>
-                      </>
-                    )}
-                  </For>
-                </tr>
-              </Show>
+              <LocationLicenses />
             </tbody>
           </table>
         </div>
