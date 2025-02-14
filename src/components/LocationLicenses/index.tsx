@@ -11,7 +11,7 @@ export const LocationLicenses = (props: LocationLicensesProps) => {
   return (
     <>
       <Show when={licensesData.length > 0}>
-        <tr>
+        <tr class='license-tr'>
           <td>Licenses</td>
           <For each={props.licenses}>
             {(license) => (
@@ -32,7 +32,7 @@ export const LocationLicenses = (props: LocationLicensesProps) => {
           </For>
         </tr>
         <tr>
-          <td>Attributes</td>
+          <td class='license-attributes'>Attributes</td>
           <For each={props.licenses}>
             {(license) => (
               <td>
@@ -42,7 +42,7 @@ export const LocationLicenses = (props: LocationLicensesProps) => {
                     loading="lazy"
                     alt="cc logo"
                     title="Creative Commons"
-                    class="cc-license-img"
+                    class="cc-license-img cc-img"
                   />
                 </Show>
 
