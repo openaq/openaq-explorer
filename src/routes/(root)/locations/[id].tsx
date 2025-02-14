@@ -10,12 +10,14 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import '~/assets/scss/routes/location.scss';
 import { getLocationById, sensorNodeLists } from '~/db/lists';
 import { getSessionUser } from '~/auth/session';
+import { getLocationLicenses } from '~/client';
 
 export const route = {
   preload: ({ params }: { params: Params }) => {
     getSessionUser();
     getLocationById(Number(params.id));
     sensorNodeLists(Number(params.id));
+    getLocationLicenses(Number(params.id));
   },
 };
 
@@ -33,6 +35,11 @@ export default function Location() {
     deferStream: true,
   });
 
+  const licenses = createAsync(() => getLocationLicenses(Number(id)), {
+    deferStream: true,
+  });
+
+
   return (
     <>
       <LocationDetailOpenGraph
@@ -42,7 +49,7 @@ export default function Location() {
       <main class="location-main">
         <Show when={location()}>
           <Breadcrumbs pageName={location()?.name} />
-          <DetailOverview {...location()} user={user} />
+          <DetailOverview {...location()} licenses={licenses()} user={user} />
           <Show when={location().datetimeFirst}>
             <DetailCharts {...location()} />
             <section id="download-card" class="download-card">

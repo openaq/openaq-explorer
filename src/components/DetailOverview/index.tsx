@@ -14,9 +14,8 @@ import { DetailMap } from '~/components/DetailMap';
 import { SensorType } from './SensorType';
 
 import '~/assets/scss/components/detail-overview.scss';
-import { DetailOverviewDefinition, Licenses } from './types';
+import { DetailOverviewDefinition } from './types';
 import { sensorNodeLists } from '~/db/lists';
-import { getLocationLicenses } from '~/client';
 import { LocationLicenses } from '../LocationLicenses';
 
 interface ListsDefinition {
@@ -71,13 +70,14 @@ function LocationListsFallback() {
 
 export function DetailOverview(props: DetailOverviewDefinition) {
   const pageLocation = useLocation();
+  
 
   return (
     <section class="detail-overview">
       <div class="detail-overview__title">
         <div>
           <span class="type-subtitle-3 text-smoke-120">
-            {props.country?.name}
+            {props?.name}
           </span>
           <h1 class="type-display-1 text-sky-120">
             {props.name || 'No label'}
@@ -150,7 +150,7 @@ export function DetailOverview(props: DetailOverviewDefinition) {
                 <td>Provider</td>
                 <td>{props.provider?.name}</td>
               </tr>
-              <LocationLicenses />
+              <LocationLicenses {...props} />
             </tbody>
           </table>
         </div>

@@ -1,26 +1,19 @@
-import { createAsync, Params, useParams } from '@solidjs/router';
 import { Show, For } from 'solid-js';
-import { getLocationLicenses } from '~/client';
+import { Licenses } from '../DetailOverview/types';
 
-export const route = {
-  preload: ({ params }: { params: Params }) => {
-    getLocationLicenses(Number(params.id));
-  },
-};
+interface LocationLicensesProps {
+  licenses?: Licenses[];
+}
 
-export const LocationLicenses = () => {
-  const { id } = useParams();
-
-  const licenses = createAsync(() => getLocationLicenses(Number(id)), {
-    deferStream: true,
-  });
+export const LocationLicenses = (props: LocationLicensesProps) => {
+  const licensesData = props.licenses ?? [];
 
   return (
     <>
-      <Show when={Array.isArray(licenses()) && licenses().length > 0}>
+      <Show when={licensesData.length > 0}>
         <tr>
           <td>Licenses</td>
-          <For each={licenses()}>
+          <For each={props.licenses}>
             {(license) => (
               <>
                 <td>
@@ -40,7 +33,7 @@ export const LocationLicenses = () => {
         </tr>
         <tr>
           <td>Attributes</td>
-          <For each={licenses()}>
+          <For each={props.licenses}>
             {(license) => (
               <td>
                 <Show when={[30, 32, 41].includes(license?.id)}>
