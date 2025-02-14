@@ -26,29 +26,6 @@ export const LocationLicenses = () => {
                 <td>
                   <p class="license-name">{license.name}</p>
 
-                  <Show when={[30, 32, 41].includes(license?.id)}>
-                    <img
-                      src="/svgs/license-icons/cc-icon.svg"
-                      loading="lazy"
-                      alt="cc logo"
-                      title="Creative Commons"
-                      class="cc-license-img"
-                    />
-                  </Show>
-
-                  {license?.commercialUseAllowed
-                    ? ''
-                    : `${(<img src="/svgs/license-icons/nc-icon.svg" loading="lazy" alt="" class="cc-license-img" />)}`}
-                  {license?.attributionRequired
-                    ? `${(<img src="/svgs/license-icons/by-icon.svg" loading="lazy" alt="" class="cc-license-img" />)}`
-                    : ''}
-                  {license?.shareAlikeRequired
-                    ? `${(<img src="/svgs/license-icons/sa-icon.svg" loading="lazy" alt="" class="cc-license-img" />)}`
-                    : ''}
-                  {license?.modificationAllowed
-                    ? `${(<img src="/svgs/license-icons/nd-icon.svg" loading="lazy" alt="" class="cc-license-img" />)}`
-                    : ''}
-                  <br />
                   <a
                     rel="noopener noreferrer"
                     target="_blank"
@@ -58,6 +35,64 @@ export const LocationLicenses = () => {
                   </a>
                 </td>
               </>
+            )}
+          </For>
+        </tr>
+        <tr>
+          <td>Attributes</td>
+          <For each={licenses()}>
+            {(license) => (
+              <td>
+                <Show when={[30, 32, 41].includes(license?.id)}>
+                  <img
+                    src="/svgs/license-icons/cc-icon.svg"
+                    loading="lazy"
+                    alt="cc logo"
+                    title="Creative Commons"
+                    class="cc-license-img"
+                  />
+                </Show>
+
+                <Show when={!license.commercialUseAllowed}>
+                  <img
+                    src="/svgs/license-icons/nc-icon.svg"
+                    loading="lazy"
+                    alt="nc logo"
+                    title="Commercial Use Allowed" 
+                    class="cc-license-img"
+                  />
+                </Show>
+
+                <Show when={license.attributionRequired}>
+                  <img
+                    src="/svgs/license-icons/by-icon.svg"
+                    loading="lazy"
+                    alt="by logo"
+                    title="Attribution Required" 
+                    class="cc-license-img"
+                  />
+                </Show>
+
+                <Show when={license.shareAlikeRequired}>
+                  <img
+                    src="/svgs/license-icons/sa-icon.svg"
+                    loading="lazy"
+                    alt="sa logo"
+                    title="Share Alike Required" 
+                    class="cc-license-img"
+                  />
+                </Show>
+
+                <Show when={!license.modificationAllowed}>
+                  <img
+                    src="/svgs/license-icons/nd-icon.svg"
+                    loading="lazy"
+                    alt="nd logo"
+                    title="Modification Allowed" 
+                    class="cc-license-img"
+                  />
+                </Show>
+              </td>
             )}
           </For>
         </tr>
