@@ -29,3 +29,9 @@ gitignore
 # System Files
 .DS_Store
 Thumbs.db
+
+# Generated Config Files
+/app.config.timestamp_1739782433426.js
+/app.config.timestamp_1739782459399.js
+/app.config.timestamp_1739782470986.js
+/app.config.timestamp_1739784651008.js
