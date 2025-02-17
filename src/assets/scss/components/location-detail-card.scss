@@ -1,12 +1,13 @@
 @use 'openaq-design-system/scss/mixins/index' as mixins;
 @use 'openaq-design-system/scss/variables';
 @use '~/assets/scss/cards';
+@use '~/assets/scss/media-queries.scss' as f;
 
 .location-detail-card {
   @extend .dismissable-card;
   background-color: white;
   width: 280px;
-  position: absolute;
+  position: fixed;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -17,6 +18,10 @@
   border-radius: 18px;
   overflow: hidden;
   box-shadow: 0 7px 20px #00000026;
+
+  @include f.respond(medium) {
+  top: 125px
+  }
 
   &--translate {
     @extend .dismissable-card--translate;
