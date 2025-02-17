@@ -3,6 +3,12 @@ import { render, screen } from '@solidjs/testing-library';
 import { License } from '.';
 import '@testing-library/jest-dom';
 
+
+// test for is license null?
+// test that cc licenses get a cc logo
+// test a non cc license 
+
+
 describe('<License />', () => {
   test('<License />  shows the right element and correct inner html', () => {
     const testLicenseName = 'Creative Commons License';

@@ -147,7 +147,19 @@ export function DetailOverview(props: DetailOverviewDefinition) {
                 <td>Provider</td>
                 <td>{props.provider?.name}</td>
               </tr>
-              <License {...props} />
+              <tr>
+                <td>Licenses</td>
+                <td>
+                <For each={props.licenses}>
+                  {(license) => 
+                    <License {...license} />
+                  }              
+                </For>
+
+                </td>
+
+              </tr>
+
             </tbody>
           </table>
         </div>

@@ -1,5 +1,6 @@
 import { AccessorWithLatest } from "@solidjs/router";
 import { SessionData } from "~/auth/session";
+import { LicenseDefinition } from "../License/types";
 
 export interface SensorsDefinition {
   name: string;
@@ -39,17 +40,6 @@ export interface Sensor {
   parameter: Parameter;
 }
 
-export interface Licenses {
-  id: number;
-  name: string;
-  commercialUseAllowed: boolean;
-  attributionRequired: boolean;
-  shareAlikeRequired: boolean;
-  modificationAllowed: boolean;
-  redistributionAllowed: boolean;
-  sourceUrl: string;
-}
-
 export interface Datetime {
   utc: string;
   local: string;
@@ -69,7 +59,7 @@ export interface DetailOverviewDefinition {
   datetimeLast: Datetime;
   isMobile: boolean;
   lists: any[];
-  licenses?: Licenses[];
+  licenses?: LicenseDefinition[];
 }
 
 export interface SensorTypeDefintion {
