@@ -11,7 +11,10 @@ export interface PasswordScoreDefinition {
 
 export type Color = 'warning' | 'alert' | 'ok';
 
-export type SvgSymbol = 'check_mantis100.svg' | 'warning_fire100.svg' | undefined;
+export type SvgSymbol =
+  | 'check_mantis100.svg'
+  | 'warning_fire100.svg'
+  | undefined;
 
 export interface PasswordValue {
   color: Color;

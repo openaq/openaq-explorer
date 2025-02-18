@@ -64,7 +64,7 @@ export default function Account() {
               }}
             >
               Copy
-              </button>
+            </button>
             <button
               class="btn btn-primary"
               onClick={() => toggleRegenerateKeyModalOpen()}

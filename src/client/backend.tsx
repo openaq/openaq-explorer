@@ -28,15 +28,15 @@ interface ListLocationDefinition {
   locationsId: number;
 }
 
-export type UserResponse = UserRow[]
+export type UserResponse = UserRow[];
 
 export interface UserRow {
-    usersId: number
-    isActive: boolean
-    emailAddress: string
-    fullname: string
-    passwordHash: string
-    token: string
+  usersId: number;
+  isActive: boolean;
+  emailAddress: string;
+  fullname: string;
+  passwordHash: string;
+  token: string;
 }
 
 export const db = {
@@ -56,8 +56,8 @@ export const db = {
     const res = await fetch(`${baseUrl}/users/${usersId}`, {
       method: 'GET',
       headers: {
-        'Cache-Control': 'no-cache, no-store'
-      }
+        'Cache-Control': 'no-cache, no-store',
+      },
     });
     return res;
   },
@@ -66,8 +66,8 @@ export const db = {
     const res = await fetch(`${baseUrl}/users/email/${emailAddress}`, {
       method: 'GET',
       headers: {
-        'Cache-Control': 'no-cache, no-store'
-      }
+        'Cache-Control': 'no-cache, no-store',
+      },
     });
     return res;
   },
@@ -80,8 +80,8 @@ export const db = {
       {
         method: 'GET',
         headers: {
-          'Cache-Control': 'no-cache, no-store'
-        }
+          'Cache-Control': 'no-cache, no-store',
+        },
       }
     );
     return res;
@@ -131,8 +131,8 @@ export const db = {
     const res = await fetch(`${baseUrl}/lists/${listsId}`, {
       method: 'GET',
       headers: {
-        'Cache-Control': 'no-cache, no-store'
-      }
+        'Cache-Control': 'no-cache, no-store',
+      },
     });
     return res;
   },
@@ -173,8 +173,8 @@ export const db = {
     const res = await fetch(`${baseUrl}/users/${usersId}/lists`, {
       method: 'GET',
       headers: {
-        'Cache-Control': 'no-cache, no-store'
-      }
+        'Cache-Control': 'no-cache, no-store',
+      },
     });
     return res;
   },
@@ -188,8 +188,8 @@ export const db = {
       {
         method: 'GET',
         headers: {
-          'Cache-Control': 'no-cache, no-store'
-        }
+          'Cache-Control': 'no-cache, no-store',
+        },
       }
     );
     return res;
@@ -198,8 +198,8 @@ export const db = {
     const res = await fetch(`${baseUrl}/lists/${listsId}/locations`, {
       method: 'GET',
       headers: {
-        'Cache-Control': 'no-cache, no-store'
-      }
+        'Cache-Control': 'no-cache, no-store',
+      },
     });
     return res;
   },

@@ -1,5 +1,5 @@
-import { AccessorWithLatest } from "@solidjs/router";
-import { SessionData } from "~/auth/session";
+import { AccessorWithLatest } from '@solidjs/router';
+import { SessionData } from '~/auth/session';
 
 export interface SensorsDefinition {
   name: string;

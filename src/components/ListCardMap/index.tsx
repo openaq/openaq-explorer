@@ -1,14 +1,9 @@
-import MapGL, {
-  Layer,
-  Source,
-  Viewport,
-} from 'solid-map-gl';
+import MapGL, { Layer, Source, Viewport } from 'solid-map-gl';
 import * as maplibre from 'maplibre-gl';
 import { createSignal, Show } from 'solid-js';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import destination from '@turf/destination';
 import '~/assets/scss/components/list-card-map.scss';
-
 
 interface Coordinates {
   latitude: number;
@@ -32,7 +27,7 @@ export function ListCardMap(props: DetailMapDefinition) {
   } as Viewport);
 
   return (
-    <div class='list-card-map-container'>
+    <div class="list-card-map-container">
       <MapGL
         class="map"
         mapLib={maplibre}
@@ -51,9 +46,7 @@ export function ListCardMap(props: DetailMapDefinition) {
               id: 'locations',
               type: 'vector',
               tiles: [
-                `${
-                  import.meta.env.VITE_TILES_URL
-                }/{z}/{x}/{y}.pbf?apiKey=${
+                `${import.meta.env.VITE_TILES_URL}/{z}/{x}/{y}.pbf?apiKey=${
                   import.meta.env.VITE_TILES_API_KEY
                 }`,
               ],
