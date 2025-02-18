@@ -78,7 +78,7 @@ export function ProvidersCard() {
             bbox: o.bbox,
           };
         })
-        .sort((a, b) => (a.name < b.name ? -1 : 1))
+        .sort((a, b) => (a.name.toLowerCase < b.name.toLowerCase ? -1 : 1))
     );
     miniSearch.addAll(selectedProviders);
   });
