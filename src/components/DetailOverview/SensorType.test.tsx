@@ -1,4 +1,4 @@
-import { test, expect, vi, describe,  } from "vitest"
+import { test, expect, vi, describe } from "vitest"
 import { render } from "@solidjs/testing-library"
 import { SensorType } from './SensorType';
 

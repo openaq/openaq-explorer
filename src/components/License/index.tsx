@@ -1,60 +1,65 @@
 import { Show } from 'solid-js';
-import { LicenseDefinition } from './types';
+import { IconTooltipDefinition, LicenseDefinition } from './types';
 import '~/assets/scss/components/license.scss';
 
-import CCIcon from '../../assets/imgs/license-icons/cc-icon.svg';
-import NCIcon from '../../assets/imgs/license-icons/nc-icon.svg';
-import BYIcon from '../../assets/imgs/license-icons/by-icon.svg';
-import SAIcon from '../../assets/imgs/license-icons/sa-icon.svg';
-import NDIcon from '../../assets/imgs/license-icons/nd-icon.svg';
+import CCIcon from '~/assets/imgs/license-icons/cc-icon.svg';
+import NCIcon from '~/assets/imgs/license-icons/nc-icon.svg';
+import BYIcon from '~/assets/imgs/license-icons/by-icon.svg';
+import SAIcon from '~/assets/imgs/license-icons/sa-icon.svg';
+import NDIcon from '~/assets/imgs/license-icons/nd-icon.svg';
 
-export const License = (props: LicenseDefinition) => {
+function IconTooltip(props: IconTooltipDefinition) {
+  return (
+    <div class="tooltip" title={props.title}>
+      {props.children}
+    </div>
+  );
+}
+
+export function License(props: LicenseDefinition) {
+
+  const svgAttributes = {
+    width: 32,
+    height: 32,
+    fill: '#5a6672',
+  };
+
+  const isCreativeCommons = [30, 32, 41].indexOf(props.id) > -1;
+
   return (
     <div>
       <div>
-        {/* <p class="license-name">{props.name}</p> */}
-        <a rel="noopener noreferrer" target="_blank" href={props?.sourceUrl}>
-          {/* {props?.sourceUrl} */}
+        <a rel="noopener noreferrer" target="_blank" href={props.sourceUrl}>
           {props.name}
         </a>
       </div>
       <div class="license-attribute-icons">
-        <Show when={[30, 32, 41].includes(props?.id)}>
-          <div class="tooltip" title="Creative Commons">
-            <CCIcon
-              role="img"
-              aria-label="Creative Commons Logo"
-              width={32}
-              height={32}
-              fill={'#5a6672'}
-            />
-          </div>
+        <Show when={isCreativeCommons}>
+          <IconTooltip title={'Creative Commons'}>
+            <CCIcon {...svgAttributes} />
+          </IconTooltip>
         </Show>
-
         <Show when={!props.commercialUseAllowed}>
-          <div class="tooltip" title="Commercial Use Allowed">
-            <NCIcon width={32} height={32} fill={'#5a6672'} />
-          </div>
+          <IconTooltip title={'Only non-commercial uses of the work are permitted.'}>
+            <NCIcon {...svgAttributes} />
+          </IconTooltip>
         </Show>
-
         <Show when={props.attributionRequired}>
-          <div class="tooltip" title="Attribution Required">
-            <BYIcon width={32} height={32} fill={'#5a6672'} />
-          </div>
+          <IconTooltip title={'Attribution: Credit must be given to the creator.'}>
+            <BYIcon {...svgAttributes} />
+          </IconTooltip>
         </Show>
-
         <Show when={props.shareAlikeRequired}>
-          <div class="tooltip" title="Share Alike Required">
-            <SAIcon width={32} height={32} fill={'#5a6672'} />
-          </div>
+          <IconTooltip title={'Share Alike: Adaptations must be shared under the same terms.'}>
+            <SAIcon {...svgAttributes} />
+          </IconTooltip>
         </Show>
-
         <Show when={!props.modificationAllowed}>
-          <div class="tooltip" title="Modification Allowed">
-            <NDIcon width={32} height={32} fill={'#5a6672'} />
-          </div>
+          <IconTooltip title={'No derivatives or adaptations of the work are permitted.'}>
+            <NDIcon {...svgAttributes} />
+          </IconTooltip>
         </Show>
       </div>
     </div>
   );
-};
+}
