@@ -1,58 +1,54 @@
-import { clearSession, getSessionUser, setSession } from "./session";
+import { clearSession, getSessionUser, setSession } from './session';
 import { db, UserResponse } from '~/client/backend';
-import { encode, isValidEmailDomain, verifyPassword } from "~/lib/auth";
-
+import { encode, isValidEmailDomain, verifyPassword } from '~/lib/auth';
 
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import { action, query, redirect, revalidate } from "@solidjs/router";
-import { getRequestEvent } from "solid-js/web";
-import { validatePassword } from "~/lib/password";
-
+import { action, query, redirect, revalidate } from '@solidjs/router';
+import { getRequestEvent } from 'solid-js/web';
+import { validatePassword } from '~/lib/password';
 
 dayjs.extend(utc);
 
-
 export const redirectIfLoggedIn = query(async (): Promise<void> => {
-  "use server";
+  'use server';
   const session = await getSessionUser();
   const usersId = session?.usersId;
   if (usersId) {
-    throw redirect("/");
+    throw redirect('/');
   }
-}, 'redirect-if-logged-in')
+}, 'redirect-if-logged-in');
 
 export const getLoggedInUser = query(async () => {
-  "use server";
+  'use server';
   const session = await getSessionUser();
   const usersId = session?.usersId;
   let res;
   if (typeof usersId === 'number') {
     res = await db.getUserById(usersId);
   } else {
-    throw redirect("/");
+    throw redirect('/');
   }
   if (res.status === 404) {
-    throw redirect("/");
+    throw redirect('/');
   }
-  const user = await res.json() as UserResponse;
+  const user = (await res.json()) as UserResponse;
   if (user.length > 0) {
     return {
       email: user[0].emailAddress,
       fullname: user[0].fullname,
-      token: user[0].token
+      token: user[0].token,
     };
   } else {
-    throw redirect("/");
+    throw redirect('/');
   }
-}, "get-logged-in-user");
-
+}, 'get-logged-in-user');
 
 export const register = action(async (formData: FormData) => {
   'use server';
 
-  const event = getRequestEvent()
-  const xForwardedFor = event?.request.headers.get("x-forwarded-for") || '';
+  const event = getRequestEvent();
+  const xForwardedFor = event?.request.headers.get('x-forwarded-for') || '';
   const ips = xForwardedFor?.split(', ');
   const ipAddress = ips[0] || '0.0.0.0';
   const fullName = String(formData.get('fullname'));
@@ -74,7 +70,9 @@ export const register = action(async (formData: FormData) => {
   }
   if (!isValidEmailDomain(emailAddress)) {
     console.info(`invalid email domain attempt: ${emailAddress}`);
-    return new Error('Valid email address required - disposable email domains not allowed.');
+    return new Error(
+      'Valid email address required - disposable email domains not allowed.'
+    );
   }
   if (fullName === '') {
     return new Error(`Name is required`);
@@ -84,7 +82,7 @@ export const register = action(async (formData: FormData) => {
   }
   if (password !== passwordConfirm) {
     return new Error('Passwords must match');
-  } 
+  }
   const passwordHash = await encode(password);
   let res = await db.getUserByEmailAddress(emailAddress);
   if (res.status == 200) {
@@ -100,27 +98,26 @@ export const register = action(async (formData: FormData) => {
     fullName,
     emailAddress,
     passwordHash,
-    ipAddress
-  })
+    ipAddress,
+  });
   await createUserRes.json();
   try {
     res = await db.getUserByEmailAddress(emailAddress);
     if (res.status === 200) {
-      const user = await res.json()
+      const user = await res.json();
       await sendVerificationEmail(user[0].usersId);
     }
     if (res.status === 404) {
-      throw new Error("failed to create new user")
+      throw new Error('failed to create new user');
     }
   } catch (err) {
     return err as Error;
   }
   throw redirect(`/verify-email?email=${emailAddress}`);
-}, 'register-action')
-
+}, 'register-action');
 
 export const login = action(async (formData: FormData) => {
-  "use server";
+  'use server';
 
   const email = String(formData.get('email-address'));
   const password = String(formData.get('password'));
@@ -131,24 +128,21 @@ export const login = action(async (formData: FormData) => {
     if (res.status !== 200) {
       throw new Error('Invalid credentials');
     }
-    const rows = await res.json()
+    const rows = await res.json();
     if (rows.length == 0) {
       throw new Error('Invalid credentials');
     }
-    const user = rows[0]
+    const user = rows[0];
     if (!user.isActive) {
       throw redirect('/verify-email');
     }
-    const isCorrectPassword = await verifyPassword(
-      password,
-      user.passwordHash
-    );
+    const isCorrectPassword = await verifyPassword(password, user.passwordHash);
     if (!isCorrectPassword) {
       throw new Error('Invalid credentials');
     }
     const remember = rememberMe == 'on' ? true : false;
     const maxAge = remember ? 60 * 60 * 24 * 30 : 60 * 60 * 24;
-    await setSession(user.usersId, maxAge)
+    await setSession(user.usersId, maxAge);
   } catch (err) {
     return err as Error;
   }
@@ -158,11 +152,10 @@ export const login = action(async (formData: FormData) => {
 }, 'login-action');
 
 export const logout = action(async () => {
-  "use server";
+  'use server';
   await clearSession();
   return revalidate([getSessionUser.key, getLoggedInUser.key]);
 }, 'logout-action');
-
 
 export const sendVerificationEmail = async (usersId: number) => {
   'use server';
@@ -173,14 +166,14 @@ export const sendVerificationEmail = async (usersId: number) => {
 
   const res = await fetch(url.href, {
     method: 'POST',
-    headers: {  
-      'Accept': 'application/json',
+    headers: {
+      Accept: 'application/json',
       'Content-Type': 'application/json',
       'X-API-Key': `${import.meta.env.VITE_EXPLORER_API_KEY}`,
     },
     body: JSON.stringify(data),
   });
-  await res.json()
+  await res.json();
 };
 
 async function registerToken(usersId: any) {
@@ -200,15 +193,13 @@ async function registerToken(usersId: any) {
   });
 }
 
-export const verifyEmail = query(async(verificationCode: string) => {
+export const verifyEmail = query(async (verificationCode: string) => {
   'use server';
-  const res = await db.getUserByVerificationCode(
-    verificationCode
-  );
+  const res = await db.getUserByVerificationCode(verificationCode);
   if (res.status == 404) {
     throw redirect('/');
   }
-  const user = await res.json()
+  const user = await res.json();
   if (user[0].active) {
     // already verified
     throw redirect('/login');
@@ -217,18 +208,17 @@ export const verifyEmail = query(async(verificationCode: string) => {
     // expired
     throw redirect(`/expired?code=${verificationCode}`);
   }
-  await db.verifyUser(user[0].usersId)
+  await db.verifyUser(user[0].usersId);
   try {
     await registerToken(user[0].usersId);
   } catch (err) {
-    console.error('failed to register token', err)
+    console.error('failed to register token', err);
     return err as Error;
   }
   throw redirect('/email-verified');
 }, 'verify-email-action');
 
-
-export const resendVerificationEmail= action(async(formData: FormData) => {
+export const resendVerificationEmail = action(async (formData: FormData) => {
   'use server';
   const verificationCode = String(formData.get('verification-code'));
   const res = await db.getUserByVerificationCode(verificationCode);
@@ -260,8 +250,7 @@ export const resendVerificationEmail= action(async(formData: FormData) => {
   throw redirect(`/verify-email?email=${user[0].emailAddress}`);
 }, 'resend-verification-email-action');
 
-
-export const forgotPasswordLink = action(async(formData: FormData) => {
+export const forgotPasswordLink = action(async (formData: FormData) => {
   'use server';
 
   const emailAddress = String(formData.get('email-address'));
@@ -291,9 +280,7 @@ export const forgotPassword = action(async (formData: FormData) => {
   'use server';
   const verificationCode = String(formData.get('verification-code'));
   const newPassword = String(formData.get('new-password'));
-  const newPasswordConfirm = String(
-    formData.get('confirm-new-password')
-  );
+  const newPasswordConfirm = String(formData.get('confirm-new-password'));
   const res = await db.getUserByVerificationCode(verificationCode);
   if (res.status !== 200) {
     throw redirect('/login');
@@ -309,15 +296,17 @@ export const forgotPassword = action(async (formData: FormData) => {
     const newPasswordHash = await encode(newPassword);
     const { usersId } = user[0];
     const res = await db.updateUserPassword({
-      usersId: usersId, 
-      passwordHash: newPasswordHash
-    })
+      usersId: usersId,
+      passwordHash: newPasswordHash,
+    });
     if (res.status !== 200) {
-      console.error(`Failed to update user password: ${res.url} HTTP ${res.status}`)
+      console.error(
+        `Failed to update user password: ${res.url} HTTP ${res.status}`
+      );
       return new Error('Failed to update password');
     }
     const d = await res.json();
-    console.info(`User ID ${d.usersid} changed password.`)
+    console.info(`User ID ${d.usersid} changed password.`);
   } catch (err) {
     return err as Error;
   }

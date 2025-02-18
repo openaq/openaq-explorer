@@ -4,6 +4,7 @@ import solidSvg from 'vite-plugin-solid-svg';
 
 import { defineConfig } from "vitest/config"
 
+
 export default defineConfig({
   plugins: [solid(), solidSvg()],
 
@@ -12,9 +13,9 @@ export default defineConfig({
     environment: 'jsdom',
   },
   resolve: {
-    conditions: ["development", "browser"],
+    conditions: ['development', 'browser'],
     alias: {
-      '~': path.resolve(__dirname, './src')
+      '~': path.resolve(__dirname, './src'),
     },
   },
 });

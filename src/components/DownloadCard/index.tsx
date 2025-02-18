@@ -4,10 +4,7 @@ import tz from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import { getSensorMeasurementsDownload } from '~/client';
 
-import {
-  useLocation,
-  A,
-} from '@solidjs/router';
+import { useLocation, A } from '@solidjs/router';
 
 import '~/assets/scss/components/download-card.scss';
 import { Sensor } from '../DetailOverview/types';

@@ -23,9 +23,7 @@ function BoxPlotTooltip(props) {
       role="tooltip"
     >
       <div class="box-plot-tooltip__head">
-        <span class="type-body3 text-white">
-          {props.data?.period}
-        </span>
+        <span class="type-body3 text-white">{props.data?.period}</span>
       </div>
       <div class="box-plot-tooltip__body">
         <div class="box-plot-legend-item">
@@ -57,9 +55,7 @@ function BoxPlotTooltip(props) {
         <div class="box-plot-legend-item bg-sky-1">
           <div class="bg-lavender-120 box-plot-legend-color" />
           <div>
-            <span class="type-body-3">
-              {props.data.values?.median}{' '}
-            </span>
+            <span class="type-body-3">{props.data.values?.median} </span>
             <span class="type-body-1">µg/m³</span>
           </div>
           <div class="box-plot-legend-item-label">
@@ -205,14 +201,10 @@ export default function Boxplot(props) {
 
   const yDomain = () => {
     const minimumValue =
-      props.data == undefined
-        ? 0
-        : min(props.data, (d) => d.summary.q02);
+      props.data == undefined ? 0 : min(props.data, (d) => d.summary.q02);
     y.domain([
       minimumValue < 0 ? minimumValue : 0,
-      props.data == undefined
-        ? 0
-        : max(props.data, (d) => d.summary.q98 * 1.1),
+      props.data == undefined ? 0 : max(props.data, (d) => d.summary.q98 * 1.1),
     ]);
   };
 
@@ -225,10 +217,7 @@ export default function Boxplot(props) {
       : periods;
 
   const yAxis = axisLeft(y).ticks(6);
-  const yAxisGrid = axisLeft(y)
-    .tickSize(-props.width)
-    .tickFormat('')
-    .ticks(6);
+  const yAxisGrid = axisLeft(y).tickSize(-props.width).tickFormat('').ticks(6);
   const xAxis = axisBottom(x)
     .tickValues(ticksValues)
     .tickFormat((e) => lookup[e]);
@@ -255,9 +244,7 @@ export default function Boxplot(props) {
       >
         <g
           class={`chart-grid box-plot-grid-${props.name}`}
-          transform={`translate(${props.margin / 2} ${
-            props.margin / 2
-          } )`}
+          transform={`translate(${props.margin / 2} ${props.margin / 2} )`}
         />
         <g
           transform={`translate(${
@@ -265,11 +252,7 @@ export default function Boxplot(props) {
           } ${props.margin / 2})`}
         >
           <Show when={props.loading}>
-            <text
-              text-anchor="middle"
-              x={props.width / 2}
-              y={props.height / 2}
-            >
+            <text text-anchor="middle" x={props.width / 2} y={props.height / 2}>
               Loading...
             </text>
           </Show>
@@ -333,9 +316,7 @@ export default function Boxplot(props) {
         </g>
         <g
           class={`box-plot-y-axis-${props.name}`}
-          transform={`translate(${props.margin / 2} ${
-            props.margin / 2
-          })`}
+          transform={`translate(${props.margin / 2} ${props.margin / 2})`}
         />
         <g
           class={`box-plot-x-axis-${props.name}`}

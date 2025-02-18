@@ -6,9 +6,7 @@ import { Show } from 'solid-js';
 
 export default function VerifyEmail() {
   const [searchParams] = useSearchParams();
-  const resendingVerificationEmail = useSubmission(
-    resendVerificationEmail
-  );
+  const resendingVerificationEmail = useSubmission(resendVerificationEmail);
 
   return (
     <>

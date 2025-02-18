@@ -33,10 +33,7 @@ export const changePassword = action(async (formData: FormData) => {
     throw redirect('/verify-email');
   }
 
-  const isCorrectPassword = await checkPassword(
-    password,
-    user[0].passwordHash
-  );
+  const isCorrectPassword = await checkPassword(password, user[0].passwordHash);
   const newPasswordHash = await encode(newPassword);
 
   if (!isCorrectPassword) {
@@ -47,22 +44,21 @@ export const changePassword = action(async (formData: FormData) => {
 
   if (result.score < 4) {
     return new Error(`New password too weak: ${result.feedback.warning}`);
-  }  
+  }
 
   try {
     const res = await db.updateUserPassword({
       usersId: user[0].usersId,
       passwordHash: newPasswordHash,
     });
-    const d = await res.json()
-    console.info(`User ID ${d.usersid} changed password.`)
+    const d = await res.json();
+    console.info(`User ID ${d.usersid} changed password.`);
   } catch (err) {
     console.error(`password change failed: ${JSON.stringify(err)}`);
     return new Error('Failed to password change');
   }
-  throw redirect("/account");
+  throw redirect('/account');
 }, 'change-password-action');
-
 
 export const regenerateKey = action(async (formData: FormData) => {
   'use server';
@@ -97,5 +93,5 @@ export const regenerateKey = action(async (formData: FormData) => {
     console.error(`Regenerate key failed: ${err}`);
     return new Error('Failed to update key');
   }
-  throw redirect("/account");
+  throw redirect('/account');
 });
