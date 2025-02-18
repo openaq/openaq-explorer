@@ -1,6 +1,7 @@
 import { defineConfig } from '@solidjs/start/config';
 import { configDefaults } from 'vitest/config'
 import autoprefixer from 'autoprefixer';
+import solidSvg from 'vite-plugin-solid-svg';
 
 export default defineConfig({
   server: {
@@ -8,6 +9,7 @@ export default defineConfig({
     inlineDynamicImports: true
   },
   vite: {
+    plugins: [solidSvg()],
     css: {
       postcss: {
         plugins: [autoprefixer({})],
