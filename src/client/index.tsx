@@ -33,7 +33,7 @@ async function fetchSensorMeasurementsDownload(
     ' ',
     '%2b'
   )}&datetime_to=${datetimeTo.replace(' ', '%2b')}&limit=${limit}`;
-  console.info(`fetching ${url.href}`)
+  console.info(`fetching ${url.href}`);
   const res = await fetch(url.href, {
     headers: {
       'Content-Type': 'application/json',
@@ -42,7 +42,7 @@ async function fetchSensorMeasurementsDownload(
   });
   if (res.status !== 200) {
     console.error(`${url.href} failed with HTTP ${res.status}`);
-    throw new Error('failed to fetch')
+    throw new Error('failed to fetch');
   }
   const data = await res.json();
   return data.results;
@@ -61,7 +61,7 @@ async function fetchSensorMeasurements(
     ' ',
     '%2b'
   )}&datetime_to=${datetimeTo.replace(' ', '%2b')}&limit=${limit}`;
-  console.info(`fetching ${url.href}`)
+  console.info(`fetching ${url.href}`);
   const res = await fetch(url.href, {
     headers: {
       'Content-Type': 'application/json',
@@ -70,7 +70,7 @@ async function fetchSensorMeasurements(
   });
   if (res.status !== 200) {
     console.error(`${url.href} failed with HTTP ${res.status}`);
-    throw new Error('failed to fetch')
+    throw new Error('failed to fetch');
   }
   const data = await res.json();
   return data.results;
@@ -87,10 +87,9 @@ async function fetchSensorTrends(
   url.pathname = `/v3/sensors/${sensorsId}/hours/${periodName}`;
   url.search = `?datetime_from=${datetimeFrom.replace(
     ' ',
-    '%2b')}&datetime_to=${datetimeTo.replace(
-      ' ',
-      '%2b')}`;
-  console.info(`fetching ${url.href}`)
+    '%2b'
+  )}&datetime_to=${datetimeTo.replace(' ', '%2b')}`;
+  console.info(`fetching ${url.href}`);
   const res = await fetch(url.href, {
     headers: {
       'Content-Type': 'application/json',
@@ -184,12 +183,15 @@ export const getSensorRecentMeasurements = GET(
         value: o.value,
       };
     });
-    return json({
-      parameter: `${sensor.parameter.displayName} ${sensor.parameter.units}`,
-      series: series,
-    }, {
-      headers: { 'cache-control': 'max-age=3600' },
-    });
+    return json(
+      {
+        parameter: `${sensor.parameter.displayName} ${sensor.parameter.units}`,
+        series: series,
+      },
+      {
+        headers: { 'cache-control': 'max-age=3600' },
+      }
+    );
   }
 );
 

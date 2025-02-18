@@ -1,12 +1,12 @@
-import { useStore } from "~/stores";
+import { useStore } from '~/stores';
 
-import { For, Show, createSignal, onMount, createEffect } from "solid-js";
-import { getProviders } from "~/client";
-import MiniSearch from "minisearch";
-import bbox from "@turf/bbox";
-import { createStore, produce } from "solid-js/store";
+import { For, Show, createSignal, onMount, createEffect } from 'solid-js';
+import { getProviders } from '~/client';
+import MiniSearch from 'minisearch';
+import bbox from '@turf/bbox';
+import { createStore, produce } from 'solid-js/store';
 
-import "~/assets/scss/components/providers-card.scss";
+import '~/assets/scss/components/providers-card.scss';
 
 interface ProvidersStoreDefinition {
   name: string;
@@ -35,8 +35,8 @@ export function ProvidersCard() {
   };
 
   const miniSearch = new MiniSearch({
-    fields: ["name"],
-    storeFields: ["name"],
+    fields: ['name'],
+    storeFields: ['name'],
   });
 
   let timeout: ReturnType<typeof setTimeout>;
@@ -50,7 +50,7 @@ export function ProvidersCard() {
       setSelectedProviders(
         () => true,
         produce((provider) =>
-          value != ""
+          value != ''
             ? (provider.matchesQuery =
                 res.map((o) => o.id).indexOf(provider.id) != -1)
             : (provider.matchesQuery = true)
@@ -72,7 +72,7 @@ export function ProvidersCard() {
             id: o.id,
             checked:
               store.providers.length === 0
-                ? "true"
+                ? 'true'
                 : store.providers.includes(o.id),
             matchesQuery: true,
             bbox: o.bbox,
@@ -129,7 +129,7 @@ export function ProvidersCard() {
           <div class="select-helpers">
             <button
               class="button-reset type-link-1 providers-list-select-all"
-              onClick={() => setSelectedProviders(() => true, "checked", true)}
+              onClick={() => setSelectedProviders(() => true, 'checked', true)}
             >
               Select All
             </button>
@@ -137,7 +137,7 @@ export function ProvidersCard() {
             <button
               class="button-reset type-link-1 providers-list-select-none"
               onClick={() => {
-                setSelectedProviders(() => true, "checked", false);
+                setSelectedProviders(() => true, 'checked', false);
               }}
             >
               Select None
@@ -198,7 +198,7 @@ export function ProvidersCard() {
                         onChange={(e) => {
                           setSelectedProviders(
                             (p) => p.id == provider.id,
-                            "checked",
+                            'checked',
                             e.target.checked
                           );
                         }}
@@ -214,7 +214,7 @@ export function ProvidersCard() {
       <footer class="providers-card__footer">
         <button
           class={`btn btn-primary ${
-            activeProviders().length > 0 ? "" : "btn-primary--disabled"
+            activeProviders().length > 0 ? '' : 'btn-primary--disabled'
           }`}
           disabled={activeProviders().length === 0}
           onClick={() => onClickUpdate(activeProviders())}

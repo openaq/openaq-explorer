@@ -17,7 +17,10 @@ interface ListsDefinition {
 }
 
 function LocationLists(props: ListsDefinition) {
-  const lists = createAsync(() => sensorNodeLists(props.sensorNodesId), { initialValue: [], deferStream: true })
+  const lists = createAsync(() => sensorNodeLists(props.sensorNodesId), {
+    initialValue: [],
+    deferStream: true,
+  });
 
   return (
     <ul class="lists-list">
@@ -59,7 +62,6 @@ function LocationListsFallback() {
 }
 
 export function DetailOverview(props: DetailOverviewDefinition) {
-
   const pageLocation = useLocation();
 
   return (
@@ -146,8 +148,11 @@ export function DetailOverview(props: DetailOverviewDefinition) {
         <div class="divider"> </div>
         <div class="location-lists">
           <h3 class="type-subtitle-3 text-smoke-180">LISTS</h3>
-          <Show when={props.user?.()?.usersId} fallback={<LocationListsFallback />}>
-                      {props.lists}
+          <Show
+            when={props.user?.()?.usersId}
+            fallback={<LocationListsFallback />}
+          >
+            {props.lists}
             <LocationLists
               sensorNodesId={props.id}
               pathname={pageLocation.pathname}

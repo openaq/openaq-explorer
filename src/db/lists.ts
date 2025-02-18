@@ -120,7 +120,6 @@ export const createList = action(async (formData: FormData) => {
     return new Error('Failed to create list');
   }
   throw redirect(`/lists/${newList.create_list}`);
-
 }, 'create-list-action');
 
 export const updateList = action(async (formData: FormData) => {
@@ -143,8 +142,9 @@ export const updateList = action(async (formData: FormData) => {
     console.error(`update list failed: ${err}`);
     return new Error('Failed to update list');
   }
-  throw redirect(`/lists/${listsId}`, {revalidate: getUserLists.keyFor()[listsId]});
-
+  throw redirect(`/lists/${listsId}`, {
+    revalidate: getUserLists.keyFor()[listsId],
+  });
 }, 'update-list-action');
 
 export const deleteList = action(async (formData: FormData) => {
@@ -161,7 +161,7 @@ export const deleteList = action(async (formData: FormData) => {
     console.error(`delete list failed: ${err}`);
     return new Error('Failed to delete list');
   }
-  throw redirect(`/lists`, {revalidate: getUserLists.keyFor()[listsId]});
+  throw redirect(`/lists`, { revalidate: getUserLists.keyFor()[listsId] });
 }, 'delete-list-action');
 
 export const getLocationById = query(async (locationsId: number) => {
@@ -193,9 +193,12 @@ export const removeSensorNodesList = action(
       console.error(`create list location failed: ${err}`);
       return new Error('Failed to create list location');
     }
-    throw redirect(`/lists/${listsId}`, {revalidate: getUserLists.keyFor[listsId]});
-
-  }, 'remove-sensor-node-list-action');
+    throw redirect(`/lists/${listsId}`, {
+      revalidate: getUserLists.keyFor[listsId],
+    });
+  },
+  'remove-sensor-node-list-action'
+);
 
 export const addRemoveSensorNodesList = action(async (formData: FormData) => {
   'use server';

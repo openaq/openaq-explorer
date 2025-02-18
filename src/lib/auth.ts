@@ -4,14 +4,10 @@ import { customAlphabet } from 'nanoid';
 import { disposableDomains } from '~/data/auth';
 const pbkdf2Async = promisify(crypto.pbkdf2);
 
-
 export async function checkPassword(password: string, hash: string) {
   'use server';
   const parts = hash.split('$');
-  const salt = Buffer.from(
-    parts[3],
-    'base64'
-  )
+  const salt = Buffer.from(parts[3], 'base64');
   let hashedPassword = await pbkdf2Async(
     password,
     salt,
@@ -22,7 +18,6 @@ export async function checkPassword(password: string, hash: string) {
   const hashedPasswordB64 = passlibify(hashedPassword);
   return parts[4] == hashedPasswordB64;
 }
-
 
 export function passlibify(passhwordHash: Buffer): string {
   'use server';
@@ -101,9 +96,8 @@ export async function verifyPassword(
 ): Promise<boolean> {
   'use server';
 
-  const { digest, iterations, salt, hash } = await parsePasswordHash(
-    passwordHash
-  );
+  const { digest, iterations, salt, hash } =
+    await parsePasswordHash(passwordHash);
   const hashedPassword = await pbkdf2Async(
     password,
     Buffer.from(salt, 'base64'),
@@ -119,5 +113,5 @@ export function isValidEmailDomain(email: string): boolean {
   if (disposableDomains.has(emailDomain)) {
     return false;
   }
-  return true
+  return true;
 }
