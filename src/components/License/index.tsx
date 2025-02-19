@@ -17,7 +17,6 @@ function IconTooltip(props: IconTooltipDefinition) {
 }
 
 export function License(props: LicenseDefinition) {
-
   const svgAttributes = {
     width: 32,
     height: 32,
@@ -36,27 +35,37 @@ export function License(props: LicenseDefinition) {
       <div class="license-attribute-icons">
         <Show when={isCreativeCommons}>
           <IconTooltip title={'Creative Commons'}>
-            <CCIcon {...svgAttributes} />
+            <CCIcon class="cc-class" {...svgAttributes} />
           </IconTooltip>
         </Show>
         <Show when={!props.commercialUseAllowed}>
-          <IconTooltip title={'Only non-commercial uses of the work are permitted.'}>
-            <NCIcon {...svgAttributes} />
+          <IconTooltip
+            title={'Only non-commercial uses of the work are permitted.'}
+          >
+            <NCIcon class="nc-class" {...svgAttributes} />
           </IconTooltip>
         </Show>
         <Show when={props.attributionRequired}>
-          <IconTooltip title={'Attribution: Credit must be given to the creator.'}>
-            <BYIcon {...svgAttributes} />
+          <IconTooltip
+            title={'Attribution: Credit must be given to the creator.'}
+          >
+            <BYIcon class="by-class" {...svgAttributes} />
           </IconTooltip>
         </Show>
         <Show when={props.shareAlikeRequired}>
-          <IconTooltip title={'Share Alike: Adaptations must be shared under the same terms.'}>
-            <SAIcon {...svgAttributes} />
+          <IconTooltip
+            title={
+              'Share Alike: Adaptations must be shared under the same terms.'
+            }
+          >
+            <SAIcon {...svgAttributes} class="sa-class" />
           </IconTooltip>
         </Show>
         <Show when={!props.modificationAllowed}>
-          <IconTooltip title={'No derivatives or adaptations of the work are permitted.'}>
-            <NDIcon {...svgAttributes} />
+          <IconTooltip
+            title={'No derivatives or adaptations of the work are permitted.'}
+          >
+            <NDIcon {...svgAttributes} class="nd-class" />
           </IconTooltip>
         </Show>
       </div>

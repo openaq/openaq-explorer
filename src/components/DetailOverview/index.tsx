@@ -1,11 +1,5 @@
-import { createEffect, createSignal, For, Show } from 'solid-js';
-import {
-  A,
-  createAsync,
-  Params,
-  useLocation,
-  useParams,
-} from '@solidjs/router';
+import { For, Show } from 'solid-js';
+import { A, createAsync, useLocation } from '@solidjs/router';
 
 import { timeFromNow, since } from '~/lib/utils';
 import { ListsForm } from '~/components/Cards/ListsForm';
@@ -147,19 +141,20 @@ export function DetailOverview(props: DetailOverviewDefinition) {
                 <td>Provider</td>
                 <td>{props.provider?.name}</td>
               </tr>
-              <tr>
-                <td>Licenses</td>
-                <td>
-                <For each={props.licenses}>
-                  {(license) => 
-                    <License {...license} />
-                  }              
-                </For>
-
-                </td>
-
-              </tr>
-
+              <Show
+                when={
+                  Array.isArray(props.licenses) && props.licenses.length > 0
+                }
+              >
+                <tr>
+                  <td>Licenses</td>
+                  <td>
+                    <For each={props.licenses}>
+                      {(license) => <License {...license} />}
+                    </For>
+                  </td>
+                </tr>
+              </Show>
             </tbody>
           </table>
         </div>
