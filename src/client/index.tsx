@@ -1,8 +1,11 @@
-import { json } from '@solidjs/router';
+import { json, query } from '@solidjs/router';
 import { GET } from '@solidjs/start';
+import { queryAllByAltText } from '@solidjs/testing-library';
 import dayjs from 'dayjs';
 import tz from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
+import { DetailOverviewDefinition } from '~/components/DetailOverview/types';
+import { getLocationById } from '~/db/lists';
 
 dayjs.extend(utc);
 dayjs.extend(tz);
@@ -262,3 +265,35 @@ export const getProviders = GET(async () => {
     headers: { 'cache-control': 'max-age=86400' },
   });
 });
+
+export const getLocationLicenses = query(async (locationsId: number) => {
+  'use server';
+  const location = await getLocationById(locationsId);
+
+  if (!location || !location.licenses) {
+    console.error(`No licenses found for location ID: ${locationsId}`);
+    return [];
+  }
+
+  const licenseIds = location.licenses.map(
+    (licenses: { id: number }) => licenses.id
+  );
+
+  const url = new URL(import.meta.env.VITE_API_BASE_URL);
+  url.pathname = `/v3/licenses`;
+
+  const res = await fetch(url.href, {
+    headers: {
+      'Content-Type': 'application/json',
+      'X-API-KEY': `${import.meta.env.VITE_EXPLORER_API_KEY}`,
+    },
+  });
+  const data = await res.json();
+  const allLicenses = data.results;
+
+  const filteredLicenses = allLicenses.filter((license: { id: number }) =>
+    licenseIds.includes(license.id)
+  );
+
+  return filteredLicenses;
+}, 'get-location-licenses-action');

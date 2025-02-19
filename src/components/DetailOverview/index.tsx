@@ -10,6 +10,7 @@ import { SensorType } from './SensorType';
 import '~/assets/scss/components/detail-overview.scss';
 import { DetailOverviewDefinition } from './types';
 import { sensorNodeLists } from '~/db/lists';
+import { License } from '../License';
 
 interface ListsDefinition {
   sensorNodesId: number;
@@ -68,9 +69,7 @@ export function DetailOverview(props: DetailOverviewDefinition) {
     <section class="detail-overview">
       <div class="detail-overview__title">
         <div>
-          <span class="type-subtitle-3 text-smoke-120">
-            {props.country?.name}
-          </span>
+          <span class="type-subtitle-3 text-smoke-120">{props?.name}</span>
           <h1 class="type-display-1 text-sky-120">
             {props.name || 'No label'}
           </h1>
@@ -142,6 +141,20 @@ export function DetailOverview(props: DetailOverviewDefinition) {
                 <td>Provider</td>
                 <td>{props.provider?.name}</td>
               </tr>
+              <Show
+                when={
+                  Array.isArray(props.licenses) && props.licenses.length > 0
+                }
+              >
+                <tr>
+                  <td>Licenses</td>
+                  <td>
+                    <For each={props.licenses}>
+                      {(license) => <License {...license} />}
+                    </For>
+                  </td>
+                </tr>
+              </Show>
             </tbody>
           </table>
         </div>
