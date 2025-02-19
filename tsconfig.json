@@ -10,7 +10,12 @@
     "allowJs": true,
     "strict": true,
     "noEmit": true,
-    "types": ["vinxi/types/client", "node"],
+    "types": [
+      "vite-plugin-solid-svg/types-component-solid",
+      "vite/client",
+      "vinxi/types/client",
+      "node"
+    ],
     "isolatedModules": true,
     "paths": {
       "~/*": ["./src/*"]
