@@ -1,7 +1,7 @@
 import { createSignal } from 'solid-js';
-import { ErrorIcon } from '~/assets/imgs/svgs/notification-icons/error-svg';
-import { InfoIcon } from '~/assets/imgs/svgs/notification-icons/info-svg';
-import { WarningIcon } from '~/assets/imgs/svgs/notification-icons/warning-svg';
+import ErrorIcon from '~/assets/imgs/svgs/error.svg';
+import InfoIcon from '~/assets/imgs/svgs/info.svg';
+import WarningIcon from '~/assets/imgs/svgs/warning.svg';
 import '~/assets/scss/components/notification-card.scss';
 
 export const NotificationCard = () => {
