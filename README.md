@@ -11,7 +11,7 @@ meta-framework [Solid Start](https://start.solidjs.com/).
 ### Linting and style
 
 [ESLint](https://eslint.org/) is used for code linting, see
-[eslint.config.js](eslint.config.js) for specifcs. 
+[eslint.config.js](eslint.config.js) for specifcs.
 [Prettier](https://prettier.io/) is used for code style and formatting, see the
 [.prettierrc](.prettierrc) file for specifics.
 
@@ -23,26 +23,26 @@ Infrastructure deployment and development is managed with AWS CDK and can be
 found in the [cdk](cdk) directory.
 
 ```
-                                                                    AWS VPC   
-                                                      ┌ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ 
+                                                                    AWS VPC
+                                                      ┌ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─
                                                                              │
-                                                      │                       
+                                                      │
                                       ┌───────────┐      ┌───────────────┐   │
-                                      │           │   │  │ AWS Lambda λ  │    
+                                      │           │   │  │ AWS Lambda λ  │
                                   ┌──▶│ AWS HTTP  │◀────▶│               │   │
-                                  │   │API Gateway│   │  │  Application  │    
+                                  │   │API Gateway│   │  │  Application  │
   ┌───────────┐    ┌───────────┐  │   │           │      │    server     │   │
-  │           │    │           │  │   └───────────┘   │  └───────────────┘    
+  │           │    │           │  │   └───────────┘   │  └───────────────┘
   │AWS Route53│◀──▶│    AWS    │◀─┘                                          │
-  │    DNS    │    │Cloudfront │◀───────────┐         │                       
+  │    DNS    │    │Cloudfront │◀───────────┐         │
   │           │    │           │            │            ┌───────────────┐   │
-  └───────────┘    └───────────┘            │         │  │               │    
+  └───────────┘    └───────────┘            │         │  │               │
                                             │            │    AWS S3     │   │
-                                            └─────────┼─▶│ Static assets │    
+                                            └─────────┼─▶│ Static assets │
                                                          │               │   │
-                                                      │  └───────────────┘    
+                                                      │  └───────────────┘
                                                                              │
-                                                      │                       
+                                                      │
                                                        ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘
 ```
 

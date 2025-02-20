@@ -6,6 +6,9 @@ import dayjs from 'dayjs';
 import tz from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 
+import NestClock from '~/assets/imgs/nest_clock.svg';
+
+
 import '~/assets/scss/components/detail-charts.scss';
 
 
@@ -47,6 +50,25 @@ function getYears(datetimeFirst: string, datetimeLast: string): string[] {
   const years = dayjs(datetimeLast).diff(datetimeFirst,'year');
   const firstYear = dayjs(datetimeFirst).year()
   return Array.from({length: years + 1}, (_, i) => String(i + firstYear)).reverse()
+
+}
+
+
+interface TimezoneDisclaimerDefinition {
+  timezone: string;
+}
+
+function TimezoneDisclaimer(props: TimezoneDisclaimerDefinition) {
+  return(
+    <div class="timezone-disclaimer">
+      <NestClock width={24} height={24} fill='#5a6672' role="img"/> 
+    <span>
+      Chart shows local times ({props.timezone} UTC{dayjs(new Date()).tz(props.timezone).format('Z')})
+    </span>
+    </div>
+
+  )
+                
 
 }
 
@@ -247,13 +269,8 @@ export function DetailCharts(props: DetailChartsDefinition) {
               timezone={props.timezone}
               noDataMessage={'  No data in selected time range'}
             />
-            <p class="timezone">
-              <img
-                src="/svgs/nest_clock_smoke120.svg"
-                alt="nest clock icon"
-              />{' '}
-              Chart shows local times ({props.timezone})
-            </p>
+ 
+            <TimezoneDisclaimer timezone={props.timezone}/>
           </div>
         </div>
       </div>
@@ -312,13 +329,7 @@ export function DetailCharts(props: DetailChartsDefinition) {
                 loading={patternsLoading()}
             />
             </div>
-            <p class='timezone'>
-              <img
-                src="/svgs/nest_clock_smoke120.svg"
-                alt="nest clock icon"
-              />{' '}
-              Chart shows local times ({props.timezone})
-            </p>
+              <TimezoneDisclaimer timezone={props.timezone}/>
           </div>
         </div>
       </div>

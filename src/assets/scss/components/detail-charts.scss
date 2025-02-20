@@ -3,6 +3,13 @@
 @use 'openaq-design-system/scss/horizontal-rule';
 @use '~/assets/scss/media-queries.scss' as f;
 
+
+.timezone-disclaimer {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
 .detail-charts {
   border: 1px solid variables.$smoke30;
   border-radius: 22px;

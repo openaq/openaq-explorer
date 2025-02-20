@@ -1,4 +1,3 @@
-
 import {
   NoRecentUpdateMarker,
   ReferenceGradeMarker,
@@ -7,7 +6,6 @@ import {
 import { useStore } from '~/stores';
 
 import '~/assets/scss/components/overlay-card.scss';
-
 
 export function OverlayCard() {
   const [
@@ -21,18 +19,19 @@ export function OverlayCard() {
     },
   ] = useStore();
 
-
   return (
-    <div class='overlay-card'>
-      <section class='filter-section'>
-        <header class='filter-section__header'>
-          <div class='card-title'>
+    <div class="overlay-card">
+      <section class="filter-section">
+        <header class="filter-section__header">
+          <div class="card-title">
             <img src="/svgs/filter_white.svg" alt="filter icon" />
             <h3>Filters</h3>
           </div>
         </header>
-        <div class='pollutant-select'>
-          <label for="parameter-select" class="type-subtitle-2">Choose a pollutant</label>
+        <div class="pollutant-select">
+          <label for="parameter-select" class="type-subtitle-2">
+            Choose a pollutant
+          </label>
           <select
             class="select"
             name="parameter-select"
@@ -51,69 +50,58 @@ export function OverlayCard() {
         </div>
         <hr class="hr" />
         <div>
-        <span class="type-subtitle-2">Choose location type</span>
+          <span class="type-subtitle-2">Choose location type</span>
 
-   
-        <div class='filter-section__body'>
-
-          <ReferenceGradeMarker />
-          <label
-            class='marker-legend-item'
-            for="reference-grade"
-          >
-            <span>Reference monitor locations</span>
-            <input
-              type="checkbox"
-              name="reference-grade"
-              id="reference-grade"
-              class="checkbox"
-              checked={store.showMonitors}
-              onInput={toggleMonitor}
-              disabled={!store.showAirSensors}
-            />
-          </label>
-          <LowCostSensorMarker />
-          <label
-            class='marker-legend-item'
-            for="low-cost-sensor"
-          >
-            Air sensors locations
-            <input
-              type="checkbox"
-              name="low-cost-sensor"
-              id="low-cost-sensor"
-              class="checkbox"
-              checked={store.showAirSensors}
-              onInput={toggleAirSensor}
-              disabled={!store.showMonitors}
-            />
-          </label>
-          <NoRecentUpdateMarker />
-          <label
-            class='marker-legend-item'
-            for="no-recent-updates"
-          >
-            Show locations with no recent updates
-            <input
-              type="checkbox"
-              name="no-recent-updates"
-              id="no-recent-updates"
-              class="checkbox"
-              checked={!store.showOnlyActiveLocations}
-              onInput={toggleMapIsActive}
-            />
-          </label>
+          <div class="filter-section__body">
+            <ReferenceGradeMarker />
+            <label class="marker-legend-item" for="reference-grade">
+              <span>Reference monitor locations</span>
+              <input
+                type="checkbox"
+                name="reference-grade"
+                id="reference-grade"
+                class="checkbox"
+                checked={store.showMonitors}
+                onInput={toggleMonitor}
+                disabled={!store.showAirSensors}
+              />
+            </label>
+            <LowCostSensorMarker />
+            <label class="marker-legend-item" for="low-cost-sensor">
+              Air sensors locations
+              <input
+                type="checkbox"
+                name="low-cost-sensor"
+                id="low-cost-sensor"
+                class="checkbox"
+                checked={store.showAirSensors}
+                onInput={toggleAirSensor}
+                disabled={!store.showMonitors}
+              />
+            </label>
+            <NoRecentUpdateMarker />
+            <label class="marker-legend-item" for="no-recent-updates">
+              Show locations with no recent updates
+              <input
+                type="checkbox"
+                name="no-recent-updates"
+                id="no-recent-updates"
+                class="checkbox"
+                checked={!store.showOnlyActiveLocations}
+                onInput={toggleMapIsActive}
+              />
+            </label>
           </div>
-          </div>
+        </div>
       </section>
-      <footer class='overlay-card__footer'>
+      <footer class="overlay-card__footer">
         <span class="type-body-1">
           Showing data from{' '}
           {store.providers.length == 0
             ? 'all providers'
             : store.providers.length == 1
-            ? '1 provider'
-            : `${store.providers.length} providers`}
+              ? '1 provider'
+              : `${store.providers.length} providers`}
         </span>
         <button
           class="icon-btn btn-secondary"

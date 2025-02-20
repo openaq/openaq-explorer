@@ -10,7 +10,6 @@ import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 dayjs.extend(tz);
 
-
 export function Sparkline(props: SparklineDefinition) {
   const [data, setData] = createSignal<SeriesData[]>(transform(props.series));
 
@@ -44,16 +43,10 @@ export function Sparkline(props: SparklineDefinition) {
 
   return (
     <svg
-      width={`${
-        props.width + props.margin.left + props.margin.right
-      }px`}
-      height={`${
-        props.height + props.margin.top + props.margin.bottom
-      }px`}
+      width={`${props.width + props.margin.left + props.margin.right}px`}
+      height={`${props.height + props.margin.top + props.margin.bottom}px`}
     >
-      <g
-        transform={`translate(${props.margin.left} ${props.margin.top})`}
-      >
+      <g transform={`translate(${props.margin.left} ${props.margin.top})`}>
         <path
           style={{
             fill: props.style.fill,

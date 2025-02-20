@@ -1,9 +1,4 @@
-import MapGL, {
-  Source,
-  Layer,
-  Control,
-  Viewport,
-} from 'solid-map-gl';
+import MapGL, { Source, Layer, Control, Viewport } from 'solid-map-gl';
 import * as maplibre from 'maplibre-gl';
 import { createSignal } from 'solid-js';
 import 'maplibre-gl/dist/maplibre-gl.css';
@@ -12,7 +7,6 @@ import destination from '@turf/destination';
 import { useStore } from '~/stores';
 
 import '~/assets/scss/components/list-map.scss';
-
 
 interface ListDefinition {
   listsId: number;
@@ -47,8 +41,7 @@ export function ListMap(props: ListMapDefinition) {
     bounds: bounds(props.list.bbox),
   } as Viewport);
 
-
-  const [store, {setSelectedLocationsId}] = useStore();
+  const [store, { setSelectedLocationsId }] = useStore();
 
   function getFeature(e: any) {
     const features = e.target.queryRenderedFeatures(e.point);
@@ -73,17 +66,19 @@ export function ListMap(props: ListMapDefinition) {
       onViewportChange={(e) => {
         return setViewport(e);
       }}
-      onMouseOver={{ locations: (e) => e.target.getCanvas().style.cursor = 'pointer'}}
-      onMouseLeave={{ locations: (e) => e.target.getCanvas().style.cursor = ''}}
+      onMouseOver={{
+        locations: (e) => (e.target.getCanvas().style.cursor = 'pointer'),
+      }}
+      onMouseLeave={{
+        locations: (e) => (e.target.getCanvas().style.cursor = ''),
+      }}
     >
       <Source
         source={{
           id: 'locations',
           type: 'vector',
           tiles: [
-            `${
-              import.meta.env.VITE_TILES_URL
-            }/{z}/{x}/{y}.pbf?apiKey=${
+            `${import.meta.env.VITE_TILES_URL}/{z}/{x}/{y}.pbf?apiKey=${
               import.meta.env.VITE_TILES_API_KEY
             }`,
           ],

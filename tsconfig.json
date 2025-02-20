@@ -12,7 +12,6 @@
     "noEmit": true,
     "types": [
       "vite-plugin-solid-svg/types-component-solid",
-      "vite/client",
       "vinxi/types/client",
       "node"
     ],

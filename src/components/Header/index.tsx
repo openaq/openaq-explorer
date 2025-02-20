@@ -1,12 +1,11 @@
-import {  AccessorWithLatest, useLocation } from '@solidjs/router';
+import { AccessorWithLatest, useLocation } from '@solidjs/router';
 
-import {  createMemo, createSignal } from 'solid-js';
+import { createMemo, createSignal } from 'solid-js';
 
 import { A } from '@solidjs/router';
 import '~/assets/scss/components/header.scss';
 import { SessionData } from '~/auth/session';
 import { logout } from '~/auth/user';
-
 
 function Account() {
   const location = useLocation();
@@ -14,7 +13,6 @@ function Account() {
 
   const re = /\/lists[\/\d+]*|\/account/;
   const match = pathname().match(re);
-
 
   return (
     <div class="dropdown">
@@ -39,14 +37,18 @@ function Account() {
           </A>
         </li>
         <li class="submenu__item">
-          <form action={logout} method="post" class='logout-form'>
+          <form action={logout} method="post" class="logout-form">
             <img src="/svgs/logout.svg" alt="logout icon" />
             <input
-            type="hidden"
-            name="redirect"
-            value={match ? '/' : pathname()}
-          />
-            <button name="logout" type="submit" class="type-body-3 text-smoke-120 logout-btn">
+              type="hidden"
+              name="redirect"
+              value={match ? '/' : pathname()}
+            />
+            <button
+              name="logout"
+              type="submit"
+              class="type-body-3 text-smoke-120 logout-btn"
+            >
               Logout
             </button>
           </form>
@@ -89,10 +91,7 @@ export function Header(props: Props) {
           </label>
           <ul class={`${'nav-list'} ${open() ? 'nav-list--visible' : ''}`}>
             <li>
-              <a
-                class="nav__item nav__item--active explore-data-tab"
-                href="/"
-              >
+              <a class="nav__item nav__item--active explore-data-tab" href="/">
                 Explore the data
               </a>
             </li>
@@ -197,10 +196,7 @@ export function Header(props: Props) {
                   </A>
                 </li>
                 <li class="submenu__item">
-                  <A
-                    class="nav__item"
-                    href="https://openaq.org/about/blog"
-                  >
+                  <A class="nav__item" href="https://openaq.org/about/blog">
                     Blog
                   </A>
                 </li>
@@ -228,14 +224,20 @@ export function Header(props: Props) {
           {props.user?.()?.usersId ? (
             ''
           ) : (
-            <A href={`/register?redirect=${pageLocation.pathname}`} class="type-link-3 text-smoke-120">
+            <A
+              href={`/register?redirect=${pageLocation.pathname}`}
+              class="type-link-3 text-smoke-120"
+            >
               Sign up
             </A>
           )}
           {props.user?.()?.usersId ? (
             ''
           ) : (
-            <A href={`/login?redirect=${pageLocation.pathname}`} class="btn btn-secondary">
+            <A
+              href={`/login?redirect=${pageLocation.pathname}`}
+              class="btn btn-secondary"
+            >
               Login{' '}
             </A>
           )}
@@ -255,7 +257,7 @@ export function Header(props: Props) {
           {props.user?.()?.usersId ? <Account /> : ''}
           <A
             href="https://secure.givelively.org/donate/openaq-inc/"
-            class={`btn btn-primary ${"donate-btn"}`}
+            class={`btn btn-primary ${'donate-btn'}`}
           >
             Donate
           </A>

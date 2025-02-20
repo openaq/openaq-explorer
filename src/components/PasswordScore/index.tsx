@@ -1,12 +1,18 @@
 import { Show } from 'solid-js';
-import { StrengthBarDefinition, PasswordScoreDefinition, Color, SvgSymbol, PasswordValue } from './types';
+import {
+  StrengthBarDefinition,
+  PasswordScoreDefinition,
+  Color,
+  SvgSymbol,
+  PasswordValue,
+} from './types';
 
 import '~/assets/scss/components/password-score.scss';
 
 const errorSvg = 'warning_fire100.svg' as SvgSymbol;
 const checkSvg = 'check_mantis100.svg' as SvgSymbol;
 
-function passwordValues(score: number) : PasswordValue  {
+function passwordValues(score: number): PasswordValue {
   let color: Color;
   let message: string;
   let symbol: SvgSymbol;
@@ -60,9 +66,7 @@ export function StrengthBar(props: StrengthBarDefinition) {
   );
 }
 
-export default function PasswordScore(
-  props: PasswordScoreDefinition
-) {
+export default function PasswordScore(props: PasswordScoreDefinition) {
   return (
     <div class="password-strength">
       <div class="strength-meter-container">
@@ -104,10 +108,7 @@ export default function PasswordScore(
         <span class="strength-message">
           {passwordValues(props.score!).message}
           {passwordValues(props.score!).symbol ? (
-            <img
-              src={`/svgs/${passwordValues(props.score!).symbol}`}
-              alt=""
-            />
+            <img src={`/svgs/${passwordValues(props.score!).symbol}`} alt="" />
           ) : (
             ''
           )}
