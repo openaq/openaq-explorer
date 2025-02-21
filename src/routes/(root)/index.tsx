@@ -1,16 +1,18 @@
 import { Map } from '~/components/Map';
 import { LocationDetailCard } from '~/components/Cards/LocationDetailCard';
 import { FlipCard } from '~/components/Cards/FlipCard';
-
+import { clientOnly } from '@solidjs/start';
 import '~/assets/scss/routes/index.scss';
 import { useLocation, useNavigate } from '@solidjs/router';
 import { useStore } from '~/stores';
 import { createEffect, createMemo, onMount } from 'solid-js';
-import { NotificationCard } from '~/components/Cards/NotificationCard';
 
 export default function Home() {
   const [store, actions] = useStore();
 
+  const NotificationCard = clientOnly(
+    () => import('~/components/Cards/NotificationCard')
+  );
   const setSelectedLocationsId = actions.setSelectedLocationsId;
   const setSelectedMapParameter = actions.setSelectedMapParameter;
   const setProviders = actions.setProviders;
