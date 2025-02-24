@@ -58,7 +58,7 @@ type Store = [
     updateRecentMeasurements: (parameter: string, measurements) => void;
     setTotalProviders: () => void;
     openToast: () => void;
-    dismissNotificationCard: () => void;
+    toggleShowNotificationCard: () => void;
   },
 ];
 
@@ -89,8 +89,7 @@ export const StoreProvider: Component<{}> = (props) => {
     toastOpen: false,
     apiKeyRegenerateModalOpen: false,
     listParametersId: undefined,
-    showNotificationCard:
-      localStorage.getItem('notificationDismissed') !== 'true',
+    showNotificationCard: false,
   });
 
   const store = [
@@ -183,8 +182,8 @@ export const StoreProvider: Component<{}> = (props) => {
       setListParameter(parameter: string) {
         setState({ listParameter: parameter });
       },
-      dismissNotificationCard() {
-        setState({ showNotificationCard: state.showNotificationCard });
+      toggleShowNotificationCard() {
+        setState({ showNotificationCard: !state.showNotificationCard });
       },
     },
   ];

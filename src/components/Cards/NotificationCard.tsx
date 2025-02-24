@@ -9,9 +9,7 @@ import remarkFrontmatter from 'remark-frontmatter';
 import remarkParseFrontmatter from 'remark-parse-frontmatter';
 import remarkRehype from 'remark-rehype';
 import rehypeStringify from 'rehype-stringify';
-import content from '~/content/notification.md?raw';
 import { useStore } from '~/stores';
-import MD5 from 'crypto-js/md5';
 
 interface NotificationContentDefinition {
   html: string;
@@ -22,16 +20,20 @@ interface Frontmatter {
   title: string;
 }
 
+interface ContentDefinition {
+  content: string;
+}
+
 function NotificationContent(props: NotificationContentDefinition) {
   return <span innerHTML={props.html} />;
 }
 
-const NotificationCard = () => {
+const NotificationCard = (props: ContentDefinition) => {
   // const [showCard, setShowCard] = createSignal(
   //   localStorage.getItem('notificationDismissed') !== 'true'
   // );
 
-  const [store, { dismissNotificationCard }] = useStore();
+  const [store, { toggleShowNotificationCard }] = useStore();
 
   const {
     data: { frontmatter },
@@ -42,16 +44,13 @@ const NotificationCard = () => {
     .use(remarkParseFrontmatter)
     .use(remarkRehype)
     .use(rehypeStringify)
-    .processSync(content);
+    .processSync(props.content);
 
   // const handleDismiss = () => {
   //   localStorage.setItem('notificationDismissed', 'true');
   //   setShowCard(false);
   // };
 
-  const hashedContent = MD5(content).toString();
-  const dismissedKey = `${hashedContent}-notificationDismissed`;
-  const dismissed = localStorage.getItem(dismissedKey) === 'true';
   const typedFrontmatter = frontmatter as Frontmatter;
 
   const notificationType = typedFrontmatter?.type;
@@ -95,7 +94,7 @@ const NotificationCard = () => {
           <h3>{notificationTitle}</h3>
         </div>
         <NotificationContent html={String(value)} />
-        <button class="notification-btn" onClick={dismissNotificationCard}>
+        <button class="notification-btn" onClick={toggleShowNotificationCard}>
           Dismiss
         </button>
       </section>

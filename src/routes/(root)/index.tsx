@@ -5,7 +5,9 @@ import { clientOnly } from '@solidjs/start';
 import '~/assets/scss/routes/index.scss';
 import { useLocation, useNavigate } from '@solidjs/router';
 import { useStore } from '~/stores';
-import { createEffect, createMemo, onMount } from 'solid-js';
+import { createEffect, createMemo, onMount, Show } from 'solid-js';
+import content from '~/content/notification.md?raw';
+import MD5 from 'crypto-js/md5';
 
 export default function Home() {
   const showNotification = JSON.parse(
@@ -16,6 +18,16 @@ export default function Home() {
   const NotificationCard = clientOnly(
     () => import('~/components/Cards/NotificationCard')
   );
+  const hashedContent = MD5(content).toString();
+  createEffect(() => {
+    const dismissedKey = `${hashedContent}-notificationDismissed`;
+    const isDismissed = localStorage.getItem(dismissedKey) === 'true';
+
+    if (!isDismissed && !store.showNotificationCard) {
+      actions.toggleShowNotificationCard();
+    }
+  });
+
   const setSelectedLocationsId = actions.setSelectedLocationsId;
   const setSelectedMapParameter = actions.setSelectedMapParameter;
   const setProviders = actions.setProviders;
@@ -104,7 +116,11 @@ export default function Home() {
 
   return (
     <>
-      {showNotification && store.showNotificationCard && <NotificationCard />}
+      {
+        <Show when={showNotification && store.showNotificationCard}>
+          <NotificationCard content={content} />
+        </Show>
+      }
 
       <Map />
       <FlipCard />
