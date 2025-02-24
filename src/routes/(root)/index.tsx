@@ -8,6 +8,9 @@ import { useStore } from '~/stores';
 import { createEffect, createMemo, onMount } from 'solid-js';
 
 export default function Home() {
+  const showNotification = JSON.parse(
+    import.meta.env.VITE_SHOW_NOTIFICATION || false
+  );
   const [store, actions] = useStore();
 
   const NotificationCard = clientOnly(
@@ -101,7 +104,8 @@ export default function Home() {
 
   return (
     <>
-      <NotificationCard />
+      {showNotification && store.showNotificationCard && <NotificationCard />}
+
       <Map />
       <FlipCard />
       <LocationDetailCard />

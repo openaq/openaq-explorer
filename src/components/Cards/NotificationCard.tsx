@@ -10,6 +10,8 @@ import remarkParseFrontmatter from 'remark-parse-frontmatter';
 import remarkRehype from 'remark-rehype';
 import rehypeStringify from 'rehype-stringify';
 import content from '~/content/notification.md?raw';
+import { useStore } from '~/stores';
+import MD5 from 'crypto-js/md5';
 
 interface NotificationContentDefinition {
   html: string;
@@ -25,12 +27,11 @@ function NotificationContent(props: NotificationContentDefinition) {
 }
 
 const NotificationCard = () => {
-  const [showCard, setShowCard] = createSignal(
-    localStorage.getItem('notificationDismissed') !== 'true'
-  );
-  const showNotification = JSON.parse(
-    import.meta.env.VITE_SHOW_NOTIFICATION || 'false'
-  );
+  // const [showCard, setShowCard] = createSignal(
+  //   localStorage.getItem('notificationDismissed') !== 'true'
+  // );
+
+  const [store, { dismissNotificationCard }] = useStore();
 
   const {
     data: { frontmatter },
@@ -43,11 +44,14 @@ const NotificationCard = () => {
     .use(rehypeStringify)
     .processSync(content);
 
-  const handleDismiss = () => {
-    localStorage.setItem('notificationDismissed', 'true');
-    setShowCard(false);
-  };
+  // const handleDismiss = () => {
+  //   localStorage.setItem('notificationDismissed', 'true');
+  //   setShowCard(false);
+  // };
 
+  const hashedContent = MD5(content).toString();
+  const dismissedKey = `${hashedContent}-notificationDismissed`;
+  const dismissed = localStorage.getItem(dismissedKey) === 'true';
   const typedFrontmatter = frontmatter as Frontmatter;
 
   const notificationType = typedFrontmatter?.type;
@@ -85,18 +89,16 @@ const NotificationCard = () => {
 
   return (
     <>
-      {showCard() && showNotification && (
-        <section class="notification-card">
-          <div class="notification-card__header">
-            {getNotificationIcon()}
-            <h3>{notificationTitle}</h3>
-          </div>
-          <NotificationContent html={String(value)} />
-          <button class="notification-btn" onClick={handleDismiss}>
-            Dismiss
-          </button>
-        </section>
-      )}
+      <section class="notification-card">
+        <div class="notification-card__header">
+          {getNotificationIcon()}
+          <h3>{notificationTitle}</h3>
+        </div>
+        <NotificationContent html={String(value)} />
+        <button class="notification-btn" onClick={dismissNotificationCard}>
+          Dismiss
+        </button>
+      </section>
     </>
   );
 };
