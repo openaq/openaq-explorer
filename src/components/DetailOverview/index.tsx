@@ -11,6 +11,7 @@ import '~/assets/scss/components/detail-overview.scss';
 import { DetailOverviewDefinition } from './types';
 import { sensorNodeLists } from '~/db/lists';
 import { License } from '../License';
+import DownloadOceanIcon from '~/assets/imgs/download_ocean.svg';
 
 interface ListsDefinition {
   sensorNodesId: number;
@@ -65,6 +66,11 @@ function LocationListsFallback() {
 export function DetailOverview(props: DetailOverviewDefinition) {
   const pageLocation = useLocation();
 
+  const svgAttributes = {
+    width: 24,
+    height: 24,
+  };
+
   return (
     <section class="detail-overview">
       <div class="detail-overview__title">
@@ -81,7 +87,7 @@ export function DetailOverview(props: DetailOverviewDefinition) {
               class="icon-btn btn-tertiary download-anchor"
             >
               Download data
-              <img src="/svgs/download_ocean.svg" alt="" />
+              <DownloadOceanIcon {...svgAttributes} />
             </a>
           </Show>
         </div>

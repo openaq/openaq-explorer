@@ -4,6 +4,8 @@ import {
   LowCostSensorMarker,
 } from '../LocationMarker';
 import { useStore } from '~/stores';
+import WhiteFilterIcon from '~/assets/imgs/filter_white.svg';
+import TuneIcon from '~/assets/imgs/tune_ocean120.svg';
 
 import '~/assets/scss/components/overlay-card.scss';
 
@@ -19,12 +21,17 @@ export function OverlayCard() {
     },
   ] = useStore();
 
+  const svgAttributes = {
+    width: 24,
+    height: 24,
+  };
+
   return (
     <div class="overlay-card">
       <section class="filter-section">
         <header class="filter-section__header">
           <div class="card-title">
-            <img src="/svgs/filter_white.svg" alt="filter icon" />
+            <WhiteFilterIcon {...svgAttributes} />
             <h3>Filters</h3>
           </div>
         </header>
@@ -107,8 +114,7 @@ export function OverlayCard() {
           class="icon-btn btn-secondary"
           onClick={() => toggleShowProvidersCard()}
         >
-          Choose data providers{' '}
-          <img src="/svgs/tune_ocean120.svg" alt="tune icon" />
+          Choose data providers <TuneIcon {...svgAttributes} />
         </button>
       </footer>
     </div>
