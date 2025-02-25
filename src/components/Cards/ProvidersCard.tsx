@@ -5,8 +5,8 @@ import { getProviders } from '~/client';
 import MiniSearch from 'minisearch';
 import bbox from '@turf/bbox';
 import { createStore, produce } from 'solid-js/store';
-import ArrowLeftIcon from '~/assets/imgs/arrow_left_white.svg';
-import CropIcon from '~/assets/imgs/crop_free_smoke120.svg';
+import ArrowLeftIcon from '~/assets/imgs/arrow_left.svg';
+import CropIcon from '~/assets/imgs/crop.svg';
 
 import '~/assets/scss/components/providers-card.scss';
 
@@ -124,7 +124,11 @@ export function ProvidersCard() {
   return (
     <div class="providers-card">
       <header class="providers-card__header">
-        <ArrowLeftIcon {...svgAttributes} onClick={() => onClickClose()} />
+        <ArrowLeftIcon
+          fill="#FFFFFF"
+          {...svgAttributes}
+          onClick={() => onClickClose()}
+        />
         <h3 class="type-heading-3 text-white">Data providers</h3>
       </header>
       <div class="providers-card__body">
@@ -160,7 +164,7 @@ export function ProvidersCard() {
               onClick={zoomToExtent}
             >
               <span>Zoom to provider extent </span>
-              <CropIcon {...svgAttributes} />
+              <CropIcon fill="#5a6672" {...svgAttributes} />
             </button>
           </Show>
           <input

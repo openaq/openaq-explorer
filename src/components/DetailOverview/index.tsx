@@ -11,7 +11,7 @@ import '~/assets/scss/components/detail-overview.scss';
 import { DetailOverviewDefinition } from './types';
 import { sensorNodeLists } from '~/db/lists';
 import { License } from '../License';
-import DownloadOceanIcon from '~/assets/imgs/download_ocean.svg';
+import CloudDownloadIcon from '~/assets/imgs/cloud_download.svg';
 
 interface ListsDefinition {
   sensorNodesId: number;
@@ -69,6 +69,7 @@ export function DetailOverview(props: DetailOverviewDefinition) {
   const svgAttributes = {
     width: 24,
     height: 24,
+    fill: '#33a3a1',
   };
 
   return (
@@ -87,7 +88,7 @@ export function DetailOverview(props: DetailOverviewDefinition) {
               class="icon-btn btn-tertiary download-anchor"
             >
               Download data
-              <DownloadOceanIcon {...svgAttributes} />
+              <CloudDownloadIcon {...svgAttributes} />
             </a>
           </Show>
         </div>

@@ -6,7 +6,7 @@ import { since, timeFromNow } from '~/lib/utils';
 import { ListsForm } from './ListsForm';
 import { Sparkline } from '~/components/Charts/Sparkline';
 import CloseIcon from '~/assets/imgs/close.svg';
-import ArrowRightIcon from '~/assets/imgs/arrow_right_white.svg';
+import ArrowRightIcon from '~/assets/imgs/arrow_right.svg';
 
 import '~/assets/scss/components/location-detail-card.scss';
 import { getSessionUser } from '~/auth/session';
@@ -18,6 +18,7 @@ export function LocationDetailCard() {
   const svgAttributes = {
     width: 24,
     height: 24,
+    fill: '#FFFFFF',
   };
 
   const [
