@@ -19,12 +19,17 @@ export default function Home() {
     () => import('~/components/Cards/NotificationCard')
   );
   const hashedContent = MD5(content).toString();
+  const dismissedKey = `${hashedContent}-notificationDismissed`;
+
   createEffect(() => {
-    const dismissedKey = `${hashedContent}-notificationDismissed`;
     const isDismissed = localStorage.getItem(dismissedKey) === 'true';
 
-    if (!isDismissed && !store.showNotificationCard) {
-      actions.toggleShowNotificationCard();
+    if (showNotification && !isDismissed) {
+      actions.toggleShowNotificationCard(true);
+    }
+
+    if (isDismissed || !showNotification) {
+      actions.toggleShowNotificationCard(false);
     }
   });
 
@@ -118,7 +123,7 @@ export default function Home() {
     <>
       {
         <Show when={showNotification && store.showNotificationCard}>
-          <NotificationCard content={content} />
+          <NotificationCard content={content} dismissedKey={dismissedKey} />
         </Show>
       }
 

@@ -1,4 +1,3 @@
-import { createSignal } from 'solid-js';
 import ErrorIcon from '~/assets/imgs/svgs/error.svg';
 import InfoIcon from '~/assets/imgs/svgs/info.svg';
 import WarningIcon from '~/assets/imgs/svgs/warning.svg';
@@ -22,6 +21,7 @@ interface Frontmatter {
 
 interface ContentDefinition {
   content: string;
+  dismissedKey: string;
 }
 
 function NotificationContent(props: NotificationContentDefinition) {
@@ -56,6 +56,11 @@ const NotificationCard = (props: ContentDefinition) => {
   const notificationType = typedFrontmatter?.type;
   const notificationTitle = typedFrontmatter?.title;
 
+  const handleDismiss = () => {
+    localStorage.setItem(props.dismissedKey, 'true');
+    toggleShowNotificationCard(false);
+  };
+
   const getNotificationIcon = () => {
     switch (notificationType) {
       case 'warning':
@@ -63,26 +68,16 @@ const NotificationCard = (props: ContentDefinition) => {
           <WarningIcon
             role="img"
             aria-label="Warning Icon"
-            class="notification-icon"
+            class="warning-icon"
           />
         );
       case 'error':
         return (
-          <ErrorIcon
-            role="img"
-            aria-label="Error Icon"
-            class="notification-icon"
-          />
+          <ErrorIcon role="img" aria-label="Error Icon" class="error-icon" />
         );
       case 'info':
       default:
-        return (
-          <InfoIcon
-            role="img"
-            aria-label="Info Icon"
-            class="notification-icon"
-          />
-        );
+        return <InfoIcon role="img" aria-label="Info Icon" class="info-icon" />;
     }
   };
 
@@ -94,7 +89,7 @@ const NotificationCard = (props: ContentDefinition) => {
           <h3>{notificationTitle}</h3>
         </div>
         <NotificationContent html={String(value)} />
-        <button class="notification-btn" onClick={toggleShowNotificationCard}>
+        <button class="notification-btn" onClick={() => handleDismiss()}>
           Dismiss
         </button>
       </section>

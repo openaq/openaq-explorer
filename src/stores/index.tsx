@@ -58,7 +58,7 @@ type Store = [
     updateRecentMeasurements: (parameter: string, measurements) => void;
     setTotalProviders: () => void;
     openToast: () => void;
-    toggleShowNotificationCard: () => void;
+    toggleShowNotificationCard: (value: boolean) => void;
   },
 ];
 
@@ -182,8 +182,8 @@ export const StoreProvider: Component<{}> = (props) => {
       setListParameter(parameter: string) {
         setState({ listParameter: parameter });
       },
-      toggleShowNotificationCard() {
-        setState({ showNotificationCard: !state.showNotificationCard });
+      toggleShowNotificationCard(value: boolean) {
+        setState({ showNotificationCard: value });
       },
     },
   ];
