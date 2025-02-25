@@ -16,6 +16,7 @@
     "@solidjs/testing-library": "^0.8.5",
     "@testing-library/jest-dom": "^6.2.0",
     "@testing-library/user-event": "^14.5.2",
+    "@types/crypto-js": "^4.2.2",
     "@types/d3": "^7.4.3",
     "@types/events": "^3.0.3",
     "@types/node": "^22.10.0",
@@ -54,6 +55,7 @@
     "@zxcvbn-ts/language-common": "^2.0.1",
     "@zxcvbn-ts/language-en": "^2.1.0",
     "babel-jest": "^29.7.0",
+    "crypto-js": "^4.2.0",
     "d3": "^7.8.5",
     "dayjs": "^1.11.10",
     "events": "^3.3.0",
@@ -65,10 +67,19 @@
     "openaq-design-system": "github:openaq/openaq-design-system#v-4.0.0",
     "pg": "^8.12.0",
     "postgres": "^3.4.3",
+    "rehype-stringify": "^10.0.1",
+    "remark": "^15.0.1",
+    "remark-frontmatter": "^5.0.0",
+    "remark-html": "^16.0.1",
+    "remark-parse": "^11.0.0",
+    "remark-parse-frontmatter": "^1.0.3",
+    "remark-rehype": "^11.1.1",
     "solid-js": "^1.9.0",
     "solid-map-gl": "1.10.0",
     "ts-node": "^10.9.2",
-    "vinxi": "^0.4.1"
+    "unified": "^11.0.5",
+    "vinxi": "^0.4.1",
+    "vite-remark-html": "^1.1.1"
   },
   "engines": {
     "node": ">=20"
