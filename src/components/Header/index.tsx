@@ -13,15 +13,16 @@ import MenuIcon from '~/assets/imgs/menu.svg';
 import OpenAQIcon from '~/assets/imgs/logo.svg';
 import ListsIcon from '~/assets/imgs/lists.svg';
 
-function Account() {
-  const svgHeightWidth = {
-    width: 24,
-    height: 24,
-  };
+const svgHeightWidth = {
+  width: 24,
+  height: 24,
+};
 
-  const svgColor = {
-    fill: '#33a3a1',
-  };
+const svgColor = {
+  fill: '#33a3a1',
+};
+
+function Account() {
   const location = useLocation();
   const pathname = createMemo(() => location.pathname);
 
