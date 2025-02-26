@@ -8,6 +8,7 @@ import { useStore } from '~/stores';
 import { createEffect, createMemo, onMount, Show } from 'solid-js';
 import content from '~/content/notification.md?raw';
 import MD5 from 'crypto-js/md5';
+import { parseMarkdown } from '~/components/Cards/utils';
 
 export default function Home() {
   const showNotification = JSON.parse(
@@ -20,6 +21,11 @@ export default function Home() {
   );
   const hashedContent = MD5(content).toString();
   const dismissedKey = `${hashedContent}-notificationDismissed`;
+
+  const parsedContent = parseMarkdown(content);
+  const notificationType = parsedContent.notificationType;
+  const notificationTitle = parsedContent.notificationTitle;
+  const notificationContent = parsedContent.notificationContent;
 
   createEffect(() => {
     const isDismissed = localStorage.getItem(dismissedKey) === 'true';
@@ -123,7 +129,12 @@ export default function Home() {
     <>
       {
         <Show when={showNotification && store.showNotificationCard}>
-          <NotificationCard content={content} dismissedKey={dismissedKey} />
+          <NotificationCard
+            notificationType={notificationType}
+            notificationTitle={notificationTitle}
+            notificationContent={notificationContent}
+            dismissedKey={dismissedKey}
+          />
         </Show>
       }
 

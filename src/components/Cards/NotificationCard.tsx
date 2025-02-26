@@ -2,59 +2,25 @@ import ErrorIcon from '~/assets/imgs/svgs/error.svg';
 import InfoIcon from '~/assets/imgs/svgs/info.svg';
 import WarningIcon from '~/assets/imgs/svgs/warning.svg';
 import '~/assets/scss/components/notification-card.scss';
-import { unified } from 'unified';
-import remarkParse from 'remark-parse';
-import remarkFrontmatter from 'remark-frontmatter';
-import remarkParseFrontmatter from 'remark-parse-frontmatter';
-import remarkRehype from 'remark-rehype';
-import rehypeStringify from 'rehype-stringify';
 import { useStore } from '~/stores';
 
 interface NotificationContentDefinition {
   html: string;
 }
 
-interface Frontmatter {
-  type: string;
-  title: string;
-}
-
-interface ContentDefinition {
-  content: string;
+interface NotificationDefinition {
   dismissedKey: string;
+  notificationTitle?: string;
+  notificationType?: string;
+  notificationContent?: string;
 }
 
 function NotificationContent(props: NotificationContentDefinition) {
   return <span innerHTML={props.html} />;
 }
 
-const NotificationCard = (props: ContentDefinition) => {
-  // const [showCard, setShowCard] = createSignal(
-  //   localStorage.getItem('notificationDismissed') !== 'true'
-  // );
-
+const NotificationCard = (props: NotificationDefinition) => {
   const [store, { toggleShowNotificationCard }] = useStore();
-
-  const {
-    data: { frontmatter },
-    value,
-  } = unified()
-    .use(remarkParse)
-    .use(remarkFrontmatter, ['yaml'])
-    .use(remarkParseFrontmatter)
-    .use(remarkRehype)
-    .use(rehypeStringify)
-    .processSync(props.content);
-
-  // const handleDismiss = () => {
-  //   localStorage.setItem('notificationDismissed', 'true');
-  //   setShowCard(false);
-  // };
-
-  const typedFrontmatter = frontmatter as Frontmatter;
-
-  const notificationType = typedFrontmatter?.type;
-  const notificationTitle = typedFrontmatter?.title;
 
   const handleDismiss = () => {
     localStorage.setItem(props.dismissedKey, 'true');
@@ -62,7 +28,7 @@ const NotificationCard = (props: ContentDefinition) => {
   };
 
   const getNotificationIcon = () => {
-    switch (notificationType) {
+    switch (props.notificationType) {
       case 'warning':
         return (
           <WarningIcon
@@ -86,9 +52,9 @@ const NotificationCard = (props: ContentDefinition) => {
       <section class="notification-card">
         <div class="notification-card__header">
           {getNotificationIcon()}
-          <h3>{notificationTitle}</h3>
+          <h3>{props.notificationTitle}</h3>
         </div>
-        <NotificationContent html={String(value)} />
+        <NotificationContent html={String(props.notificationContent)} />
         <button class="notification-btn" onClick={() => handleDismiss()}>
           Dismiss
         </button>
