@@ -26,6 +26,7 @@ interface StoreParameters {
   toastOpen: boolean;
   apiKeyRegenerateModalOpen: boolean;
   passwordChangeModalOpen: boolean;
+  showNotificationCard: boolean;
 }
 
 type Store = [
@@ -57,6 +58,7 @@ type Store = [
     updateRecentMeasurements: (parameter: string, measurements) => void;
     setTotalProviders: () => void;
     openToast: () => void;
+    toggleShowNotificationCard: (value: boolean) => void;
   },
 ];
 
@@ -87,6 +89,7 @@ export const StoreProvider: Component<{}> = (props) => {
     toastOpen: false,
     apiKeyRegenerateModalOpen: false,
     listParametersId: undefined,
+    showNotificationCard: false,
   });
 
   const store = [
@@ -178,6 +181,9 @@ export const StoreProvider: Component<{}> = (props) => {
       },
       setListParameter(parameter: string) {
         setState({ listParameter: parameter });
+      },
+      toggleShowNotificationCard(value: boolean) {
+        setState({ showNotificationCard: value });
       },
     },
   ];
