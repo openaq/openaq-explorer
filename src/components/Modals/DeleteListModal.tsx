@@ -3,8 +3,15 @@ import { JSX, Show, createEffect, createSignal } from 'solid-js';
 import { useStore } from '~/stores';
 import '~/assets/scss/components/modal.scss';
 import { deleteList } from '~/db/lists';
+import DeleteForeverIcon from '~/assets/imgs/delete_forever.svg';
+import CloseIcon from '~/assets/imgs/close.svg';
 
 export function DeleteListModal() {
+  const svgAttributes = {
+    width: 24,
+    height: 24,
+    fill: '#FFFFFF',
+  };
   const [ref, setRef] = createSignal<HTMLDialogElement>();
 
   const [store, { toggleDeleteListModalOpen }] = useStore();
@@ -34,7 +41,7 @@ export function DeleteListModal() {
       <form action={deleteList} method="post">
         <header class="modal__header">
           <h2 class="title">
-            <img src="/svgs/delete_forever_white.svg" alt="add icon" />
+            <DeleteForeverIcon {...svgAttributes} />
             Delete list
           </h2>
           <button
@@ -44,7 +51,7 @@ export function DeleteListModal() {
             formnovalidate
             onClick={onClickClose}
           >
-            <img src="/svgs/close.svg" alt="close icon" />
+            <CloseIcon {...svgAttributes} />
           </button>
         </header>
 
@@ -52,7 +59,7 @@ export function DeleteListModal() {
           <p class="type-subtitle-3">Delete Warning</p>
           <p>
             <span class="type-subtitle-4">Warning</span> You are about to delete
-            a list, this cannot be undone. Click Delete if you are you sure want
+            a list, this cannot be undone. Click Delete if you are sure you want
             to proceed.
           </p>
         </div>
