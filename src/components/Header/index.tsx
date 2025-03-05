@@ -81,7 +81,7 @@ export function Header(props: Props) {
             class="header-logo"
             aria-label="openaq logo"
           >
-            <OpenAQIcon {...svgHeightWidth} />
+            <OpenAQIcon height={40} width={72} />
           </A>
           <label class="menu-button-container" for="menu-toggle">
             <input id="menu-toggle" type="checkbox" />
