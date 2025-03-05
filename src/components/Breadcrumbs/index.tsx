@@ -1,19 +1,26 @@
 import { A } from '@solidjs/router';
 import '~/assets/scss/components/breadcrumbs.scss';
+import ChevronRightIcon from '~/assets/imgs/chevron_right.svg';
+import HomeIcon from '~/assets/imgs/home.svg';
 
 interface BreadcrumbsDefinition {
   pageName: string;
 }
 
 export function Breadcrumbs(props: BreadcrumbsDefinition) {
+  const svgAttributes = {
+    width: 24,
+    height: 24,
+    fill: '#5a6672',
+  };
   return (
     <div class="breadcrumbs">
       <A href="https://openaq.org">
-        <img src="/svgs/home_ocean_120.svg" alt="home" />
+        <HomeIcon {...svgAttributes} fill="#33a3a1" />
       </A>
-      <img src="/svgs/chevron_right_smoke_100.svg" alt="chevron right" />
+      <ChevronRightIcon {...svgAttributes} />
       <A href="/">Explore the data</A>
-      <img src="/svgs/chevron_right_smoke_100.svg" alt="chevron right" />
+      <ChevronRightIcon {...svgAttributes} />
       <span class="" data-testid="page-name">
         {props.pageName}
       </span>

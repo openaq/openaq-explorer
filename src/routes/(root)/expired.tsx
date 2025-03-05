@@ -3,10 +3,17 @@ import { resendVerificationEmail } from '~/auth/user';
 
 import '~/assets/scss/routes/expired.scss';
 import { Show } from 'solid-js';
+import ErrorIcon from '~/assets/imgs/error.svg';
 
 export default function VerifyEmail() {
   const [searchParams] = useSearchParams();
   const resendingVerificationEmail = useSubmission(resendVerificationEmail);
+
+  const svgAttributes = {
+    width: 24,
+    height: 24,
+    fill: '##dd443c',
+  };
 
   return (
     <>
@@ -29,7 +36,7 @@ export default function VerifyEmail() {
             />
             <Show when={resendingVerificationEmail.result}>
               <p role="alert" id="error-message" class="error-message">
-                <img src="/svgs/error_fire100.svg" alt="error icon" />
+                <ErrorIcon {...svgAttributes} />
                 {resendingVerificationEmail.result!.message}
               </p>
             </Show>

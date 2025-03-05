@@ -4,12 +4,17 @@ import { useStore } from '~/stores';
 
 import '~/assets/scss/components/lists-form.scss';
 import { addRemoveSensorNodesList, getUserLists } from '~/db/lists';
+import ListsIcon from '~/assets/imgs/lists.svg';
 
 interface ListsFormDefinition {
   redirect: string | undefined;
 }
 
 function ListToggle(props: any) {
+  const svgAttributes = {
+    width: 24,
+    height: 24,
+  };
   const [store] = useStore();
 
   let radioOnRef: HTMLInputElement;
@@ -41,9 +46,11 @@ function ListToggle(props: any) {
           )}
         >
           {props.list.sensorNodesIds.indexOf(store.locationsId) === -1 ? (
-            <img src="/svgs/lists_off.svg" alt="" />
+            <ListsIcon {...svgAttributes} />
           ) : (
-            <img src="/svgs/lists.svg" alt="" />
+            // note: needs to be styled with right colors, this one is listsoff
+            <ListsIcon {...svgAttributes} />
+            // note: needs to be styled with right colors, this one is lists
           )}
         </button>
       </label>
@@ -104,14 +111,16 @@ export function ListsForm(props: ListsFormDefinition) {
       </div>
       {lists()?.length === 0 ? (
         <A class="icon-btn btn-secondary" href="/lists">
-          Add to list <img src="/svgs/lists.svg" alt="" />
+          Add to list <ListsIcon {...svgAttributes} />
+          //Same as above, needs color - this one is lists
         </A>
       ) : (
         <button
           class="icon-btn btn-secondary"
           onClick={() => onClickAddToList()}
         >
-          Add to list <img src="/svgs/lists.svg" alt="" />
+          Add to list <ListsIcon {...svgAttributes} />
+          //Same as above, needs color - this one is lists
         </button>
       )}
     </div>

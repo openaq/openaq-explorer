@@ -3,6 +3,14 @@ import { JSX, Show, createEffect, createSignal } from 'solid-js';
 import { useStore } from '~/stores';
 import '~/assets/scss/components/modal.scss';
 import { createList } from '~/db/lists';
+import AddIcon from '~/assets/imgs/add.svg';
+import CloseIcon from '~/assets/imgs/close.svg';
+
+const svgAttributes = {
+  width: 24,
+  height: 24,
+  fill: '#FFFFFF',
+};
 
 interface NewListModalDefinition {
   usersId: number;
@@ -35,7 +43,7 @@ export function NewListModal(props: NewListModalDefinition) {
       <form action={createList} method="post">
         <header class="modal__header">
           <h2 class="title">
-            <img src="/svgs/add_white.svg" alt="add icon" />
+            <AddIcon {...svgAttributes} />
             New list
           </h2>
           <button
@@ -45,7 +53,7 @@ export function NewListModal(props: NewListModalDefinition) {
             formnovalidate
             onClick={onClickClose}
           >
-            <img src="/svgs/close.svg" alt="close icon" />
+            <CloseIcon {...svgAttributes} />
           </button>
         </header>
 

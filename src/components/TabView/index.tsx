@@ -3,6 +3,8 @@ import { ListMap } from '~/components/ListMap';
 import { LocationList } from '~/components/LocationList';
 import { LocationDetailCardMini } from '~/components/Cards/LocationDetailCardMini';
 import { useStore } from '~/stores';
+import MapIcon from '~/assets/imgs/map.svg';
+import ViewListIcon from '~/assets/imgs/view_list.svg';
 
 import '~/assets/scss/components/tab-view.scss';
 import { ListItemDefinition, ParameterDefinition } from '~/db/types';
@@ -13,6 +15,11 @@ interface TabViewDefintion {
 }
 
 export function TabView(props: TabViewDefintion) {
+  const svgAttributes = {
+    width: 24,
+    height: 24,
+  };
+
   const [activeTab, setActiveTab] = createSignal('list');
   const [parameters, setParameters] = createSignal<ParameterDefinition[]>([]);
   const [store, { setListParametersId, setListParameter }] = useStore();
@@ -36,24 +43,23 @@ export function TabView(props: TabViewDefintion) {
         <nav class="tab-nav">
           <a href="#" onClick={() => setActiveTab('list')}>
             <div class={`tab ${activeTab() == 'list' ? 'tab--active' : ''}`}>
-              <img
-                src="/svgs/view_list_black.svg"
+              {''}
+              <ViewListIcon
+                {...svgAttributes}
                 class={`tab-icon ${
                   activeTab() == 'list' ? 'tab-icon--active' : ''
                 }`}
-                alt=""
-              />{' '}
+              />
               List
             </div>
           </a>
           <a href="#" onClick={() => setActiveTab('map')}>
             <div class={`tab ${activeTab() == 'map' ? 'tab--active' : ''}`}>
-              <img
-                src="/svgs/map_black.svg"
+              <MapIcon
+                {...svgAttributes}
                 class={`$'tab-icon' ${
                   activeTab() == 'map' ? 'tab-icon--active' : ''
                 }`}
-                alt="map icon"
               />
               Map
             </div>

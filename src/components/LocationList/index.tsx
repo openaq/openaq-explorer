@@ -8,6 +8,7 @@ import dayjs from 'dayjs';
 import tz from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import { getSensorMeasurements } from '~/client';
+import DeleteForeverIcon from '~/assets/imgs/delete_forever.svg';
 
 import '~/assets/scss/components/location-list.scss';
 
@@ -45,6 +46,12 @@ interface LocationListItems {
 }
 
 export function LocationListItem(props: LocationListItemDefinition) {
+  const svgAttributes = {
+    width: 24,
+    height: 24,
+    fill: '#FFFFFF',
+  };
+
   const [
     store,
     { setDeleteListLocationsId, toggleDeleteListLocationModalOpen },
@@ -141,10 +148,7 @@ export function LocationListItem(props: LocationListItemDefinition) {
           toggleDeleteListLocationModalOpen();
         }}
       >
-        <img
-          src="/svgs/delete_forever_smoke120.svg"
-          alt="delete forever icon"
-        />
+        <DeleteForeverIcon {...svgAttributes} />
       </button>
     </li>
   );

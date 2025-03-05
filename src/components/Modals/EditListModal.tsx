@@ -3,6 +3,8 @@ import { JSX, Show, createEffect, createSignal } from 'solid-js';
 import { useStore } from '~/stores';
 import '~/assets/scss/components/modal.scss';
 import { updateList } from '~/db/lists';
+import CloseIcon from '~/assets/imgs/close.svg';
+import EditIcon from '~/assets/imgs/edit.svg';
 
 interface EditListModalDefinition {
   listsId: number;
@@ -11,6 +13,12 @@ interface EditListModalDefinition {
 }
 
 export function EditListModal(props: EditListModalDefinition) {
+  const svgAttributes = {
+    width: 24,
+    height: 24,
+    fill: '#FFFFFF',
+  };
+
   const [store, { toggleEditListModalOpen }] = useStore();
   const updatingList = useSubmission(updateList);
 
@@ -39,7 +47,7 @@ export function EditListModal(props: EditListModalDefinition) {
         <input type="hidden" name="lists-id" value={props.listsId} />
         <header class="modal__header">
           <h2 class="title">
-            <img src="/svgs/edit_white.svg" alt="add icon" />
+            <EditIcon {...svgAttributes} />
             Edit list
           </h2>
           <button
@@ -49,7 +57,7 @@ export function EditListModal(props: EditListModalDefinition) {
             formnovalidate
             onClick={onClickClose}
           >
-            <img src="/svgs/close.svg" alt="close icon" />
+            <CloseIcon {...svgAttributes} />
           </button>
         </header>
 

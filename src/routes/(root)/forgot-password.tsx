@@ -2,9 +2,16 @@ import { useSubmission } from '@solidjs/router';
 import { Show } from 'solid-js';
 import '~/assets/scss/routes/forgot-password.scss';
 import { forgotPasswordLink } from '~/auth/user';
+import ErrorIcon from '~/assets/imgs/error.svg';
 
 export default function VerifyEmail() {
   const requestingPasswordReset = useSubmission(forgotPasswordLink);
+
+  const svgAttributes = {
+    width: 24,
+    height: 24,
+    fill: '##dd443c',
+  };
 
   return (
     <>
@@ -27,7 +34,7 @@ export default function VerifyEmail() {
           </div>
           <Show when={requestingPasswordReset.result}>
             <p role="alert" id="error-message" class="error-message">
-              <img src="/svgs/error_fire100.svg" alt="error icon" />
+              <ErrorIcon {...svgAttributes} />
               {requestingPasswordReset.result!.message}
             </p>
           </Show>

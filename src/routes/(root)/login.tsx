@@ -8,6 +8,7 @@ import {
 import { redirectIfLoggedIn } from '~/auth/user';
 import { login } from '~/auth/user';
 import '~/assets/scss/routes/login.scss';
+import ErrorIcon from '~/assets/imgs/error.svg';
 
 export const route = {
   preload: () => redirectIfLoggedIn(),
@@ -28,6 +29,12 @@ export default function Login() {
   } else {
     redirect = searchParams.redirect;
   }
+
+  const svgAttributes = {
+    width: 24,
+    height: 24,
+    fill: '##dd443c',
+  };
 
   const loggingIn = useSubmission(login);
 
@@ -70,7 +77,7 @@ export default function Login() {
           </div>
           <Show when={loggingIn.result}>
             <p role="alert" id="error-message" class="error-message">
-              <img src="/svgs/error_fire100.svg" alt="error icon" />
+              <ErrorIcon {...svgAttributes} />
               {loggingIn.result!.message}
             </p>
           </Show>

@@ -5,6 +5,8 @@ import { DeleteLocationModal } from '~/components/Modals/DeleteLocationModal';
 import { Show } from 'solid-js';
 import { A } from '@solidjs/router';
 import { useStore } from '~/stores';
+import EditIcon from '~/assets/imgs/edit.svg';
+import ChevronLeft from '~/assets/imgs/chevron_left.svg';
 
 import '~/assets/scss/routes/list-detail.scss';
 import { getLoggedInUser } from '~/auth/user';
@@ -19,6 +21,10 @@ export const route = {
 };
 
 export default function List() {
+  const svgAttributes = {
+    width: 24,
+    height: 24,
+  };
   const [_, { toggleEditListModalOpen }] = useStore();
 
   const { id } = useParams();
@@ -37,7 +43,7 @@ export default function List() {
           <Show when={list()}>
             <div class="title">
               <A href="/lists">
-                <img src="/svgs/arrow_left_sky120.svg" alt="" />
+                <ChevronLeft {...svgAttributes} fill="#1e64ab" />
               </A>{' '}
               <div>
                 <div class="list-name">
@@ -46,7 +52,7 @@ export default function List() {
                     class="button-reset"
                     onClick={() => toggleEditListModalOpen()}
                   >
-                    <img src="/svgs/edit_smoke120.svg" alt="edit icon" />
+                    <EditIcon {...svgAttributes} fill="#5a6672" />
                   </button>
                 </div>
                 <span class="type-subtitle-2 text-smoke-120">

@@ -4,11 +4,18 @@ import { getLocation } from '~/client';
 import { A, createAsync, useLocation } from '@solidjs/router';
 import { since, timeFromNow } from '~/lib/utils';
 import { ListsForm } from './ListsForm';
+import CloseIcon from '~/assets/imgs/close.svg';
+import ChevronRightIcon from '~/assets/imgs/chevron_right.svg';
 
 import '~/assets/scss/components/location-detail-card-mini.scss';
 import { getSessionUser } from '~/auth/session';
 
 export function LocationDetailCardMini() {
+  const svgAttributes = {
+    width: 24,
+    height: 24,
+    fill: '#FFFFFF',
+  };
   const pageLocation = useLocation();
 
   const user = createAsync(() => getSessionUser(), { deferStream: true });
@@ -38,7 +45,7 @@ export function LocationDetailCardMini() {
         <div>
           <button class="close-btn" onClick={() => clearLocationsId()}>
             {' '}
-            <img src="/svgs/close.svg" alt="close icon" />{' '}
+            <CloseIcon {...svgAttributes} />{' '}
           </button>
         </div>
       </header>
@@ -96,8 +103,7 @@ export function LocationDetailCardMini() {
           href={`/locations/${store.locationsId}`}
           class="icon-btn btn-primary"
         >
-          Show Details{' '}
-          <img src="/svgs/arrow_right_white.svg" alt="arrow right icon" />
+          Show Details <ChevronRightIcon {...svgAttributes} />
         </A>
       </footer>
     </div>

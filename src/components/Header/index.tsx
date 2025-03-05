@@ -6,6 +6,21 @@ import { A } from '@solidjs/router';
 import '~/assets/scss/components/header.scss';
 import { SessionData } from '~/auth/session';
 import { logout } from '~/auth/user';
+import AccountIcon from '~/assets/imgs/account.svg';
+import SettingsIcon from '~/assets/imgs/settings.svg';
+import LogoutIcon from '~/assets/imgs/logout.svg';
+import MenuIcon from '~/assets/imgs/menu.svg';
+import OpenAQIcon from '~/assets/imgs/logo.svg';
+import ListsIcon from '~/assets/imgs/lists.svg';
+
+const svgHeightWidth = {
+  width: 24,
+  height: 24,
+};
+
+const svgColor = {
+  fill: '#33a3a1',
+};
 
 function Account() {
   const location = useLocation();
@@ -17,28 +32,18 @@ function Account() {
   return (
     <div class="dropdown">
       <A href="/account">
-        <img
-          width="24px"
-          height="24px"
-          src="/svgs/account.svg"
-          alt="account icon"
-        />
+        <AccountIcon {...svgHeightWidth} {...svgColor} />
       </A>
       <ul class="submenu" aria-label="submenu">
         <li class="submenu__item">
           <A href="/account" class={`type-body-3 text-smoke-120 settings-link`}>
-            <img
-              width="24px"
-              height="24px"
-              src="/svgs/settings.svg"
-              alt="settings icon"
-            />
+            <SettingsIcon {...svgHeightWidth} {...svgColor} />
             Settings
           </A>
         </li>
         <li class="submenu__item">
           <form action={logout} method="post" class="logout-form">
-            <img src="/svgs/logout.svg" alt="logout icon" />
+            <LogoutIcon {...svgHeightWidth} {...svgColor} />
             <input
               type="hidden"
               name="redirect"
@@ -76,7 +81,7 @@ export function Header(props: Props) {
             class="header-logo"
             aria-label="openaq logo"
           >
-            <img src="/svgs/logo.svg" alt="openaq logo" />
+            <OpenAQIcon height={40} width={72} />
           </A>
           <label class="menu-button-container" for="menu-toggle">
             <input id="menu-toggle" type="checkbox" />
@@ -86,7 +91,7 @@ export function Header(props: Props) {
                 setOpen(!open());
               }}
             >
-              <img src="/svgs/menu_ocean120.svg" alt="menu icon" />
+              <MenuIcon {...svgHeightWidth} {...svgColor} />
             </button>
           </label>
           <ul class={`${'nav-list'} ${open() ? 'nav-list--visible' : ''}`}>
@@ -243,13 +248,8 @@ export function Header(props: Props) {
           )}
           {props.user?.()?.usersId ? (
             <A href="/lists" class="type-link-3 list-link">
-              <img
-                width="24px"
-                height="24px"
-                src="/svgs/lists.svg"
-                alt="lists icon"
-              />{' '}
-              Lists
+              <ListsIcon {...svgHeightWidth} {...svgColor} />
+              // This icon needs coloring, is the lists icon Lists
             </A>
           ) : (
             ''

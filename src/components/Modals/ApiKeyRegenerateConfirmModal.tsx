@@ -4,12 +4,19 @@ import { useStore } from '~/stores';
 
 import '~/assets/scss/components/modal.scss';
 import { regenerateKey } from '~/db/account';
+import CloseIcon from '~/assets/imgs/close.svg';
 
 interface Props {
   token?: string;
 }
 
 export function ApiKeyRegenerateConfirmModal(props: Props) {
+  const svgAttributes = {
+    width: 24,
+    height: 24,
+    fill: '#FFFFFF',
+  };
+
   const [store, { toggleRegenerateKeyModalOpen }] = useStore();
 
   const onClickClose: JSX.EventHandler<HTMLButtonElement, MouseEvent> = (e) => {
@@ -50,7 +57,7 @@ export function ApiKeyRegenerateConfirmModal(props: Props) {
             formnovalidate
             onClick={onClickClose}
           >
-            <img src="/svgs/close.svg" alt="close icon" />
+            <CloseIcon {...svgAttributes} />
           </button>
         </header>
         <div class="modal__body">

@@ -5,6 +5,8 @@ import { A, createAsync, useLocation } from '@solidjs/router';
 import { since, timeFromNow } from '~/lib/utils';
 import { ListsForm } from './ListsForm';
 import { Sparkline } from '~/components/Charts/Sparkline';
+import CloseIcon from '~/assets/imgs/close.svg';
+import ArrowRightIcon from '~/assets/imgs/arrow_right.svg';
 
 import '~/assets/scss/components/location-detail-card.scss';
 import { getSessionUser } from '~/auth/session';
@@ -12,6 +14,12 @@ import { getSessionUser } from '~/auth/session';
 export function LocationDetailCard() {
   const user = createAsync(() => getSessionUser());
   const pageLocation = useLocation();
+
+  const svgAttributes = {
+    width: 24,
+    height: 24,
+    fill: '#FFFFFF',
+  };
 
   const [
     store,
@@ -66,7 +74,7 @@ export function LocationDetailCard() {
         <div>
           <button class="close-btn" onClick={() => clearLocationsId()}>
             {' '}
-            <img src="/svgs/close.svg" alt="close icon" />{' '}
+            <CloseIcon {...svgAttributes} />
           </button>
         </div>
       </header>
@@ -162,8 +170,7 @@ export function LocationDetailCard() {
           href={`/locations/${store.locationsId}`}
           class="icon-btn btn-primary"
         >
-          Show Details{' '}
-          <img src="/svgs/arrow_right_white.svg" alt="arrow right icon" />
+          Show Details <ArrowRightIcon {...svgAttributes} />
         </A>
       </footer>
     </div>
