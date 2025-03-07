@@ -1,6 +1,7 @@
 import { A } from '@solidjs/router';
 import { useStore } from '~/stores';
 import { ListCardMap } from '~/components/ListCardMap';
+import DeleteForeverIcon from '~/assets/imgs/delete_forever.svg';
 
 import '~/assets/scss/components/list-card.scss';
 
@@ -19,6 +20,11 @@ interface ListCardDefintion {
 }
 
 export function ListCard(props: ListCardDefintion) {
+  const svgAttributes = {
+    width: 24,
+    height: 24,
+    fill: '#5a6672',
+  };
   const [store, { setDeleteListsId, toggleDeleteListModalOpen }] = useStore();
 
   return (
@@ -44,10 +50,7 @@ export function ListCard(props: ListCardDefintion) {
           toggleDeleteListModalOpen();
         }}
       >
-        <img
-          src="/svgs/delete_forever_smoke120.svg"
-          alt="delete forever icon"
-        />
+        <DeleteForeverIcon {...svgAttributes} />
       </button>
     </div>
   );

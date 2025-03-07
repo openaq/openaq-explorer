@@ -1,6 +1,8 @@
 import { useSubmission } from '@solidjs/router';
 import { JSX, Show, createEffect, createSignal } from 'solid-js';
 import { useStore } from '~/stores';
+import DeleteForeverIcon from '~/assets/imgs/delete_forever.svg';
+import CloseIcon from '~/assets/imgs/close.svg';
 
 import '~/assets/scss/components/modal.scss';
 import { deleteListLocation } from '~/db/lists';
@@ -10,6 +12,11 @@ interface DeleteLocationModalDefinition {
 }
 
 export function DeleteLocationModal(props: DeleteLocationModalDefinition) {
+  const svgAttributes = {
+    width: 24,
+    height: 24,
+    fill: '#FFFFFF',
+  };
   const [ref, setRef] = createSignal<HTMLDialogElement>();
 
   const [store, { toggleDeleteListLocationModalOpen }] = useStore();
@@ -39,7 +46,7 @@ export function DeleteLocationModal(props: DeleteLocationModalDefinition) {
       <form action={deleteListLocation} method="post">
         <header class="modal__header">
           <h2 class="title">
-            <img src="/svgs/delete_forever_white.svg" alt="add icon" />
+            <DeleteForeverIcon {...svgAttributes} />
             Remove location?
           </h2>
           <button
@@ -49,7 +56,7 @@ export function DeleteLocationModal(props: DeleteLocationModalDefinition) {
             formnovalidate
             onClick={onClickClose}
           >
-            <img src="/svgs/close.svg" alt="close icon" />
+            <CloseIcon {...svgAttributes} />
           </button>
         </header>
 

@@ -3,11 +3,17 @@ import { forgotPassword } from '~/auth/user';
 import { Show, createSignal } from 'solid-js';
 import PasswordScore from '~/components/PasswordScore';
 import { evaluatePassword } from '~/lib/password';
+import ErrorIcon from '~/assets/imgs/warning.svg';
 
 import '~/assets/scss/routes/new-password.scss';
 import { Score } from '@zxcvbn-ts/core/dist/types';
 
 export default function VerifyEmail() {
+  const svgAttributes = {
+    width: 24,
+    height: 24,
+    fill: '#dd443c',
+  };
   const [searchParams] = useSearchParams();
   const settingNewPassword = useSubmission(forgotPassword);
 
@@ -97,7 +103,7 @@ export default function VerifyEmail() {
           </Show>
           <Show when={settingNewPassword.result}>
             <p role="alert" id="error-message" class="error-message">
-              <img src="/svgs/error_fire100.svg" alt="error icon" />
+              <ErrorIcon {...svgAttributes} />
               {settingNewPassword.result!.message}
             </p>
           </Show>
