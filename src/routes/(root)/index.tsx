@@ -1,14 +1,42 @@
 import { Map } from '~/components/Map';
 import { LocationDetailCard } from '~/components/Cards/LocationDetailCard';
 import { FlipCard } from '~/components/Cards/FlipCard';
-
+import { clientOnly } from '@solidjs/start';
 import '~/assets/scss/routes/index.scss';
 import { useLocation, useNavigate } from '@solidjs/router';
 import { useStore } from '~/stores';
-import { createEffect, createMemo, onMount } from 'solid-js';
+import { createEffect, createMemo, onMount, Show } from 'solid-js';
+import content from '~/content/notification.md?raw';
+import MD5 from 'crypto-js/md5';
+import { parseMarkdown } from '~/components/Cards/utils';
 
 export default function Home() {
+  const showNotification = JSON.parse(
+    import.meta.env.VITE_SHOW_NOTIFICATION || false
+  );
   const [store, actions] = useStore();
+  const NotificationCard = clientOnly(
+    () => import('~/components/Cards/NotificationCard')
+  );
+  const hashedContent = MD5(content).toString();
+  const dismissedKey = `${hashedContent}-notificationDismissed`;
+
+  const parsedContent = parseMarkdown(content);
+  const notificationType = parsedContent.notificationType;
+  const notificationTitle = parsedContent.notificationTitle;
+  const notificationContent = parsedContent.notificationContent;
+
+  createEffect(() => {
+    const isDismissed = localStorage.getItem(dismissedKey) === 'true';
+
+    if (showNotification && !isDismissed) {
+      actions.toggleShowNotificationCard(true);
+    }
+
+    if (isDismissed || !showNotification) {
+      actions.toggleShowNotificationCard(false);
+    }
+  });
 
   const setSelectedLocationsId = actions.setSelectedLocationsId;
   const setSelectedMapParameter = actions.setSelectedMapParameter;
@@ -98,6 +126,17 @@ export default function Home() {
 
   return (
     <>
+      {
+        <Show when={showNotification && store.showNotificationCard}>
+          <NotificationCard
+            notificationType={notificationType}
+            notificationTitle={notificationTitle}
+            notificationContent={notificationContent}
+            dismissedKey={dismissedKey}
+          />
+        </Show>
+      }
+
       <Map />
       <FlipCard />
       <LocationDetailCard />
