@@ -64,16 +64,25 @@ export default function Home() {
       }
     }
 
-    if (location.query?.active === 'false') {
-      toggleMapIsActive();
+    if (location.query?.active) {
+      const activeStateFromQuery = location.query.active === 'true';
+      if (store.showOnlyActiveLocations !== activeStateFromQuery) {
+        toggleMapIsActive();
+      }
     }
 
-    if (location.query?.sensors === 'false') {
-      toggleAirSensor();
+    if (location.query?.sensors) {
+      const activeStateFromQuery = location.query.sensors === 'true';
+      if (store.showAirSensors !== activeStateFromQuery) {
+        toggleAirSensor();
+      }
     }
 
-    if (location.query?.monitors === 'false') {
-      toggleMonitor();
+    if (location.query?.monitors) {
+      const activeStateFromQuery = location.query.monitors === 'true';
+      if (store.showMonitors !== activeStateFromQuery) {
+        toggleMonitor();
+      }
     }
 
     if (location.query?.provider) {
