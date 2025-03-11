@@ -36,8 +36,11 @@ export default function Home() {
       }
     }
 
-    if (location.query?.active === 'false') {
-      toggleMapIsActive();
+    if (location.query?.active) {
+      const activeStateFromQuery = location.query.active === 'true';
+      if (store.showOnlyActiveLocations !== activeStateFromQuery) {
+        toggleMapIsActive();
+      }
     }
 
     if (location.query?.sensors === 'false') {
