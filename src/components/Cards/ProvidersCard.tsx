@@ -22,7 +22,13 @@ interface ProvidersStoreDefinition {
 export function ProvidersCard() {
   const [
     store,
-    { toggleShowProvidersCard, setViewport, setProviders, setTotalProviders },
+    {
+      toggleShowProvidersCard,
+      setViewport,
+      setProviders,
+      setTotalProviders,
+      setBounds,
+    },
   ] = useStore();
 
   const [count, setCount] = createSignal();
@@ -104,13 +110,16 @@ export function ProvidersCard() {
     let minBottom = 90;
     let maxRight = -180;
     let maxTop = -90;
+
     providerBounds.forEach(([left, bottom, right, top]) => {
       if (left < minLeft) minLeft = left;
       if (bottom < minBottom) minBottom = bottom;
       if (right > maxRight) maxRight = right;
       if (top > maxTop) maxTop = top;
     });
-    setViewport(null);
+
+    setViewport({ zoom: 12 });
+
     setBounds([minLeft, minBottom, maxRight, maxTop]);
   }
 

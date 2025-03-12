@@ -26,6 +26,7 @@ interface StoreParameters {
   toastOpen: boolean;
   apiKeyRegenerateModalOpen: boolean;
   passwordChangeModalOpen: boolean;
+  bounds: number[];
 }
 
 type Store = [
@@ -57,6 +58,7 @@ type Store = [
     updateRecentMeasurements: (parameter: string, measurements) => void;
     setTotalProviders: () => void;
     openToast: () => void;
+    setBounds: (bounds: number[]) => void;
   },
 ];
 
@@ -87,6 +89,7 @@ export const StoreProvider: Component<{}> = (props) => {
     toastOpen: false,
     apiKeyRegenerateModalOpen: false,
     listParametersId: undefined,
+    bounds: [],
   });
 
   const store = [
@@ -94,6 +97,9 @@ export const StoreProvider: Component<{}> = (props) => {
     {
       setSelectedLocationsId(locationsId: number) {
         setState({ locationsId: locationsId });
+      },
+      setBounds(bounds: number[]) {
+        setState({ bounds: bounds });
       },
       clearLocationsId() {
         setState({ locationsId: undefined });
