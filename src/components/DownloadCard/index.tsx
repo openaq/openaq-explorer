@@ -228,7 +228,7 @@ export function DownloadCard(props: Props) {
           }`}
           disabled={downloading() ? true : false}
         >
-          Download CSV <DownloadIcon {...svgAttributes} />
+          Download CSV <DownloadIcon class="download-icon" {...svgAttributes} />
         </button>
       </form>
     </>

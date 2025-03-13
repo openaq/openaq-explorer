@@ -94,7 +94,9 @@
   align-items: center;
 }
 
-.download-anchor {
+.download-anchor {  
+  fill: variables.$ocean120;
+
   @include f.respond(medium) {
     display: none;
   }
