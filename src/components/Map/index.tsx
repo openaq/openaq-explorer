@@ -21,13 +21,11 @@ function Bounds() {
   // const [mapBbox, setMapBbox] = createSignal([] as number[]);
 
   createEffect(() => {
-    console.log('Store MapBbox Changed:', store.mapBbox);
-    if (store.viewport && store.mapBbox.length === 4) {
-      console.log('Fitting Bounds to:', store.mapBbox);
+    if (store.bounds.length === 4) {
       ctx.map.fitBounds(
         [
-          [store.mapBbox[0], store.mapBbox[1]],
-          [store.mapBbox[2], store.mapBbox[3]],
+          [store.bounds[0], store.bounds[1]],
+          [store.bounds[2], store.bounds[3]],
         ],
         { padding: { top: 90, bottom: 150, left: 20, right: 360 } }
       );

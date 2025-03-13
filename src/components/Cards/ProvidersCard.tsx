@@ -28,6 +28,7 @@ export function ProvidersCard() {
       setProviders,
       setTotalProviders,
       setBounds,
+      setMapBbox
     },
   ] = useStore();
 
@@ -129,7 +130,6 @@ export function ProvidersCard() {
 
     setBounds([minLeft, minBottom, maxRight, maxTop]);
     console.log('Set Bounds:', [minLeft, minBottom, maxRight, maxTop]);
-
     setViewport({
       zoom: 11,
       center: [(minLeft + maxRight) / 2, (minBottom + maxTop) / 2],
