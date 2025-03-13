@@ -101,11 +101,14 @@ export function ProvidersCard() {
   });
 
   function zoomToExtent() {
+    console.log('Hej jag funkar');
+
     const providerBounds = selectedProviders
       .filter((o) => o.checked)
-      .map((o) => {
-        return bbox(o.bbox);
-      });
+      .map((o) => bbox(o.bbox));
+
+    console.log('HEJ PROVIDERS', providerBounds);
+
     let minLeft = 180;
     let minBottom = 90;
     let maxRight = -180;
@@ -117,10 +120,24 @@ export function ProvidersCard() {
       if (right > maxRight) maxRight = right;
       if (top > maxTop) maxTop = top;
     });
-
-    setViewport({ zoom: 12 });
+    console.log('HEJ min/max-värden:', {
+      minLeft,
+      minBottom,
+      maxRight,
+      maxTop,
+    });
 
     setBounds([minLeft, minBottom, maxRight, maxTop]);
+    console.log('Set Bounds:', [minLeft, minBottom, maxRight, maxTop]);
+
+    setViewport({
+      zoom: 11,
+      center: [(minLeft + maxRight) / 2, (minBottom + maxTop) / 2],
+    });
+    console.log('Set Viewport:', {
+      zoom: 11,
+      center: [(minLeft + maxRight) / 2, (minBottom + maxTop) / 2],
+    });
   }
 
   function onClickUpdate(selectedProviders: ProvidersStoreDefinition[]) {

@@ -16,17 +16,18 @@ function calculateFlyToDuration(zoom: number) {
 
 function Bounds() {
   const [ctx] = useMapContext();
-
-  const [viewport, setViewport] = createSignal();
-  const [mapBbox, setMapBbox] = createSignal([] as number[]);
+  const [store] = useStore();
+  // const [viewport, setViewport] = createSignal();
+  // const [mapBbox, setMapBbox] = createSignal([] as number[]);
 
   createEffect(() => {
-    if (viewport() && mapBbox()) {
-      const bounds = [...mapBbox()];
+    console.log('Store MapBbox Changed:', store.mapBbox);
+    if (store.viewport && store.mapBbox.length === 4) {
+      console.log('Fitting Bounds to:', store.mapBbox);
       ctx.map.fitBounds(
         [
-          [bounds[0], bounds[1]],
-          [bounds[2], bounds[3]],
+          [store.mapBbox[0], store.mapBbox[1]],
+          [store.mapBbox[2], store.mapBbox[3]],
         ],
         { padding: { top: 90, bottom: 150, left: 20, right: 360 } }
       );

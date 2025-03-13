@@ -27,6 +27,7 @@ interface StoreParameters {
   apiKeyRegenerateModalOpen: boolean;
   passwordChangeModalOpen: boolean;
   bounds: number[];
+  mapBbox: number[];
 }
 
 type Store = [
@@ -59,6 +60,7 @@ type Store = [
     setTotalProviders: () => void;
     openToast: () => void;
     setBounds: (bounds: number[]) => void;
+    setMapBbox: (mapBbox: number[]) => void;
   },
 ];
 
@@ -90,6 +92,7 @@ export const StoreProvider: Component<{}> = (props) => {
     apiKeyRegenerateModalOpen: false,
     listParametersId: undefined,
     bounds: [],
+    mapBbox: [],
   });
 
   const store = [
@@ -100,6 +103,9 @@ export const StoreProvider: Component<{}> = (props) => {
       },
       setBounds(bounds: number[]) {
         setState({ bounds: bounds });
+      },
+      setMapBbox(mapBbox: number[]) {
+        setState({ mapBbox: mapBbox });
       },
       clearLocationsId() {
         setState({ locationsId: undefined });
