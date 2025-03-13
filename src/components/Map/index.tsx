@@ -17,8 +17,6 @@ function calculateFlyToDuration(zoom: number) {
 function Bounds() {
   const [ctx] = useMapContext();
   const [store] = useStore();
-  // const [viewport, setViewport] = createSignal();
-  // const [mapBbox, setMapBbox] = createSignal([] as number[]);
 
   createEffect(() => {
     if (store.bounds.length === 4) {
