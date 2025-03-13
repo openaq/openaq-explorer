@@ -28,6 +28,7 @@ interface StoreParameters {
   passwordChangeModalOpen: boolean;
   bounds: number[];
   mapBbox: number[];
+  showNotificationCard: boolean;
 }
 
 type Store = [
@@ -61,6 +62,7 @@ type Store = [
     openToast: () => void;
     setBounds: (bounds: number[]) => void;
     setMapBbox: (mapBbox: number[]) => void;
+    toggleShowNotificationCard: (value: boolean) => void;
   },
 ];
 
@@ -93,6 +95,7 @@ export const StoreProvider: Component<{}> = (props) => {
     listParametersId: undefined,
     bounds: [],
     mapBbox: [],
+    showNotificationCard: false,
   });
 
   const store = [
@@ -190,6 +193,9 @@ export const StoreProvider: Component<{}> = (props) => {
       },
       setListParameter(parameter: string) {
         setState({ listParameter: parameter });
+      },
+      toggleShowNotificationCard(value: boolean) {
+        setState({ showNotificationCard: value });
       },
     },
   ];

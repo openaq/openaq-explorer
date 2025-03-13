@@ -69,7 +69,6 @@ export function DetailOverview(props: DetailOverviewDefinition) {
   const svgAttributes = {
     width: 24,
     height: 24,
-    fill: '#33a3a1',
   };
 
   return (
@@ -88,7 +87,10 @@ export function DetailOverview(props: DetailOverviewDefinition) {
               class="icon-btn btn-tertiary download-anchor"
             >
               Download data
-              <CloudDownloadIcon {...svgAttributes} />
+              <CloudDownloadIcon
+                class="cloud-download-icon"
+                {...svgAttributes}
+              />
             </a>
           </Show>
         </div>

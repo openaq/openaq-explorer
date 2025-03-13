@@ -9,7 +9,10 @@ export default defineConfig({
     inlineDynamicImports: true,
   },
   vite: {
-    plugins: [solidSvg()],
+    assetsInclude: ['**/*.md'],
+    plugins: [
+      solidSvg()
+    ],
     css: {
       postcss: {
         plugins: [autoprefixer({})],

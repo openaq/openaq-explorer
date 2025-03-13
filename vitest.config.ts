@@ -1,5 +1,5 @@
-import path from 'path'
-import solid from "vite-plugin-solid"
+import path from 'path';
+import solid from 'vite-plugin-solid';
 import solidSvg from 'vite-plugin-solid-svg';
 
 import { defineConfig } from "vitest/config"
