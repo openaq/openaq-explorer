@@ -11,10 +11,6 @@ interface ListsFormDefinition {
 }
 
 function ListToggle(props: any) {
-  const svgAttributes = {
-    width: 24,
-    height: 24,
-  };
   const [store] = useStore();
 
   let radioOnRef: HTMLInputElement;
@@ -46,11 +42,9 @@ function ListToggle(props: any) {
           )}
         >
           {props.list.sensorNodesIds.indexOf(store.locationsId) === -1 ? (
-            <ListsIcon {...svgAttributes} />
+            <ListsIcon height={24} width={24} />
           ) : (
-            // note: needs to be styled with right colors, this one is listsoff
-            <ListsIcon {...svgAttributes} />
-            // note: needs to be styled with right colors, this one is lists
+            <ListsIcon height={24} width={24} />
           )}
         </button>
       </label>
@@ -63,7 +57,6 @@ function ListToggle(props: any) {
         id={`list-${props.list.listsId}-on`}
         value="1"
         checked={props.list.sensorNodesIds.indexOf(store.locationsId) !== -1}
-        // onChange={onInputChange}
       />
       <input
         class="radio-input"
@@ -73,7 +66,6 @@ function ListToggle(props: any) {
         id={`list-${props.list.listsId}-off`}
         value="0"
         checked={props.list.sensorNodesIds.indexOf(store.locationsId) === -1}
-        // onChange={onInputChange}
       />
     </div>
   );
@@ -111,16 +103,16 @@ export function ListsForm(props: ListsFormDefinition) {
       </div>
       {lists()?.length === 0 ? (
         <A class="icon-btn btn-secondary" href="/lists">
-          Add to list <ListsIcon {...svgAttributes} />
-          //Same as above, needs color - this one is lists
+          Add to list{' '}
+          <ListsIcon height={24} width={24} fill="#0000ff" stroke="#ff0000" />
         </A>
       ) : (
         <button
           class="icon-btn btn-secondary"
           onClick={() => onClickAddToList()}
         >
-          Add to list <ListsIcon {...svgAttributes} />
-          //Same as above, needs color - this one is lists
+          Add to list{' '}
+          <ListsIcon height={24} width={24} fill="#0000ff" stroke="#ff0000" />
         </button>
       )}
     </div>

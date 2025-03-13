@@ -32,7 +32,7 @@ function Account() {
   return (
     <div class="dropdown">
       <A href="/account">
-        <AccountIcon {...svgHeightWidth} {...svgColor} />
+        <AccountIcon width={28} height={28} {...svgColor} />
       </A>
       <ul class="submenu" aria-label="submenu">
         <li class="submenu__item">
@@ -248,8 +248,8 @@ export function Header(props: Props) {
           )}
           {props.user?.()?.usersId ? (
             <A href="/lists" class="type-link-3 list-link">
-              <ListsIcon {...svgHeightWidth} {...svgColor} />
-              // This icon needs coloring, is the lists icon Lists
+              <ListsIcon {...svgHeightWidth} {...svgColor}  fill="#0000ff" stroke="#ff0000" stroke-width={12}/>
+              Lists
             </A>
           ) : (
             ''
