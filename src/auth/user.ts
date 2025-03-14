@@ -38,6 +38,7 @@ export const getLoggedInUser = query(async () => {
       email: user[0].emailAddress,
       fullname: user[0].fullname,
       token: user[0].token,
+      isActive: user[0].isActive
     };
   } else {
     throw redirect('/');
@@ -133,7 +134,7 @@ export const login = action(async (formData: FormData) => {
       throw new Error('Invalid credentials');
     }
     const user = rows[0];
-    if (!user.isActive) {
+    if (!user.isVerified) {
       throw redirect('/verify-email');
     }
     const isCorrectPassword = await verifyPassword(password, user.passwordHash);
