@@ -191,8 +191,8 @@ export function DownloadCard(props: Props) {
         <label for="">Data type</label>
         <select id="select" class="date-input">
           <option value="hours">Hourly averages</option>
-          <option value="daily">Daily averages</option>
-          <option value="yearly">Yearly averages</option>
+          <option value="days">Daily averages</option>
+          <option value="years">Yearly averages</option>
         </select>
         <br />
         <br />
