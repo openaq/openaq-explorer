@@ -136,9 +136,10 @@ export function DownloadCard(props: Props) {
     e.preventDefault();
     setDownloading(true);
     const formElements = e.target.elements;
-    const tz = formElements[0].value;
-    const dateFromValue = formElements[1].value;
-    const dateToValue = formElements[2].value;
+    const rollup = formElements[0].value;
+    const tz = formElements[1].value;
+    const dateFromValue = formElements[2].value;
+    const dateToValue = formElements[3].value;
     const sensorInputs = [...formElements]
       .filter((o) => o.id.includes('checkbox-sensor'))
       .filter((o) => o.checked);
@@ -150,42 +151,18 @@ export function DownloadCard(props: Props) {
     for (const sensorId of sensorIds) {
       const measurements = await getSensorMeasurementsDownload(
         sensorId,
+        rollup,
         dayjs(new Date(dateFromValue), props.timezone).toISOString(),
         dayjs(new Date(dateToValue), props.timezone).toISOString()
       );
       data = data.concat(measurements);
+      console.log('HEJ DATA', data);
       await sleep(300);
     }
+
     const csvData = measurementsCsv(props, data);
     downloadFile(`openaq_location_${props.id}_measurments.csv`, csvData);
     setDownloading(false);
-  };
-
-  const handleChange = async (e) => {
-    if (e.target.value === 'hourly') {
-      const startDate = dayjs().subtract(1, 'day').toISOString();
-      const endDate = dayjs().toISOString();
-      console.log('HEJ PROPS ID', props.id);
-      console.log('HEJ start date', startDate);
-      console.log('HEJ end date', endDate);
-      console.log('HEJ 24', 24);
-      console.log('HEJ API-anrop görs nu...');
-
-      try {
-        const testSensorId = 4275972;
-        console.log('HEJ testar med hårdkodat sensor-ID:', testSensorId);
-        const data = await fetchSensorMeasurements(
-          // props.id,
-          testSensorId,
-          startDate,
-          endDate,
-          24
-        );
-        console.log('HEEEEEEEEJ Hourly data:', data);
-      } catch (error) {
-        console.error(' HEJ Error fetching', error);
-      }
-    }
   };
 
   return (
@@ -212,8 +189,8 @@ export function DownloadCard(props: Props) {
         }}
       >
         <label for="">Data type</label>
-        <select onInput={handleChange} name="" id="" class="date-input">
-          <option value="hourly">Hourly averages</option>
+        <select id="select" class="date-input">
+          <option value="hours">Hourly averages</option>
           <option value="daily">Daily averages</option>
           <option value="yearly">Yearly averages</option>
         </select>

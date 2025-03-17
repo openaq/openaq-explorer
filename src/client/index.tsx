@@ -25,13 +25,14 @@ export async function fetchLocation(locationsId: number) {
 
 async function fetchSensorMeasurementsDownload(
   sensorsId: number,
+  rollup: string,
   datetimeFrom: string,
   datetimeTo: string,
   limit: number
 ) {
   'use server';
   const url = new URL(import.meta.env.VITE_API_BASE_URL);
-  url.pathname = `/v3/sensors/${sensorsId}/measurements`;
+  url.pathname = `/v3/sensors/${sensorsId}/${rollup}`;
   url.search = `?datetime_from=${datetimeFrom.replace(
     ' ',
     '%2b'
@@ -53,13 +54,14 @@ async function fetchSensorMeasurementsDownload(
 
 export async function fetchSensorMeasurements(
   sensorsId: number,
+  rollup: string,
   datetimeFrom: string,
   datetimeTo: string,
   limit?: number
 ) {
   'use server';
   const url = new URL(import.meta.env.VITE_API_BASE_URL);
-  url.pathname = `/v3/sensors/${sensorsId}/hours`;
+  url.pathname = `/v3/sensors/${sensorsId}/${rollup}`;
   url.search = `?datetime_from=${datetimeFrom.replace(
     ' ',
     '%2b'
@@ -117,9 +119,12 @@ async function fetchProviders() {
   return await res.json();
 }
 
+type rollup = 'measurements' | 'hours' | 'days' | 'years';
+
 export const getSensorMeasurements = GET(
   async (
     sensorsId: number,
+    rollup: rollup,
     datetimeFrom: string,
     datetimeTo: string,
     limit: number = 1000
@@ -127,6 +132,7 @@ export const getSensorMeasurements = GET(
     'use server';
     const data = await fetchSensorMeasurements(
       sensorsId,
+      rollup,
       datetimeFrom,
       datetimeTo,
       limit
@@ -138,6 +144,7 @@ export const getSensorMeasurements = GET(
 export const getSensorMeasurementsDownload = GET(
   async (
     sensorsId: number,
+    rollup: string,
     datetimeFrom: string,
     datetimeTo: string,
     limit: number = 1000
@@ -145,6 +152,7 @@ export const getSensorMeasurementsDownload = GET(
     'use server';
     const data = await fetchSensorMeasurementsDownload(
       sensorsId,
+      rollup,
       datetimeFrom,
       datetimeTo,
       limit
