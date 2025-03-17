@@ -2,7 +2,10 @@ import { createSignal, For } from 'solid-js';
 import dayjs from 'dayjs';
 import tz from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
-import { getSensorMeasurementsDownload } from '~/client';
+import {
+  getSensorMeasurementsDownload,
+  fetchSensorMeasurements,
+} from '~/client';
 
 import { useLocation, A } from '@solidjs/router';
 
@@ -143,6 +146,7 @@ export function DownloadCard(props: Props) {
       Number(o.id.replace('checkbox-sensor-', ''))
     );
     let data = [];
+
     for (const sensorId of sensorIds) {
       const measurements = await getSensorMeasurementsDownload(
         sensorId,
@@ -155,6 +159,33 @@ export function DownloadCard(props: Props) {
     const csvData = measurementsCsv(props, data);
     downloadFile(`openaq_location_${props.id}_measurments.csv`, csvData);
     setDownloading(false);
+  };
+
+  const handleChange = async (e) => {
+    if (e.target.value === 'hourly') {
+      const startDate = dayjs().subtract(1, 'day').toISOString();
+      const endDate = dayjs().toISOString();
+      console.log('HEJ PROPS ID', props.id);
+      console.log('HEJ start date', startDate);
+      console.log('HEJ end date', endDate);
+      console.log('HEJ 24', 24);
+      console.log('HEJ API-anrop görs nu...');
+
+      try {
+        const testSensorId = 4275972;
+        console.log('HEJ testar med hårdkodat sensor-ID:', testSensorId);
+        const data = await fetchSensorMeasurements(
+          // props.id,
+          testSensorId,
+          startDate,
+          endDate,
+          24
+        );
+        console.log('HEEEEEEEEJ Hourly data:', data);
+      } catch (error) {
+        console.error(' HEJ Error fetching', error);
+      }
+    }
   };
 
   return (
@@ -180,6 +211,14 @@ export function DownloadCard(props: Props) {
           onFormSubmit(e);
         }}
       >
+        <label for="">Data type</label>
+        <select onInput={handleChange} name="" id="" class="date-input">
+          <option value="hourly">Hourly averages</option>
+          <option value="daily">Daily averages</option>
+          <option value="yearly">Yearly averages</option>
+        </select>
+        <br />
+        <br />
         <input type="hidden" name="timezone" value={props.timezone} />
         <label for="">Start date</label>
         <input

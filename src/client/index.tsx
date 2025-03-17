@@ -51,11 +51,11 @@ async function fetchSensorMeasurementsDownload(
   return data.results;
 }
 
-async function fetchSensorMeasurements(
+export async function fetchSensorMeasurements(
   sensorsId: number,
   datetimeFrom: string,
   datetimeTo: string,
-  limit: number
+  limit?: number
 ) {
   'use server';
   const url = new URL(import.meta.env.VITE_API_BASE_URL);
