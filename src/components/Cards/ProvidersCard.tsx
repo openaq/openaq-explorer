@@ -1,12 +1,14 @@
-import { useStore } from "~/stores";
+import { useStore } from '~/stores';
 
-import { For, Show, createSignal, onMount, createEffect } from "solid-js";
-import { getProviders } from "~/client";
-import MiniSearch from "minisearch";
-import bbox from "@turf/bbox";
-import { createStore, produce } from "solid-js/store";
+import { For, Show, createSignal, onMount, createEffect } from 'solid-js';
+import { getProviders } from '~/client';
+import MiniSearch from 'minisearch';
+import bbox from '@turf/bbox';
+import { createStore, produce } from 'solid-js/store';
+import ArrowLeftIcon from '~/assets/imgs/arrow_left.svg';
+import CropIcon from '~/assets/imgs/crop.svg';
 
-import "~/assets/scss/components/providers-card.scss";
+import '~/assets/scss/components/providers-card.scss';
 
 interface ProvidersStoreDefinition {
   name: string;
@@ -20,7 +22,14 @@ interface ProvidersStoreDefinition {
 export function ProvidersCard() {
   const [
     store,
-    { toggleShowProvidersCard, setViewport, setProviders, setTotalProviders },
+    {
+      toggleShowProvidersCard,
+      setViewport,
+      setProviders,
+      setTotalProviders,
+      setBounds,
+      setMapBbox,
+    },
   ] = useStore();
 
   const [count, setCount] = createSignal();
@@ -35,9 +44,14 @@ export function ProvidersCard() {
   };
 
   const miniSearch = new MiniSearch({
-    fields: ["name"],
-    storeFields: ["name"],
+    fields: ['name'],
+    storeFields: ['name'],
   });
+
+  const svgAttributes = {
+    width: 24,
+    height: 24,
+  };
 
   let timeout: ReturnType<typeof setTimeout>;
 
@@ -50,7 +64,7 @@ export function ProvidersCard() {
       setSelectedProviders(
         () => true,
         produce((provider) =>
-          value != ""
+          value != ''
             ? (provider.matchesQuery =
                 res.map((o) => o.id).indexOf(provider.id) != -1)
             : (provider.matchesQuery = true)
@@ -72,13 +86,13 @@ export function ProvidersCard() {
             id: o.id,
             checked:
               store.providers.length === 0
-                ? "true"
+                ? 'true'
                 : store.providers.includes(o.id),
             matchesQuery: true,
             bbox: o.bbox,
           };
         })
-        .sort((a, b) => (a.name < b.name ? -1 : 1))
+        .sort((a, b) => (a.name.toLowerCase < b.name.toLowerCase ? -1 : 1))
     );
     miniSearch.addAll(selectedProviders);
   });
@@ -90,21 +104,25 @@ export function ProvidersCard() {
   function zoomToExtent() {
     const providerBounds = selectedProviders
       .filter((o) => o.checked)
-      .map((o) => {
-        return bbox(o.bbox);
-      });
+      .map((o) => bbox(o.bbox));
+
     let minLeft = 180;
     let minBottom = 90;
     let maxRight = -180;
     let maxTop = -90;
+
     providerBounds.forEach(([left, bottom, right, top]) => {
       if (left < minLeft) minLeft = left;
       if (bottom < minBottom) minBottom = bottom;
       if (right > maxRight) maxRight = right;
       if (top > maxTop) maxTop = top;
     });
-    setViewport(null);
+
     setBounds([minLeft, minBottom, maxRight, maxTop]);
+    setViewport({
+      zoom: 11,
+      center: [(minLeft + maxRight) / 2, (minBottom + maxTop) / 2],
+    });
   }
 
   function onClickUpdate(selectedProviders: ProvidersStoreDefinition[]) {
@@ -117,9 +135,9 @@ export function ProvidersCard() {
   return (
     <div class="providers-card">
       <header class="providers-card__header">
-        <img
-          src="/svgs/arrow_left_white.svg"
-          alt=""
+        <ArrowLeftIcon
+          fill="#FFFFFF"
+          {...svgAttributes}
           onClick={() => onClickClose()}
         />
         <h3 class="type-heading-3 text-white">Data providers</h3>
@@ -129,7 +147,7 @@ export function ProvidersCard() {
           <div class="select-helpers">
             <button
               class="button-reset type-link-1 providers-list-select-all"
-              onClick={() => setSelectedProviders(() => true, "checked", true)}
+              onClick={() => setSelectedProviders(() => true, 'checked', true)}
             >
               Select All
             </button>
@@ -137,7 +155,7 @@ export function ProvidersCard() {
             <button
               class="button-reset type-link-1 providers-list-select-none"
               onClick={() => {
-                setSelectedProviders(() => true, "checked", false);
+                setSelectedProviders(() => true, 'checked', false);
               }}
             >
               Select None
@@ -157,7 +175,7 @@ export function ProvidersCard() {
               onClick={zoomToExtent}
             >
               <span>Zoom to provider extent </span>
-              <img src="/svgs/crop_free_smoke120.svg" alt="" />
+              <CropIcon fill="#5a6672" {...svgAttributes} />
             </button>
           </Show>
           <input
@@ -198,7 +216,7 @@ export function ProvidersCard() {
                         onChange={(e) => {
                           setSelectedProviders(
                             (p) => p.id == provider.id,
-                            "checked",
+                            'checked',
                             e.target.checked
                           );
                         }}
@@ -214,7 +232,7 @@ export function ProvidersCard() {
       <footer class="providers-card__footer">
         <button
           class={`btn btn-primary ${
-            activeProviders().length > 0 ? "" : "btn-primary--disabled"
+            activeProviders().length > 0 ? '' : 'btn-primary--disabled'
           }`}
           disabled={activeProviders().length === 0}
           onClick={() => onClickUpdate(activeProviders())}

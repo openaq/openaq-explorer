@@ -3,6 +3,8 @@ import { JSX, Show, createEffect, createSignal } from 'solid-js';
 import { useStore } from '~/stores';
 import '~/assets/scss/components/modal.scss';
 import { updateList } from '~/db/lists';
+import CloseIcon from '~/assets/imgs/close.svg';
+import EditIcon from '~/assets/imgs/edit.svg';
 
 interface EditListModalDefinition {
   listsId: number;
@@ -11,19 +13,22 @@ interface EditListModalDefinition {
 }
 
 export function EditListModal(props: EditListModalDefinition) {
+  const svgAttributes = {
+    width: 24,
+    height: 24,
+    fill: '#FFFFFF',
+  };
+
   const [store, { toggleEditListModalOpen }] = useStore();
   const updatingList = useSubmission(updateList);
 
-  const onClickClose: JSX.EventHandler<
-    HTMLButtonElement,
-    MouseEvent
-  > = (e) => {
+  const onClickClose: JSX.EventHandler<HTMLButtonElement, MouseEvent> = (e) => {
     toggleEditListModalOpen();
     e.preventDefault();
     e.target.closest('dialog')!.close();
   };
 
-  const [ref, setRef ] = createSignal<HTMLDialogElement>()
+  const [ref, setRef] = createSignal<HTMLDialogElement>();
 
   createEffect(() => {
     if (store.editListModalOpen) {
@@ -31,9 +36,7 @@ export function EditListModal(props: EditListModalDefinition) {
     }
   });
 
-  const onSubmit: JSX.EventHandler<HTMLButtonElement, MouseEvent> = (
-    e
-  ) => {
+  const onSubmit: JSX.EventHandler<HTMLButtonElement, MouseEvent> = (e) => {
     e.target.closest('dialog')!.close();
     toggleEditListModalOpen();
   };
@@ -43,26 +46,26 @@ export function EditListModal(props: EditListModalDefinition) {
       <form action={updateList} method="post">
         <input type="hidden" name="lists-id" value={props.listsId} />
         <header class="modal__header">
-          <h2 class='title'>
-            <img src="/svgs/edit_white.svg" alt="add icon" />
+          <h2 class="title">
+            <EditIcon {...svgAttributes} />
             Edit list
           </h2>
           <button
             id="close"
-            class='close-btn'
+            class="close-btn"
             aria-label="close"
             formnovalidate
             onClick={onClickClose}
           >
-            <img src="/svgs/close.svg" alt="close icon" />
+            <CloseIcon {...svgAttributes} />
           </button>
         </header>
 
         <div class="modal__body">
-          <div class='form-input'>
+          <div class="form-input">
             <label for="list-name">Name</label>
 
-            <div class='form-input'>
+            <div class="form-input">
               <input
                 type="text"
                 name="list-name"
@@ -84,11 +87,7 @@ export function EditListModal(props: EditListModalDefinition) {
         </div>
         <footer class="modal__footer">
           <Show when={updatingList.result}>
-            <p
-              style={{ color: 'red' }}
-              role="alert"
-              id="error-message"
-            >
+            <p style={{ color: 'red' }} role="alert" id="error-message">
               {updatingList.result!.message}
             </p>
           </Show>

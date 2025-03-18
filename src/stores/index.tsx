@@ -1,7 +1,6 @@
-import { createContext, useContext, Component } from "solid-js";
-import { createStore } from "solid-js/store";
-import { Viewport } from "solid-map-gl";
-
+import { createContext, useContext, Component } from 'solid-js';
+import { createStore } from 'solid-js/store';
+import { Viewport } from 'solid-map-gl';
 
 interface StoreParameters {
   locationsId: number | undefined;
@@ -10,7 +9,6 @@ interface StoreParameters {
   listLocationsId: number | undefined;
   listParametersId: number | undefined;
   listParameter: string | undefined;
-
 
   deleteListModalOpen: boolean;
   deleteListLocationModalOpen: boolean;
@@ -28,9 +26,13 @@ interface StoreParameters {
   toastOpen: boolean;
   apiKeyRegenerateModalOpen: boolean;
   passwordChangeModalOpen: boolean;
+  bounds: number[];
+  mapBbox: number[];
+  showNotificationCard: boolean;
 }
 
-type Store = [StoreParameters,
+type Store = [
+  StoreParameters,
   {
     setSelectedLocationsId: (locationsId: number) => void;
     clearLocationsId: () => void;
@@ -58,7 +60,10 @@ type Store = [StoreParameters,
     updateRecentMeasurements: (parameter: string, measurements) => void;
     setTotalProviders: () => void;
     openToast: () => void;
-  }
+    setBounds: (bounds: number[]) => void;
+    setMapBbox: (mapBbox: number[]) => void;
+    toggleShowNotificationCard: (value: boolean) => void;
+  },
 ];
 
 const StoreContext = createContext<Store>();
@@ -88,6 +93,9 @@ export const StoreProvider: Component<{}> = (props) => {
     toastOpen: false,
     apiKeyRegenerateModalOpen: false,
     listParametersId: undefined,
+    bounds: [],
+    mapBbox: [],
+    showNotificationCard: false,
   });
 
   const store = [
@@ -95,6 +103,12 @@ export const StoreProvider: Component<{}> = (props) => {
     {
       setSelectedLocationsId(locationsId: number) {
         setState({ locationsId: locationsId });
+      },
+      setBounds(bounds: number[]) {
+        setState({ bounds: bounds });
+      },
+      setMapBbox(mapBbox: number[]) {
+        setState({ mapBbox: mapBbox });
       },
       clearLocationsId() {
         setState({ locationsId: undefined });
@@ -180,6 +194,9 @@ export const StoreProvider: Component<{}> = (props) => {
       setListParameter(parameter: string) {
         setState({ listParameter: parameter });
       },
+      toggleShowNotificationCard(value: boolean) {
+        setState({ showNotificationCard: value });
+      },
     },
   ];
 
@@ -193,7 +210,7 @@ export const StoreProvider: Component<{}> = (props) => {
 function useStoreContext() {
   const context = useContext(StoreContext);
   if (!context) {
-    throw new Error("useStoreContext: cannot find a StoreContext");
+    throw new Error('useStoreContext: cannot find a StoreContext');
   }
   return context;
 }

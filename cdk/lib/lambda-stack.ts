@@ -70,6 +70,7 @@ export class LambdaStack extends cdk.Stack {
         handler: 'server/index.handler',
         memorySize: 512,
         runtime: lambda.Runtime.NODEJS_20_X,
+        architecture: lambda.Architecture.ARM_64,
         vpc: vpc,
         allowPublicSubnet: true,
         vpcSubnets: {subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS},
@@ -79,7 +80,7 @@ export class LambdaStack extends cdk.Stack {
     );
 
     const bucket = new s3.Bucket(this, `${id}-explorer-assets`, {
-      bucketName: "openaq-explorer-assets",
+      bucketName: `${envName}-openaq-explorer-assets`,
       encryption: s3.BucketEncryption.S3_MANAGED,
       enforceSSL: true,
       removalPolicy: RemovalPolicy.DESTROY,

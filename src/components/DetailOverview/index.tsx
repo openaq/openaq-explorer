@@ -10,6 +10,8 @@ import { SensorType } from './SensorType';
 import '~/assets/scss/components/detail-overview.scss';
 import { DetailOverviewDefinition } from './types';
 import { sensorNodeLists } from '~/db/lists';
+import { License } from '../License';
+import CloudDownloadIcon from '~/assets/imgs/cloud_download.svg';
 
 interface ListsDefinition {
   sensorNodesId: number;
@@ -17,7 +19,10 @@ interface ListsDefinition {
 }
 
 function LocationLists(props: ListsDefinition) {
-  const lists = createAsync(() => sensorNodeLists(props.sensorNodesId), { initialValue: [], deferStream: true })
+  const lists = createAsync(() => sensorNodeLists(props.sensorNodesId), {
+    initialValue: [],
+    deferStream: true,
+  });
 
   return (
     <ul class="lists-list">
@@ -59,16 +64,18 @@ function LocationListsFallback() {
 }
 
 export function DetailOverview(props: DetailOverviewDefinition) {
-
   const pageLocation = useLocation();
+
+  const svgAttributes = {
+    width: 24,
+    height: 24,
+  };
 
   return (
     <section class="detail-overview">
       <div class="detail-overview__title">
         <div>
-          <span class="type-subtitle-3 text-smoke-120">
-            {props.country?.name}
-          </span>
+          <span class="type-subtitle-3 text-smoke-120">{props?.name}</span>
           <h1 class="type-display-1 text-sky-120">
             {props.name || 'No label'}
           </h1>
@@ -80,7 +87,10 @@ export function DetailOverview(props: DetailOverviewDefinition) {
               class="icon-btn btn-tertiary download-anchor"
             >
               Download data
-              <img src="/svgs/download_ocean.svg" alt="" />
+              <CloudDownloadIcon
+                class="cloud-download-icon"
+                {...svgAttributes}
+              />
             </a>
           </Show>
         </div>
@@ -140,14 +150,31 @@ export function DetailOverview(props: DetailOverviewDefinition) {
                 <td>Provider</td>
                 <td>{props.provider?.name}</td>
               </tr>
+              <Show
+                when={
+                  Array.isArray(props.licenses) && props.licenses.length > 0
+                }
+              >
+                <tr>
+                  <td>Licenses</td>
+                  <td>
+                    <For each={props.licenses}>
+                      {(license) => <License {...license} />}
+                    </For>
+                  </td>
+                </tr>
+              </Show>
             </tbody>
           </table>
         </div>
         <div class="divider"> </div>
         <div class="location-lists">
           <h3 class="type-subtitle-3 text-smoke-180">LISTS</h3>
-          <Show when={props.user?.()?.usersId} fallback={<LocationListsFallback />}>
-                      {props.lists}
+          <Show
+            when={props.user?.()?.usersId}
+            fallback={<LocationListsFallback />}
+          >
+            {props.lists}
             <LocationLists
               sensorNodesId={props.id}
               pathname={pageLocation.pathname}

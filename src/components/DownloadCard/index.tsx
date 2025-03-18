@@ -4,13 +4,11 @@ import tz from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import { getSensorMeasurementsDownload } from '~/client';
 
-import {
-  useLocation,
-  A,
-} from '@solidjs/router';
+import { useLocation, A } from '@solidjs/router';
 
 import '~/assets/scss/components/download-card.scss';
 import { Sensor } from '../DetailOverview/types';
+import DownloadIcon from '~/assets/imgs/cloud_download.svg';
 
 dayjs.extend(utc);
 dayjs.extend(tz);
@@ -97,6 +95,11 @@ interface Props {
 }
 
 export function DownloadCard(props: Props) {
+  const svgAttributes = {
+    width: 32,
+    height: 32,
+    fill: '##33a3a1',
+  };
   const [downloading, setDownloading] = createSignal(false);
 
   const [formDisabled, setFormDisabled] = createSignal(false);
@@ -225,7 +228,7 @@ export function DownloadCard(props: Props) {
           }`}
           disabled={downloading() ? true : false}
         >
-          Download CSV <img src="/svgs/download_ocean.svg" alt="" />
+          Download CSV <DownloadIcon class="download-icon" {...svgAttributes} />
         </button>
       </form>
     </>

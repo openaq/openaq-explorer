@@ -61,8 +61,14 @@
           background-size: 20px;
           background-repeat: no-repeat;
           background-position: calc(100% - 22px) center;
-        }
+        } 
       }
+    }
+    .zoom-to-provider-btn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin: 5px 0 5px 0;
     }
 
     .list-container {

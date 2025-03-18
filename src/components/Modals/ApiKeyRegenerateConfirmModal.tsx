@@ -4,25 +4,28 @@ import { useStore } from '~/stores';
 
 import '~/assets/scss/components/modal.scss';
 import { regenerateKey } from '~/db/account';
-
+import CloseIcon from '~/assets/imgs/close.svg';
 
 interface Props {
   token?: string;
 }
 
 export function ApiKeyRegenerateConfirmModal(props: Props) {
+  const svgAttributes = {
+    width: 24,
+    height: 24,
+    fill: '#FFFFFF',
+  };
+
   const [store, { toggleRegenerateKeyModalOpen }] = useStore();
 
-  const onClickClose: JSX.EventHandler<
-    HTMLButtonElement,
-    MouseEvent
-  > = (e) => {
+  const onClickClose: JSX.EventHandler<HTMLButtonElement, MouseEvent> = (e) => {
     toggleRegenerateKeyModalOpen();
     e.preventDefault();
     e.target.closest('dialog')!.close();
   };
 
-  const [ref, setRef ] = createSignal<HTMLDialogElement>()
+  const [ref, setRef] = createSignal<HTMLDialogElement>();
 
   createEffect(() => {
     if (store.apiKeyRegenerateModalOpen) {
@@ -30,10 +33,7 @@ export function ApiKeyRegenerateConfirmModal(props: Props) {
     }
   });
 
-  const onSubmit: JSX.EventHandler<
-    HTMLButtonElement,
-    MouseEvent
-  > = (e) => {
+  const onSubmit: JSX.EventHandler<HTMLButtonElement, MouseEvent> = (e) => {
     e.target.closest('dialog')!.close();
     toggleRegenerateKeyModalOpen();
   };
@@ -42,17 +42,22 @@ export function ApiKeyRegenerateConfirmModal(props: Props) {
 
   return (
     <dialog class="modal" ref={setRef}>
-      <form action={regenerateKey} name="regenerate-key-form" id="regenerate-key-form" method="post">
+      <form
+        action={regenerateKey}
+        name="regenerate-key-form"
+        id="regenerate-key-form"
+        method="post"
+      >
         <header class="modal__header">
           <h2>Regenerate API Key</h2>
           <button
             id="close"
-            class='close-btn'
+            class="close-btn"
             aria-label="close"
             formnovalidate
             onClick={onClickClose}
           >
-            <img src="/svgs/close.svg" alt="close icon" />
+            <CloseIcon {...svgAttributes} />
           </button>
         </header>
         <div class="modal__body">
@@ -71,11 +76,7 @@ export function ApiKeyRegenerateConfirmModal(props: Props) {
             Cancel
           </button>
           <Show when={regeneratingKey.result}>
-            <p
-              style={{ color: 'red' }}
-              role="alert"
-              id="error-message"
-            >
+            <p style={{ color: 'red' }} role="alert" id="error-message">
               {regeneratingKey.result?.message}
             </p>
           </Show>
@@ -93,4 +94,3 @@ export function ApiKeyRegenerateConfirmModal(props: Props) {
     </dialog>
   );
 }
-

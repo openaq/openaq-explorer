@@ -44,18 +44,18 @@ export function multiFormat(date, timezone) {
     timeSecond(date) < date
       ? formatMillisecond
       : timeMinute(date) < date
-      ? formatSecond
-      : timeHour(date) < date
-      ? formatMinute
-      : timeDay(date) < date
-      ? formatHour
-      : timeMonth(date) < date
-      ? timeWeek(date) < date
-        ? formatDay
-        : formatWeek
-      : timeYear(date) < date
-      ? formatMonth
-      : formatYear
+        ? formatSecond
+        : timeHour(date) < date
+          ? formatMinute
+          : timeDay(date) < date
+            ? formatHour
+            : timeMonth(date) < date
+              ? timeWeek(date) < date
+                ? formatDay
+                : formatWeek
+              : timeYear(date) < date
+                ? formatMonth
+                : formatYear
   )(
     new Date(
       date.toLocaleString('en-US', {
@@ -65,61 +65,6 @@ export function multiFormat(date, timezone) {
   );
 }
 
-function fillHourlyGaps(data) {
-  if (data.length === 0) return [];
-
-  const oneHour = 60 * 60 * 1000; // One hour in milliseconds
-  const filledData = [];
-
-  data.forEach((currentItem, index) => {
-    // Push the current item to the filledData array
-    filledData.push(currentItem);
-
-    // Check if this is the last item, skip adding gaps if so
-    if (index === data.length - 1) return;
-
-    const currentEndTime = new Date(
-      currentItem.period.datetimeTo.utc
-    ).getTime();
-    const nextStartTime = new Date(
-      data[index + 1].period.datetimeFrom.utc
-    ).getTime();
-
-    // Calculate the number of missing hours between the current item and the next one
-    const missingHours = (nextStartTime - currentEndTime) / oneHour;
-
-    // If there's a gap, create new objects with value null for each missing hour
-    Array.from({ length: missingHours - 1 }).forEach((_, gapIndex) => {
-      const newTimeFrom = new Date(
-        currentEndTime + oneHour * (gapIndex + 1)
-      ).toISOString();
-      const newTimeTo = new Date(
-        currentEndTime + oneHour * (gapIndex + 2)
-      ).toISOString();
-
-      const gapItem = {
-        ...currentItem,
-        value: null,
-        period: {
-          ...currentItem.period,
-          datetimeFrom: {
-            utc: newTimeFrom,
-            local: newTimeFrom, // Adjust the local time as needed
-          },
-          datetimeTo: {
-            utc: newTimeTo,
-            local: newTimeTo, // Adjust the local time as needed
-          },
-        },
-      };
-
-      // Push the gap item into the filledData array
-      filledData.push(gapItem);
-    });
-  });
-
-  return filledData;
-}
 // splits single measurements series into multiple subseries
 // if dates are not continuous
 export function splitMeasurements(measurements, timezone) {
@@ -334,7 +279,7 @@ export default function LineChart(props) {
                   cx={item.cx}
                   cy={item.cy}
                   r={item.cx == tooltipValue()?.x ? 5 : 3}
-                  onMouseEnter={() =>
+                  onMouseEnter={() => {
                     setTooltipValue({
                       visible: true,
                       x: item.cx,
@@ -342,8 +287,8 @@ export default function LineChart(props) {
                       value: item.value,
                       unit: item.unit,
                       date: item.date,
-                    })
-                  }
+                    });
+                  }}
                   onMouseLeave={() => setTooltipValue({ visible: false })}
                 />
               )}
@@ -395,7 +340,7 @@ export default function LineChart(props) {
                   props.height + 17
                 })`}
               >
-                {formatHour(tooltipValue()?.date)}
+                {tooltipValue()?.date.tz(props.timezone).format('HH:mm')}
               </text>
             </Show>
           </g>

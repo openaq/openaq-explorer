@@ -1,9 +1,6 @@
 import { A } from '@solidjs/router';
 import { For, Show, createEffect, createSignal } from 'solid-js';
-import {
-  ReferenceGradeMarker,
-  LowCostSensorMarker,
-} from '../LocationMarker';
+import { ReferenceGradeMarker, LowCostSensorMarker } from '../LocationMarker';
 import { NoLocationsFallback } from './NoLocationsFallback';
 import { useStore } from '~/stores';
 import LineChart from '~/components/Charts/LineChart';
@@ -11,10 +8,9 @@ import dayjs from 'dayjs';
 import tz from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import { getSensorMeasurements } from '~/client';
+import DeleteForeverIcon from '~/assets/imgs/delete_forever.svg';
 
 import '~/assets/scss/components/location-list.scss';
-
-
 
 dayjs.extend(utc);
 dayjs.extend(tz);
@@ -49,11 +45,13 @@ interface LocationListItems {
   locations: LocationListItemDefinition[];
 }
 
-
-
-
-
 export function LocationListItem(props: LocationListItemDefinition) {
+  const svgAttributes = {
+    width: 24,
+    height: 24,
+    fill: '#FFFFFF',
+  };
+
   const [
     store,
     { setDeleteListLocationsId, toggleDeleteListLocationModalOpen },
@@ -63,36 +61,35 @@ export function LocationListItem(props: LocationListItemDefinition) {
 
   const [loading, setLoading] = createSignal(true);
 
-
   const getLocationSensorsId = (): number | undefined => {
-    const sensor = props.sensors.filter(o => Number(o.parameter.id) === Number(store.listParametersId) );
-    return sensor?.[0]?.id
-  }
+    const sensor = props.sensors.filter(
+      (o) => Number(o.parameter.id) === Number(store.listParametersId)
+    );
+    return sensor?.[0]?.id;
+  };
 
   const [measurements, setMeasurements] = createSignal([]);
 
   createEffect(async () => {
-    setSelectedSensorsId(getLocationSensorsId())
+    setSelectedSensorsId(getLocationSensorsId());
     setMeasurements([]);
     if (selectedSensorsId()) {
-      setMeasurements(await getSensorMeasurements(selectedSensorsId()!,dayjs
-      .tz(
-        Date.now() - 1000 * 60 * 60 * 24,
-        props.timezone
-      )
-      .format(), dayjs
-      .tz(Date.now(),  props.timezone)
-      .format() ))
+      setMeasurements(
+        await getSensorMeasurements(
+          selectedSensorsId()!,
+          dayjs.tz(Date.now() - 1000 * 60 * 60 * 24, props.timezone).format(),
+          dayjs.tz(Date.now(), props.timezone).format()
+        )
+      );
     }
     setLoading(false);
-
-  })
+  });
 
   return (
-    <li class='location-list-item'>
+    <li class="location-list-item">
       <A href={`/locations/${props.id}`}>
-        <div class='location-info'>
-          <div class='location-info__title'>
+        <div class="location-info">
+          <div class="location-info__title">
             {props.ismonitor ? (
               <ReferenceGradeMarker />
             ) : (
@@ -100,10 +97,10 @@ export function LocationListItem(props: LocationListItemDefinition) {
             )}
             <h3>{props.name}</h3>
           </div>
-          <div class='location-info__body'>
+          <div class="location-info__body">
             <div>
-              <div class='locality'>{props.country}</div>
-              <div class='location-characteristics'>
+              <div class="locality">{props.country}</div>
+              <div class="location-characteristics">
                 <div class="type-body-1">Provider</div>
                 <div class="type-body-2">{props.provider}</div>
 
@@ -116,29 +113,23 @@ export function LocationListItem(props: LocationListItemDefinition) {
                 <div class="type-body-2">
                   {props.sensors
                     .map(
-                      (o) =>
-                        `${o.parameter.displayName} ${o.parameter.units}`
+                      (o) => `${o.parameter.displayName} ${o.parameter.units}`
                     )
                     .join(', ')}
                 </div>
               </div>
             </div>
 
-            <div class='location-measurements'>
+            <div class="location-measurements">
               <LineChart
                 width={400}
                 height={200}
                 margin={60}
                 xTicks={4}
                 dateFrom={dayjs
-                  .tz(
-                    Date.now() - 1000 * 60 * 60 * 24,
-                    props.timezone
-                  )
+                  .tz(Date.now() - 1000 * 60 * 60 * 24, props.timezone)
                   .format()}
-                dateTo={dayjs
-                  .tz(Date.now(), props.timezone)
-                  .format()}
+                dateTo={dayjs.tz(Date.now(), props.timezone).format()}
                 data={measurements()}
                 scale={'linear'}
                 loading={loading()}
@@ -150,17 +141,14 @@ export function LocationListItem(props: LocationListItemDefinition) {
         </div>
       </A>
       <button
-        class='location-card-delete-btn'
+        class="location-card-delete-btn"
         type="button"
         onClick={() => {
           setDeleteListLocationsId(props.id);
           toggleDeleteListLocationModalOpen();
         }}
       >
-        <img
-          src="/svgs/delete_forever_smoke120.svg"
-          alt="delete forever icon"
-        />
+        <DeleteForeverIcon {...svgAttributes} />
       </button>
     </li>
   );
@@ -168,15 +156,13 @@ export function LocationListItem(props: LocationListItemDefinition) {
 
 export function LocationList(props: LocationListItems) {
   return (
-    <ul class='location-list'>
+    <ul class="location-list">
       <Show
         when={props.locations.length > 0}
         fallback={<NoLocationsFallback />}
       >
         <For each={props.locations}>
-          {(locationListItem) => (
-            <LocationListItem {...locationListItem} />
-          )}
+          {(locationListItem) => <LocationListItem {...locationListItem} />}
         </For>
       </Show>
     </ul>

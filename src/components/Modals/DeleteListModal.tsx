@@ -3,28 +3,29 @@ import { JSX, Show, createEffect, createSignal } from 'solid-js';
 import { useStore } from '~/stores';
 import '~/assets/scss/components/modal.scss';
 import { deleteList } from '~/db/lists';
-
-
+import DeleteForeverIcon from '~/assets/imgs/delete_forever.svg';
+import CloseIcon from '~/assets/imgs/close.svg';
 
 export function DeleteListModal() {
-  const [ref, setRef ] = createSignal<HTMLDialogElement>()
+  const svgAttributes = {
+    width: 24,
+    height: 24,
+    fill: '#FFFFFF',
+  };
+  const [ref, setRef] = createSignal<HTMLDialogElement>();
 
   const [store, { toggleDeleteListModalOpen }] = useStore();
   const deletingList = useSubmission(deleteList);
 
-  const onClickClose: JSX.EventHandler<
-    HTMLButtonElement,
-    MouseEvent
-  > = (e) => {
+  const onClickClose: JSX.EventHandler<HTMLButtonElement, MouseEvent> = (e) => {
     toggleDeleteListModalOpen();
     e.preventDefault();
     e.target.closest('dialog')!.close();
   };
 
-  const onSubmitClick: JSX.EventHandler<
-    HTMLButtonElement,
-    MouseEvent
-  > = (e) => {
+  const onSubmitClick: JSX.EventHandler<HTMLButtonElement, MouseEvent> = (
+    e
+  ) => {
     e.target.closest('dialog')!.close();
     toggleDeleteListModalOpen();
   };
@@ -39,39 +40,32 @@ export function DeleteListModal() {
     <dialog class="modal" ref={setRef}>
       <form action={deleteList} method="post">
         <header class="modal__header">
-          <h2 class='title'>
-            <img
-              src="/svgs/delete_forever_white.svg"
-              alt="add icon"
-            />
+          <h2 class="title">
+            <DeleteForeverIcon {...svgAttributes} />
             Delete list
           </h2>
           <button
             id="close"
-            class='close-btn'
+            class="close-btn"
             aria-label="close"
             formnovalidate
             onClick={onClickClose}
           >
-            <img src="/svgs/close.svg" alt="close icon" />
+            <CloseIcon {...svgAttributes} />
           </button>
         </header>
 
         <div class="modal__body">
           <p class="type-subtitle-3">Delete Warning</p>
           <p>
-            <span class="type-subtitle-4">Warning</span> You are about
-            to delete a list, this cannot be undone. Click Delete if
-            you are you sure want to proceed.
+            <span class="type-subtitle-4">Warning</span> You are about to delete
+            a list, this cannot be undone. Click Delete if you are sure you want
+            to proceed.
           </p>
         </div>
         <footer class="modal__footer">
           <Show when={deletingList.result}>
-            <p
-              style={{ color: 'red' }}
-              role="alert"
-              id="error-message"
-            >
+            <p style={{ color: 'red' }} role="alert" id="error-message">
               {deletingList.result!.message}
             </p>
           </Show>
@@ -85,11 +79,7 @@ export function DeleteListModal() {
           >
             Cancel
           </button>
-          <input
-            type="hidden"
-            name="lists-id"
-            value={store.listsId}
-          />
+          <input type="hidden" name="lists-id" value={store.listsId} />
           <button
             class="btn btn-primary"
             type="submit"

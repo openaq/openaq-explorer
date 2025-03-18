@@ -3,25 +3,27 @@ import { forgotPassword } from '~/auth/user';
 import { Show, createSignal } from 'solid-js';
 import PasswordScore from '~/components/PasswordScore';
 import { evaluatePassword } from '~/lib/password';
+import ErrorIcon from '~/assets/imgs/warning.svg';
 
 import '~/assets/scss/routes/new-password.scss';
 import { Score } from '@zxcvbn-ts/core/dist/types';
 
-
 export default function VerifyEmail() {
+  const svgAttributes = {
+    width: 24,
+    height: 24,
+    fill: '#dd443c',
+  };
   const [searchParams] = useSearchParams();
   const settingNewPassword = useSubmission(forgotPassword);
 
-  const [passwordInputValue, setPasswordInputValue] =
-    createSignal<string>();
+  const [passwordInputValue, setPasswordInputValue] = createSignal<string>();
   const [passwordConfirmInputValue, setPasswordConfirmInputValue] =
     createSignal<string>();
 
   const [passwordScore, setPasswordScore] = createSignal<Score>();
-  const [passwordWarning, setPasswordWarning] =
-    createSignal<string>();
-  const [passwordsDoNotMatch, setPasswordsDoNotMatch] =
-    createSignal<boolean>();
+  const [passwordWarning, setPasswordWarning] = createSignal<string>();
+  const [passwordsDoNotMatch, setPasswordsDoNotMatch] = createSignal<boolean>();
 
   let passwordInputTimeout: number;
 
@@ -64,14 +66,8 @@ export default function VerifyEmail() {
   return (
     <>
       <main class="main">
-        <h1 class="type-heading-1 text-sky-120">
-          Forgot your password?
-        </h1>
-        <form
-          action={forgotPassword}
-          method="post"
-          class="new-password-form"
-        >
+        <h1 class="type-heading-1 text-sky-120">Forgot your password?</h1>
+        <form action={forgotPassword} method="post" class="new-password-form">
           <input
             type="hidden"
             name="verification-code"
@@ -89,9 +85,7 @@ export default function VerifyEmail() {
             />
           </div>
           <div class="form-element">
-            <label for="confirm-new-password">
-              Confirm new password
-            </label>
+            <label for="confirm-new-password">Confirm new password</label>
             <input
               class="text-input"
               type="password"
@@ -101,10 +95,7 @@ export default function VerifyEmail() {
               onInput={(e) => onPasswordConfirmInput(e)}
             />
           </div>
-          <PasswordScore
-            score={passwordScore()}
-            warning={passwordWarning()}
-          />
+          <PasswordScore score={passwordScore()} warning={passwordWarning()} />
           <Show when={passwordsDoNotMatch()}>
             <p class="type-body-2" role="alert">
               Passwords must match
@@ -112,14 +103,18 @@ export default function VerifyEmail() {
           </Show>
           <Show when={settingNewPassword.result}>
             <p role="alert" id="error-message" class="error-message">
-              <img src="/svgs/error_fire100.svg" alt="error icon" />
+              <ErrorIcon {...svgAttributes} />
               {settingNewPassword.result!.message}
             </p>
           </Show>
           <button
             class="btn btn-primary"
             type="submit"
-            disabled={settingNewPassword.pending || passwordScore()! < 4 || passwordsDoNotMatch()}
+            disabled={
+              settingNewPassword.pending ||
+              passwordScore()! < 4 ||
+              passwordsDoNotMatch()
+            }
           >
             Submit
           </button>
@@ -127,6 +122,6 @@ export default function VerifyEmail() {
         <div class="bubble-lg" />
         <div class="bubble-sm" />
       </main>
-      </>
+    </>
   );
 }
