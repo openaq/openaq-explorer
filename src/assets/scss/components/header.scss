@@ -171,23 +171,51 @@
       overflow: hidden;
     }
   }
+    .dropdown {
+     position: relative;
+     background-color: white;
+ 
+     &:hover {
+       .submenu {
+         z-index: 1000;
+         display: flex;
+         border: none;
+         border-radius: 0;
+       }
+     }
+ 
+     & > a {
+       display: none;
+     }
+ 
+     & {
+       .submenu {
+         background-color: white;
+         visibility: visible;
+         position: static;
+         margin: 0;
+         opacity: 1;
+         width: 100%;
+         display: flex;
+         align-items: center;
+         flex-direction: column;
+ 
+         &:hover {
+           display: flex;
+         }
+ 
+         &__item {
+           display: flex;
+           height: auto;
+           width: 100%;
+           margin: 0;
+           justify-content: center;
+           border: 1px solid #eaecf0;
+         }
+       }
+     }
+   }
 
-  .dropdown {
-    position: relative;
-    background-color: white;
-  
-    &:hover {
-      .submenu {
-        background-color: white;
-        visibility: visible;
-        opacity: 1;
-        z-index: 1000;
-        display: block;
-        border: 1px solid #eaecf0;
-        border-radius: 12px;
-    }
-  }
-}
 
   #menu-toggle ~ .nav-list > li {
     height: 0;
@@ -262,8 +290,5 @@
 
   .donate-btn {
     display: none !important;
-  }
-  .submenu {
-    transform: translateX(-30%);
-  }
+  }    
 }

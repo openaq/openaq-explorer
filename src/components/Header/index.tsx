@@ -32,7 +32,12 @@ function Account() {
   return (
     <div class="dropdown">
       <A href="/account">
-        <AccountIcon width={28} height={28} {...svgColor} />
+        <AccountIcon
+          class="account-icon"
+          width={28}
+          height={28}
+          {...svgColor}
+        />
       </A>
       <ul class="submenu" aria-label="submenu">
         <li class="submenu__item">
@@ -43,7 +48,6 @@ function Account() {
         </li>
         <li class="submenu__item">
           <form action={logout} method="post" class="logout-form">
-            <img src="/svgs/logout.svg" alt="logout icon" />
             <LogoutIcon {...svgHeightWidth} {...svgColor} />
             <input
               type="hidden"
@@ -249,15 +253,14 @@ export function Header(props: Props) {
           )}
           {props.user?.()?.usersId ? (
             <A href="/lists" class="type-link-3 list-link">
-              <img
-                width="24px"
-                height="24px"
-                src="/svgs/lists.svg"
-                alt="lists icon"
-              />{' '}
+              <ListsIcon
+                {...svgHeightWidth}
+                {...svgColor}
+                fill="#0000ff"
+                stroke="#ff0000"
+                stroke-width={12}
+              />
               <span>Lists</span>
-              <ListsIcon {...svgHeightWidth} {...svgColor}  fill="#0000ff" stroke="#ff0000" stroke-width={12}/>
-              Lists
             </A>
           ) : (
             ''
