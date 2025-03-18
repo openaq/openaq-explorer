@@ -2,10 +2,7 @@ import { createSignal, For } from 'solid-js';
 import dayjs from 'dayjs';
 import tz from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
-import {
-  getSensorMeasurementsDownload,
-  fetchSensorMeasurements,
-} from '~/client';
+import { getSensorMeasurementsDownload } from '~/client';
 
 import { useLocation, A } from '@solidjs/router';
 
@@ -156,7 +153,6 @@ export function DownloadCard(props: Props) {
         dayjs(new Date(dateToValue), props.timezone).toISOString()
       );
       data = data.concat(measurements);
-      console.log('HEJ DATA', data);
       await sleep(300);
     }
 
@@ -190,13 +186,11 @@ export function DownloadCard(props: Props) {
       >
         <label for="">Data type</label>
         <select id="select" class="date-input">
-          <option value="measurements">Raw data</option>
+          <option value="measurements">Measurements</option>
           <option value="hours">Hourly averages</option>
           <option value="days">Daily averages</option>
           <option value="years">Yearly averages</option>
         </select>
-        <br />
-        <br />
         <input type="hidden" name="timezone" value={props.timezone} />
         <label for="">Start date</label>
         <input

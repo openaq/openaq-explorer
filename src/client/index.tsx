@@ -52,7 +52,7 @@ async function fetchSensorMeasurementsDownload(
   return data.results;
 }
 
-export async function fetchSensorMeasurements(
+async function fetchSensorMeasurements(
   sensorsId: number,
   rollup: string,
   datetimeFrom: string,
