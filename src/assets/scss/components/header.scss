@@ -116,9 +116,85 @@
     }
   }
 }
+.account-submenu {
+  list-style: none;
+  margin: 0;
+  padding-left: 0;
+  width: 320px;
+  background-color: white;
+  visibility: hidden;
+  opacity: 0;
+  min-width: 5rem;
+  position: absolute;
+  transition: all 0.5s ease;
+  margin-top: 1rem;
+  top: 10px;
+  left: 0;
+  display: none;
+
+  &:hover {
+    visibility: visible;
+    opacity: 1;
+    display: block;
+  }
+
+  &__item {
+    height: 24px;
+    margin: 12px;
+  }
+}
+
+.account-dropdown {
+  position: relative;
+  background-color: white;
+
+  &:hover {
+    .account-submenu {
+      background-color: white;
+      visibility: visible;
+      opacity: 1;
+      z-index: 1000;
+      display: block;
+      border: 1px solid #eaecf0;
+      border-radius: 12px;
+    }
+  }
+}
+
+.mobile-account-actions {
+  display: none;
+}
 
 @media (max-width: 1000px) {
   $header-height: 60px;
+
+  .mobile-account-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    display: flex;
+    height: auto;
+    width: 100%;
+    margin: 0;
+    justify-content: center;
+    border: 1px solid #eaecf0;
+    a {
+      display: flex;
+      height: auto;
+      width: 100%;
+      margin: 0;
+      justify-content: center;
+      border: 1px solid #eaecf0;
+    }
+  }
+
+  
+
+  .account-dropdown {
+    display: none; 
+  }
+  
 
   .header {
     height: $header-height;
@@ -170,7 +246,7 @@
     & > li {
       overflow: hidden;
     }
-  }
+  }  
     .dropdown {
      position: relative;
      background-color: white;
@@ -183,10 +259,9 @@
          border-radius: 0;
        }
      }
- 
      & > a {
-       display: none;
-     }
+      display: none;
+      }
  
      & {
        .submenu {
@@ -215,6 +290,7 @@
        }
      }
    }
+   
 
 
   #menu-toggle ~ .nav-list > li {
@@ -278,6 +354,13 @@
 }
 
 @media (max-width: 424px) {
+  .mobile-account-actions {
+    display: none !important; 
+  }
+
+  .account-dropdown {
+    display: block; 
+  }
   .header-logo {
     position: absolute;
     left: 50%;
@@ -291,4 +374,8 @@
   .donate-btn {
     display: none !important;
   }    
+  
+  .account-submenu {
+    transform: (translate(-30%));
+  } 
 }
