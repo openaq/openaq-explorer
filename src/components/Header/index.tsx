@@ -23,18 +23,32 @@ const svgColor = {
 };
 
 function Account() {
+  const [accountDropdownOpen, setAccountDropdownOpen] = createSignal(false);
   const location = useLocation();
   const pathname = createMemo(() => location.pathname);
 
   const re = /\/lists[\/\d+]*|\/account/;
   const match = pathname().match(re);
 
+  const toggleDropdown = (e: MouseEvent) => {
+    e.preventDefault();
+    setAccountDropdownOpen(!accountDropdownOpen());
+  };
+
   return (
-    <div class="dropdown">
-      <A href="/account">
-        <AccountIcon width={28} height={28} {...svgColor} />
+    <div class={`account-dropdown ${accountDropdownOpen() ? 'open' : ''}`}>
+      <A href="/account" onClick={toggleDropdown}>
+        <AccountIcon
+          class="account-icon"
+          width={28}
+          height={28}
+          {...svgColor}
+        />
       </A>
-      <ul class="submenu" aria-label="submenu">
+      <ul
+        class={`account-submenu ${accountDropdownOpen() ? 'show' : ''}`}
+        aria-label="submenu"
+      >
         <li class="submenu__item">
           <A href="/account" class={`type-body-3 text-smoke-120 settings-link`}>
             <SettingsIcon {...svgHeightWidth} {...svgColor} />
@@ -248,13 +262,47 @@ export function Header(props: Props) {
           )}
           {props.user?.()?.usersId ? (
             <A href="/lists" class="type-link-3 list-link">
-              <ListsIcon {...svgHeightWidth} {...svgColor}  fill="#0000ff" stroke="#ff0000" stroke-width={12}/>
-              Lists
+              <ListsIcon
+                {...svgHeightWidth}
+                {...svgColor}
+                fill="#0000ff"
+                stroke="#ff0000"
+                stroke-width={12}
+              />
+              <span>Lists</span>
             </A>
           ) : (
             ''
           )}
           {props.user?.()?.usersId ? <Account /> : ''}
+          {props.user?.()?.usersId ? (
+            <div class="mobile-account-actions">
+              <A
+                href="/account"
+                class="type-body-3 text-smoke-120 settings-link"
+              >
+                <SettingsIcon {...svgHeightWidth} {...svgColor} />
+                <span>Settings</span>
+              </A>
+              <form action={logout} method="post" class="logout-form">
+                <LogoutIcon {...svgHeightWidth} {...svgColor} />
+                <input
+                  type="hidden"
+                  name="redirect"
+                  value={pageLocation.pathname}
+                />
+                <button
+                  name="logout"
+                  type="submit"
+                  class="type-body-3 text-smoke-120 logout-btn"
+                >
+                  Logout
+                </button>
+              </form>
+            </div>
+          ) : (
+            ''
+          )}
           <A
             href="https://secure.givelively.org/donate/openaq-inc/"
             class={`btn btn-primary ${'donate-btn'}`}
