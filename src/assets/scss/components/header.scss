@@ -157,6 +157,9 @@
       display: block;
       border: 1px solid #eaecf0;
       border-radius: 12px;
+      @media (max-width: 424px) {
+        display: none; 
+      }
     }
   }
 }
@@ -189,13 +192,10 @@
     }
   }
 
-  
-
   .account-dropdown {
     display: none; 
   }
   
-
   .header {
     height: $header-height;
     padding: 0 10px;
@@ -290,8 +290,6 @@
        }
      }
    }
-   
-
 
   #menu-toggle ~ .nav-list > li {
     height: 0;
@@ -361,6 +359,24 @@
   .account-dropdown {
     display: block; 
   }
+
+  .account-submenu {
+    display: none;
+    visibility: hidden;
+    opacity: 0; 
+    transition: visibility 0s, opacity 0.2s linear;
+    z-index: 2000;
+    background-color: white;
+    border: 1px solid #eaecf0;
+    border-radius: 12px;
+  }
+
+  .account-dropdown.open .account-submenu {
+    display: block;
+    visibility: visible;
+    opacity: 1;
+  }
+
   .header-logo {
     position: absolute;
     left: 50%;

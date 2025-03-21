@@ -30,19 +30,14 @@ function Account() {
   const re = /\/lists[\/\d+]*|\/account/;
   const match = pathname().match(re);
 
-  // const toggleDropdown = (e: MouseEvent) => {
-  //   if (window.innerWidth <= 424) {
-  //     e.preventDefault();
-  //     setAccountDropdownOpen(!accountDropdownOpen);
-  //   }
-  // };
+  const toggleDropdown = (e: MouseEvent) => {
+    e.preventDefault();
+    setAccountDropdownOpen(!accountDropdownOpen());
+  };
 
   return (
     <div class={`account-dropdown ${accountDropdownOpen() ? 'open' : ''}`}>
-      <A
-        href="/account"
-        // onClick={toggleDropdown}
-      >
+      <A href="/account" onClick={toggleDropdown}>
         <AccountIcon
           class="account-icon"
           width={28}
