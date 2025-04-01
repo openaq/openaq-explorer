@@ -10,13 +10,20 @@ interface Frontmatter {
   title: string;
 }
 
-interface ParsedMarkdown {
+interface ParsedNotificationMarkdown {
   notificationContent: string;
   notificationType?: string;
   notificationTitle?: string;
 }
 
-export const parseMarkdown = (markdown: string): ParsedMarkdown => {
+interface ParsedHelpMarkdown {
+  helpContent: string;
+  helpTitle: string;
+}
+
+export const parseNotificationMarkdown = (
+  markdown: string
+): ParsedNotificationMarkdown => {
   const {
     data: { frontmatter },
     value,
@@ -34,5 +41,24 @@ export const parseMarkdown = (markdown: string): ParsedMarkdown => {
     notificationContent: String(value),
     notificationTitle: parsedFrontmatter?.title,
     notificationType: parsedFrontmatter?.type,
+  };
+};
+
+export const parseHelpMarkdown = (markdown: string): ParsedHelpMarkdown => {
+  const {
+    data: { frontmatter },
+    value,
+  } = unified()
+    .use(remarkParse)
+    .use(remarkFrontmatter, ['yaml'])
+    .use(remarkParseFrontmatter)
+    .use(remarkRehype)
+    .use(rehypeStringify)
+    .processSync(markdown);
+
+  const parsedFrontmatter = frontmatter as Frontmatter;
+  return {
+    helpContent: String(value),
+    helpTitle: parsedFrontmatter?.title,
   };
 };
