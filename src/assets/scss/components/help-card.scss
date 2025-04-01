@@ -1,0 +1,57 @@
+@use 'openaq-design-system/scss/variables';
+@use '~/assets/scss/cards';
+
+.help-card {
+    @extend .dismissable-card;
+    max-height: 50%;
+    position: absolute;
+    background-color: white;
+    width: 280px;
+    border-radius: 18px;
+    border: 6px #e6f8f8 solid;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 67px;
+    margin-left: 11px;
+    z-index: 5000;
+
+
+    &--translate {
+        @extend .dismissable-card--translate;
+        left: 660px 
+      }
+
+    .help-card__body {
+        overflow-y: auto;
+    }
+
+    .help-card__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        
+        h3 {
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+    }
+
+    p {
+        text-align: left;
+        margin: 0 auto;
+        width: 100%;
+        font-size: 1rem;
+    }
+
+
+    .help-card-btn {
+        font-size: 1rem;
+        width: 180px;
+    }
+
+
+}
