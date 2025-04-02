@@ -17,9 +17,9 @@ const HelpCard = (props: HelpCardDefinition) => {
         class={`help-card ${store.showHelpCard ? 'help-card--translate' : ''}`}
       >
         <header class="help-card__header">
-          <h3 class="type-subtitle-1 gradient-title">{props.title}</h3>
+          <h3 class="type-subtitle-1">{props.title}</h3>
           <button class="close-btn" onClick={() => toggleShowHelpCard(false)}>
-            <CloseIcon />
+            <CloseIcon fill="#FFFFFF" />
           </button>
         </header>
         <section class="help-card__body help-items">

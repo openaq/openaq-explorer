@@ -146,12 +146,7 @@ export default function Home() {
           />
         </Show>
       }
-      <Show when={store.showHelpCard}>
-        <>
-          <HelpCard content={store.helpContent} title="Help" />
-        </>
-      </Show>
-
+      <HelpCard content={store.helpContent} title="Help" />
       <Map />
       <FlipCard />
       <LocationDetailCard />

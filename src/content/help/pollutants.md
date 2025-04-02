@@ -2,7 +2,7 @@
 title: 'pollutants'
 ---
 
-## Pollutants
+### Pollutants
 
 The OpenAQ database currently ingests the following pollutant data, with a focus on those in **bold**.
 
