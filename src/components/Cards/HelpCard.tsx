@@ -37,7 +37,7 @@ const HelpCard = (props: HelpCardDefinition) => {
             rel="noreferrer noopener"
           >
             <span>More Help</span>
-            <RightArrowIcon fill="#FFFFFF" />
+            <RightArrowIcon fill="#FFFFFF" width={20} height={20} />
           </a>
         </footer>
       </article>

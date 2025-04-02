@@ -17,18 +17,13 @@
     transform: translateX(120%);
     transition: transform 0.4s cubic-bezier(0.3, 1, 0.3, 1);
     box-shadow: 0px 20px 20px 0px rgba(0, 0, 0, 0.25);
+    line-height: 120%;
 
 
     &--translate {
         top: 100px;
         transform: translateX(-120%);
       }
-
-
-    .help-card__body {
-        overflow-y: auto;
-        margin-inline: 18px
-    }
 
     .help-card__header {
         background-color: var.$lavender100;
@@ -40,33 +35,44 @@
         gap: 10px;
         padding-block: 10px;
         padding-inline: 20px;
-
         
         h3 {
             margin-top: 0;
             margin-bottom: 0;
+            font-size: 18px;
             color: white;
+        }
+    }
+
+    .help-card__body {
+        overflow-y: auto;
+        margin-inline: 18px;
+        padding-bottom: 20px;
+
+        h3, li {
+            font-size: 14px;
+        }
+
+        p {
+            text-align: left;
+            margin: 0 auto;
+            width: 100%;
+            font-size: 14px;
         }
 
     }
 
-    p {
-        text-align: left;
-        margin: 0 auto;
-        width: 100%;
-        font-size: 1rem;
+
+
+    .help-card__footer {
+        border-top: solid 1px var.$smoke30;
+
+        .help-card-btn {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            margin: 12px 18px 12px 18px;
+        }
     }
-
-
-    .help-card-btn {
-        display: flex;
-        justify-content: space-between;
-        font-size: 1rem;
-        margin: 12px 18px 12px 18px;
-    }
-
-
-    
-
 
 }
