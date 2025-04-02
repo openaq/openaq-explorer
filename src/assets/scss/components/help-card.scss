@@ -1,10 +1,12 @@
 @use 'openaq-design-system/scss/variables' as var;
 @use '~/assets/scss/cards';
+@use 'openaq-design-system/scss/mixins/index.scss' as mixins;
 
 .help-card {
     position: absolute;
+    top: 100px;
     right: -300px;
-    height: 500px;
+    height: 531px;
     background-color: var.$white;
     color: var.$smoke120;
     width: 280px;
@@ -15,7 +17,7 @@
     margin-left: 11px;
     z-index: 5000;
     transform: translateX(120%);
-    transition: transform 0.4s cubic-bezier(0.3, 1, 0.3, 1);
+    transition: transform 0.6s cubic-bezier(0, 0, 0.6, 1);
     box-shadow: 0px 20px 20px 0px rgba(0, 0, 0, 0.25);
     line-height: 120%;
 
@@ -23,13 +25,14 @@
     &--translate {
         top: 100px;
         transform: translateX(-120%);
+        transition: transform 0.6s cubic-bezier(0, 0, 0.6, 1);
       }
 
     .help-card__header {
         background-color: var.$lavender100;
         display: flex;
         max-width: 100%;
-        height: 45px !important;
+        height: 45px;
         align-items: center;
         justify-content: space-between;
         gap: 10px;
@@ -37,10 +40,10 @@
         padding-inline: 20px;
         
         h3 {
+            @include mixins.heading3;
+            color: var.$white;
             margin-top: 0;
             margin-bottom: 0;
-            font-size: 18px;
-            color: white;
         }
     }
 
@@ -49,20 +52,16 @@
         margin-inline: 18px;
         padding-bottom: 20px;
 
-        h3, li {
-            font-size: 14px;
+        h3 {
+            @include mixins.subtitle3;
+            margin-top: 12px;
+            margin-bottom: 12px;
         }
 
-        p {
-            text-align: left;
-            margin: 0 auto;
-            width: 100%;
-            font-size: 14px;
+        p, li {
+            @include mixins.body1
         }
-
     }
-
-
 
     .help-card__footer {
         border-top: solid 1px var.$smoke30;
@@ -72,6 +71,11 @@
             justify-content: space-between;
             font-size: 14px;
             margin: 12px 18px 12px 18px;
+
+            > span {
+                @include mixins.button1;
+                color: var.$white;
+            }
         }
     }
 

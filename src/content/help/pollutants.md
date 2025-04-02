@@ -20,9 +20,7 @@ The OpenAQ database currently ingests the following pollutant data, with a focus
 - CH₄ - Methane gas
 - CO₂ - Carbon dioxide gas
 
----
-
-# Units of measurement
+### Units of measurement
 
 Measurements of pollutants are reported in a variety of units depending on how the data is reported from the original data provider. The most common units found in the dataset are:
 
