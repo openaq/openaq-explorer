@@ -12,31 +12,48 @@
   overflow-y: hidden;
   min-height: calc(100vh + 200px);
 
+  h1 {
+    text-align: center;
+  }
+
   &__section {
-    width: 600px;
+    width: 100%;
+    max-width: 600px;
     display: flex;
     gap: 12px;
     flex-direction: column;
 
+    @media (max-width: 630px) {
+      width: calc(100% - 40px);
+      max-width: none;
+      padding: 0 20px;
+      h2 {
+        text-align: left;
+        width: 100%;
+      }
+    }
+    
     .form-element {
       display: flex;
       flex-direction: column;
-      margin: 9px 0;
       gap: 8px;
-
+      width: 100%;
+    
       input {
-        width: 80%;
+        width: 100%;
+        max-width: 500px; 
+        padding: 8px;
+        box-sizing: border-box;
+    
+        @media (max-width: 600px) {
+          width: 100%;
+          padding: 8px;
+        }
       }
 
       button {
         align-self: flex-start;
       }
-    }
-
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
     }
   }
 }
