@@ -8,7 +8,7 @@ import { useStore } from '~/stores';
 import { createEffect, createMemo, onMount, Show } from 'solid-js';
 import content from '~/content/notification.md?raw';
 import MD5 from 'crypto-js/md5';
-import { parseMarkdown } from '~/components/Cards/utils';
+import { parseNotificationMarkdown } from '~/components/Cards/utils';
 
 export default function Home() {
   const showNotification = JSON.parse(
@@ -18,10 +18,11 @@ export default function Home() {
   const NotificationCard = clientOnly(
     () => import('~/components/Cards/NotificationCard')
   );
+  const HelpCard = clientOnly(() => import('~/components/Cards/HelpCard'));
   const hashedContent = MD5(content).toString();
   const dismissedKey = `${hashedContent}-notificationDismissed`;
 
-  const parsedContent = parseMarkdown(content);
+  const parsedContent = parseNotificationMarkdown(content);
   const notificationType = parsedContent.notificationType;
   const notificationTitle = parsedContent.notificationTitle;
   const notificationContent = parsedContent.notificationContent;
@@ -145,7 +146,7 @@ export default function Home() {
           />
         </Show>
       }
-
+      <HelpCard content={store.helpContent} title="Help" />
       <Map />
       <FlipCard />
       <LocationDetailCard />

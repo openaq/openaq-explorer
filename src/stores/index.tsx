@@ -9,7 +9,6 @@ interface StoreParameters {
   listLocationsId: number | undefined;
   listParametersId: number | undefined;
   listParameter: string | undefined;
-
   deleteListModalOpen: boolean;
   deleteListLocationModalOpen: boolean;
   newListModalOpen: boolean;
@@ -29,6 +28,8 @@ interface StoreParameters {
   bounds: number[];
   mapBbox: number[];
   showNotificationCard: boolean;
+  showHelpCard: boolean;
+  helpContent: string;
 }
 
 type Store = [
@@ -39,10 +40,8 @@ type Store = [
     setSelectedMapParameter: (mapParameter: string) => void;
     setDeleteListsId: () => void;
     setDeleteListLocationsId: () => void;
-
     setListParametersId: (parametersId: number) => void;
     setListParameter: (parameter: string) => void;
-
     clearDeleteListsId: () => void;
     toggleDeleteListModalOpen: () => void;
     toggleNewListModalOpen: () => void;
@@ -63,6 +62,8 @@ type Store = [
     setBounds: (bounds: number[]) => void;
     setMapBbox: (mapBbox: number[]) => void;
     toggleShowNotificationCard: (value: boolean) => void;
+    toggleShowHelpCard: (value: boolean) => void;
+    setHelpContent: (content: string) => void;
   },
 ];
 
@@ -96,6 +97,8 @@ export const StoreProvider: Component<{}> = (props) => {
     bounds: [],
     mapBbox: [],
     showNotificationCard: false,
+    showHelpCard: false,
+    helpContent: '',
   });
 
   const store = [
@@ -196,6 +199,12 @@ export const StoreProvider: Component<{}> = (props) => {
       },
       toggleShowNotificationCard(value: boolean) {
         setState({ showNotificationCard: value });
+      },
+      toggleShowHelpCard(value: boolean) {
+        setState({ showHelpCard: value });
+      },
+      setHelpContent(content: string) {
+        setState({ helpContent: content });
       },
     },
   ];

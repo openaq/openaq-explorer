@@ -6,8 +6,13 @@ import {
 import { useStore } from '~/stores';
 import FilterIcon from '~/assets/imgs/filter.svg';
 import TuneIcon from '~/assets/imgs/tune.svg';
-
 import '~/assets/scss/components/overlay-card.scss';
+import AccessHelp from '../Help/AccessHelp';
+import pollutantsContent from '~/content/help/pollutants.md?raw';
+import { parseHelpMarkdown } from '../Cards/utils';
+const parsedPollutantsContent = parseHelpMarkdown(pollutantsContent);
+const parsedPollutantsHtml = parsedPollutantsContent.helpContent;
+const parsedPollutantsTitle = parsedPollutantsContent.helpTitle;
 
 export function OverlayCard() {
   const [
@@ -36,9 +41,18 @@ export function OverlayCard() {
           </div>
         </header>
         <div class="pollutant-select">
-          <label for="parameter-select" class="type-subtitle-2">
-            Choose a pollutant
-          </label>
+          <div class="pollutant-label-wrapper">
+            <label for="parameter-select" class="type-subtitle-2">
+              Choose a pollutant{' '}
+            </label>
+            <span>
+              <AccessHelp
+                content={parsedPollutantsHtml}
+                title={parsedPollutantsTitle}
+              />
+            </span>
+          </div>
+
           <select
             class="select"
             name="parameter-select"

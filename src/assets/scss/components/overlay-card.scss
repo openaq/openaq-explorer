@@ -50,6 +50,17 @@
     padding: 0 10px;
   }
 
+  .pollutant-label-wrapper {
+    display: flex;
+   gap: 8px;
+    align-items: center;
+  }
+
+  .pollutant-label-wrapper span {
+    display: flex;
+    align-items: center;
+  }
+
   &__body {
     width: 250px;
     display: grid;
