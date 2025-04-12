@@ -33,6 +33,7 @@ jobs:
                 VITE_GEOCODE_URL: ${{ secrets.VITE_GEOCODE_URL }}
                 VITE_GEOCDE_API_KEY: ${{ secrets.VITE_GEOCDE_API_KEY }}
                 VITE_ENV: ${{ secrets.VITE_ENV }}
+                VITE_SHOW_NOTIFICATION: true
 
             - name: Configure aws credentials
               uses: aws-actions/configure-aws-credentials@master
