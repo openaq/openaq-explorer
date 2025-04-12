@@ -1,6 +1,8 @@
 ---
-title: 'Info'
-type: 'info'
+title: 'Registration issues'
+type: 'warning'
 ---
 
-This is an info message in Markdown. **Important!** _foo_
+The OpenAQ Explorer is currently experiencing issues with new account
+registration. Existing accounts can login as usual. If you need to register for
+an accout please try again later.

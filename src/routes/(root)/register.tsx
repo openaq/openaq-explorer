@@ -72,7 +72,8 @@ export default function Register() {
     <>
       <main class="register-page">
         <h1 class="type-display-1 text-sky-120">Create an account</h1>
-        <form action={register} class="register-form" method="post">
+        <span>The OpenAQ Explorer is experiencing issues with new account registration.<br/> We are currently working on a fix, please try again later.</span>
+        {/* <form action={register} class="register-form" method="post">
           <input
             type="hidden"
             name="redirect"
@@ -156,14 +157,14 @@ export default function Register() {
           >
             {registering.pending ? 'Registering...' : 'Get started'}
           </button>
-        </form>
+        </form> */}
 
-        <Show when={registering.result}>
+        {/* <Show when={registering.result}>
           <p style={{ color: 'red' }} role="alert" id="error-message">
             {registering.result!.message}
           </p>
-        </Show>
-        <div>
+        </Show> */}
+        {/* <div>
           <span class="type-subtitle-3 text-sky-120">
             Already have an account?{' '}
             <A class="type-link-3 text-sky-120" href="/login">
@@ -202,7 +203,7 @@ export default function Register() {
             you already have an OpenAQ Explorer account! use the email and
             password you previously signed up with to get started.
           </p>
-        </div>
+        </div> */}
       </main>
     </>
   );
