@@ -116,10 +116,86 @@
     }
   }
 }
+.account-submenu {
+  list-style: none;
+  margin: 0;
+  padding-left: 0;
+  width: 320px;
+  background-color: white;
+  visibility: hidden;
+  opacity: 0;
+  min-width: 5rem;
+  position: absolute;
+  transition: all 0.5s ease;
+  margin-top: 1rem;
+  top: 10px;
+  left: 0;
+  display: none;
+
+  &:hover {
+    visibility: visible;
+    opacity: 1;
+    display: block;
+  }
+
+  &__item {
+    height: 24px;
+    margin: 12px;
+  }
+}
+
+.account-dropdown {
+  position: relative;
+  background-color: white;
+
+  &:hover {
+    .account-submenu {
+      background-color: white;
+      visibility: visible;
+      opacity: 1;
+      z-index: 1000;
+      display: block;
+      border: 1px solid #eaecf0;
+      border-radius: 12px;
+      @media (max-width: 424px) {
+        display: none; 
+      }
+    }
+  }
+}
+
+.mobile-account-actions {
+  display: none;
+}
 
 @media (max-width: 1000px) {
   $header-height: 60px;
 
+  .mobile-account-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    display: flex;
+    height: auto;
+    width: 100%;
+    margin: 0;
+    justify-content: center;
+    border: 1px solid #eaecf0;
+    a {
+      display: flex;
+      height: auto;
+      width: 100%;
+      margin: 0;
+      justify-content: center;
+      border: 1px solid #eaecf0;
+    }
+  }
+
+  .account-dropdown {
+    display: none; 
+  }
+  
   .header {
     height: $header-height;
     padding: 0 10px;
@@ -149,10 +225,6 @@
     order: 1;
   }
 
-  .donate-btn {
-    display: none;
-  }
-
   .menu-button-container {
     display: flex;
   }
@@ -174,52 +246,50 @@
     & > li {
       overflow: hidden;
     }
-  }
-
-  .dropdown {
-    position: relative;
-    background-color: white;
-
-    &:hover {
-      .submenu {
-        z-index: 1000;
-        display: flex;
-        border: none;
-        border-radius: 0;
-      }
-    }
-
-    & > a {
+  }  
+    .dropdown {
+     position: relative;
+     background-color: white;
+ 
+     &:hover {
+       .submenu {
+         z-index: 1000;
+         display: flex;
+         border: none;
+         border-radius: 0;
+       }
+     }
+     & > a {
       display: none;
-    }
-
-    & {
-      .submenu {
-        background-color: white;
-        visibility: visible;
-        position: static;
-        margin: 0;
-        opacity: 1;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-
-        &:hover {
-          display: flex;
-        }
-
-        &__item {
-          display: flex;
-          height: auto;
-          width: 100%;
-          margin: 0;
-          justify-content: center;
-          border: 1px solid #eaecf0;
-        }
       }
-    }
-  }
+ 
+     & {
+       .submenu {
+         background-color: white;
+         visibility: visible;
+         position: static;
+         margin: 0;
+         opacity: 1;
+         width: 100%;
+         display: flex;
+         align-items: center;
+         flex-direction: column;
+ 
+         &:hover {
+           display: flex;
+         }
+ 
+         &__item {
+           display: flex;
+           height: auto;
+           width: 100%;
+           margin: 0;
+           justify-content: center;
+           border: 1px solid #eaecf0;
+         }
+       }
+     }
+   }
 
   #menu-toggle ~ .nav-list > li {
     height: 0;
@@ -254,6 +324,9 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  span {
+    display: flex;
+  }
 }
 
 .logout-form {
@@ -276,4 +349,49 @@
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+@media (max-width: 424px) {
+  .mobile-account-actions {
+    display: none !important; 
+  }
+
+  .account-dropdown {
+    display: block; 
+  }
+
+  .account-submenu {
+    display: none;
+    visibility: hidden;
+    opacity: 0; 
+    transition: visibility 0s, opacity 0.2s linear;
+    z-index: 2000;
+    background-color: white;
+    border: 1px solid #eaecf0;
+    border-radius: 12px;
+  }
+
+  .account-dropdown.open .account-submenu {
+    display: block;
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .header-logo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .list-link span {
+    display: none;
+  }
+
+  .donate-btn {
+    display: none !important;
+  }    
+  
+  .account-submenu {
+    transform: (translate(-30%));
+  } 
 }
