@@ -75,14 +75,16 @@ export default function Register() {
     <>
       <main class="register-page">
         <h1 class="type-display-1 text-sky-120">Create an account</h1>
-        <Show when={registrationDisabled}>
-          <span>
-            The OpenAQ Explorer is experiencing issues with new account
-            registration.
-            <br /> We are currently working on a fix, please try again later.
-          </span>
-        </Show>
-        <Show when={!registrationDisabled}>
+        <Show
+          when={!registrationDisabled}
+          fallback={
+            <span>
+              The OpenAQ Explorer is experiencing issues with new account
+              registration.
+              <br /> We are currently working on a fix, please try again later.
+            </span>
+          }
+        >
           <form action={register} class="register-form" method="post">
             <input
               type="hidden"
