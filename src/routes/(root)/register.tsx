@@ -68,142 +68,161 @@ export default function Register() {
 
   const registering = useSubmission(register);
 
+  const registrationDisabled =
+    import.meta.env.VITE_REGISTRATION_DISABLED === 'true';
+
   return (
     <>
       <main class="register-page">
         <h1 class="type-display-1 text-sky-120">Create an account</h1>
-        <span>The OpenAQ Explorer is experiencing issues with new account registration.<br/> We are currently working on a fix, please try again later.</span>
-        {/* <form action={register} class="register-form" method="post">
-          <input
-            type="hidden"
-            name="redirect"
-            value={searchParams.redirect ?? '/'}
-          />
-          <div class="form-element">
-            <label for="fullname" class="type-subtitle-3 text-sky-120">
-              Full Name
-            </label>
+        <Show
+          when={!registrationDisabled}
+          fallback={
+            <span>
+              The OpenAQ Explorer is experiencing issues with new account
+              registration.
+              <br /> We are currently working on a fix, please try again later.
+            </span>
+          }
+        >
+          <form action={register} class="register-form" method="post">
             <input
-              class="text-input"
-              name="fullname"
-              autocomplete="on"
-              placeholder=" "
-              disabled={registering.pending}
-              required
+              type="hidden"
+              name="redirect"
+              value={searchParams.redirect ?? '/'}
             />
-          </div>
-          <div class="form-element">
-            <label for="email-address" class="type-subtitle-3 text-sky-120">
-              Email address
-            </label>
-            <input
-              class="text-input"
-              name="email-address"
-              type="email"
-              placeholder=" "
-              autocomplete="on"
-              disabled={registering.pending}
-              required
-            />
-          </div>
-          <div class="form-element">
-            <label for="password-input" class="type-subtitle-3 text-sky-120">
-              Password (mininum 8 characters)
-            </label>
-            <input
-              name="password"
-              id="password"
-              type="password"
-              minlength="8"
-              placeholder=" "
-              class="text-input"
-              disabled={registering.pending}
-              required
-              onInput={(e) => onPasswordInput(e)}
-            />
-          </div>
-          <div class="form-element">
-            <label for="password-confirm" class="type-subtitle-3 text-sky-120">
-              Confirm Password
-            </label>
-            <input
-              name="password-confirm"
-              id="password-confirm"
-              type="password"
-              minlength="8"
-              placeholder=" "
-              class="text-input"
-              disabled={registering.pending}
-              required
-              onInput={(e) => onPasswordConfirmInput(e)}
-            />
-          </div>
+            <div class="form-element">
+              <label for="fullname" class="type-subtitle-3 text-sky-120">
+                Full Name
+              </label>
+              <input
+                class="text-input"
+                name="fullname"
+                autocomplete="on"
+                placeholder=" "
+                disabled={registering.pending}
+                required
+              />
+            </div>
+            <div class="form-element">
+              <label for="email-address" class="type-subtitle-3 text-sky-120">
+                Email address
+              </label>
+              <input
+                class="text-input"
+                name="email-address"
+                type="email"
+                placeholder=" "
+                autocomplete="on"
+                disabled={registering.pending}
+                required
+              />
+            </div>
+            <div class="form-element">
+              <label for="password-input" class="type-subtitle-3 text-sky-120">
+                Password (mininum 8 characters)
+              </label>
+              <input
+                name="password"
+                id="password"
+                type="password"
+                minlength="8"
+                placeholder=" "
+                class="text-input"
+                disabled={registering.pending}
+                required
+                onInput={(e) => onPasswordInput(e)}
+              />
+            </div>
+            <div class="form-element">
+              <label
+                for="password-confirm"
+                class="type-subtitle-3 text-sky-120"
+              >
+                Confirm Password
+              </label>
+              <input
+                name="password-confirm"
+                id="password-confirm"
+                type="password"
+                minlength="8"
+                placeholder=" "
+                class="text-input"
+                disabled={registering.pending}
+                required
+                onInput={(e) => onPasswordConfirmInput(e)}
+              />
+            </div>
 
-          <PasswordScore score={passwordScore()} warning={passwordWarning()} />
-          <Show when={passwordsDoNotMatch()}>
-            <p class="type-body-2" role="alert">
-              Passwords must match
+            <PasswordScore
+              score={passwordScore()}
+              warning={passwordWarning()}
+            />
+            <Show when={passwordsDoNotMatch()}>
+              <p class="type-body-2" role="alert">
+                Passwords must match
+              </p>
+            </Show>
+
+            <button
+              class="btn btn-primary"
+              type="submit"
+              disabled={
+                registering.pending ||
+                passwordScore()! < 4 ||
+                passwordsDoNotMatch()
+              }
+            >
+              {registering.pending ? 'Registering...' : 'Get started'}
+            </button>
+          </form>
+
+          <Show when={registering.result}>
+            <p style={{ color: 'red' }} role="alert" id="error-message">
+              {registering.result!.message}
             </p>
           </Show>
-
-          <button
-            class="btn btn-primary"
-            type="submit"
-            disabled={
-              registering.pending ||
-              passwordScore()! < 4 ||
-              passwordsDoNotMatch()
-            }
-          >
-            {registering.pending ? 'Registering...' : 'Get started'}
-          </button>
-        </form> */}
-
-        {/* <Show when={registering.result}>
-          <p style={{ color: 'red' }} role="alert" id="error-message">
-            {registering.result!.message}
-          </p>
-        </Show> */}
-        {/* <div>
-          <span class="type-subtitle-3 text-sky-120">
-            Already have an account?{' '}
-            <A class="type-link-3 text-sky-120" href="/login">
-              Login
-            </A>
-          </span>
-        </div>
-        <div>
-          <p style="width: 500px;" class="type-body-3 text-sky-120">
-            By registering and using OpenAQ services, you agree to the OpenAQ{' '}
-            <A
-              class="type-link-3 text-sky-120"
-              href="https://docs.openaq.org/about/terms"
-            >
-              Terms of Use
-            </A>
-            ,{' '}
-            <A
-              class="type-link-3 text-sky-120"
-              href="https://openaq.org/privacy/"
-            >
-              Privacy Policy
-            </A>{' '}
-            and{' '}
-            <A
-              class="type-link-3 text-sky-120"
-              href="https://openaq.org/cookies/"
-            >
-              Cookie Policy
-            </A>
-            .
-          </p>
-          <br />
-          <p style="width: 500px;" class="type-body-3 text-sky-120">
-            If you had registered for an OpenAQ API key prior to January 2024
-            you already have an OpenAQ Explorer account! use the email and
-            password you previously signed up with to get started.
-          </p>
-        </div> */}
+          <div>
+            <span class="type-subtitle-3 text-sky-120">
+              Already have an account?{' '}
+              <A class="type-link-3 text-sky-120" href="/login">
+                Login
+              </A>
+            </span>
+          </div>
+          <div>
+            <p style="width: 500px;" class="type-body-3 text-sky-120">
+              By registering and using OpenAQ services, you agree to the OpenAQ{' '}
+              <A
+                class="type-link-3 text-sky-120"
+                href="https://docs.openaq.org/about/terms"
+              >
+                Terms of Use
+              </A>
+              ,{' '}
+              <A
+                class="type-link-3 text-sky-120"
+                href="https://openaq.org/privacy/"
+              >
+                Privacy Policy
+              </A>{' '}
+              and{' '}
+              <A
+                class="type-link-3 text-sky-120"
+                href="https://openaq.org/cookies/"
+              >
+                Cookie Policy
+              </A>
+              .
+            </p>
+            <br />
+            <p style="width: 500px;" class="type-body-3 text-sky-120">
+              If you had registered for an OpenAQ API key prior to January 2024
+              you already have an OpenAQ Explorer account! use the email and
+              password you previously signed up with to get started.
+            </p>
+          </div>
+        </Show>
       </main>
     </>
   );
