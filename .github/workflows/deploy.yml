@@ -23,7 +23,6 @@ jobs:
             - name: Build app
               run: npm run build
               env:
-                REST_API_URL: ${{secrets.REST_API_URL}}
                 VITE_SESSION_SECRET: ${{ secrets.VITE_SESSION_SECRET }}
                 VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
                 VITE_MAP_STYLE: ${{ secrets.VITE_MAP_STYLE }}
@@ -52,6 +51,7 @@ jobs:
                   npm install 
                   cdk deploy --require-approval never 
               env:
+                REST_API_URL: ${{secrets.REST_API_URL}}
                 VPC_ID: ${{secrets.VPC_ID}}
                 HOSTED_ZONE_ID: ${{ secrets.HOSTED_ZONE_ID }}
                 HOSTED_ZONE_NAME: ${{ secrets.HOSTED_ZONE_NAME }}
