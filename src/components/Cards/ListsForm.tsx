@@ -5,6 +5,7 @@ import { useStore } from '~/stores';
 import '~/assets/scss/components/lists-form.scss';
 import { addRemoveSensorNodesList, getUserLists } from '~/db/lists';
 import ListsIcon from '~/assets/imgs/lists.svg';
+import ListContainsIcon from '~/assets/imgs/list_contains.svg';
 
 interface ListsFormDefinition {
   redirect: string | undefined;
@@ -44,7 +45,7 @@ function ListToggle(props: any) {
           {props.list.sensorNodesIds.indexOf(store.locationsId) === -1 ? (
             <ListsIcon height={24} width={24} />
           ) : (
-            <ListsIcon height={24} width={24} />
+            <ListContainsIcon width={40} height={40} />
           )}
         </button>
       </label>
@@ -103,7 +104,7 @@ export function ListsForm(props: ListsFormDefinition) {
       </div>
       {lists()?.length === 0 ? (
         <A class="icon-btn btn-secondary" href="/lists">
-          Add to list{' '}
+          Add to list
           <ListsIcon height={24} width={24} fill="#0000ff" stroke="#ff0000" />
         </A>
       ) : (
@@ -111,7 +112,7 @@ export function ListsForm(props: ListsFormDefinition) {
           class="icon-btn btn-secondary"
           onClick={() => onClickAddToList()}
         >
-          Add to list{' '}
+          Add to list
           <ListsIcon height={24} width={24} fill="#0000ff" stroke="#ff0000" />
         </button>
       )}
