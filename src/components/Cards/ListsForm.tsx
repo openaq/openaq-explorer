@@ -45,7 +45,7 @@ function ListToggle(props: any) {
           {props.list.sensorNodesIds.indexOf(store.locationsId) === -1 ? (
             <ListsIcon height={24} width={24} />
           ) : (
-            <ListContainsIcon width={40} height={40} />
+            <ListContainsIcon height={24} width={24} />
           )}
         </button>
       </label>
