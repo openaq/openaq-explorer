@@ -37,7 +37,7 @@ function ListToggle(props: any) {
         {props.list.label}
         <button
           onClick={(e) => onButtonClick(e)}
-          class="list-btn"
+          class={`list-btn ${props.list.sensorNodesIds.indexOf(store.locationsId) !== -1 ? '--active' : ''}`}
           value={String(
             props.list.sensorNodesIds.indexOf(store.locationsId) === -1
           )}
@@ -45,7 +45,7 @@ function ListToggle(props: any) {
           {props.list.sensorNodesIds.indexOf(store.locationsId) === -1 ? (
             <ListsIcon height={24} width={24} />
           ) : (
-            <ListContainsIcon height={24} width={24} />
+            <ListsIcon height={24} width={24} />
           )}
         </button>
       </label>
