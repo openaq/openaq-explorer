@@ -11,6 +11,8 @@ import '~/assets/scss/routes/location.scss';
 import { getLocationById, sensorNodeLists } from '~/db/lists';
 import { getSessionUser } from '~/auth/session';
 import { getLocationLicenses } from '~/client';
+import { HttpStatusCode } from '@solidjs/start';
+import NotFound from '~/routes/[...404]';
 
 export const route = {
   preload: ({ params }: { params: Params }) => {
@@ -31,23 +33,33 @@ export default function Location() {
     deferStream: true,
   });
 
-  const location = createAsync(() => getLocationById(Number(id)), {
-    deferStream: true,
-  });
+  const location = createAsync(
+    () => getLocationById(Number(id)).catch(() => null),
+    {
+      deferStream: true,
+    }
+  );
 
   const licenses = createAsync(() => getLocationLicenses(Number(id)), {
     deferStream: true,
   });
 
-
   return (
     <>
-      <LocationDetailOpenGraph
-        locationsId={Number(id)}
-        locationName={location()?.name}
-      />
-      <main class="location-main">
-        <Show when={location()}>
+      <Show
+        when={location()}
+        fallback={
+          <>
+            <HttpStatusCode code={404} />
+            <NotFound />
+          </>
+        }
+      >
+        <LocationDetailOpenGraph
+          locationsId={Number(id)}
+          locationName={location()?.name}
+        />
+        <main class="location-main">
           <Breadcrumbs pageName={location()?.name} />
           <DetailOverview {...location()} licenses={licenses()} user={user} />
           <Show when={location().datetimeFirst}>
@@ -61,8 +73,8 @@ export default function Location() {
               </Show>
             </section>
           </Show>
-        </Show>
-      </main>
+        </main>
+      </Show>
     </>
   );
 }

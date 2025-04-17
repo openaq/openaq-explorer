@@ -5,7 +5,6 @@ import { Header } from '~/components/Header';
 export default function NotFound() {
   return (
     <>
-      <Header />
       <main>
         <HttpStatusCode code={404} />
         <section class="page-404">
