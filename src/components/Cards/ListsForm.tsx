@@ -37,7 +37,7 @@ function ListToggle(props: any) {
         {props.list.label}
         <button
           onClick={(e) => onButtonClick(e)}
-          class={`list-btn ${props.list.sensorNodesIds.indexOf(store.locationsId) !== -1 ? '--active' : ''}`}
+          class={`list-btn ${props.list.sensorNodesIds.indexOf(store.locationsId) !== -1 ? 'list-btn--active' : ''}`}
           value={String(
             props.list.sensorNodesIds.indexOf(store.locationsId) === -1
           )}
