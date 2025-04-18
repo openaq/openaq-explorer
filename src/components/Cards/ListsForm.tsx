@@ -36,7 +36,7 @@ function ListToggle(props: any) {
         {props.list.label}
         <button
           onClick={(e) => onButtonClick(e)}
-          class="list-btn"
+          class={`list-btn ${props.list.sensorNodesIds.indexOf(store.locationsId) !== -1 ? 'list-btn--active' : ''}`}
           value={String(
             props.list.sensorNodesIds.indexOf(store.locationsId) === -1
           )}
@@ -103,7 +103,7 @@ export function ListsForm(props: ListsFormDefinition) {
       </div>
       {lists()?.length === 0 ? (
         <A class="icon-btn btn-secondary" href="/lists">
-          Add to list{' '}
+          Add to list
           <ListsIcon height={24} width={24} fill="#0000ff" stroke="#ff0000" />
         </A>
       ) : (
@@ -111,7 +111,7 @@ export function ListsForm(props: ListsFormDefinition) {
           class="icon-btn btn-secondary"
           onClick={() => onClickAddToList()}
         >
-          Add to list{' '}
+          Add to list
           <ListsIcon height={24} width={24} fill="#0000ff" stroke="#ff0000" />
         </button>
       )}

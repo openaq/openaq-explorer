@@ -63,6 +63,9 @@
 
       &--active {
         background-color: #33a3a1;
+          svg circle {
+            stroke: #fdcd56;
+         }
       }
     }
   }
