@@ -5,7 +5,6 @@ import { useStore } from '~/stores';
 import '~/assets/scss/components/lists-form.scss';
 import { addRemoveSensorNodesList, getUserLists } from '~/db/lists';
 import ListsIcon from '~/assets/imgs/lists.svg';
-import ListContainsIcon from '~/assets/imgs/list_contains.svg';
 
 interface ListsFormDefinition {
   redirect: string | undefined;
