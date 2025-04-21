@@ -31,7 +31,7 @@ jobs:
                 VITE_EXPLORER_API_KEY: ${{ secrets.VITE_EXPLORER_API_KEY }}
                 VITE_GEOCODE_URL: ${{ secrets.VITE_GEOCODE_URL }}
                 VITE_GEOCDE_API_KEY: ${{ secrets.VITE_GEOCDE_API_KEY }}
-                VITE_ENV: ${{ secrets.VITE_ENV }}
+                VITE_ENV: 'prod'
                 VITE_SHOW_NOTIFICATION: false
                 VITE_REGISTRATION_DISABLED: false
 
