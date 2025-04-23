@@ -1,8 +1,10 @@
+import { HttpStatusCode } from '@solidjs/start';
 import '~/assets/scss/routes/page-not-found.scss';
 
 export function NotFoundMessage() {
   return (
     <>
+      <HttpStatusCode code={404} />
       <section class="page-404">
         <div class="bubble-lg" />
         <div class="bubble-sm" />
