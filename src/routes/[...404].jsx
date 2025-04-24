@@ -1,20 +1,15 @@
 import { HttpStatusCode } from '@solidjs/start';
 import '~/assets/scss/routes/page-not-found.scss';
 import { Header } from '~/components/Header';
+import { NotFoundMessage } from '~/components/NotFoundMessage/NotFoundMessage';
 
 export default function NotFound() {
   return (
     <>
-      <Header />
+      <HttpStatusCode code={404} />
       <main>
-        <HttpStatusCode code={404} />
-        <section class="page-404">
-          <div class="bubble-lg" />
-          <div class="bubble-sm" />
-          <h1 class="type-heading-1">
-            Uh oh! We can't find the page you've requested
-          </h1>
-        </section>
+        <Header />
+        <NotFoundMessage />
       </main>
     </>
   );

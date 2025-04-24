@@ -4,13 +4,14 @@ import { DetailCharts } from '~/components/DetailCharts';
 import { Breadcrumbs } from '~/components/Breadcrumbs';
 import { DownloadCard, NotLoggedInFallback } from '~/components/DownloadCard';
 import { LocationDetailOpenGraph } from '~/components/OpenGraph';
-import { Show } from 'solid-js';
+import { ErrorBoundary, Show } from 'solid-js';
 import { useStore } from '~/stores';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import '~/assets/scss/routes/location.scss';
 import { getLocationById, sensorNodeLists } from '~/db/lists';
 import { getSessionUser } from '~/auth/session';
 import { getLocationLicenses } from '~/client';
+import { NotFoundMessage } from '~/components/NotFoundMessage/NotFoundMessage';
 
 export const route = {
   preload: ({ params }: { params: Params }) => {
@@ -31,38 +32,43 @@ export default function Location() {
     deferStream: true,
   });
 
-  const location = createAsync(() => getLocationById(Number(id)), {
-    deferStream: true,
-  });
+  const location = createAsync(
+    () => getLocationById(Number(id)).catch(() => null),
+    {
+      deferStream: true,
+    }
+  );
 
   const licenses = createAsync(() => getLocationLicenses(Number(id)), {
     deferStream: true,
   });
 
-
   return (
     <>
-      <LocationDetailOpenGraph
-        locationsId={Number(id)}
-        locationName={location()?.name}
-      />
-      <main class="location-main">
-        <Show when={location()}>
-          <Breadcrumbs pageName={location()?.name} />
-          <DetailOverview {...location()} licenses={licenses()} user={user} />
-          <Show when={location().datetimeFirst}>
-            <DetailCharts {...location()} />
-            <section id="download-card" class="download-card">
-              <header class="download-card__header">
-                <h3 class="heading">Download</h3>
-              </header>
-              <Show when={user()?.usersId} fallback={<NotLoggedInFallback />}>
-                <DownloadCard {...location()} />
-              </Show>
-            </section>
-          </Show>
+      <ErrorBoundary fallback={() => <NotFoundMessage />}>
+        <Show when={location()} fallback={<NotFoundMessage />}>
+          <LocationDetailOpenGraph
+            locationsId={Number(id)}
+            locationName={location()?.name}
+          />
+
+          <main class="location-main">
+            <Breadcrumbs pageName={location()?.name} />
+            <DetailOverview {...location()} licenses={licenses()} user={user} />
+            <Show when={location().datetimeFirst}>
+              <DetailCharts {...location()} />
+              <section id="download-card" class="download-card">
+                <header class="download-card__header">
+                  <h3 class="heading">Download</h3>
+                </header>
+                <Show when={user()?.usersId} fallback={<NotLoggedInFallback />}>
+                  <DownloadCard {...location()} />
+                </Show>
+              </section>
+            </Show>
+          </main>
         </Show>
-      </main>
+      </ErrorBoundary>
     </>
   );
 }
