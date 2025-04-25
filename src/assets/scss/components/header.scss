@@ -87,6 +87,10 @@
   top: 10px;
   left: 0;
   display: none;
+  a {
+    text-decoration: none;
+    color: #30363c;
+  }
 
   &:hover {
     visibility: visible;
