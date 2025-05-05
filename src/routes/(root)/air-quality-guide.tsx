@@ -111,41 +111,57 @@ export default function AirQualityGuide() {
           </div>
         </section>
 
-        <section class="guide-step">
+        <section class="guide-step instrument-section">
           <h2 class="type-heading-1 text-sky-100">
             Understanding the Instruments
           </h2>
-          <p>
-            Reference grade monitors are represented by larger dots with white
-            circles around; they are the <strong>“gold standard”</strong> for
-            measuring pollution concentrations and are typically operated by
-            government agencies and used for regulatory purposes.
-          </p>
-          <p>
-            Air sensors are represented by smaller dots; they are less
-            sophisticated instruments, but-- because of their small size,
-            portability and affordability--are more easily deployed by
-            institutions and individuals to fill in gaps in air quality
-            knowledge.
-          </p>
-          <ul>
-            <li>
-              <WarningIcon
-                role="img"
-                aria-label="Warning Icon"
-                class="warning-icon"
-              />{' '}
-              Learn more about regulatory data & air sensor data at the U.S.
-              EPA’s Air Sensor Toolbox site (resources in English and Español):{' '}
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href="https://www.epa.gov/air-sensor-toolbox"
-              >
-                https://www.epa.gov/air-sensor-toolbox
-              </a>
-            </li>
-          </ul>
+          <div class="instrument-wrapper">
+            <div class="instruments-container">
+              <div class="paragraph-dot">
+                <p>
+                  Reference grade monitors are represented by larger dots with
+                  white circles around; they are the{' '}
+                  <strong>“gold standard”</strong> for measuring pollution
+                  concentrations and are typically operated by government
+                  agencies and used for regulatory purposes.
+                </p>
+                <img
+                  class="dot-border-svg"
+                  src="src/assets/imgs/dot-border.png"
+                  alt=""
+                />
+              </div>
+              <div class="paragraph-dot">
+                <p>
+                  Air sensors are represented by smaller dots; they are less
+                  sophisticated instruments, but-- because of their small size,
+                  portability and affordability--are more easily deployed by
+                  institutions and individuals to fill in gaps in air quality
+                  knowledge.
+                </p>
+                <img class="dot-svg" src="src/assets/imgs/dot.png" alt="" />
+              </div>
+              <ul>
+                <li>
+                  <WarningIcon
+                    role="img"
+                    aria-label="Warning Icon"
+                    class="warning-icon"
+                  />{' '}
+                  Learn more about regulatory data & air sensor data at the U.S.
+                  EPA’s Air Sensor Toolbox site (resources in English and
+                  Español):{' '}
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href="https://www.epa.gov/air-sensor-toolbox"
+                  >
+                    https://www.epa.gov/air-sensor-toolbox
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
         </section>
 
         <section class="guide-step">
