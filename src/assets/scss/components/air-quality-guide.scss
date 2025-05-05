@@ -116,6 +116,14 @@
                 }
             }
 
+            .step-list li ul {
+              
+                li {
+                  counter-increment: none;
+                }
+              }
+              
+
             
       .image-container {
         flex-shrink: 0;
