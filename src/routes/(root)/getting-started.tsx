@@ -1,4 +1,4 @@
-import '~/assets/scss/components/air-quality-guide.scss';
+import '~/assets/scss/components/getting-started.scss';
 import WarningIcon from '~/assets/imgs/svgs/warning.svg';
 import Arrow from '~/assets/imgs/arrow.svg';
 
@@ -7,7 +7,7 @@ export default function AirQualityGuide() {
     <>
       <main class="container">
         <h1 class="type-heading-1 text-sky-100">
-          Accessing Air Quality Data in OpenAQ
+          Accessing Air Quality Data in OpenAQ Explorer
         </h1>
 
         <section class="guide-step">
@@ -86,7 +86,8 @@ export default function AirQualityGuide() {
                       class="warning-icon"
                     />{' '}
                     You will need an <strong>Explorer account</strong> and{' '}
-                    <strong>API Key</strong> (see flip side) to download data.
+                    <strong>API Key</strong> (see instructions under ‘Additional
+                    OpenAQ Resources’) to download data.
                   </li>
                 </ul>
               </li>
