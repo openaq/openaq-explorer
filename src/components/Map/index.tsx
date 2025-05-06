@@ -9,6 +9,7 @@ import { Geocoder } from '../Geocoder';
 import { createEffect, createSignal } from 'solid-js';
 
 import '~/assets/scss/components/map.scss';
+import InfoIcon from '~/assets/imgs/svgs/info.svg';
 
 function calculateFlyToDuration(zoom: number) {
   return 2500 / (zoom / 5);
@@ -324,6 +325,17 @@ export function Map() {
         </Source>
         <Bounds />
       </MapGL>
+      <div class="getting-started-link">
+        <InfoIcon
+          viewBox="0 0 25 25"
+          role="img"
+          aria-label="Info Icon"
+          class="info-icon"
+        />
+        <a href="/getting-started" target="_blank" rel="noopener">
+          Learn how to use the Explorer
+        </a>
+      </div>
     </div>
   );
 }
