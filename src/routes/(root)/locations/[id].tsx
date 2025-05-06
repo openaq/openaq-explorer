@@ -65,6 +65,11 @@ export default function Location() {
                   <DownloadCard {...location()} />
                 </Show>
               </section>
+              <section class="getting-started-section">
+                <a href="/getting-started" class="getting-started-link">
+                  Learn how to use the Explorer
+                </a>
+              </section>
             </Show>
           </main>
         </Show>
