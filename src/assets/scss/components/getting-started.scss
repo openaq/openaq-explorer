@@ -78,10 +78,11 @@
                     position: relative;
 
                     &::before {
+                        text-indent: -1px;
                         content: counter(step);
                         position: absolute;
                         left: 0;
-                        top: 0.1rem;
+                        top: 0;
                         width: 2rem;
                         height: 2rem;
                         background-color: black;
