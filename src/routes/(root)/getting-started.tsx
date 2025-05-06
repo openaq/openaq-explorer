@@ -45,25 +45,34 @@ export default function AirQualityGuide() {
                 back to the map and pan out. Or start over (see #2), typing in a
                 new location name.
                 <ul>
-                  <li>
-                    <WarningIcon
-                      role="img"
-                      aria-label="Warning Icon"
-                      class="warning-icon"
-                    />{' '}
-                    If you start over, make sure to click both{' '}
-                    <strong>“Reference monitor locations”</strong> and{' '}
-                    <strong>“Air sensor locations”</strong> in the sidebar.
-                  </li>
-                  <li>
-                    <WarningIcon
-                      role="img"
-                      aria-label="Warning Icon"
-                      class="warning-icon"
-                    />{' '}
-                    You can also choose{' '}
-                    <strong>“Show locations with no recent updates”</strong>.
-                  </li>
+                  <div class="admonition warning">
+                    <div class="icon-wrapper">
+                      <WarningIcon
+                        class="warning-icon"
+                        role="img"
+                        aria-label="Warning"
+                      />
+                    </div>
+                    <div class="content">
+                      If you start over, make sure to click both{' '}
+                      <strong>“Reference monitor locations”</strong> and{' '}
+                      <strong>“Air sensor locations”</strong> in the sidebar.
+                    </div>
+                  </div>
+
+                  <div class="admonition warning">
+                    <div class="icon-wrapper">
+                      <WarningIcon
+                        class="warning-icon"
+                        role="img"
+                        aria-label="Warning"
+                      />
+                    </div>
+                    <div class="content">
+                      You can also choose{' '}
+                      <strong>“Show locations with no recent updates”</strong>.
+                    </div>
+                  </div>
                 </ul>
               </li>
               <li>
@@ -79,16 +88,20 @@ export default function AirQualityGuide() {
                 then show you locations where data on that pollutant is being
                 collected by the provider(s) you selected.
                 <ul>
-                  <li>
-                    <WarningIcon
-                      role="img"
-                      aria-label="Warning Icon"
-                      class="warning-icon"
-                    />{' '}
-                    You will need an <strong>Explorer account</strong> and{' '}
-                    <strong>API Key</strong> (see instructions under ‘Additional
-                    OpenAQ Resources’) to download data.
-                  </li>
+                  <div class="admonition warning">
+                    <div class="icon-wrapper">
+                      <WarningIcon
+                        class="warning-icon"
+                        role="img"
+                        aria-label="Warning"
+                      />
+                    </div>
+                    <div class="content">
+                      You will need an <strong>Explorer account</strong> and{' '}
+                      <strong>API Key</strong> (see instructions under
+                      ‘Additional OpenAQ Resources’) to download data.
+                    </div>
+                  </div>
                 </ul>
               </li>
             </ol>
@@ -143,23 +156,27 @@ export default function AirQualityGuide() {
                 <img class="dot-svg" src="src/assets/imgs/dot.png" alt="" />
               </div>
               <ul>
-                <li>
-                  <WarningIcon
-                    role="img"
-                    aria-label="Warning Icon"
-                    class="warning-icon"
-                  />{' '}
-                  Learn more about regulatory data & air sensor data at the U.S.
-                  EPA’s Air Sensor Toolbox site (resources in English and
-                  Español):{' '}
-                  <a
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href="https://www.epa.gov/air-sensor-toolbox"
-                  >
-                    https://www.epa.gov/air-sensor-toolbox
-                  </a>
-                </li>
+                <div class="admonition warning smaller">
+                  <div class="icon-wrapper">
+                    <WarningIcon
+                      class="warning-icon"
+                      role="img"
+                      aria-label="Warning"
+                    />
+                  </div>
+                  <div class="content">
+                    Learn more about regulatory data & air sensor data at the
+                    U.S. EPA’s Air Sensor Toolbox site (resources in English and
+                    Español):{' '}
+                    <a
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      href="https://www.epa.gov/air-sensor-toolbox"
+                    >
+                      https://www.epa.gov/air-sensor-toolbox
+                    </a>
+                  </div>
+                </div>
               </ul>
             </div>
           </div>
@@ -182,41 +199,50 @@ export default function AirQualityGuide() {
             strictest 24-hour national standard for PM2.5 is 25 µg/m .
           </p>
           <ul>
-            <li>
-              <WarningIcon
-                role="img"
-                aria-label="Warning Icon"
-                class="warning-icon"
-              />{' '}
-              Check out{' '}
-              <strong>
-                WHO national air quality standards interactive tool
-              </strong>{' '}
-              for national air quality standards across the world:{' '}
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href="https://worldhealthorg.shinyapps.io/AirQualityStandards"
-              >
-                https://worldhealthorg.shinyapps.io/AirQualityStandards
-              </a>
-            </li>
-            <li>
-              <WarningIcon
-                role="img"
-                aria-label="Warning Icon"
-                class="warning-icon"
-              />{' '}
-              Learn more about{' '}
-              <strong>WHO’s global air quality guidelines</strong>:{' '}
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href="https://www.who.int/publications/i/item/9789240034228"
-              >
-                https://www.who.int/publications/i/item/9789240034228
-              </a>
-            </li>
+            <div class="admonition warning smaller">
+              <div class="icon-wrapper">
+                <WarningIcon
+                  class="warning-icon"
+                  role="img"
+                  aria-label="Warning"
+                />
+              </div>
+              <div class="content">
+                Check out{' '}
+                <strong>
+                  WHO national air quality standards interactive tool
+                </strong>{' '}
+                for national air quality standards across the world:{' '}
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://worldhealthorg.shinyapps.io/AirQualityStandards"
+                >
+                  https://worldhealthorg.shinyapps.io/AirQualityStandards
+                </a>
+              </div>
+            </div>
+
+            <div class="admonition warning smaller">
+              <div class="icon-wrapper">
+                <WarningIcon
+                  class="warning-icon"
+                  role="img"
+                  aria-label="Warning"
+                />
+              </div>
+              <div class="content">
+                Learn more about{' '}
+                <strong>WHO’s global air quality guidelines</strong>:{' '}
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://www.who.int/publications/i/item/9789240034228"
+                >
+                  https://www.who.int/publications/i/item/9789240034228
+                </a>
+              </div>
+            </div>
           </ul>
           <p>
             The <strong>“Latest Readings”</strong> graph tells you how

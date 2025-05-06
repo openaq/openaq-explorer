@@ -23,6 +23,29 @@
         padding-left: 1.5rem;
         list-style-type: none;
 
+        .admonition.warning {
+            background-color: variables.$sky10;
+            border-left: 4px solid variables.$sky60;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin: 1rem 0;
+            
+          
+            .icon-wrapper {
+              display: flex;
+              justify-content: flex-start;
+            }
+
+            a {
+                word-break: break-all;
+            }
+        }
+        .smaller {
+            width: calc(100% - 60px);
+        }
+
         .warning-icon path {
             stroke: variables.$sky100;
         }
@@ -142,8 +165,8 @@
     
         .arrow-container {
             position: absolute;
-            top: 39%;
-            left: 60%;
+            top: 31%;
+            left: 62%;
             @media (max-width: 950px) {
                 top: 80%;
                 left: 57%;
