@@ -12,6 +12,7 @@ import { getLocationById, sensorNodeLists } from '~/db/lists';
 import { getSessionUser } from '~/auth/session';
 import { getLocationLicenses } from '~/client';
 import { NotFoundMessage } from '~/components/NotFoundMessage/NotFoundMessage';
+import InfoIcon from '~/assets/imgs/svgs/info.svg';
 
 export const route = {
   preload: ({ params }: { params: Params }) => {
@@ -53,7 +54,20 @@ export default function Location() {
           />
 
           <main class="location-main">
-            <Breadcrumbs pageName={location()?.name} />
+            <div class="breadcrumb-container">
+              <Breadcrumbs pageName={location()?.name} />
+              <section class="getting-started-section">
+                <InfoIcon
+                  viewBox="0 0 25 25"
+                  role="img"
+                  aria-label="Info Icon"
+                  class="info-icon"
+                />
+                <a href="/getting-started" class="getting-started-link">
+                  Learn how to use the Explorer
+                </a>
+              </section>
+            </div>
             <DetailOverview {...location()} licenses={licenses()} user={user} />
             <Show when={location().datetimeFirst}>
               <DetailCharts {...location()} />

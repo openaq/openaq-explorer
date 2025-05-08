@@ -12,7 +12,6 @@ import { DetailOverviewDefinition } from './types';
 import { sensorNodeLists } from '~/db/lists';
 import { License } from '../License';
 import CloudDownloadIcon from '~/assets/imgs/cloud_download.svg';
-import InfoIcon from '~/assets/imgs/svgs/info.svg';
 interface ListsDefinition {
   sensorNodesId: number;
   pathname: string;
@@ -93,17 +92,6 @@ export function DetailOverview(props: DetailOverviewDefinition) {
               />
             </a>
           </Show>
-          <section class="getting-started-section">
-            <InfoIcon
-              viewBox="0 0 25 25"
-              role="img"
-              aria-label="Info Icon"
-              class="info-icon"
-            />
-            <a href="/getting-started" class="getting-started-link">
-              Learn how to use the Explorer
-            </a>
-          </section>
         </div>
       </div>
       <div class="detail-overview__body">
