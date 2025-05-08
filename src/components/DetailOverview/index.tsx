@@ -12,7 +12,6 @@ import { DetailOverviewDefinition } from './types';
 import { sensorNodeLists } from '~/db/lists';
 import { License } from '../License';
 import CloudDownloadIcon from '~/assets/imgs/cloud_download.svg';
-
 interface ListsDefinition {
   sensorNodesId: number;
   pathname: string;
