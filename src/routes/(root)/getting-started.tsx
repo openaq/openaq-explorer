@@ -108,13 +108,13 @@ export default function AirQualityGuide() {
             <div class="image-container">
               <img
                 src="src/assets/imgs/explorer-map.png"
-                alt=""
+                alt="OpenAQ explorer map"
                 width="400"
                 loading="lazy"
               />
               <img
                 src="src/assets/imgs/explorer-search.png"
-                alt="OpenAQ explorer map"
+                alt="OpenAQ explorer map search"
                 loading="lazy"
                 width="400"
               />
@@ -124,7 +124,7 @@ export default function AirQualityGuide() {
               <img
                 class="button-img"
                 src="src/assets/imgs/button.png"
-                alt="Explorer search"
+                alt="Button"
                 loading="lazy"
                 width="150"
               />
