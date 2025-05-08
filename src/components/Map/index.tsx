@@ -332,9 +332,7 @@ export function Map() {
           aria-label="Info Icon"
           class="info-icon"
         />
-        <a href="/getting-started" target="_blank" rel="noopener">
-          Learn how to use the Explorer
-        </a>
+        <a href="/getting-started">Learn how to use the Explorer</a>
       </div>
     </div>
   );

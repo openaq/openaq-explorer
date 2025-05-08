@@ -30,7 +30,7 @@
         color: variables.$smoke120;
         text-decoration: none;
         font-weight: 500;
-        font-size: 0.65rem;
+        font-size: 0.875rem;
 
         &:hover {
           text-decoration: underline;
@@ -38,8 +38,8 @@
       }
 
       .info-icon {
-        width: 14px;
-        height: 14px;
+        width: 20px;
+        height: 20px;
         margin-right: 3px;
 
         svg {
