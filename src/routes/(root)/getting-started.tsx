@@ -1,6 +1,11 @@
 import '~/assets/scss/components/getting-started.scss';
 import WarningIcon from '~/assets/imgs/svgs/warning.svg';
 import Arrow from '~/assets/imgs/arrow.svg';
+import explorerSearch from '~/assets/imgs/explorer-search.png';
+import explorerMap from '~/assets/imgs/explorer-map.png';
+import buttonImg from '~/assets/imgs/button.png';
+import dotBorderImg from '~/assets/imgs/dot-border.png';
+import dotImg from '~/assets/imgs/dot.png';
 
 export default function AirQualityGuide() {
   return (
@@ -99,7 +104,7 @@ export default function AirQualityGuide() {
                     <div class="content">
                       You will need an <strong>Explorer account</strong> and{' '}
                       <strong>API Key</strong> (see instructions under
-                      ‘Additional OpenAQ Resources’) to download data.
+                      'Additional OpenAQ Resources') to download data.
                     </div>
                   </div>
                 </ul>
@@ -107,13 +112,13 @@ export default function AirQualityGuide() {
             </ol>
             <div class="image-container">
               <img
-                src="src/assets/imgs/explorer-map.png"
+                src={explorerMap}
                 alt="OpenAQ explorer map"
                 width="400"
                 loading="lazy"
               />
               <img
-                src="src/assets/imgs/explorer-search.png"
+                src={explorerSearch}
                 alt="OpenAQ explorer map search"
                 loading="lazy"
                 width="400"
@@ -123,7 +128,7 @@ export default function AirQualityGuide() {
               </div>
               <img
                 class="button-img"
-                src="src/assets/imgs/button.png"
+                src={buttonImg}
                 alt="Button"
                 loading="lazy"
                 width="150"
@@ -148,7 +153,7 @@ export default function AirQualityGuide() {
                 </p>
                 <img
                   class="dot-border-svg"
-                  src="src/assets/imgs/dot-border.png"
+                  src={dotBorderImg}
                   alt=""
                 />
               </div>
@@ -160,7 +165,7 @@ export default function AirQualityGuide() {
                   institutions and individuals to fill in gaps in air quality
                   knowledge.
                 </p>
-                <img class="dot-svg" src="src/assets/imgs/dot.png" alt="" />
+                <img class="dot-svg" src={dotImg} alt="" />
               </div>
               <ul>
                 <div class="admonition warning smaller">
@@ -173,7 +178,7 @@ export default function AirQualityGuide() {
                   </div>
                   <div class="content">
                     Learn more about regulatory data & air sensor data at the
-                    U.S. EPA’s Air Sensor Toolbox site (resources in English and
+                    U.S. EPA's Air Sensor Toolbox site (resources in English and
                     Español):{' '}
                     <a
                       target="_blank"
@@ -200,7 +205,7 @@ export default function AirQualityGuide() {
             Air quality standards (the concentration level at which a pollutant
             is considered safe) are set by governments, and they vary across the
             world. The World Health Organization has set guidelines that are
-            more protective than any county’s standards. For example, the WHO’s
+            more protective than any county's standards. For example, the WHO's
             guideline for a safe level of fine particulate matter (PM ) over a
             24-hour period is 15 µg/m (micrograms per cubic meter); whereas the
             strictest 24-hour national standard for PM2.5 is 25 µg/m .
@@ -240,7 +245,7 @@ export default function AirQualityGuide() {
               </div>
               <div class="content">
                 Learn more about{' '}
-                <strong>WHO’s global air quality guidelines</strong>:{' '}
+                <strong>WHO's global air quality guidelines</strong>:{' '}
                 <a
                   target="_blank"
                   rel="noopener noreferrer"
@@ -290,7 +295,7 @@ export default function AirQualityGuide() {
             </a>
           </p>
           <p>
-            To understand Air Quality Indexes across the world, visit OpenAQ’s
+            To understand Air Quality Indexes across the world, visit OpenAQ's
             AQI Hub:{' '}
             <a
               target="_blank"
@@ -301,7 +306,7 @@ export default function AirQualityGuide() {
             </a>
           </p>
           <p>
-            Find out more about OpenAQ’s mission, initiatives and impact on our
+            Find out more about OpenAQ's mission, initiatives and impact on our
             homepage:{' '}
             <a
               target="_blank"
