@@ -262,6 +262,12 @@ export class LambdaStack extends cdk.Stack {
             }),
             allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
           },
+          '/images/*': {
+            origin: new cdk.aws_cloudfront_origins.S3Origin(bucket, {
+              originAccessIdentity: originAccessIdentity,
+            }),
+            allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
+          },
           '/svgs/*': {
             origin: new cdk.aws_cloudfront_origins.S3Origin(bucket, {
               originAccessIdentity: originAccessIdentity,
