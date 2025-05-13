@@ -1,11 +1,6 @@
 import '~/assets/scss/components/getting-started.scss';
 import WarningIcon from '~/assets/imgs/svgs/warning.svg';
 import Arrow from '~/assets/imgs/arrow.svg';
-import explorerSearch from '~/assets/imgs/explorer-search.png';
-import explorerMap from '~/assets/imgs/explorer-map.png';
-import buttonImg from '~/assets/imgs/button.png';
-import dotBorderImg from '~/assets/imgs/dot-border.png';
-import dotImg from '~/assets/imgs/dot.png';
 
 export default function AirQualityGuide() {
   return (
@@ -112,13 +107,13 @@ export default function AirQualityGuide() {
             </ol>
             <div class="image-container">
               <img
-                src={explorerMap}
+                src="/images/explorer-map.png"
                 alt="OpenAQ explorer map"
                 width="400"
                 loading="lazy"
               />
               <img
-                src={explorerSearch}
+                src="/images/explorer-search.png"
                 alt="OpenAQ explorer map search"
                 loading="lazy"
                 width="400"
@@ -128,7 +123,7 @@ export default function AirQualityGuide() {
               </div>
               <img
                 class="button-img"
-                src={buttonImg}
+                src="/images/button.png"
                 alt="Button"
                 loading="lazy"
                 width="150"
@@ -153,7 +148,7 @@ export default function AirQualityGuide() {
                 </p>
                 <img
                   class="dot-border-svg"
-                  src={dotBorderImg}
+                  src="/images/dot-border.png"
                   alt=""
                 />
               </div>
@@ -165,7 +160,7 @@ export default function AirQualityGuide() {
                   institutions and individuals to fill in gaps in air quality
                   knowledge.
                 </p>
-                <img class="dot-svg" src={dotImg} alt="" />
+                <img class="dot-svg" src="/images/dot.png" alt="" />
               </div>
               <ul>
                 <div class="admonition warning smaller">
