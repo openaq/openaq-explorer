@@ -40,6 +40,11 @@ export interface Sensor {
   parameter: Parameter;
 }
 
+export interface Instrument {
+  id: number;
+  name: string;
+}
+
 export interface Datetime {
   utc: string;
   local: string;
@@ -55,6 +60,7 @@ export interface DetailOverviewDefinition {
   provider: Provider;
   isMonitor: boolean;
   sensors: Sensor[];
+  instruments: Instrument[];
   datetimeFirst: Datetime;
   datetimeLast: Datetime;
   isMobile: boolean;
