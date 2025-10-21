@@ -127,6 +127,17 @@ export function DetailOverview(props: DetailOverviewDefinition) {
                 </td>
               </tr>
               <tr>
+                <td>Instrument(s)</td>
+                <td>
+                  {props.instruments
+                    ?.map(
+                      (p) => `${p.name}`
+                    )
+                    .join(', ')
+                  }
+                  </td>
+              </tr>
+              <tr>
                 <td>Name</td>
                 <td>{props.name}</td>
               </tr>
