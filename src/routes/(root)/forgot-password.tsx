@@ -30,6 +30,7 @@ export default function VerifyEmail() {
               required
               name="email-address"
               id="email-address-forgot"
+              placeholder=" "
               disabled={requestingPasswordReset.pending}
             />
           </div>
