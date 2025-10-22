@@ -72,6 +72,12 @@
   background-color: #fff;
 }
 
+.menu-button:focus {
+  outline: 1px auto;
+  outline: -webkit-focus-ring-color;
+  outline: -webkit-focus-ring-color auto 5px;
+}
+
 .submenu {
   list-style: none;
   margin: 0;

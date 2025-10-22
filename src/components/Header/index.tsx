@@ -93,19 +93,30 @@ export function Header(props: Props) {
           <A
             href="https://openaq.org"
             class="header-logo"
-            aria-label="openaq logo"
+            aria-label="openaq"
           >
-            <OpenAQIcon height={40} width={72} />
+            <OpenAQIcon 
+              height={40} 
+              width={72} 
+              role="img"
+              aria-label="openaq logo"
+            />
           </A>
           <label class="menu-button-container" for="menu-toggle">
             <input id="menu-toggle" type="checkbox" />
             <button
               class="menu-button button-reset"
+              aria-label="toggle menu"
               onClick={() => {
                 setOpen(!open());
               }}
             >
-              <MenuIcon {...svgHeightWidth} {...svgColor} />
+              <MenuIcon 
+                {...svgHeightWidth} 
+                {...svgColor} 
+                role="img"
+                aria-label="menu"
+              />
             </button>
           </label>
           <ul class={`${'nav-list'} ${open() ? 'nav-list--visible' : ''}`}>
