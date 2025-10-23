@@ -181,33 +181,39 @@ export function DownloadCard(props: Props) {
         }}
       >
         <input type="hidden" name="timezone" value={props.timezone} />
-        <label for="">Start date</label>
-        <input
-          type="date"
-          name="date-from"
-          id="date-from-input"
-          value={dayjs(+new Date() - 86400000, props.timezone).format(
-            'YYYY-MM-DD'
-          )}
-          max={dayjs(new Date(), props.timezone).format('YYYY-MM-DD')}
-          onInput={onDateFromInput}
-          class="date-input"
-        />
-        <label for="">End date</label>
-        <input
-          type="date"
-          name="date-to"
-          id="date-to-input"
-          value={dayjs(new Date(), props.timezone).format('YYYY-MM-DD')}
-          max={dayjs(new Date(), props.timezone).format('YYYY-MM-DD')}
-          onInput={onDateToInput}
-          class="date-input"
-        />
+        <div class="date-inputs">
+          <label for="date-from-input">
+            Start date
+            <input
+              type="date"
+              name="date-from"
+              id="date-from-input"
+              value={dayjs(+new Date() - 86400000, props.timezone).format(
+                'YYYY-MM-DD'
+              )}
+              max={dayjs(new Date(), props.timezone).format('YYYY-MM-DD')}
+              onInput={onDateFromInput}
+              class="date-input"
+            />
+          </label>
+          <label for="date-to-input">
+            End date
+            <input
+              type="date"
+              name="date-to"
+              id="date-to-input"
+              value={dayjs(new Date(), props.timezone).format('YYYY-MM-DD')}
+              max={dayjs(new Date(), props.timezone).format('YYYY-MM-DD')}
+              onInput={onDateToInput}
+              class="date-input"
+            />
+          </label>
+        </div>
         <div class="parameter-inputs">
           <For each={props.sensors}>
             {(sensor) => (
               <>
-                <label for="">
+                <label for={`checkbox-sensor-${sensor.id}`}>
                   {sensor.parameter.displayName} {sensor.parameter.units}
                 </label>
                 <input
