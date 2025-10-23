@@ -42,12 +42,12 @@ export function EditListModal(props: EditListModalDefinition) {
   };
 
   return (
-    <dialog class="modal" ref={setRef}>
+    <dialog class="modal" ref={setRef} aria-labelledby="dialog-edit-heading">
       <form action={updateList} method="post">
         <input type="hidden" name="lists-id" value={props.listsId} />
         <header class="modal__header">
-          <h2 class="title">
-            <EditIcon {...svgAttributes} />
+          <h2 class="title" id="dialog-edit-heading">
+            <EditIcon {...svgAttributes} aria-hidden="true" />
             Edit list
           </h2>
           <button
@@ -57,13 +57,13 @@ export function EditListModal(props: EditListModalDefinition) {
             formnovalidate
             onClick={onClickClose}
           >
-            <CloseIcon {...svgAttributes} />
+            <CloseIcon {...svgAttributes} role="img" aria-label="close" />
           </button>
         </header>
 
         <div class="modal__body">
           <div class="form-input">
-            <label for="list-name">Name</label>
+            <label for="list-name-input">Name</label>
 
             <div class="form-input">
               <input
@@ -74,7 +74,7 @@ export function EditListModal(props: EditListModalDefinition) {
                 value={props.label}
               />
             </div>
-            <label for="list-description">Description</label>
+            <label for="list-description-input">Description</label>
 
             <input
               type="text"
