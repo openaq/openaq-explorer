@@ -201,7 +201,7 @@ export function DetailCharts(props: DetailChartsDefinition) {
     <section class='detail-charts'>
       <div>
         <header class='detail-charts__header'>
-        <h1 class="heading">Latest Readings</h1>
+        <h2 class="heading">Latest Readings</h2>
         </header>
         
         <div class='chart-container'>
@@ -277,7 +277,7 @@ export function DetailCharts(props: DetailChartsDefinition) {
       <hr class='horizontal-rule' />
       <div>
       <header class='detail-charts__header'>
-        <h1 class='heading'>Patterns</h1>
+        <h2 class='heading'>Patterns</h2>
         </header>
         <div class='chart-container'>
           <div class='chart-controls'>

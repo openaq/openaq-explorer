@@ -100,7 +100,7 @@ export function DetailOverview(props: DetailOverviewDefinition) {
         </div>
         <div class="divider"> </div>
         <div class="location-characteristics">
-          <h3>CHARACTERISTICS</h3>
+          <h2>Characteristics</h2>
           <table class="characteristics-table">
             <tbody>
               <tr>
@@ -179,7 +179,7 @@ export function DetailOverview(props: DetailOverviewDefinition) {
         </div>
         <div class="divider"> </div>
         <div class="location-lists">
-          <h3 class="type-subtitle-3 text-smoke-180">LISTS</h3>
+          <h2>Lists</h2>
           <Show
             when={props.user?.()?.usersId}
             fallback={<LocationListsFallback />}

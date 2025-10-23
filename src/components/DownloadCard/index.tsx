@@ -159,7 +159,7 @@ export function DownloadCard(props: Props) {
 
   return (
     <>
-      <h3 class="type-subtitle-1 text-sky-120">Download Data CSV</h3>
+      <h4 class="type-subtitle-1 text-sky-120">Download Data CSV</h4>
       <span class="type-body-1 text-smoke-120">
         Data downloads on OpenAQ Explorer are limited to 1000 records per
         parameter or 30 days, whichever is larger. For larger downloads use the
