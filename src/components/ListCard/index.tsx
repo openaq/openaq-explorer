@@ -34,7 +34,7 @@ export function ListCard(props: ListCardDefintion) {
           <div class="list-content">
             <ListCardMap {...props}></ListCardMap>
             <div class="list-info">
-              <h1 class="type-heading-1 text-sky-120">{props.label}</h1>
+              <h2 class="type-heading-1 text-sky-120">{props.label}</h2>
               <p class="type-body-2">{props.description}</p>
               <p class="type-body-3">{props.locationsCount} Locations</p>
             </div>

@@ -38,9 +38,9 @@ export function LocationDetailCardMini() {
     >
       <header class="location-detail-card-mini__header">
         <div>
-          <h3 class="type-heading-3 text-white">
+          <h2 class="type-heading-3 text-white">
             {location()?.results?.[0].name}
-          </h3>
+          </h2>
         </div>
         <div>
           <button class="close-btn" onClick={() => clearLocationsId()}>

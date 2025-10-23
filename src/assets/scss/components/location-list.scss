@@ -27,7 +27,7 @@
           display: flex;
           align-items: center;
 
-          h3 {
+          h2 {
             @include mixins.heading3(variables.$sky120);
             margin-left: 20px;
           }

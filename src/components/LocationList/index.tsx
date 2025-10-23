@@ -95,7 +95,7 @@ export function LocationListItem(props: LocationListItemDefinition) {
             ) : (
               <LowCostSensorMarker />
             )}
-            <h3>{props.name}</h3>
+            <h2>{props.name}</h2>
           </div>
           <div class="location-info__body">
             <div>
