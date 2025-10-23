@@ -49,7 +49,7 @@ export function LocationDetailCardMini() {
             onClick={() => clearLocationsId()}
           >
             {' '}
-            <CloseIcon {...svgAttributes} role="img" aria-label="Close" />
+            <CloseIcon {...svgAttributes} aria-hidden="true" />
             {' '}
           </button>
         </div>

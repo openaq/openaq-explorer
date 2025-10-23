@@ -152,8 +152,7 @@ export function LocationListItem(props: LocationListItemDefinition) {
         <DeleteForeverIcon 
           {...svgAttributes} 
           fill="#5a6672" 
-          role="img"
-          aria-label="Delete location from list"
+          aria-hidden="true"
         />
       </button>
     </li>

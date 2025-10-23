@@ -57,7 +57,7 @@ export function EditListModal(props: EditListModalDefinition) {
             formnovalidate
             onClick={onClickClose}
           >
-            <CloseIcon {...svgAttributes} role="img" aria-label="close" />
+            <CloseIcon {...svgAttributes} aria-hidden="true" />
           </button>
         </header>
 
@@ -94,7 +94,6 @@ export function EditListModal(props: EditListModalDefinition) {
           <button
             class="btn btn-secondary"
             id="cancel"
-            aria-label="close"
             formnovalidate
             onClick={onClickClose}
             autofocus

@@ -51,7 +51,7 @@ export function ListCard(props: ListCardDefintion) {
           toggleDeleteListModalOpen();
         }}
       >
-        <DeleteForeverIcon {...svgAttributes} role="img" aria-label="Delete list" />
+        <DeleteForeverIcon {...svgAttributes} aria-hidden="true" />
       </button>
     </div>
   );

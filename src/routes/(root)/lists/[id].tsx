@@ -55,13 +55,13 @@ export default function List() {
                   <h1 class="type-display-1 gradient-title">{list().label}</h1>
                   <button
                     class="button-reset"
+                    aria-label="Edit list" 
                     onClick={() => toggleEditListModalOpen()}
                   >
                     <EditIcon 
                       {...svgAttributes} 
                       fill="#5a6672" 
-                      role="img" 
-                      aria-label="Edit list" 
+                      aria-hidden="true"
                     />
                   </button>
                 </div>

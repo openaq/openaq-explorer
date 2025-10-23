@@ -56,7 +56,7 @@ export function DeleteLocationModal(props: DeleteLocationModalDefinition) {
             formnovalidate
             onClick={onClickClose}
           >
-            <CloseIcon {...svgAttributes} role="img" aria-label="close" />
+            <CloseIcon {...svgAttributes} aria-hidden="true" />
           </button>
         </header>
 
@@ -76,7 +76,6 @@ export function DeleteLocationModal(props: DeleteLocationModalDefinition) {
           <button
             class="btn btn-secondary"
             id="cancel"
-            aria-label="close"
             formnovalidate
             onClick={onClickClose}
             autofocus
