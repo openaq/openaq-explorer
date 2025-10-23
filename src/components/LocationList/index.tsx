@@ -148,7 +148,7 @@ export function LocationListItem(props: LocationListItemDefinition) {
           toggleDeleteListLocationModalOpen();
         }}
       >
-        <DeleteForeverIcon {...svgAttributes} />
+        <DeleteForeverIcon {...svgAttributes} fill="#5a6672" />
       </button>
     </li>
   );
