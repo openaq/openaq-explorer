@@ -143,12 +143,18 @@ export function LocationListItem(props: LocationListItemDefinition) {
       <button
         class="location-card-delete-btn"
         type="button"
+        aria-label="Delete location from list"
         onClick={() => {
           setDeleteListLocationsId(props.id);
           toggleDeleteListLocationModalOpen();
         }}
       >
-        <DeleteForeverIcon {...svgAttributes} fill="#5a6672" />
+        <DeleteForeverIcon 
+          {...svgAttributes} 
+          fill="#5a6672" 
+          role="img"
+          aria-label="Delete location from list"
+        />
       </button>
     </li>
   );

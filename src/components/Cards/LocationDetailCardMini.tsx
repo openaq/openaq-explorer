@@ -43,9 +43,14 @@ export function LocationDetailCardMini() {
           </h2>
         </div>
         <div>
-          <button class="close-btn" onClick={() => clearLocationsId()}>
+          <button 
+            class="close-btn" 
+            aria-label="Close"
+            onClick={() => clearLocationsId()}
+          >
             {' '}
-            <CloseIcon {...svgAttributes} />{' '}
+            <CloseIcon {...svgAttributes} role="img" aria-label="Close" />
+            {' '}
           </button>
         </div>
       </header>
@@ -103,7 +108,8 @@ export function LocationDetailCardMini() {
           href={`/locations/${store.locationsId}`}
           class="icon-btn btn-primary"
         >
-          Show Details <ChevronRightIcon {...svgAttributes} />
+          Show Details 
+          <ChevronRightIcon {...svgAttributes} aria-hidden="true" />
         </A>
       </footer>
     </div>

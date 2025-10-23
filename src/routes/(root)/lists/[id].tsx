@@ -43,7 +43,12 @@ export default function List() {
           <Show when={list()}>
             <div class="title">
               <A href="/lists">
-                <ChevronLeft {...svgAttributes} fill="#1e64ab" />
+                <ChevronLeft 
+                  {...svgAttributes} 
+                  fill="#1e64ab" 
+                  role="img" 
+                  aria-label="Go back" 
+                />
               </A>{' '}
               <div>
                 <div class="list-name">
@@ -52,7 +57,12 @@ export default function List() {
                     class="button-reset"
                     onClick={() => toggleEditListModalOpen()}
                   >
-                    <EditIcon {...svgAttributes} fill="#5a6672" />
+                    <EditIcon 
+                      {...svgAttributes} 
+                      fill="#5a6672" 
+                      role="img" 
+                      aria-label="Edit list" 
+                    />
                   </button>
                 </div>
                 <span class="type-subtitle-2 text-smoke-120">

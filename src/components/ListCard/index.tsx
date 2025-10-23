@@ -45,12 +45,13 @@ export function ListCard(props: ListCardDefintion) {
       <button
         class="list-card-delete-btn"
         type="button"
+        aria-label="Delete list"
         onClick={() => {
           setDeleteListsId(props.listsId);
           toggleDeleteListModalOpen();
         }}
       >
-        <DeleteForeverIcon {...svgAttributes} />
+        <DeleteForeverIcon {...svgAttributes} role="img" aria-label="Delete list" />
       </button>
     </div>
   );
