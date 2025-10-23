@@ -89,6 +89,7 @@ export function DetailOverview(props: DetailOverviewDefinition) {
               <CloudDownloadIcon
                 class="cloud-download-icon"
                 {...svgAttributes}
+                aria-hidden="true"
               />
             </a>
           </Show>

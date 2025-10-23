@@ -61,7 +61,7 @@ interface TimezoneDisclaimerDefinition {
 function TimezoneDisclaimer(props: TimezoneDisclaimerDefinition) {
   return(
     <div class="timezone-disclaimer">
-      <NestClock width={24} height={24} fill='#5a6672' role="img"/> 
+      <NestClock width={24} height={24} fill='#5a6672' aria-hidden="true" /> 
     <span>
       Chart shows local times ({props.timezone} UTC{dayjs(new Date()).tz(props.timezone).format('Z')})
     </span>
