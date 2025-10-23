@@ -40,7 +40,7 @@ export function TabView(props: TabViewDefintion) {
   return (
     <div class="tab-view">
       <header class="tab-view__header">
-        <nav class="tab-nav">
+        <nav class="tab-nav" aria-label="List tabview">
           <a href="#" onClick={() => setActiveTab('list')}>
             <div class={`tab ${activeTab() == 'list' ? 'tab--active' : ''}`}>
               {''}
