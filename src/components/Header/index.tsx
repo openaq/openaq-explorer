@@ -279,6 +279,7 @@ export function Header(props: Props) {
                 fill="#0000ff"
                 stroke="#ff0000"
                 stroke-width={12}
+                aria-hidden="true"
               />
               <span>Lists</span>
             </A>
@@ -292,11 +293,11 @@ export function Header(props: Props) {
                 href="/account"
                 class="type-body-3 text-smoke-120 settings-link"
               >
-                <SettingsIcon {...svgHeightWidth} {...svgColor} />
+                <SettingsIcon {...svgHeightWidth} {...svgColor} aria-hidden="true" />
                 <span>Settings</span>
               </A>
               <form action={logout} method="post" class="logout-form">
-                <LogoutIcon {...svgHeightWidth} {...svgColor} />
+                <LogoutIcon {...svgHeightWidth} {...svgColor} aria-hidden="true" />
                 <input
                   type="hidden"
                   name="redirect"
