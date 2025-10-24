@@ -21,7 +21,7 @@ export default function Layout(props: ParentProps) {
       <Header
         user={user as AccessorWithLatest<SessionData | undefined | null>}
       />
-      <main>{props.children}</main>
+      <div>{props.children}</div>
     </>
   );
 }
