@@ -92,12 +92,13 @@ export default function Register() {
               value={searchParams.redirect ?? '/'}
             />
             <div class="form-element">
-              <label for="fullname" class="type-subtitle-3 text-sky-120">
+              <label for="full-name-register" class="type-subtitle-3 text-sky-120">
                 Full Name
               </label>
               <input
                 class="text-input"
                 name="fullname"
+                id="full-name-register"
                 autocomplete="on"
                 placeholder=" "
                 disabled={registering.pending}
@@ -105,12 +106,13 @@ export default function Register() {
               />
             </div>
             <div class="form-element">
-              <label for="email-address" class="type-subtitle-3 text-sky-120">
+              <label for="email-address-register" class="type-subtitle-3 text-sky-120">
                 Email address
               </label>
               <input
                 class="text-input"
                 name="email-address"
+                id="email-address-register"
                 type="email"
                 placeholder=" "
                 autocomplete="on"
@@ -119,12 +121,12 @@ export default function Register() {
               />
             </div>
             <div class="form-element">
-              <label for="password-input" class="type-subtitle-3 text-sky-120">
+              <label for="password-register" class="type-subtitle-3 text-sky-120">
                 Password (mininum 8 characters)
               </label>
               <input
                 name="password"
-                id="password"
+                id="password-register"
                 type="password"
                 minlength="8"
                 placeholder=" "

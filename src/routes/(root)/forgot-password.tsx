@@ -23,12 +23,14 @@ export default function VerifyEmail() {
         </span>
         <form action={forgotPasswordLink} method="post">
           <div class="form-element">
-            <label for="email-address">Email address</label>
+            <label for="email-address-forgot">Email address</label>
             <input
               class="text-input"
               type="email"
               required
               name="email-address"
+              id="email-address-forgot"
+              placeholder=" "
               disabled={requestingPasswordReset.pending}
             />
           </div>

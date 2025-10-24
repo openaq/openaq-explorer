@@ -56,13 +56,23 @@ export default function Login() {
             >
               Email Address
             </label>
-            <input name="email-address" class="text-input" type="email" />
+            <input 
+              name="email-address" 
+              class="text-input" 
+              type="email" 
+              id="email-address-input"
+            />
           </div>
           <div class="form-element">
             <label class="type-subtitle-3 text-sky-120" for="password-input">
               Password
             </label>
-            <input name="password" type="password" class="text-input" />
+            <input 
+              name="password"  
+              type="password" 
+              class="text-input" 
+              id="password-input"
+            />
           </div>
           <div class="form-element-row">
             <input
@@ -71,7 +81,7 @@ export default function Login() {
               id="remember-me"
               class="checkbox"
             />
-            <label class="type-subtitle-3 text-sky-120" for="password-input">
+            <label class="type-subtitle-3 text-sky-120" for="remember-me">
               Remember me for 30 days
             </label>
           </div>
