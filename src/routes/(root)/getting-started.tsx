@@ -119,7 +119,7 @@ export default function AirQualityGuide() {
                 width="400"
               />
               <div class="arrow-container">
-                <Arrow />
+                <Arrow aria-hidden="true" />
               </div>
               <img
                 class="button-img"
