@@ -40,7 +40,7 @@ export function TabView(props: TabViewDefintion) {
   return (
     <div class="tab-view">
       <header class="tab-view__header">
-        <nav class="tab-nav">
+        <nav class="tab-nav" aria-label="List tabview">
           <a href="#" onClick={() => setActiveTab('list')}>
             <div class={`tab ${activeTab() == 'list' ? 'tab--active' : ''}`}>
               {''}
@@ -49,6 +49,7 @@ export function TabView(props: TabViewDefintion) {
                 class={`tab-icon ${
                   activeTab() == 'list' ? 'tab-icon--active' : ''
                 }`}
+                aria-hidden="true"
               />
               List
             </div>
@@ -60,6 +61,7 @@ export function TabView(props: TabViewDefintion) {
                 class={`$'tab-icon' ${
                   activeTab() == 'map' ? 'tab-icon--active' : ''
                 }`}
+                aria-hidden="true"
               />
               Map
             </div>
@@ -67,10 +69,10 @@ export function TabView(props: TabViewDefintion) {
         </nav>
         <Show when={activeTab() == 'list' && props.locations.length > 0}>
           <div class="list-controls">
-            <label for="parameter-select">Parameters</label>
+            <label for="parameter-select-list">Parameters</label>
             <select
               name="parameter-select"
-              id=""
+              id="parameter-select-list"
               class="select"
               value={store.listParametersId}
               onChange={(e) => {

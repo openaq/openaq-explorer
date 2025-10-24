@@ -43,16 +43,26 @@ export default function List() {
           <Show when={list()}>
             <div class="title">
               <A href="/lists">
-                <ChevronLeft {...svgAttributes} fill="#1e64ab" />
+                <ChevronLeft 
+                  {...svgAttributes} 
+                  fill="#1e64ab" 
+                  role="img" 
+                  aria-label="Go back" 
+                />
               </A>{' '}
               <div>
                 <div class="list-name">
                   <h1 class="type-display-1 gradient-title">{list().label}</h1>
                   <button
                     class="button-reset"
+                    aria-label="Edit list" 
                     onClick={() => toggleEditListModalOpen()}
                   >
-                    <EditIcon {...svgAttributes} fill="#5a6672" />
+                    <EditIcon 
+                      {...svgAttributes} 
+                      fill="#5a6672" 
+                      aria-hidden="true"
+                    />
                   </button>
                 </div>
                 <span class="type-subtitle-2 text-smoke-120">

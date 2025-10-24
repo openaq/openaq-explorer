@@ -104,7 +104,13 @@ export function ListsForm(props: ListsFormDefinition) {
       {lists()?.length === 0 ? (
         <A class="icon-btn btn-secondary" href="/lists">
           Add to list
-          <ListsIcon height={24} width={24} fill="#0000ff" stroke="#ff0000" />
+          <ListsIcon 
+            height={24} 
+            width={24} 
+            fill="#0000ff" 
+            stroke="#ff0000" 
+            aria-hidden="true"
+          />
         </A>
       ) : (
         <button
@@ -112,7 +118,13 @@ export function ListsForm(props: ListsFormDefinition) {
           onClick={() => onClickAddToList()}
         >
           Add to list
-          <ListsIcon height={24} width={24} fill="#0000ff" stroke="#ff0000" />
+          <ListsIcon 
+            height={24} 
+            width={24} 
+            fill="#0000ff" 
+            stroke="#ff0000" 
+            aria-hidden="true"
+          />
         </button>
       )}
     </div>

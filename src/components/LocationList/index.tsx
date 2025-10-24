@@ -95,7 +95,7 @@ export function LocationListItem(props: LocationListItemDefinition) {
             ) : (
               <LowCostSensorMarker />
             )}
-            <h3>{props.name}</h3>
+            <h2>{props.name}</h2>
           </div>
           <div class="location-info__body">
             <div>
@@ -143,12 +143,17 @@ export function LocationListItem(props: LocationListItemDefinition) {
       <button
         class="location-card-delete-btn"
         type="button"
+        aria-label="Delete location from list"
         onClick={() => {
           setDeleteListLocationsId(props.id);
           toggleDeleteListLocationModalOpen();
         }}
       >
-        <DeleteForeverIcon {...svgAttributes} />
+        <DeleteForeverIcon 
+          {...svgAttributes} 
+          fill="#5a6672" 
+          aria-hidden="true"
+        />
       </button>
     </li>
   );

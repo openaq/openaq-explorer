@@ -42,11 +42,11 @@ export function DeleteLocationModal(props: DeleteLocationModalDefinition) {
   });
 
   return (
-    <dialog class="modal" ref={setRef}>
+    <dialog class="modal" ref={setRef} aria-labelledby="dialog-remove-heading">
       <form action={deleteListLocation} method="post">
         <header class="modal__header">
-          <h2 class="title">
-            <DeleteForeverIcon {...svgAttributes} />
+          <h2 class="title" id="dialog-remove-heading">
+            <DeleteForeverIcon {...svgAttributes} aria-hidden="true" />
             Remove location?
           </h2>
           <button
@@ -56,7 +56,7 @@ export function DeleteLocationModal(props: DeleteLocationModalDefinition) {
             formnovalidate
             onClick={onClickClose}
           >
-            <CloseIcon {...svgAttributes} />
+            <CloseIcon {...svgAttributes} aria-hidden="true" />
           </button>
         </header>
 
@@ -76,7 +76,6 @@ export function DeleteLocationModal(props: DeleteLocationModalDefinition) {
           <button
             class="btn btn-secondary"
             id="cancel"
-            aria-label="close"
             formnovalidate
             onClick={onClickClose}
             autofocus

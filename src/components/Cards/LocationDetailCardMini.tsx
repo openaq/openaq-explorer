@@ -38,14 +38,19 @@ export function LocationDetailCardMini() {
     >
       <header class="location-detail-card-mini__header">
         <div>
-          <h3 class="type-heading-3 text-white">
+          <h2 class="type-heading-3 text-white">
             {location()?.results?.[0].name}
-          </h3>
+          </h2>
         </div>
         <div>
-          <button class="close-btn" onClick={() => clearLocationsId()}>
+          <button 
+            class="close-btn" 
+            aria-label="Close"
+            onClick={() => clearLocationsId()}
+          >
             {' '}
-            <CloseIcon {...svgAttributes} />{' '}
+            <CloseIcon {...svgAttributes} aria-hidden="true" />
+            {' '}
           </button>
         </div>
       </header>
@@ -103,7 +108,8 @@ export function LocationDetailCardMini() {
           href={`/locations/${store.locationsId}`}
           class="icon-btn btn-primary"
         >
-          Show Details <ChevronRightIcon {...svgAttributes} />
+          Show Details 
+          <ChevronRightIcon {...svgAttributes} aria-hidden="true" />
         </A>
       </footer>
     </div>
