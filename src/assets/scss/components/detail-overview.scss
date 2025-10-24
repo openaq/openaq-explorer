@@ -55,14 +55,20 @@
   padding: 50px;
   flex: 1;
 
-  h3 {
+  h2 {
     @include mixins.subtitle3(variables.$smoke180);
+    text-transform: uppercase;
   }
 }
 
 .location-lists {
   padding: 50px;
   flex: 1;
+
+  h2 {
+    @include mixins.subtitle3(variables.$smoke180);
+    text-transform: uppercase;
+  }
 }
 
 .divider {

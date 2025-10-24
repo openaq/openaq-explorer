@@ -61,7 +61,7 @@ interface TimezoneDisclaimerDefinition {
 function TimezoneDisclaimer(props: TimezoneDisclaimerDefinition) {
   return(
     <div class="timezone-disclaimer">
-      <NestClock width={24} height={24} fill='#5a6672' role="img"/> 
+      <NestClock width={24} height={24} fill='#5a6672' aria-hidden="true" /> 
     <span>
       Chart shows local times ({props.timezone} UTC{dayjs(new Date()).tz(props.timezone).format('Z')})
     </span>
@@ -201,53 +201,62 @@ export function DetailCharts(props: DetailChartsDefinition) {
     <section class='detail-charts'>
       <div>
         <header class='detail-charts__header'>
-        <h1 class="heading">Latest Readings</h1>
+        <h2 class="heading">Latest Readings</h2>
         </header>
         
         <div class='chart-container'>
           <div class='chart-controls'>
-            <select
-              name="sensor-select"
-              id="sensor-select"
-              class="select"
-              onChange={(e) =>
-                setSelectedSensor(Number(e.target.value))
-              }
-            >
-              <For each={props.sensors}>
-                {(sensor) => (
-                  <option value={sensor.id}>
-                    {sensor.parameter.displayName}{' '}
-                    {sensor.parameter.units}
-                  </option>
-                )}
-              </For>
-            </select>
-            <select
-              name="time-range-select"
-              id="time-range-select"
-              class="select"
-              onChange={(e) =>
-                setSelectedTimePeriod(Number(e.target.value))
-              }
-            >
-              <option value="24">Last 24 hours</option>
-              <option value="48">Last 48 hours</option>
-              <option value="72">Last 72 hours</option>
-              <option value="168">Last 1 week</option>
-              <option value="720">Last 30 days</option>
-            </select>
-            <select
-              name="scale-type-select"
-              id="scale-type-select"
-              class="select"
-              onChange={(e) => setSelectedScale(e.target.value)}
-            >
-              <option value="linear" selected>
-                Linear
-              </option>
-              <option value="log">Logarithmic</option>
-            </select>
+            <label>
+                <div>Sensor</div>
+              <select
+                name="sensor-select"
+                id="sensor-select"
+                class="select"
+                onChange={(e) =>
+                  setSelectedSensor(Number(e.target.value))
+                }
+              >
+                <For each={props.sensors}>
+                  {(sensor) => (
+                    <option value={sensor.id}>
+                      {sensor.parameter.displayName}{' '}
+                      {sensor.parameter.units}
+                    </option>
+                  )}
+                </For>
+              </select>
+            </label>
+            <label>
+              <div>Time range</div>
+              <select
+                name="time-range-select"
+                id="time-range-select"
+                class="select"
+                onChange={(e) =>
+                  setSelectedTimePeriod(Number(e.target.value))
+                }
+              >
+                <option value="24">Last 24 hours</option>
+                <option value="48">Last 48 hours</option>
+                <option value="72">Last 72 hours</option>
+                <option value="168">Last 1 week</option>
+                <option value="720">Last 30 days</option>
+              </select>
+            </label>
+            <label>
+              <div>Scale type</div>
+              <select
+                name="scale-type-select"
+                id="scale-type-select"
+                class="select"
+                onChange={(e) => setSelectedScale(e.target.value)}
+              >
+                <option value="linear" selected>
+                  Linear
+                </option>
+                <option value="log">Logarithmic</option>
+              </select>
+            </label>
             <button
               class="btn btn-secondary"
               onClick={onUpdateMeasurementsClick}
@@ -277,38 +286,44 @@ export function DetailCharts(props: DetailChartsDefinition) {
       <hr class='horizontal-rule' />
       <div>
       <header class='detail-charts__header'>
-        <h1 class='heading'>Patterns</h1>
+        <h2 class='heading'>Patterns</h2>
         </header>
         <div class='chart-container'>
           <div class='chart-controls'>
-            <select
-              name="sensor-select"
-              id="sensor-select"
-              class="select"
-              onChange={(e) =>
-                setSelectedPatternsSensorsId(Number(e.target.value))
-              }
-            >
-              <For each={props.sensors}>
-                {(sensor) => (
-                  <option value={sensor.id}>
-                    {sensor.parameter.displayName}{' '}
-                    {sensor.parameter.units}
-                  </option>
-                )}
-              </For>
-            </select>
-            <select
-              name="time-range-select"
-              id="time-range-select"
-              class="select"
-              onChange={(e) => setSelectedPatternsPeriod(e.target.value)}
-            >
-              <For each={getYears(props.datetimeFirst?.utc, props.datetimeLast?.utc)}>{(year,i) => 
-                  <option value={year}>{year}</option>              
-              }
-              </For>
-            </select>
+            <label>
+              <div>Sensor</div>
+              <select
+                name="sensor-select"
+                id="sensor-select"
+                class="select"
+                onChange={(e) =>
+                  setSelectedPatternsSensorsId(Number(e.target.value))
+                }
+              >
+                <For each={props.sensors}>
+                  {(sensor) => (
+                    <option value={sensor.id}>
+                      {sensor.parameter.displayName}{' '}
+                      {sensor.parameter.units}
+                    </option>
+                  )}
+                </For>
+              </select>
+            </label>
+            <label>
+              <div>Time range</div>
+              <select
+                name="time-range-select"
+                id="time-range-select"
+                class="select"
+                onChange={(e) => setSelectedPatternsPeriod(e.target.value)}
+              >
+                <For each={getYears(props.datetimeFirst?.utc, props.datetimeLast?.utc)}>{(year,i) => 
+                    <option value={year}>{year}</option>              
+                }
+                </For>
+              </select>
+            </label>
             <button
               class="btn btn-secondary"
               onClick={onUpdatePatternsClick}

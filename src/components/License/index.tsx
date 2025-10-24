@@ -35,21 +35,21 @@ export function License(props: LicenseDefinition) {
       <div class="license-attribute-icons">
         <Show when={isCreativeCommons}>
           <IconTooltip title={'Creative Commons'}>
-            <CCIcon class="cc-class" {...svgAttributes} />
+            <CCIcon class="cc-class" {...svgAttributes} role="img" aria-label="license icon" />
           </IconTooltip>
         </Show>
         <Show when={!props.commercialUseAllowed}>
           <IconTooltip
             title={'Only non-commercial uses of the work are permitted.'}
           >
-            <NCIcon class="nc-class" {...svgAttributes} />
+            <NCIcon class="nc-class" {...svgAttributes} role="img" aria-label="license icon" />
           </IconTooltip>
         </Show>
         <Show when={props.attributionRequired}>
           <IconTooltip
             title={'Attribution: Credit must be given to the creator.'}
           >
-            <BYIcon class="by-class" {...svgAttributes} />
+            <BYIcon class="by-class" {...svgAttributes} role="img" aria-label="license icon" />
           </IconTooltip>
         </Show>
         <Show when={props.shareAlikeRequired}>
@@ -58,14 +58,14 @@ export function License(props: LicenseDefinition) {
               'Share Alike: Adaptations must be shared under the same terms.'
             }
           >
-            <SAIcon {...svgAttributes} class="sa-class" />
+            <SAIcon {...svgAttributes} class="sa-class" role="img" aria-label="license icon" />
           </IconTooltip>
         </Show>
         <Show when={!props.modificationAllowed}>
           <IconTooltip
             title={'No derivatives or adaptations of the work are permitted.'}
           >
-            <NDIcon {...svgAttributes} class="nd-class" />
+            <NDIcon {...svgAttributes} class="nd-class" role="img" aria-label="license icon" />
           </IconTooltip>
         </Show>
       </div>

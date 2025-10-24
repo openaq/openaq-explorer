@@ -36,7 +36,11 @@
   }
 }
 
-.download-form {
+.download-form { 
+  .date-inputs {
+    display: flex;
+  }
+
   .date-input {
     height: 40px;
     width: 150px;

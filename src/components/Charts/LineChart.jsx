@@ -185,6 +185,8 @@ export default function LineChart(props) {
         <svg
           width={`${props.width + props.margin}px`}
           height={`${props.height + props.margin}px`}
+          role="img"
+          aria-label="line chart"
         >
           <defs>
             <linearGradient

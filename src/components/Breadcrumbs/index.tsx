@@ -14,16 +14,21 @@ export function Breadcrumbs(props: BreadcrumbsDefinition) {
     fill: '#5a6672',
   };
   return (
-    <div class="breadcrumbs">
+    <nav class="breadcrumbs" aria-label="breadcrumbs">
       <A href="https://openaq.org">
-        <HomeIcon {...svgAttributes} fill="#33a3a1" />
+        <HomeIcon 
+          {...svgAttributes} 
+          fill="#33a3a1" 
+          role="img"
+          aria-label="home"
+        />
       </A>
-      <ChevronRightIcon {...svgAttributes} />
+      <ChevronRightIcon {...svgAttributes} aria-hidden="true" />
       <A href="/">Explore the data</A>
-      <ChevronRightIcon {...svgAttributes} />
+      <ChevronRightIcon {...svgAttributes} aria-hidden="true" />
       <span class="" data-testid="page-name">
         {props.pageName}
       </span>
-    </div>
+    </nav>
   );
 }

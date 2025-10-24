@@ -241,6 +241,8 @@ export default function Boxplot(props) {
       <svg
         width={`${props.width + props.margin}px`}
         height={`${props.height + props.margin}px`}
+        role="img"
+        aria-label="box plot chart"
       >
         <g
           class={`chart-grid box-plot-grid-${props.name}`}

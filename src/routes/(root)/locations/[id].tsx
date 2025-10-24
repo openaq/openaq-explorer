@@ -59,8 +59,7 @@ export default function Location() {
               <section class="getting-started-section">
                 <InfoIcon
                   viewBox="0 0 25 25"
-                  role="img"
-                  aria-label="Info Icon"
+                  aria-hidden="true"
                   class="info-icon"
                 />
                 <a href="/getting-started" class="getting-started-link">
