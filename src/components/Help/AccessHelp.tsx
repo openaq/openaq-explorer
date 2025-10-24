@@ -29,7 +29,6 @@ const AccessHelp = ({ content, title }: AccessHelpDefinition) => {
         {...svgAttributes}
         fill="#000000"
         class={`${title} help-icon`}
-        //onClick={(e) => showHelp(e)}
       />
     </button>
   );
