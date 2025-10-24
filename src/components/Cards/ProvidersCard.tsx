@@ -135,11 +135,17 @@ export function ProvidersCard() {
   return (
     <div class="providers-card">
       <header class="providers-card__header">
-        <ArrowLeftIcon
-          fill="#FFFFFF"
-          {...svgAttributes}
+        <button 
+          class="button-reset" 
+          aria-label="Go back"
           onClick={() => onClickClose()}
-        />
+        >
+          <ArrowLeftIcon
+            fill="#FFFFFF"
+            {...svgAttributes}
+            aria-hidden="true"
+          />
+        </button>
         <h3 class="type-heading-3 text-white">Data providers</h3>
       </header>
       <div class="providers-card__body">
