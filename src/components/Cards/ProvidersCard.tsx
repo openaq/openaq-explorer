@@ -181,7 +181,7 @@ export function ProvidersCard() {
               onClick={zoomToExtent}
             >
               <span>Zoom to provider extent </span>
-              <CropIcon fill="#5a6672" {...svgAttributes} />
+              <CropIcon fill="#5a6672" {...svgAttributes} aria-hidden="true" />
             </button>
           </Show>
           <label for="search-input">Search providers</label>

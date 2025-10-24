@@ -36,7 +36,7 @@ export function OverlayCard() {
       <section class="filter-section">
         <header class="filter-section__header">
           <div class="card-title">
-            <FilterIcon {...svgAttributes} fill="#FFFFFF" />
+            <FilterIcon {...svgAttributes} fill="#FFFFFF" aria-hidden="true" />
             <h3>Filters</h3>
           </div>
         </header>
@@ -128,7 +128,7 @@ export function OverlayCard() {
           class="icon-btn btn-secondary"
           onClick={() => toggleShowProvidersCard()}
         >
-          Choose data providers <TuneIcon {...svgAttributes} fill="#33a3a1" />
+          Choose data providers <TuneIcon {...svgAttributes} fill="#33a3a1" aria-hidden="true" />
         </button>
       </footer>
     </div>
