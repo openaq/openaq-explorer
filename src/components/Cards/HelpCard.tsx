@@ -18,8 +18,12 @@ const HelpCard = (props: HelpCardDefinition) => {
       >
         <header class="help-card__header">
           <h3 class="type-subtitle-1">{props.title}</h3>
-          <button class="close-btn" onClick={() => toggleShowHelpCard(false)}>
-            <CloseIcon fill="#FFFFFF" />
+          <button 
+            class="close-btn" 
+            aria-label="Close"
+            onClick={() => toggleShowHelpCard(false)}
+          >
+            <CloseIcon fill="#FFFFFF" aria-hidden="true" />
           </button>
         </header>
         <section class="help-card__body help-items">
@@ -37,7 +41,7 @@ const HelpCard = (props: HelpCardDefinition) => {
             rel="noreferrer noopener"
           >
             <span>More Help</span>
-            <RightArrowIcon fill="#FFFFFF" width={20} height={20} />
+            <RightArrowIcon fill="#FFFFFF" width={20} height={20} aria-hidden="true" />
           </a>
         </footer>
       </article>
