@@ -136,20 +136,22 @@ export default function Home() {
 
   return (
     <>
-      {
-        <Show when={showNotification && store.showNotificationCard}>
-          <NotificationCard
-            notificationType={notificationType}
-            notificationTitle={notificationTitle}
-            notificationContent={notificationContent}
-            dismissedKey={dismissedKey}
-          />
-        </Show>
-      }
-      <HelpCard content={store.helpContent} title="Help" />
-      <Map />
-      <FlipCard />
-      <LocationDetailCard />
+      <main>
+        {
+          <Show when={showNotification && store.showNotificationCard}>
+            <NotificationCard
+              notificationType={notificationType}
+              notificationTitle={notificationTitle}
+              notificationContent={notificationContent}
+              dismissedKey={dismissedKey}
+            />
+          </Show>
+        }
+        <HelpCard content={store.helpContent} title="Help" />
+        <Map />
+        <FlipCard />
+        <LocationDetailCard />
+      </main>
     </>
   );
 }
