@@ -178,6 +178,7 @@ export function ProvidersCard() {
               <CropIcon fill="#5a6672" {...svgAttributes} />
             </button>
           </Show>
+          <label for="search-input">Search providers</label>
           <input
             type="text"
             name="search-input"
