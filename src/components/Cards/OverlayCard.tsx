@@ -45,12 +45,10 @@ export function OverlayCard() {
             <label for="parameter-select" class="type-subtitle-2">
               Choose a pollutant{' '}
             </label>
-            <span>
-              <AccessHelp
-                content={parsedPollutantsHtml}
-                title={parsedPollutantsTitle}
-              />
-            </span>
+            <AccessHelp
+              content={parsedPollutantsHtml}
+              title={parsedPollutantsTitle}
+            />
           </div>
 
           <select

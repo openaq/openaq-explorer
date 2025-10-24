@@ -20,12 +20,18 @@ const AccessHelp = ({ content, title }: AccessHelpDefinition) => {
     e.stopPropagation();
   };
   return (
-    <HelpIcon
-      {...svgAttributes}
-      fill="#000000"
-      class={`${title} help-icon`}
+    <button 
+      class="button-reset" 
+      aria-label="Help"
       onClick={(e) => showHelp(e)}
-    />
+    >
+      <HelpIcon
+        {...svgAttributes}
+        fill="#000000"
+        class={`${title} help-icon`}
+        //onClick={(e) => showHelp(e)}
+      />
+    </button>
   );
 };
 
