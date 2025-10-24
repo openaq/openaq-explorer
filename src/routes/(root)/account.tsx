@@ -50,7 +50,7 @@ export default function Account() {
           </div>
 
           <div class="form-element">
-            <label for="name">Email</label>
+            <label for="email">Email</label>
             <input
               type="email"
               name="email"
@@ -65,12 +65,14 @@ export default function Account() {
           <PasswordForm />
         </section>
         <section class="account-page__section">
-          <h2 class="type-heading-2 text-sky-120">API Key</h2>
+          <h2 class="type-heading-2 text-sky-120" id="api-key-heading">
+            API Key
+          </h2>
           <Show when={!user()?.isActive}>
             <InactiveAccountWarning />
           </Show>
 
-          <input class="text-input" value={user()?.token}></input>
+          <input class="text-input" aria-labelledby="api-key-heading" value={user()?.token}></input>
           <div class="api-key-buttons">
             <button
               class="btn btn-primary"
