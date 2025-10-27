@@ -37,7 +37,7 @@ export function OverlayCard() {
         <header class="filter-section__header">
           <div class="card-title">
             <FilterIcon {...svgAttributes} fill="#FFFFFF" aria-hidden="true" />
-            <h3>Filters</h3>
+            <h2 class="type-heading-3 text-white">Filters</h2>
           </div>
         </header>
         <div class="pollutant-select">

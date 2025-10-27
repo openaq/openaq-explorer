@@ -146,7 +146,7 @@ export function ProvidersCard() {
             aria-hidden="true"
           />
         </button>
-        <h3 class="type-heading-3 text-white">Data providers</h3>
+        <h2 class="type-heading-3 text-white">Data providers</h2>
       </header>
       <div class="providers-card__body">
         <div class="list-header">
