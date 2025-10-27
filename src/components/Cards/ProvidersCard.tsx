@@ -139,6 +139,7 @@ export function ProvidersCard() {
           class="button-reset" 
           aria-label="Go back"
           onClick={() => onClickClose()}
+          tabindex={`${store.showHelpCard ? '-1' : '0'}`}
         >
           <ArrowLeftIcon
             fill="#FFFFFF"
@@ -154,6 +155,7 @@ export function ProvidersCard() {
             <button
               class="button-reset type-link-1 providers-list-select-all"
               onClick={() => setSelectedProviders(() => true, 'checked', true)}
+              tabindex={`${store.showHelpCard ? '-1' : '0'}`}
             >
               Select All
             </button>
@@ -163,6 +165,7 @@ export function ProvidersCard() {
               onClick={() => {
                 setSelectedProviders(() => true, 'checked', false);
               }}
+              tabindex={`${store.showHelpCard ? '-1' : '0'}`}
             >
               Select None
             </button>
@@ -179,6 +182,7 @@ export function ProvidersCard() {
             <button
               class="button-reset zoom-to-provider-btn"
               onClick={zoomToExtent}
+              tabindex={`${store.showHelpCard ? '-1' : '0'}`}
             >
               <span>Zoom to provider extent </span>
               <CropIcon fill="#5a6672" {...svgAttributes} aria-hidden="true" />
@@ -191,6 +195,7 @@ export function ProvidersCard() {
             id="search-input"
             class="search-input"
             onInput={(e) => onSearchInput(e)}
+            tabindex={`${store.showHelpCard ? '-1' : '0'}`}
           />
           <span>
             {selectedProviders.filter((o) => o.matchesQuery).length == count()
@@ -200,7 +205,10 @@ export function ProvidersCard() {
                 } of ${count()} providers`}
           </span>
         </div>
-        <div class="list-container">
+        <div 
+          class="list-container"
+          tabindex={`${store.showHelpCard ? '-1' : '0'}`}
+        >
           <ul class="providers-list">
             <For each={selectedProviders.filter((o) => o.matchesQuery)}>
               {(provider, i) => {
@@ -227,6 +235,7 @@ export function ProvidersCard() {
                             e.target.checked
                           );
                         }}
+                        tabindex={`${store.showHelpCard ? '-1' : '0'}`}
                       />
                     </li>
                   );
@@ -243,6 +252,7 @@ export function ProvidersCard() {
           }`}
           disabled={activeProviders().length === 0}
           onClick={() => onClickUpdate(activeProviders())}
+          tabindex={`${store.showHelpCard ? '-1' : '0'}`}
         >
           Update
         </button>

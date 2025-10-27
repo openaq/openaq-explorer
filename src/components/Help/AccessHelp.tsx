@@ -24,6 +24,7 @@ const AccessHelp = ({ content, title }: AccessHelpDefinition) => {
       class="button-reset" 
       aria-label="Help"
       onClick={(e) => showHelp(e)}
+      tabindex={`${store.showHelpCard ? '-1' : '0'}`}
     >
       <HelpIcon
         {...svgAttributes}

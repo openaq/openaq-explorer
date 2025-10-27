@@ -22,6 +22,7 @@ const HelpCard = (props: HelpCardDefinition) => {
             class="close-btn" 
             aria-label="Close"
             onClick={() => toggleShowHelpCard(false)}
+            tabindex={`${store.showHelpCard ? '0' : '-1'}`}
           >
             <CloseIcon fill="#FFFFFF" aria-hidden="true" />
           </button>
@@ -39,6 +40,7 @@ const HelpCard = (props: HelpCardDefinition) => {
             href="https://openaq.org/developers/help/"
             target="_blank"
             rel="noreferrer noopener"
+            tabindex={`${store.showHelpCard ? '0' : '-1'}`}
           >
             <span>More Help</span>
             <RightArrowIcon fill="#FFFFFF" width={20} height={20} aria-hidden="true" />
