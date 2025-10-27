@@ -135,12 +135,19 @@ export function ProvidersCard() {
   return (
     <div class="providers-card">
       <header class="providers-card__header">
-        <ArrowLeftIcon
-          fill="#FFFFFF"
-          {...svgAttributes}
+        <button 
+          class="button-reset" 
+          aria-label="Go back"
           onClick={() => onClickClose()}
-        />
-        <h3 class="type-heading-3 text-white">Data providers</h3>
+          tabindex={`${store.showHelpCard ? '-1' : '0'}`}
+        >
+          <ArrowLeftIcon
+            fill="#FFFFFF"
+            {...svgAttributes}
+            aria-hidden="true"
+          />
+        </button>
+        <h2 class="type-heading-3 text-white">Data providers</h2>
       </header>
       <div class="providers-card__body">
         <div class="list-header">
@@ -148,6 +155,7 @@ export function ProvidersCard() {
             <button
               class="button-reset type-link-1 providers-list-select-all"
               onClick={() => setSelectedProviders(() => true, 'checked', true)}
+              tabindex={`${store.showHelpCard ? '-1' : '0'}`}
             >
               Select All
             </button>
@@ -157,6 +165,7 @@ export function ProvidersCard() {
               onClick={() => {
                 setSelectedProviders(() => true, 'checked', false);
               }}
+              tabindex={`${store.showHelpCard ? '-1' : '0'}`}
             >
               Select None
             </button>
@@ -173,17 +182,20 @@ export function ProvidersCard() {
             <button
               class="button-reset zoom-to-provider-btn"
               onClick={zoomToExtent}
+              tabindex={`${store.showHelpCard ? '-1' : '0'}`}
             >
               <span>Zoom to provider extent </span>
-              <CropIcon fill="#5a6672" {...svgAttributes} />
+              <CropIcon fill="#5a6672" {...svgAttributes} aria-hidden="true" />
             </button>
           </Show>
+          <label for="search-input">Search providers</label>
           <input
             type="text"
             name="search-input"
             id="search-input"
             class="search-input"
             onInput={(e) => onSearchInput(e)}
+            tabindex={`${store.showHelpCard ? '-1' : '0'}`}
           />
           <span>
             {selectedProviders.filter((o) => o.matchesQuery).length == count()
@@ -193,7 +205,10 @@ export function ProvidersCard() {
                 } of ${count()} providers`}
           </span>
         </div>
-        <div class="list-container">
+        <div 
+          class="list-container"
+          tabindex={`${store.showHelpCard ? '-1' : '0'}`}
+        >
           <ul class="providers-list">
             <For each={selectedProviders.filter((o) => o.matchesQuery)}>
               {(provider, i) => {
@@ -220,6 +235,7 @@ export function ProvidersCard() {
                             e.target.checked
                           );
                         }}
+                        tabindex={`${store.showHelpCard ? '-1' : '0'}`}
                       />
                     </li>
                   );
@@ -236,6 +252,7 @@ export function ProvidersCard() {
           }`}
           disabled={activeProviders().length === 0}
           onClick={() => onClickUpdate(activeProviders())}
+          tabindex={`${store.showHelpCard ? '-1' : '0'}`}
         >
           Update
         </button>
