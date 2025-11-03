@@ -36,8 +36,8 @@ export function OverlayCard() {
       <section class="filter-section">
         <header class="filter-section__header">
           <div class="card-title">
-            <FilterIcon {...svgAttributes} fill="#FFFFFF" />
-            <h3>Filters</h3>
+            <FilterIcon {...svgAttributes} fill="#FFFFFF" aria-hidden="true" />
+            <h2 class="type-heading-3 text-white">Filters</h2>
           </div>
         </header>
         <div class="pollutant-select">
@@ -45,12 +45,10 @@ export function OverlayCard() {
             <label for="parameter-select" class="type-subtitle-2">
               Choose a pollutant{' '}
             </label>
-            <span>
-              <AccessHelp
-                content={parsedPollutantsHtml}
-                title={parsedPollutantsTitle}
-              />
-            </span>
+            <AccessHelp
+              content={parsedPollutantsHtml}
+              title={parsedPollutantsTitle}
+            />
           </div>
 
           <select
@@ -59,6 +57,7 @@ export function OverlayCard() {
             id="parameter-select"
             onChange={(e) => setSelectedMapParameter(e.target.value)}
             value={store.mapParameter.toString()}
+            tabindex={`${store.showHelpCard ? '-1' : '0'}`}
           >
             <option value="all">Any pollutant</option>
             <option value="pm25">PM&#8322;&#8325;</option>
@@ -85,6 +84,7 @@ export function OverlayCard() {
                 checked={store.showMonitors}
                 onInput={toggleMonitor}
                 disabled={!store.showAirSensors}
+                tabindex={`${store.showHelpCard ? '-1' : '0'}`}
               />
             </label>
             <LowCostSensorMarker />
@@ -98,6 +98,7 @@ export function OverlayCard() {
                 checked={store.showAirSensors}
                 onInput={toggleAirSensor}
                 disabled={!store.showMonitors}
+                tabindex={`${store.showHelpCard ? '-1' : '0'}`}
               />
             </label>
             <NoRecentUpdateMarker />
@@ -110,6 +111,7 @@ export function OverlayCard() {
                 class="checkbox"
                 checked={!store.showOnlyActiveLocations}
                 onInput={toggleMapIsActive}
+                tabindex={`${store.showHelpCard ? '-1' : '0'}`}
               />
             </label>
           </div>
@@ -127,8 +129,9 @@ export function OverlayCard() {
         <button
           class="icon-btn btn-secondary"
           onClick={() => toggleShowProvidersCard()}
+          tabindex={`${store.showHelpCard ? '-1' : '0'}`}
         >
-          Choose data providers <TuneIcon {...svgAttributes} fill="#33a3a1" />
+          Choose data providers <TuneIcon {...svgAttributes} fill="#33a3a1" aria-hidden="true" />
         </button>
       </footer>
     </div>
