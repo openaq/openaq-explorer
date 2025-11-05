@@ -168,8 +168,45 @@ export default function LineChart(props) {
 
   createEffect(() => update());
 
+  const tableData = (data) => 
+    data.map((t) => {
+      return {
+        date: dayjs(t.period.datetimeTo.local).format('DD-MM-YYYY'),
+        time: dayjs(t.period.datetimeTo.local).format(' HH:mm'),
+        value: t.value,
+        unit: t.parameter.units,
+      };
+    }
+  );
+
   return (
     <>
+      <table style={{ position: 'relative' }}>
+        <thead>
+          <tr>
+            <th>Value</th>
+            <th>Unit</th>
+            <th>Time</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <For 
+            each={
+              tableData(props.data)
+            }
+          >
+            {(item) => (
+              <tr>
+                <td>{item.value}</td>
+                <td>{item.unit}</td>
+                <td>{item.time}</td>
+                <td>{item.date}</td>
+              </tr>
+            )}
+          </For>
+        </tbody>
+      </table>
       <div style={{ position: 'relative' }}>
         <div
           class="line-chart-tooltip"
@@ -274,7 +311,7 @@ export default function LineChart(props) {
                 xScale(props.width, props.dateFrom, props.dateTo),
                 yScale(props.scale, props.height, props.data)
               )}
-            >
+            > 
               {(item) => (
                 <circle
                   class="line-chart-point"
