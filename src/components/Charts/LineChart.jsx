@@ -185,6 +185,8 @@ export default function LineChart(props) {
     setToggleTable(!toggleTable());
   }
 
+  createEffect(() => update(toggleTable()));
+
   return (
     <>
       <button 
@@ -193,30 +195,6 @@ export default function LineChart(props) {
       >
         Toggle
       </button>
-      <Show when={toggleTable()}>
-        <table style={{ position: 'relative' }}>
-          <thead>
-            <tr>
-              <th>Value</th>
-              <th>Unit</th>
-              <th>Time</th>
-              <th>Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            <For each={tableData(props.data)}>
-              {(item) => (
-                <tr>
-                  <td>{item.value}</td>
-                  <td>{item.unit}</td>
-                  <td>{item.time}</td>
-                  <td>{item.date}</td>
-                </tr>
-              )}
-            </For>
-          </tbody>
-        </table>
-      </Show>
       <div style={{ position: 'relative' }}>
         <div
           class="line-chart-tooltip"
@@ -229,171 +207,197 @@ export default function LineChart(props) {
           <span class="line-chart-tooltip__value">{tooltipValue()?.value}</span>{' '}
           <span class="line-chart-tooltip__unit">{tooltipValue()?.unit}</span>
         </div>
-        <svg
-          width={`${props.width + props.margin}px`}
-          height={`${props.height + props.margin}px`}
-          role="img"
-          aria-label="line chart"
-        >
-          <defs>
-            <linearGradient
-              id="area-gradient"
-              gradientUnits="userSpaceOnUse"
-              x1="0%"
-              y1="0%"
-              x2="0%"
-              y2="100%"
-            >
-              <stop offset="0%" stop-color="#d4cdf9" stop-opacity="0.7" />
-              <stop offset="95%" stop-color="white" stop-opacity="0.7" />
-            </linearGradient>
-          </defs>
-          <filter id="shadow" color-interpolation-filters="sRGB">
-            <feDropShadow
-              dx="2"
-              dy="2"
-              stdDeviation="0.5"
-              flood-opacity="0.2"
-            />
-          </filter>
+        <Show when={!toggleTable()}>
+          <svg
+            width={`${props.width + props.margin}px`}
+            height={`${props.height + props.margin}px`}
+            role="img"
+            aria-label="line chart"
+          >
+            <defs>
+              <linearGradient
+                id="area-gradient"
+                gradientUnits="userSpaceOnUse"
+                x1="0%"
+                y1="0%"
+                x2="0%"
+                y2="100%"
+              >
+                <stop offset="0%" stop-color="#d4cdf9" stop-opacity="0.7" />
+                <stop offset="95%" stop-color="white" stop-opacity="0.7" />
+              </linearGradient>
+            </defs>
+            <filter id="shadow" color-interpolation-filters="sRGB">
+              <feDropShadow
+                dx="2"
+                dy="2"
+                stdDeviation="0.5"
+                flood-opacity="0.2"
+              />
+            </filter>
 
-          <g transform={`translate(${props.margin / 2} ${props.margin / 2})`}>
-            <For each={splitMeasurements(props.data, props.timezone)}>
-              {(d) => (
-                <path
-                  class="line-chart-area"
-                  d={area(
-                    xScale(props.width, props.dateFrom, props.dateTo),
-                    yScale(props.scale, props.height, props.data)
-                  )(d)}
+            <g transform={`translate(${props.margin / 2} ${props.margin / 2})`}>
+              <For each={splitMeasurements(props.data, props.timezone)}>
+                {(d) => (
+                  <path
+                    class="line-chart-area"
+                    d={area(
+                      xScale(props.width, props.dateFrom, props.dateTo),
+                      yScale(props.scale, props.height, props.data)
+                    )(d)}
+                  />
+                )}
+              </For>
+            </g>
+            <g
+              class="grid"
+              transform={`translate(${props.margin / 2} ${props.margin / 2} )`}
+              ref={gridRef}
+            />
+            <g transform={`translate(${props.margin / 2} ${props.margin / 2})`}>
+              <For each={splitMeasurements(props.data, props.timezone)}>
+                {(lineData) => (
+                  <path
+                    class="line-chart-line"
+                    d={line(
+                      xScale(props.width, props.dateFrom, props.dateTo),
+                      yScale(props.scale, props.height, props.data)
+                    )(lineData)}
+                  />
+                )}
+              </For>
+              <Show when={tooltipValue()?.visible}>
+                <line
+                  x1={tooltipValue()?.x}
+                  y1={props.height}
+                  x2={tooltipValue()?.x}
+                  y2={tooltipValue()?.y}
+                  stroke="#6A5CD8"
+                  stroke-width={1}
                 />
-              )}
-            </For>
-          </g>
-          <g
-            class="grid"
-            transform={`translate(${props.margin / 2} ${props.margin / 2} )`}
-            ref={gridRef}
-          />
-          <g transform={`translate(${props.margin / 2} ${props.margin / 2})`}>
-            <For each={splitMeasurements(props.data, props.timezone)}>
-              {(lineData) => (
-                <path
-                  class="line-chart-line"
-                  d={line(
-                    xScale(props.width, props.dateFrom, props.dateTo),
-                    yScale(props.scale, props.height, props.data)
-                  )(lineData)}
-                />
-              )}
-            </For>
-            <Show when={tooltipValue()?.visible}>
-              <line
-                x1={tooltipValue()?.x}
-                y1={props.height}
-                x2={tooltipValue()?.x}
-                y2={tooltipValue()?.y}
-                stroke="#6A5CD8"
-                stroke-width={1}
-              />
-              <circle
-                class="line-chart-point-highlight"
-                cx={tooltipValue()?.x}
-                cy={tooltipValue()?.y}
-                r={9}
-              />
-              <rect
-                x="0"
-                y="0"
-                rx="5"
-                ry="5"
-                width="40"
-                height="25"
-                fill="#6A5CD8"
-                transform={`translate(${tooltipValue()?.x - 20},${
-                  props.height
-                })`}
-              />
-            </Show>
-            <For
-              each={points(
-                props.data.filter((o) => o.value !== null) ?? [],
-                xScale(props.width, props.dateFrom, props.dateTo),
-                yScale(props.scale, props.height, props.data)
-              )}
-            > 
-              {(item) => (
                 <circle
-                  class="line-chart-point"
-                  cx={item.cx}
-                  cy={item.cy}
-                  r={item.cx == tooltipValue()?.x ? 5 : 3}
-                  onMouseEnter={() => {
-                    setTooltipValue({
-                      visible: true,
-                      x: item.cx,
-                      y: item.cy,
-                      value: item.value,
-                      unit: item.unit,
-                      date: item.date,
-                    });
-                  }}
-                  onMouseLeave={() => setTooltipValue({ visible: false })}
+                  class="line-chart-point-highlight"
+                  cx={tooltipValue()?.x}
+                  cy={tooltipValue()?.y}
+                  r={9}
                 />
-              )}
-            </For>
-            <Show when={props.loading}>
-              <text
-                text-anchor="middle"
-                x={props.width / 2}
-                y={props.height / 2}
+                <rect
+                  x="0"
+                  y="0"
+                  rx="5"
+                  ry="5"
+                  width="40"
+                  height="25"
+                  fill="#6A5CD8"
+                  transform={`translate(${tooltipValue()?.x - 20},${
+                    props.height
+                  })`}
+                />
+              </Show>
+              <For
+                each={points(
+                  props.data.filter((o) => o.value !== null) ?? [],
+                  xScale(props.width, props.dateFrom, props.dateTo),
+                  yScale(props.scale, props.height, props.data)
+                )}
+              > 
+                {(item) => (
+                  <circle
+                    class="line-chart-point"
+                    cx={item.cx}
+                    cy={item.cy}
+                    r={item.cx == tooltipValue()?.x ? 5 : 3}
+                    onMouseEnter={() => {
+                      setTooltipValue({
+                        visible: true,
+                        x: item.cx,
+                        y: item.cy,
+                        value: item.value,
+                        unit: item.unit,
+                        date: item.date,
+                      });
+                    }}
+                    onMouseLeave={() => setTooltipValue({ visible: false })}
+                  />
+                )}
+              </For>
+              <Show when={props.loading}>
+                <text
+                  text-anchor="middle"
+                  x={props.width / 2}
+                  y={props.height / 2}
+                >
+                  Loading...
+                </text>
+              </Show>
+              <Show
+                when={
+                  props.data == undefined ||
+                  (props.data.length === 0 && props.loading === false)
+                }
               >
-                Loading...
-              </text>
-            </Show>
-            <Show
-              when={
-                props.data == undefined ||
-                (props.data.length === 0 && props.loading === false)
-              }
-            >
-              <text
-                text-anchor="middle"
-                x={props.width / 2}
-                y={props.height / 2}
-              >
-                {props.noDataMessage}
-              </text>
-            </Show>
-          </g>
-          <g
-            class="y-axis"
-            transform={`translate(${props.margin / 2} ${props.margin / 2})`}
-            ref={yAxisRef}
-          />
-          <g
-            class="x-axis"
-            transform={`translate(${props.margin / 2} ${
-              props.height + props.margin / 2
-            })`}
-            ref={xAxisRef}
-          />
-          <g transform={`translate(${props.margin / 2} ${props.margin / 2})`}>
-            <Show when={tooltipValue()?.visible}>
-              <text
-                x="0"
-                y="0"
-                font-size="12"
-                fill="white"
-                transform={`translate(${tooltipValue()?.x - 16},${
-                  props.height + 17
-                })`}
-              >
-                {tooltipValue()?.date.tz(props.timezone).format('HH:mm')}
-              </text>
-            </Show>
-          </g>
-        </svg>
+                <text
+                  text-anchor="middle"
+                  x={props.width / 2}
+                  y={props.height / 2}
+                >
+                  {props.noDataMessage}
+                </text>
+              </Show>
+            </g>
+            <g
+              class="y-axis"
+              transform={`translate(${props.margin / 2} ${props.margin / 2})`}
+              ref={yAxisRef}
+            />
+            <g
+              class="x-axis"
+              transform={`translate(${props.margin / 2} ${
+                props.height + props.margin / 2
+              })`}
+              ref={xAxisRef}
+            />
+            <g transform={`translate(${props.margin / 2} ${props.margin / 2})`}>
+              <Show when={tooltipValue()?.visible}>
+                <text
+                  x="0"
+                  y="0"
+                  font-size="12"
+                  fill="white"
+                  transform={`translate(${tooltipValue()?.x - 16},${
+                    props.height + 17
+                  })`}
+                >
+                  {tooltipValue()?.date.tz(props.timezone).format('HH:mm')}
+                </text>
+              </Show>
+            </g>
+          </svg>
+        </Show>
+        <Show when={toggleTable()}>
+          <table>
+            <thead>
+              <tr>
+                <th>Value</th>
+                <th>Unit</th>
+                <th>Time</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <For each={tableData(props.data)}>
+                {(item) => (
+                  <tr>
+                    <td>{item.value}</td>
+                    <td>{item.unit}</td>
+                    <td>{item.time}</td>
+                    <td>{item.date}</td>
+                  </tr>
+                )}
+              </For>
+            </tbody>
+          </table>
+        </Show>
       </div>
     </>
   );
