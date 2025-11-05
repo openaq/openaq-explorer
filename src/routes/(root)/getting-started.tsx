@@ -44,7 +44,7 @@ export default function AirQualityGuide() {
                 If you want to explore other monitoring locations elsewhere, go
                 back to the map and pan out. Or start over (see #2), typing in a
                 new location name.
-                <ul>
+                <aside>
                   <div class="admonition warning">
                     <div class="icon-wrapper">
                       <WarningIcon
@@ -73,7 +73,7 @@ export default function AirQualityGuide() {
                       <strong>“Show locations with no recent updates”</strong>.
                     </div>
                   </div>
-                </ul>
+                </aside>
               </li>
               <li>
                 If you want to access data about a specific pollutant across
@@ -87,7 +87,7 @@ export default function AirQualityGuide() {
                 choosing the provider(s) you are interested in. The map will
                 then show you locations where data on that pollutant is being
                 collected by the provider(s) you selected.
-                <ul>
+                <aside>
                   <div class="admonition warning">
                     <div class="icon-wrapper">
                       <WarningIcon
@@ -102,7 +102,7 @@ export default function AirQualityGuide() {
                       'Additional OpenAQ Resources') to download data.
                     </div>
                   </div>
-                </ul>
+                </aside>
               </li>
             </ol>
             <div class="image-container">
@@ -119,7 +119,7 @@ export default function AirQualityGuide() {
                 width="400"
               />
               <div class="arrow-container">
-                <Arrow />
+                <Arrow aria-hidden="true" />
               </div>
               <img
                 class="button-img"
@@ -162,7 +162,7 @@ export default function AirQualityGuide() {
                 </p>
                 <img class="dot-svg" src="/images/dot.png" alt="" />
               </div>
-              <ul>
+              <aside>
                 <div class="admonition warning smaller">
                   <div class="icon-wrapper">
                     <WarningIcon
@@ -184,7 +184,7 @@ export default function AirQualityGuide() {
                     </a>
                   </div>
                 </div>
-              </ul>
+              </aside>
             </div>
           </div>
         </section>
@@ -205,7 +205,7 @@ export default function AirQualityGuide() {
             24-hour period is 15 µg/m (micrograms per cubic meter); whereas the
             strictest 24-hour national standard for PM2.5 is 25 µg/m .
           </p>
-          <ul>
+          <aside>
             <div class="admonition warning smaller">
               <div class="icon-wrapper">
                 <WarningIcon
@@ -250,7 +250,7 @@ export default function AirQualityGuide() {
                 </a>
               </div>
             </div>
-          </ul>
+          </aside>
           <p>
             The <strong>“Latest Readings”</strong> graph tells you how
             measurements have changed over time.
