@@ -395,6 +395,19 @@ export default function LineChart(props) {
                   </tr>
                 )}
               </For>
+              <Show when={props.loading}>
+                <tr>
+                  <td colspan="4">Loading...</td>
+                </tr>
+              </Show>
+              <Show when={
+                props.data == undefined ||
+                (props.data.length === 0 && props.loading === false)
+              }>
+                <tr>
+                  <td colspan="4">{props.noDataMessage}</td>
+                </tr>
+              </Show>
             </tbody>
           </table>
         </Show>
