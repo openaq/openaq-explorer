@@ -179,34 +179,44 @@ export default function LineChart(props) {
     }
   );
 
+  const [toggleTable, setToggleTable] = createSignal(false);
+
+  const toggleTableData = () => {
+    setToggleTable(!toggleTable());
+  }
+
   return (
     <>
-      <table style={{ position: 'relative' }}>
-        <thead>
-          <tr>
-            <th>Value</th>
-            <th>Unit</th>
-            <th>Time</th>
-            <th>Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          <For 
-            each={
-              tableData(props.data)
-            }
-          >
-            {(item) => (
-              <tr>
-                <td>{item.value}</td>
-                <td>{item.unit}</td>
-                <td>{item.time}</td>
-                <td>{item.date}</td>
-              </tr>
-            )}
-          </For>
-        </tbody>
-      </table>
+      <button 
+        class="btn btn-tertiary"
+        onClick={toggleTableData}
+      >
+        Toggle
+      </button>
+      <Show when={toggleTable()}>
+        <table style={{ position: 'relative' }}>
+          <thead>
+            <tr>
+              <th>Value</th>
+              <th>Unit</th>
+              <th>Time</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <For each={tableData(props.data)}>
+              {(item) => (
+                <tr>
+                  <td>{item.value}</td>
+                  <td>{item.unit}</td>
+                  <td>{item.time}</td>
+                  <td>{item.date}</td>
+                </tr>
+              )}
+            </For>
+          </tbody>
+        </table>
+      </Show>
       <div style={{ position: 'relative' }}>
         <div
           class="line-chart-tooltip"
