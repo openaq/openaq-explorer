@@ -375,7 +375,7 @@ export default function LineChart(props) {
           </svg>
         </Show>
         <Show when={toggleTable()}>
-          <table>
+          <table class="table-data">
             <thead>
               <tr>
                 <th>Value</th>
