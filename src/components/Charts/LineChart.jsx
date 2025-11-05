@@ -180,7 +180,7 @@ export default function LineChart(props) {
   );
 
   const [toggleTable, setToggleTable] = createSignal(false);
-
+  
   const toggleTableData = () => {
     setToggleTable(!toggleTable());
   }
@@ -190,10 +190,15 @@ export default function LineChart(props) {
   return (
     <>
       <button 
-        class="btn btn-tertiary"
+        class="btn btn-tertiary toggle-table"
         onClick={toggleTableData}
       >
-        Toggle
+        <Show 
+          when={toggleTable()}
+          fallback={"View data as table"}
+        >
+          View data as chart
+        </Show>
       </button>
       <div style={{ position: 'relative' }}>
         <div
