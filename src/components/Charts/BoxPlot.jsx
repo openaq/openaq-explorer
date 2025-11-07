@@ -391,11 +391,11 @@ export default function Boxplot(props) {
           <thead>
             <tr>
               <th>Time</th>
-              <th>98<sup>th</sup> percentile</th>
-              <th>75<sup>th</sup> percentile</th>
-              <th>Median</th>
-              <th>25<sup>th</sup> percentile</th>
               <th>2<sup>nd</sup> percentile</th>
+              <th>25<sup>th</sup> percentile</th>
+              <th>Median</th>
+              <th>75<sup>th</sup> percentile</th>
+              <th>98<sup>th</sup> percentile</th>
             </tr>
           </thead>
           <tbody>
@@ -403,12 +403,12 @@ export default function Boxplot(props) {
               {(item) => (
                 <tr>
                   <td>{item.period}</td>
-                  <td>{item.values.max} µg/m³</td>
-                  <td>{item.values.interquartileTop} µg/m³</td>
-                  <td>{item.values.median} µg/m³</td>
-                  <td>{item.values.interquartileBottom} µg/m³</td>
                   <td>{item.values.min} µg/m³</td>
-                </tr>
+                  <td>{item.values.interquartileBottom} µg/m³</td>
+                  <td>{item.values.median} µg/m³</td>
+                  <td>{item.values.interquartileTop} µg/m³</td>
+                  <td>{item.values.max} µg/m³</td>
+                </tr>                
               )}
             </For>
             <Show when={props.loading}>
