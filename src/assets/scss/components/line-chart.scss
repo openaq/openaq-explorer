@@ -1,5 +1,4 @@
 @use 'openaq-design-system/scss/variables' as variables;
-@use '~/assets/scss/media-queries.scss' as f;
 
 .line-chart-tooltip {
   position: absolute;
@@ -82,8 +81,8 @@
   display: block;
 
   thead {
-    background-color: variables.$smoke10;
-    color: variables.$lavender100;
+    background-color: variables.$sky120;
+    color: #FFFFFF;
     position: sticky;
     top: -1px;
   }
@@ -91,12 +90,16 @@
   table,
   th,
   td {
-    padding: 6px 12px;
-    border: 2px solid variables.$smoke60;
+    padding: 12px 12px;
+  }
 
-    @include f.respond(small) {
-      padding: 6px 6px;
-    }
+  th,
+  td {
+    border-bottom: 1px solid variables.$smoke60;
+  }
+
+  tr:nth-child(even) {
+    background-color: variables.$sky10;
   }
 }
 

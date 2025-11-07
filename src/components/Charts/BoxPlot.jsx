@@ -10,6 +10,8 @@ import {
 import { createEffect, createSignal, For, Show } from 'solid-js';
 
 import '~/assets/scss/components/box-plot.scss';
+import BarChart from '~/assets/imgs/bar_chart.svg';
+import TableChart from '~/assets/imgs/table_chart.svg';
 
 function BoxPlotTooltip(props) {
   return (
@@ -270,14 +272,26 @@ export default function Boxplot(props) {
   return (
     <>
       <button 
-        class="btn btn-tertiary toggle-table-box"
+        class="icon-btn btn-tertiary toggle-table-box"
         onClick={toggleTableData}
       >
-        <Show 
-          when={toggleTable()}
-          fallback={"View data as table"}
-        >
-          View data as chart
+        <Show when={toggleTable()}>
+          View as chart 
+          <BarChart
+            width={24}
+            height={24}
+            fill="#5a6672"
+            aria-hidden="true"
+          />
+        </Show>
+        <Show when={!toggleTable()}>
+          View as table
+          <TableChart
+            width={24}
+            height={24}
+            fill="#5a6672"
+            aria-hidden="true"
+          />
         </Show>
       </button>
       <BoxPlotTooltip data={tooltip()} />
