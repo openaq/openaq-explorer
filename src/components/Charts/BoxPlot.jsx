@@ -374,7 +374,7 @@ export default function Boxplot(props) {
       </Show>
       <Show when={toggleTable()}>
         <table class="table-data-box">
-          <thead style={{ position: 'sticky', top: '-1px'}}>
+          <thead>
             <tr>
               <th>Time</th>
               <th>98<sup>th</sup> percentile</th>

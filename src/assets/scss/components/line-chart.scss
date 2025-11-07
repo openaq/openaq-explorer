@@ -84,14 +84,15 @@
   thead {
     background-color: variables.$smoke10;
     color: variables.$lavender100;
+    position: sticky;
+    top: -1px;
   }
 
   table,
   th,
   td {
     padding: 6px 12px;
-    border: 1px solid variables.$smoke30;
-    word-break: break-word;
+    border: 2px solid variables.$smoke60;
 
     @include f.respond(small) {
       padding: 6px 6px;
