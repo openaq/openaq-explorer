@@ -233,100 +233,173 @@ export default function Boxplot(props) {
         .selectAll('line,path')
         .style('stroke', '#d4d8dd');
     }
+
+    if (!toggleTable()) {
+      setData(props.data);
+      yDomain();
+      select(`.box-plot-x-axis-${props.name}`).call(xAxis);
+      select(`.box-plot-y-axis-${props.name}`).call(yAxis);
+      select(`.box-plot-grid-${props.name}`)
+        .call(yAxisGrid)
+        .selectAll('line,path')
+        .style('stroke', '#d4d8dd');
+    }
   });
+
+  const tableData = (data) => 
+    data.map((t) => {
+      return {
+        period: lookup[t.period.label],
+        values: {
+          max: parseFloat(t.summary.q98.toFixed(3)),
+          interquartileTop: parseFloat(t.summary.q75.toFixed(3)),
+          median: parseFloat(t.summary.median.toFixed(3)),
+          interquartileBottom: parseFloat(t.summary.q25.toFixed(3)),
+          min: parseFloat(t.summary.q02.toFixed(3)),
+        }
+      };
+    }
+  );
+
+  const [toggleTable, setToggleTable] = createSignal(false);
+
+  const toggleTableData = () => {
+    setToggleTable(!toggleTable());
+  }
 
   return (
     <>
-      <BoxPlotTooltip data={tooltip()} />
-      <svg
-        width={`${props.width + props.margin}px`}
-        height={`${props.height + props.margin}px`}
-        role="img"
-        aria-label="box plot chart"
+      <button 
+        class="btn btn-tertiary toggle-table-box"
+        onClick={toggleTableData}
       >
-        <g
-          class={`chart-grid box-plot-grid-${props.name}`}
-          transform={`translate(${props.margin / 2} ${props.margin / 2} )`}
-        />
-        <g
-          transform={`translate(${
-            props.margin / 1.8 + boxWidth / 2
-          } ${props.margin / 2})`}
+        <Show 
+          when={toggleTable()}
+          fallback={"View data as table"}
         >
-          <Show when={props.loading}>
-            <text text-anchor="middle" x={props.width / 2} y={props.height / 2}>
-              Loading...
-            </text>
-          </Show>
-          <For each={data()}>
-            {(d) => {
-              return (
-                <g
-                  class="box-plot-bar"
-                  onMouseEnter={(e) => onMouseEnter(e, d)}
-                  onMouseLeave={onMouseLeave}
-                >
-                  <line
-                    stroke-width={2}
-                    stroke="#CCCCCC"
-                    class="whiskers"
-                    x1={x(d.period.label)}
-                    x2={x(d.period.label)}
-                    y1={y(d.summary.q02)}
-                    y2={y(d.summary.q98)}
-                  />
-                  <line
-                    stroke-width={boxWidth}
-                    stroke="#EAE7FF"
-                    class="box"
-                    x1={x(d.period.label)}
-                    x2={x(d.period.label)}
-                    y1={y(d.summary.q25)}
-                    y2={y(d.summary.q75)}
-                  />
-                  <line
-                    stroke-width={2}
-                    stroke="#8576ED"
-                    class="q3"
-                    x1={x(d.period.label) - boxWidth / 2}
-                    x2={x(d.period.label) + boxWidth / 2}
-                    y1={y(d.summary.q75)}
-                    y2={y(d.summary.q75)}
-                  />
-                  <line
-                    stroke-width={2}
-                    stroke="#8576ED"
-                    class="q1"
-                    x1={x(d.period.label) - boxWidth / 2}
-                    x2={x(d.period.label) + boxWidth / 2}
-                    y1={y(d.summary.q25)}
-                    y2={y(d.summary.q25)}
-                  />
-                  <line
-                    stroke-width={4}
-                    stroke="#584DAE"
-                    class="median"
-                    x1={x(d.period.label) - boxWidth / 2}
-                    x2={x(d.period.label) + boxWidth / 2}
-                    y1={y(d.summary.median)}
-                    y2={y(d.summary.median)}
-                  />
-                </g>
-              );
-            }}
-          </For>
-        </g>
-        <g
-          class={`box-plot-y-axis-${props.name}`}
-          transform={`translate(${props.margin / 2} ${props.margin / 2})`}
-        />
-        <g
-          class={`box-plot-x-axis-${props.name}`}
-          transform={`translate(${props.margin / 2} ${
-            props.height + props.margin / 2
-          })`}
-        />
-      </svg>
+          View data as chart
+        </Show>
+      </button>
+      <BoxPlotTooltip data={tooltip()} />
+      <Show when={!toggleTable()}>
+        <svg
+          width={`${props.width + props.margin}px`}
+          height={`${props.height + props.margin}px`}
+          role="img"
+          aria-label="box plot chart"
+        >
+          <g
+            class={`chart-grid box-plot-grid-${props.name}`}
+            transform={`translate(${props.margin / 2} ${props.margin / 2} )`}
+          />
+          <g
+            transform={`translate(${
+              props.margin / 1.8 + boxWidth / 2
+            } ${props.margin / 2})`}
+          >
+            <Show when={props.loading}>
+              <text text-anchor="middle" x={props.width / 2} y={props.height / 2}>
+                Loading...
+              </text>
+            </Show>
+            <For each={data()}>
+              {(d) => {
+                return (
+                  <g
+                    class="box-plot-bar"
+                    onMouseEnter={(e) => onMouseEnter(e, d)}
+                    onMouseLeave={onMouseLeave}
+                  >
+                    <line
+                      stroke-width={2}
+                      stroke="#CCCCCC"
+                      class="whiskers"
+                      x1={x(d.period.label)}
+                      x2={x(d.period.label)}
+                      y1={y(d.summary.q02)}
+                      y2={y(d.summary.q98)}
+                    />
+                    <line
+                      stroke-width={boxWidth}
+                      stroke="#EAE7FF"
+                      class="box"
+                      x1={x(d.period.label)}
+                      x2={x(d.period.label)}
+                      y1={y(d.summary.q25)}
+                      y2={y(d.summary.q75)}
+                    />
+                    <line
+                      stroke-width={2}
+                      stroke="#8576ED"
+                      class="q3"
+                      x1={x(d.period.label) - boxWidth / 2}
+                      x2={x(d.period.label) + boxWidth / 2}
+                      y1={y(d.summary.q75)}
+                      y2={y(d.summary.q75)}
+                    />
+                    <line
+                      stroke-width={2}
+                      stroke="#8576ED"
+                      class="q1"
+                      x1={x(d.period.label) - boxWidth / 2}
+                      x2={x(d.period.label) + boxWidth / 2}
+                      y1={y(d.summary.q25)}
+                      y2={y(d.summary.q25)}
+                    />
+                    <line
+                      stroke-width={4}
+                      stroke="#584DAE"
+                      class="median"
+                      x1={x(d.period.label) - boxWidth / 2}
+                      x2={x(d.period.label) + boxWidth / 2}
+                      y1={y(d.summary.median)}
+                      y2={y(d.summary.median)}
+                    />
+                  </g>
+                );
+              }}
+            </For>
+          </g>
+          <g
+            class={`box-plot-y-axis-${props.name}`}
+            transform={`translate(${props.margin / 2} ${props.margin / 2})`}
+          />
+          <g
+            class={`box-plot-x-axis-${props.name}`}
+            transform={`translate(${props.margin / 2} ${
+              props.height + props.margin / 2
+            })`}
+          />
+        </svg>
+      </Show>
+      <Show when={toggleTable()}>
+        <table class="table-data-box">
+          <thead style={{ position: 'sticky', top: '-1px'}}>
+            <tr>
+              <th>Time</th>
+              <th>98<sup>th</sup> percentile</th>
+              <th>75<sup>th</sup> percentile</th>
+              <th>Median</th>
+              <th>25<sup>th</sup> percentile</th>
+              <th>2<sup>nd</sup> percentile</th>
+            </tr>
+          </thead>
+          <tbody>
+            <For each={tableData(props.data)}>
+              {(item) => (
+                <tr>
+                  <td>{item.period}</td>
+                  <td>{item.values.max} µg/m³</td>
+                  <td>{item.values.interquartileTop} µg/m³</td>
+                  <td>{item.values.median} µg/m³</td>
+                  <td>{item.values.interquartileBottom} µg/m³</td>
+                  <td>{item.values.min} µg/m³</td>
+                </tr>
+              )}
+            </For>
+          </tbody>
+        </table>
+      </Show>
     </>
   );
 }
