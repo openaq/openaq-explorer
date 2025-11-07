@@ -397,6 +397,11 @@ export default function Boxplot(props) {
                 </tr>
               )}
             </For>
+            <Show when={props.loading}>
+              <tr>
+                <td colspan="6">Loading...</td>
+              </tr>
+            </Show>
           </tbody>
         </table>
       </Show>
