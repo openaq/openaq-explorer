@@ -383,20 +383,20 @@ export default function LineChart(props) {
           <table class="table-data">
             <thead>
               <tr>
+                <th>Date</th>
+                <th>Time</th>
                 <th>Value</th>
                 <th>Unit</th>
-                <th>Time</th>
-                <th>Date</th>
               </tr>
             </thead>
             <tbody>
               <For each={tableData(props.data)}>
                 {(item) => (
                   <tr>
+                    <td>{item.date}</td>
+                    <td>{item.time}</td>
                     <td>{item.value}</td>
                     <td>{item.unit}</td>
-                    <td>{item.time}</td>
-                    <td>{item.date}</td>
                   </tr>
                 )}
               </For>
