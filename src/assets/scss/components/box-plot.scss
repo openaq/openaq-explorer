@@ -55,7 +55,7 @@
   height: 350px;
   margin: 40px;
   overflow-y: auto;
-  display: block;
+  display: inline-block;
 
   thead {
     background-color: variables.$sky120;
