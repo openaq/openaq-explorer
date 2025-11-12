@@ -61,6 +61,7 @@
 .chart-controls {
   display: flex;
   gap: 8px;
+  align-items: center;
 
   @include f.respond(medium) {
     display: flex;
