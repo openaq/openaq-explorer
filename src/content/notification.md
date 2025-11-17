@@ -1,8 +1,6 @@
 ---
-title: 'Registration issues'
-type: 'warning'
+title: 'Community Survey'
+type: 'info'
 ---
 
-The OpenAQ Explorer is currently experiencing issues with new account
-registration. Existing accounts can login as usual. If you need to register for
-an accout please try again later.
+Help shape the future of the OpenAQ platform! Fill out our 2025 [community survey](https://qfreeaccountssjc1.az1.qualtrics.com/jfe/form/SV_3jxvuuMcaRjZVHg).
