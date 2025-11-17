@@ -71,3 +71,38 @@
     stroke-dasharray: 4;
   }
 }
+
+.table-data {
+  border-collapse: collapse;
+  max-width: 100%;
+  height: 250px;
+  margin: 50px;
+  overflow-y: auto;
+  display: inline-block;
+
+  thead {
+    background-color: variables.$sky120;
+    color: #FFFFFF;
+    position: sticky;
+    top: -1px;
+  }
+
+  table,
+  th,
+  td {
+    padding: 12px 12px;
+  }
+
+  th,
+  td {
+    border-bottom: 1px solid variables.$smoke60;
+  }
+
+  tr:nth-child(even) {
+    background-color: variables.$sky10;
+  }
+}
+
+.toggle-table {
+  margin: 6px 0 0 0;
+}
