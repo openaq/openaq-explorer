@@ -16,9 +16,11 @@
 
     @include f.respond(medium) {
       min-height: 100px;
+      padding: 50px 25px 0 25px;
     }
     @include f.respond(small) {
       min-height: 100px;
+      padding: 50px 25px 0 25px;
     }
 
     .title-container {
