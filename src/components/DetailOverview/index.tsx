@@ -73,19 +73,19 @@ export function DetailOverview(props: DetailOverviewDefinition) {
   return (
     <section class="detail-overview">
       <div class="detail-overview__title">
-        <div>
+        <div class="title-container">
           <span class="type-subtitle-3 text-smoke-120">{props?.name}</span>
           <h1 class="type-display-1 text-sky-120">
             {props.name || 'No label'}
           </h1>
         </div>
-        <div>
+        <div class="button-container">
           <Show when={props.datetimeFirst}>
             <a
               href="#download-card"
               class="icon-btn btn-tertiary download-anchor"
             >
-              Download data
+              <span>Download data</span>
               <CloudDownloadIcon
                 class="cloud-download-icon"
                 {...svgAttributes}

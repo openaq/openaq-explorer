@@ -10,15 +10,38 @@
   &__title {
     display: flex;
     justify-content: space-between;
-    height: 150px;
+    min-height: 100px;
     background-color: variables.$sky10;
-    padding: 50px 25px 0 25px;
+    padding: 50px 25px 50px 25px;
 
     @include f.respond(medium) {
-      height: 100px;
+      min-height: 100px;
     }
     @include f.respond(small) {
-      height: 100px;
+      min-height: 100px;
+    }
+
+    .title-container {
+      min-width: 70%;
+
+      h1 {
+        overflow-wrap: break-word;
+      }
+    }
+
+    .button-container {
+      min-width: 180px;
+
+      @include f.respond(medium) {
+        min-width: 0;
+      }
+      @include f.respond(small) {
+        min-width: 0;
+      }
+    }
+
+    .download-anchor {
+      min-width: auto;
     }
   }
 
