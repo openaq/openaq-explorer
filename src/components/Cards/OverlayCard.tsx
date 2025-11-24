@@ -6,6 +6,7 @@ import {
 import { useStore } from '~/stores';
 import FilterIcon from '~/assets/imgs/filter.svg';
 import TuneIcon from '~/assets/imgs/tune.svg';
+import ChevronRight from '~/assets/imgs/chevron_right.svg';
 import '~/assets/scss/components/overlay-card.scss';
 import AccessHelp from '../Help/AccessHelp';
 import pollutantsContent from '~/content/help/pollutants.md?raw';
@@ -117,7 +118,7 @@ export function OverlayCard() {
           </div>
         </div>
       </section>
-      <footer class="overlay-card__footer">
+      {/*<footer class="overlay-card__footer">
         <span class="type-body-1">
           Showing data from{' '}
           {store.providers.length == 0
@@ -133,6 +134,30 @@ export function OverlayCard() {
         >
           Choose data providers <TuneIcon {...svgAttributes} fill="#33a3a1" aria-hidden="true" />
         </button>
+          </footer>*/}
+      <footer class="overlay-card__footer">
+        <button
+          class="flip-btn"
+          onClick={() => toggleShowProvidersCard()}
+          tabindex={`${store.showHelpCard ? '-1' : '0'}`}
+        >
+          <span class="type-subtitle-2">Partner projects (Beta) </span> <ChevronRight {...svgAttributes} fill="#30363c" aria-hidden="true" />
+        </button>
+        <button
+          class="flip-btn"
+          onClick={() => toggleShowProvidersCard()}
+          tabindex={`${store.showHelpCard ? '-1' : '0'}`}
+        >
+          <span class="type-subtitle-2">Choose data providers </span><ChevronRight {...svgAttributes} fill="#30363c" aria-hidden="true" />
+        </button>
+        <span class="type-body-1">
+          Showing data from{' '}
+          {store.providers.length == 0
+            ? 'all providers'
+            : store.providers.length == 1
+              ? '1 provider'
+              : `${store.providers.length} providers`}
+        </span>
       </footer>
     </div>
   );

@@ -25,6 +25,14 @@
     outline: -webkit-focus-ring-color;
     outline: -webkit-focus-ring-color auto 5px;
   }
+
+  .flip-btn {
+    border: none;
+    background-color: transparent;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 }
 
 .filter-section {
