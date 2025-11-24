@@ -24,6 +24,7 @@ export function OverlayCard() {
       toggleMapIsActive,
       toggleAirSensor,
       toggleMonitor,
+      toggleShowPartnersCard,
     },
   ] = useStore();
 
@@ -121,7 +122,7 @@ export function OverlayCard() {
       <footer class="overlay-card__footer">
         <button
           class="flip-btn"
-          onClick={() => toggleShowProvidersCard()}
+          onClick={() => toggleShowPartnersCard()}
           tabindex={`${store.showHelpCard ? '-1' : '0'}`}
         >
           <span class="type-subtitle-2">Partner projects (Beta) </span> <ChevronRight {...svgAttributes} fill="#30363c" aria-hidden="true" />

@@ -30,6 +30,7 @@ interface StoreParameters {
   showNotificationCard: boolean;
   showHelpCard: boolean;
   helpContent: string;
+  showPartnersCard: boolean;
 }
 
 type Store = [
@@ -64,6 +65,7 @@ type Store = [
     toggleShowNotificationCard: (value: boolean) => void;
     toggleShowHelpCard: (value: boolean) => void;
     setHelpContent: (content: string) => void;
+    toggleShowPartnersCard: () => void;
   },
 ];
 
@@ -99,6 +101,7 @@ export const StoreProvider: Component<{}> = (props) => {
     showNotificationCard: false,
     showHelpCard: false,
     helpContent: '',
+    showPartnersCard: false,
   });
 
   const store = [
@@ -205,6 +208,9 @@ export const StoreProvider: Component<{}> = (props) => {
       },
       setHelpContent(content: string) {
         setState({ helpContent: content });
+      },
+      toggleShowPartnersCard() {
+        setState({ showPartnersCard: !state.showPartnersCard });
       },
     },
   ];
