@@ -14,10 +14,10 @@
 
   &__footer {
     border-top: 1px solid #e8ebed;
-    padding: 24px 15px 15px;
+    padding: 15px 0;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 8px;
   }
   
   .button-reset:focus {
@@ -28,6 +28,8 @@
 
   .flip-btn {
     border: none;
+    //border-bottom: 1px solid #e8ebed;
+    padding: 0px 15px;
     background-color: transparent;
     display: flex;
     justify-content: space-between;

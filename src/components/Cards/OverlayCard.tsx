@@ -143,6 +143,7 @@ export function OverlayCard() {
         >
           <span class="type-subtitle-2">Partner projects (Beta) </span> <ChevronRight {...svgAttributes} fill="#30363c" aria-hidden="true" />
         </button>
+        <hr class="hr" />
         <button
           class="flip-btn"
           onClick={() => toggleShowProvidersCard()}
@@ -150,6 +151,7 @@ export function OverlayCard() {
         >
           <span class="type-subtitle-2">Choose data providers </span><ChevronRight {...svgAttributes} fill="#30363c" aria-hidden="true" />
         </button>
+        <hr class="hr" />
         <span class="type-body-1">
           Showing data from{' '}
           {store.providers.length == 0
