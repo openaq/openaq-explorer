@@ -118,23 +118,6 @@ export function OverlayCard() {
           </div>
         </div>
       </section>
-      {/*<footer class="overlay-card__footer">
-        <span class="type-body-1">
-          Showing data from{' '}
-          {store.providers.length == 0
-            ? 'all providers'
-            : store.providers.length == 1
-              ? '1 provider'
-              : `${store.providers.length} providers`}
-        </span>
-        <button
-          class="icon-btn btn-secondary"
-          onClick={() => toggleShowProvidersCard()}
-          tabindex={`${store.showHelpCard ? '-1' : '0'}`}
-        >
-          Choose data providers <TuneIcon {...svgAttributes} fill="#33a3a1" aria-hidden="true" />
-        </button>
-          </footer>*/}
       <footer class="overlay-card__footer">
         <button
           class="flip-btn"
