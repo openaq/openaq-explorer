@@ -2,7 +2,7 @@ import { ProvidersCard } from './ProvidersCard';
 import { OverlayCard } from './OverlayCard';
 import { PartnersCard } from './PartnersCard';
 import { useStore } from '~/stores';
-import { Show } from 'solid-js';
+import { Match, Switch } from 'solid-js';
 import '~/assets/scss/components/flip-card.scss';
 
 export function FlipCard() {
@@ -18,16 +18,16 @@ export function FlipCard() {
         <div class="flip-card-front">
           <OverlayCard />
         </div>
-        <Show when={store.showProvidersCard}>
-          <div class="flip-card-back">
-            <ProvidersCard />
-          </div>
-        </Show>
-        <Show when={store.showPartnersCard}>
-          <div class="flip-card-back">
-            <PartnersCard />
-          </div>
-        </Show>
+        <div class="flip-card-back">
+          <Switch>
+            <Match when={store.showProvidersCard}>
+                <ProvidersCard />
+            </Match>
+            <Match when={store.showPartnersCard}>
+                <PartnersCard />
+            </Match>
+          </Switch>
+        </div>
       </div>
     </div>
   );
