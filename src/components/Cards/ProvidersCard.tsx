@@ -41,8 +41,10 @@ export function ProvidersCard() {
   const [activeProviders, setActiveProviders] = createSignal([]);
 
   const onClickClose = () => {
-    toggleShowProvidersCard();
     toggleIsFlipped();
+    setTimeout(() => {
+      toggleShowProvidersCard();
+    }, 600);
   };
 
   const miniSearch = new MiniSearch({

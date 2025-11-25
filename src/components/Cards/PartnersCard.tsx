@@ -41,8 +41,10 @@ export function PartnersCard() {
   const [activeProviders, setActiveProviders] = createSignal([]);
 
   const onClickClose = () => {
-    toggleShowPartnersCard();
     toggleIsFlipped();
+    setTimeout(() => {
+      toggleShowPartnersCard();
+    }, 600);
   };
 
   const miniSearch = new MiniSearch({
