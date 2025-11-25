@@ -11,6 +11,7 @@ import '~/assets/scss/components/overlay-card.scss';
 import AccessHelp from '../Help/AccessHelp';
 import pollutantsContent from '~/content/help/pollutants.md?raw';
 import { parseHelpMarkdown } from '../Cards/utils';
+import { PartnersCard } from './PartnersCard';
 const parsedPollutantsContent = parseHelpMarkdown(pollutantsContent);
 const parsedPollutantsHtml = parsedPollutantsContent.helpContent;
 const parsedPollutantsTitle = parsedPollutantsContent.helpTitle;
@@ -25,6 +26,7 @@ export function OverlayCard() {
       toggleAirSensor,
       toggleMonitor,
       toggleShowPartnersCard,
+      toggleIsFlipped,
     },
   ] = useStore();
 
@@ -32,6 +34,18 @@ export function OverlayCard() {
     width: 24,
     height: 24,
   };
+
+  const handleClick = (value: string) => {
+    toggleIsFlipped();
+
+    if(value === 'partners') {
+      toggleShowPartnersCard();
+    }
+
+    if(value === 'providers') {
+      toggleShowProvidersCard();
+    }
+  }
 
   return (
     <div class="overlay-card">
@@ -122,7 +136,7 @@ export function OverlayCard() {
       <footer class="overlay-card__footer">
         <button
           class="flip-btn"
-          onClick={() => toggleShowPartnersCard()}
+          onClick={() => handleClick('partners')}
           tabindex={`${store.showHelpCard ? '-1' : '0'}`}
         >
           <span class="type-subtitle-2">Partner projects (Beta) </span> <ChevronRight {...svgAttributes} fill="#30363c" aria-hidden="true" />
@@ -130,7 +144,7 @@ export function OverlayCard() {
         <hr class="hr" />
         <button
           class="flip-btn"
-          onClick={() => toggleShowProvidersCard()}
+          onClick={() => handleClick('providers')}
           tabindex={`${store.showHelpCard ? '-1' : '0'}`}
         >
           <span class="type-subtitle-2">Choose data providers </span><ChevronRight {...svgAttributes} fill="#30363c" aria-hidden="true" />

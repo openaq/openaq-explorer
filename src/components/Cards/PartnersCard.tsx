@@ -29,6 +29,7 @@ export function PartnersCard() {
       setTotalProviders,
       setBounds,
       setMapBbox,
+      toggleIsFlipped,
     },
   ] = useStore();
 
@@ -41,6 +42,7 @@ export function PartnersCard() {
 
   const onClickClose = () => {
     toggleShowPartnersCard();
+    toggleIsFlipped();
   };
 
   const miniSearch = new MiniSearch({

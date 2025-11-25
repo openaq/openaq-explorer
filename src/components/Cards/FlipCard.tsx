@@ -10,7 +10,7 @@ export function FlipCard() {
 
   return (
     <div
-      class={`flip-card ${store.showProvidersCard || store.showPartnersCard ? 'flip-card--active' : ''} ${
+      class={`flip-card ${store.isFlipped ? 'flip-card--active' : ''} ${
         store.locationsId || store.showHelpCard ? 'flip-card--translate' : ''
       }`}
     >

@@ -31,6 +31,8 @@ interface StoreParameters {
   showHelpCard: boolean;
   helpContent: string;
   showPartnersCard: boolean;
+  isFlipped: boolean;
+  flipcardBack: string;
 }
 
 type Store = [
@@ -66,6 +68,8 @@ type Store = [
     toggleShowHelpCard: (value: boolean) => void;
     setHelpContent: (content: string) => void;
     toggleShowPartnersCard: () => void;
+    toggleIsFlipped: () => void;
+    setFlipcardBack: (value: string) => void;
   },
 ];
 
@@ -102,6 +106,8 @@ export const StoreProvider: Component<{}> = (props) => {
     showHelpCard: false,
     helpContent: '',
     showPartnersCard: false,
+    isFlipped: false,
+    flipcardBack: '',
   });
 
   const store = [
@@ -212,6 +218,12 @@ export const StoreProvider: Component<{}> = (props) => {
       toggleShowPartnersCard() {
         setState({ showPartnersCard: !state.showPartnersCard });
       },
+      toggleIsFlipped() {
+        setState({isFlipped: !state.isFlipped });
+      },
+      setFlipcardBack(value: string) {
+        setState({flipcardBack: value});
+      }
     },
   ];
 
