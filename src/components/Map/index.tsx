@@ -61,13 +61,14 @@ export function Map() {
     if (store.providers.length > 0) {
       arr.push(['in', ['get', 'providers_id'], ['literal', store.providers]]);
     }
+    if (store.groupLocationsIds.length > 0) {
+      arr.push(['in', ['get', 'providers_id'], ['literal', store.groupLocationsIds]]);
+    }
     if (store.showOnlyActiveLocations) {
       arr.push(['==', ['get', 'active'], true]);
     }
     if (store.showMonitors && store.showAirSensors) {
       return arr;
-    } if (store.groupLocationsIds.length > 0) {
-      arr.push(['in', ['get', 'providers_id'], ['literal', store.groupLocationsIds]]);
     } else {
       const isMonitor = calculateIsMonitor();
       arr.push(['==', ['get', 'ismonitor'], isMonitor]);

@@ -1,7 +1,7 @@
 import { useStore } from '~/stores';
 
 import { For, Show, createSignal, onMount, createEffect } from 'solid-js';
-import { getPartnerProjectById } from '~/client';
+import { getPartnerProjects } from '~/client';
 import MiniSearch from 'minisearch';
 import bbox from '@turf/bbox';
 import { createStore, produce } from 'solid-js/store';
@@ -25,8 +25,6 @@ export function PartnersCard() {
     {
       toggleShowPartnersCard,
       setViewport,
-      setProviders,
-      setTotalProviders,
       setBounds,
       setMapBbox,
       toggleIsFlipped,
@@ -80,7 +78,7 @@ export function PartnersCard() {
   };
 
   onMount(async () => {
-    const data = await getPartnerProjectById(partnerProject);
+    const data = await getPartnerProjects();
     const results = data.results;
     setCount(results.length);
     setTotalGroupLocationsIds(results.length);
@@ -136,12 +134,7 @@ export function PartnersCard() {
     setGroupLocationsIds(
       selectedIds.length === store.totalGroupLocationsIds ? [] : selectedIds
     );
-    console.log(store.groupLocationsIds);
-    console.log(selectedProjects);
-    console.log(activeProjects());
   }
-
-  const partnerProject: number = 66;
 
   return (
     <div class="projects-card">

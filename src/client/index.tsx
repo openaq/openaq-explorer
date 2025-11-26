@@ -298,11 +298,11 @@ export const getLocationLicenses = query(async (locationsId: number) => {
   return filteredLicenses;
 }, 'get-location-licenses-action');
 
-
-async function fetchPartnerProjectById(partnerProject: number) {
+async function fetchPartnerProjects() {
   'use server';
   const url = new URL(import.meta.env.VITE_API_BASE_URL);
-  url.pathname = `/v3/providers/${partnerProject}`;
+  url.pathname = `/v3/providers`;
+  url.search = 'limit=5';
   const res = await fetch(url.href, {
     headers: {
       'Content-Type': 'application/json',
@@ -312,9 +312,9 @@ async function fetchPartnerProjectById(partnerProject: number) {
   return await res.json();
 }
 
-export const getPartnerProjectById = GET(async (partnerProject: number) => {
+export const getPartnerProjects = GET(async () => {
   'use server';
-  const data = await fetchPartnerProjectById(partnerProject);
+  const data = await fetchPartnerProjects();
   return json(data, {
     headers: { 'cache-control': 'max-age=86400' },
   });
