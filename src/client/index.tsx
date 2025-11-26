@@ -297,3 +297,25 @@ export const getLocationLicenses = query(async (locationsId: number) => {
 
   return filteredLicenses;
 }, 'get-location-licenses-action');
+
+
+async function fetchPartnerProjectById(partnerProject: number) {
+  'use server';
+  const url = new URL(import.meta.env.VITE_API_BASE_URL);
+  url.pathname = `/v3/providers/${partnerProject}`;
+  const res = await fetch(url.href, {
+    headers: {
+      'Content-Type': 'application/json',
+      'X-API-Key': `${import.meta.env.VITE_EXPLORER_API_KEY}`,
+    },
+  });
+  return await res.json();
+}
+
+export const getPartnerProjectById = GET(async (partnerProject: number) => {
+  'use server';
+  const data = await fetchPartnerProjectById(partnerProject);
+  return json(data, {
+    headers: { 'cache-control': 'max-age=86400' },
+  });
+});

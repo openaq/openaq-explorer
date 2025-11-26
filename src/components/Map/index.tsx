@@ -66,6 +66,8 @@ export function Map() {
     }
     if (store.showMonitors && store.showAirSensors) {
       return arr;
+    } if (store.groupLocationsIds.length > 0) {
+      arr.push(['in', ['get', 'providers_id'], ['literal', store.groupLocationsIds]]);
     } else {
       const isMonitor = calculateIsMonitor();
       arr.push(['==', ['get', 'ismonitor'], isMonitor]);
