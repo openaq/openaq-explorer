@@ -45,6 +45,8 @@ export default function Home() {
   const toggleMapIsActive = actions.toggleMapIsActive;
   const toggleMonitor = actions.toggleMonitor;
   const toggleAirSensor = actions.toggleAirSensor;
+  const setGroupLocationsIds = actions.setGroupLocationsIds;
+
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -94,11 +96,22 @@ export default function Home() {
         .map((providerId) => Number(providerId));
       providersArray && setProviders(providersArray);
     }
+
+    if (location.query?.groupLocations) {
+      const params = new URLSearchParams(location.search);
+      const projectsArray = params
+        .get('groupLocations')
+        ?.split(',')
+        .map((providerId) => Number(providerId));
+      projectsArray && setGroupLocationsIds(projectsArray);
+    }
   });
 
   createEffect(() => {
     const getProviders = createMemo(() => store.providers);
     const providers = getProviders();
+    const getProjects = createMemo(() => store.groupLocationsIds);
+    const projects = getProjects();
 
     const searchParams = new URLSearchParams();
 
@@ -112,6 +125,9 @@ export default function Home() {
 
     if (providers.length > 0) {
       searchParams.append('provider', store.providers.join(','));
+    }
+    if (projects.length > 0) {
+      searchParams.append('groupLocations', store.groupLocationsIds.join(','));
     }
 
     if (store.showOnlyActiveLocations == false) {
