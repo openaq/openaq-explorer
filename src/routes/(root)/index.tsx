@@ -97,21 +97,21 @@ export default function Home() {
       providersArray && setProviders(providersArray);
     }
 
-    if (location.query?.groupLocations) {
+    if (location.query?.groupId) {
       const params = new URLSearchParams(location.search);
-      const projectsArray = params
-        .get('groupLocations')
+      const groupsArray = params
+        .get('groupId')
         ?.split(',')
         .map((providerId) => Number(providerId));
-      projectsArray && setGroupLocationsIds(projectsArray);
+      groupsArray && setGroupLocationsIds(groupsArray);
     }
   });
 
   createEffect(() => {
     const getProviders = createMemo(() => store.providers);
     const providers = getProviders();
-    const getProjects = createMemo(() => store.groupLocationsIds);
-    const projects = getProjects();
+    const getGroups = createMemo(() => store.groupLocationsIds);
+    const groups = getGroups();
 
     const searchParams = new URLSearchParams();
 
@@ -126,8 +126,9 @@ export default function Home() {
     if (providers.length > 0) {
       searchParams.append('provider', store.providers.join(','));
     }
-    if (projects.length > 0) {
-      searchParams.append('groupLocations', store.groupLocationsIds.join(','));
+    
+    if (groups.length > 0) {
+      searchParams.append('groupId', store.groupLocationsIds.join(','));
     }
 
     if (store.showOnlyActiveLocations == false) {
