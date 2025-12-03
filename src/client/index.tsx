@@ -316,7 +316,7 @@ async function fetchPartnerProjects() {
   return await res.json();
 }
 
-export const getPartnerProjects = GET(async (groupsId: number) => {
+export const getGroupLocations = GET(async (groupsId: number) => {
   'use server';
   const locationsIds = [2163236, 2163272, 2163334, 9478, 4400];
 
@@ -331,3 +331,23 @@ export const getPartnerProjects = GET(async (groupsId: number) => {
     }
   );
 });
+
+
+
+export const getPartnerProjects = GET(async () => {
+  'use server';
+
+  const data = [{
+    name: 'Clean Air Catalyst',
+    id: 42
+  },
+   {
+    name: 'EPIC Air Quality Fund',
+    id: 1  
+    }]
+
+  const results = {results: data}
+
+  return json(results, {headers: {'cache-control': 'max-age=3600'}})
+  
+})

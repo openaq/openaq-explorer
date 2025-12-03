@@ -19,6 +19,12 @@ interface PartnersStoreDefinition {
   bbox: number[];
 }
 
+interface PartnerProjectStoreDefinition {
+  name: string;
+  id: number;
+  checked: boolean;
+}
+
 export function PartnersCard() {
   const [
     store,
@@ -34,12 +40,16 @@ export function PartnersCard() {
   ] = useStore();
 
   const [count, setCount] = createSignal();
-
+    const [partnerProjects, setPartnerProjects] = createStore<PartnerProjectStoreDefinition[]>([]);
   const [selectedProjects, setSelectedProjects] = createStore<
     PartnersStoreDefinition[]
   >([]);
   const [activeProjects, setActiveProjects] = createSignal([]);
 
+
+
+  const foo = () => partnerProjects.filter(o => o.checked); 
+  
   const onClickClose = () => {
     toggleIsFlipped();
     setTimeout(() => {
@@ -80,25 +90,14 @@ export function PartnersCard() {
   onMount(async () => {
     const data = await getPartnerProjects();
     const results = data.results;
-    setCount(results.length);
-    setTotalGroupLocationsIds(results.length);
-    setSelectedProjects(
-      results
-        .map((o) => {
-          return {
-            name: o.name,
-            id: o.id,
-            checked:
-              store.groupLocationsIds.length === 0
-                ? 'true'
-                : store.groupLocationsIds.includes(o.id),
-            matchesQuery: true,
-            bbox: o.bbox,
-          };
-        })
-        .sort((a, b) => (a.name.toLowerCase < b.name.toLowerCase ? -1 : 1))
-    );
-    miniSearch.addAll(selectedProjects);
+    setPartnerProjects(
+      results.map(o => {
+        return {
+          ...o,
+          checked: false
+        }
+      })
+    )
   });
 
   createEffect(() => {
@@ -222,9 +221,8 @@ export function PartnersCard() {
           tabindex={`${store.showHelpCard ? '-1' : '0'}`}
         >
           <ul class="projects-list">
-            <For each={selectedProjects.filter((o) => o.matchesQuery)}>
+            <For each={partnerProjects}>
               {(project, i) => {
-                if (project.matchesQuery) {
                   return (
                     <li class="projects-list-item">
                       <label
@@ -241,7 +239,7 @@ export function PartnersCard() {
                         checked={project.checked}
                         class="checkbox"
                         onChange={(e) => {
-                          setSelectedProjects(
+                          setPartnerProjects(
                             (p) => p.id == project.id,
                             'checked',
                             e.target.checked
@@ -251,19 +249,19 @@ export function PartnersCard() {
                       />
                     </li>
                   );
-                }
               }}
             </For>
           </ul>
         </div>
       </div>
       <footer class="projects-card__footer">
+        <span>{foo().length}</span>
         <button
           class={`btn btn-primary ${
-            activeProjects().length > 0 ? '' : 'btn-primary--disabled'
+            partnerProjects.filter(o => o.checked).length > 0 ? '' : 'btn-primary--disabled'
           }`}
-          disabled={activeProjects().length === 0}
-          onClick={() => onClickUpdate(activeProjects())}
+          disabled={partnerProjects.filter(o => o.checked).length === 0}
+          onClick={() => onClickUpdate()}
           tabindex={`${store.showHelpCard ? '-1' : '0'}`}
         >
           Update
