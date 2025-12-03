@@ -301,7 +301,7 @@ export const getLocationLicenses = query(async (locationsId: number) => {
 async function fetchPartnerProjects() {
   'use server';
   const url = new URL(import.meta.env.VITE_API_BASE_URL);
-  url.pathname = `/v3/providers`;
+  url.pathname = `/v3/locations`;
   url.search = 'limit=5';
   const res = await fetch(url.href, {
     headers: {
@@ -309,13 +309,25 @@ async function fetchPartnerProjects() {
       'X-API-Key': `${import.meta.env.VITE_EXPLORER_API_KEY}`,
     },
   });
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch location_id`);
+  }
   return await res.json();
 }
 
-export const getPartnerProjects = GET(async () => {
+export const getPartnerProjects = GET(async (groupsId: number) => {
   'use server';
-  const data = await fetchPartnerProjects();
+  const locationsIds = [2163236, 2163272, 2163334, 9478, 4400];
+
+  // const data = await getProjectsByIds(locationsIds);
+  
+  //const data = await fetchPartnerProjects();
+
+  const data = [{sensorNodesIds: locationsIds}]
+
   return json(data, {
-    headers: { 'cache-control': 'max-age=86400' },
-  });
+      headers: { 'cache-control': 'max-age=86400' },
+    }
+  );
 });

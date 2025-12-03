@@ -134,6 +134,14 @@ export function PartnersCard() {
     setGroupLocationsIds(
       selectedIds.length === store.totalGroupLocationsIds ? [] : selectedIds
     );
+
+    for (const groupsId of selectedProjects) {
+      const ids: any = [];
+      //const ids = new Set([]);
+      const locationsId = getPartnerProjects(groupsId.id);
+      ids.append(locationsId)
+      setGroupLocationsIds(ids)
+    }
   }
 
   return (

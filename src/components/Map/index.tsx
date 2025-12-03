@@ -62,7 +62,7 @@ export function Map() {
       arr.push(['in', ['get', 'providers_id'], ['literal', store.providers]]);
     }
     if (store.groupLocationsIds.length > 0) {
-      arr.push(['in', ['get', 'providers_id'], ['literal', store.groupLocationsIds]]);
+      arr.push(['in', ['get', 'locations_id'], ['literal', store.groupLocationsIds]]);
     }
     if (store.showOnlyActiveLocations) {
       arr.push(['==', ['get', 'active'], true]);

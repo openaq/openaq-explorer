@@ -226,6 +226,11 @@ export const StoreProvider: Component<{}> = (props) => {
       },
       setGroupLocationsIds(groupLocationsIds) {
         setState({ groupLocationsIds: groupLocationsIds })
+        /*
+        setState({ groupLocationsIds: groupLocationsIds }, (prevList) => [
+          ...prevList,
+          groupLocationsIds,
+        ])*/
       },
       setTotalGroupLocationsIds(totalGroupLocationsIds: number) {
         setState({ totalGroupLocationsIds: totalGroupLocationsIds });
