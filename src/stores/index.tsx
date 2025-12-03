@@ -34,6 +34,7 @@ interface StoreParameters {
   isFlipped: boolean;
   groupLocationsIds: any[];
   totalGroupLocationsIds: number;
+  groups: any[];
 }
 
 type Store = [
@@ -72,6 +73,7 @@ type Store = [
     toggleIsFlipped: () => void;
     setGroupLocationsIds: (groupLocationsIds: any[]) => void;
     setTotalGroupLocationsIds: () => void;
+    setGroups: (groups: any[]) => void;
   },
 ];
 
@@ -111,6 +113,7 @@ export const StoreProvider: Component<{}> = (props) => {
     isFlipped: false,
     groupLocationsIds: [],
     totalGroupLocationsIds: 0,
+    groups: undefined,
   });
 
   const store = [
@@ -234,6 +237,9 @@ export const StoreProvider: Component<{}> = (props) => {
       },
       setTotalGroupLocationsIds(totalGroupLocationsIds: number) {
         setState({ totalGroupLocationsIds: totalGroupLocationsIds });
+      },
+      setGroups(groups) {
+        setState({ groups: groups });
       },
     },
   ];

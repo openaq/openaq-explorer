@@ -1,7 +1,7 @@
 import { useStore } from '~/stores';
 
 import { For, Show, createSignal, onMount, createEffect } from 'solid-js';
-import { getPartnerProjects } from '~/client';
+import { getPartnerProjects, getGroupLocations } from '~/client';
 import MiniSearch from 'minisearch';
 import bbox from '@turf/bbox';
 import { createStore, produce } from 'solid-js/store';
@@ -36,19 +36,21 @@ export function PartnersCard() {
       toggleIsFlipped,
       setGroupLocationsIds,
       setTotalGroupLocationsIds,
+      setGroups,
     },
   ] = useStore();
 
   const [count, setCount] = createSignal();
-    const [partnerProjects, setPartnerProjects] = createStore<PartnerProjectStoreDefinition[]>([]);
+  const [partnerProjects, setPartnerProjects] = createStore<PartnerProjectStoreDefinition[]>([]);
+
+  /*
   const [selectedProjects, setSelectedProjects] = createStore<
     PartnersStoreDefinition[]
   >([]);
   const [activeProjects, setActiveProjects] = createSignal([]);
+  */
 
-
-
-  const foo = () => partnerProjects.filter(o => o.checked); 
+  const activeProjects = () => partnerProjects.filter(o => o.checked); 
   
   const onClickClose = () => {
     toggleIsFlipped();
@@ -57,11 +59,6 @@ export function PartnersCard() {
     }, 600);
   };
 
-  const miniSearch = new MiniSearch({
-    fields: ['name'],
-    storeFields: ['name'],
-  });
-
   const svgAttributes = {
     width: 24,
     height: 24,
@@ -69,29 +66,23 @@ export function PartnersCard() {
 
   let timeout: ReturnType<typeof setTimeout>;
 
-  const onSearchInput = (e: InputEvent) => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => {
-      const target = e.target as HTMLInputElement;
-      const value = target.value;
-      const res = miniSearch.search(value, { prefix: true });
-      setSelectedProjects(
-        () => true,
-        produce((project) =>
-          value != ''
-            ? (project.matchesQuery =
-                res.map((o) => o.id).indexOf(project.id) != -1)
-            : (project.matchesQuery = true)
-        )
-      );
-    }, 300);
-  };
-
   onMount(async () => {
     const data = await getPartnerProjects();
     const results = data.results;
+    setCount(results.length);
     setPartnerProjects(
       results.map(o => {
+        
+        if (store.groups) {
+          const storedGroups = store.groups;
+
+          storedGroups.filter((groupId) => groupId === o.id);
+
+          return {
+            ...o,
+            checked: true,
+          }
+        }
         return {
           ...o,
           checked: false
@@ -100,12 +91,8 @@ export function PartnersCard() {
     )
   });
 
-  createEffect(() => {
-    setActiveProjects(selectedProjects.filter((p) => p.checked));
-  });
-
   function zoomToExtent() {
-    const projectBounds = selectedProjects
+    const projectBounds = partnerProjects
       .filter((o) => o.checked)
       .map((o) => bbox(o.bbox));
 
@@ -128,18 +115,27 @@ export function PartnersCard() {
     });
   }
 
-  function onClickUpdate(selectedProjects: PartnersStoreDefinition[]) {
+  function onClickUpdate(selectedProjects: PartnerProjectStoreDefinition[]) {
+    /*
     const selectedIds = selectedProjects.map((p) => p.id);
-    setGroupLocationsIds(
+    setGroups(
       selectedIds.length === store.totalGroupLocationsIds ? [] : selectedIds
     );
+    */
 
     for (const groupsId of selectedProjects) {
-      const ids: any = [];
-      //const ids = new Set([]);
-      const locationsId = getPartnerProjects(groupsId.id);
-      ids.append(locationsId)
-      setGroupLocationsIds(ids)
+      let groupIds = new Set<number>([...activeProjects().map((o) => o.id)]);
+      let locationIds = new Set<number>([]);
+
+      const locationsId = getGroupLocations(groupsId.id);
+
+      const groupIdsArray = [...groupIds]
+      const locationIdsArray = [...locationIds, locationsId]
+      setGroups(groupIdsArray);
+      setGroupLocationsIds(locationIdsArray)
+      
+      console.log(locationIdsArray);
+      console.log(groupIdsArray);
     }
   }
 
@@ -162,10 +158,11 @@ export function PartnersCard() {
       </header>
       <div class="projects-card__body">
         <div class="list-header">
+          {/*
           <div class="select-helpers">
             <button
               class="button-reset type-link-1 projects-list-select-all"
-              onClick={() => setSelectedProjects(() => true, 'checked', true)}
+              onClick={() => partnerProjects(() => true, 'checked', true)}
               tabindex={`${store.showHelpCard ? '-1' : '0'}`}
             >
               Select All
@@ -174,13 +171,14 @@ export function PartnersCard() {
             <button
               class="button-reset type-link-1 projects-list-select-none"
               onClick={() => {
-                setSelectedProjects(() => true, 'checked', false);
+                partnerProjects(() => true, 'checked', false);
               }}
               tabindex={`${store.showHelpCard ? '-1' : '0'}`}
             >
               Select None
             </button>
           </div>
+          */}
           <span>
             {activeProjects().length} of {`${count()}`} projects selected
           </span>
@@ -199,20 +197,12 @@ export function PartnersCard() {
               <CropIcon fill="#5a6672" {...svgAttributes} aria-hidden="true" />
             </button>
           </Show>
-          <label for="search-input">Search projects</label>
-          <input
-            type="text"
-            name="search-input"
-            id="search-input"
-            class="search-input"
-            onInput={(e) => onSearchInput(e)}
-            tabindex={`${store.showHelpCard ? '-1' : '0'}`}
-          />
+          
           <span>
-            {selectedProjects.filter((o) => o.matchesQuery).length == count()
+            {partnerProjects.filter((o) => o.checked).length == count()
               ? `Listing all ${count()} projects`
               : `Listing ${
-                  selectedProjects.filter((o) => o.matchesQuery).length
+                  partnerProjects.filter((o) => o.checked).length
                 } of ${count()} projects`}
           </span>
         </div>
@@ -255,13 +245,13 @@ export function PartnersCard() {
         </div>
       </div>
       <footer class="projects-card__footer">
-        <span>{foo().length}</span>
+        <span>{activeProjects().length}</span>
         <button
           class={`btn btn-primary ${
             partnerProjects.filter(o => o.checked).length > 0 ? '' : 'btn-primary--disabled'
           }`}
           disabled={partnerProjects.filter(o => o.checked).length === 0}
-          onClick={() => onClickUpdate()}
+          onClick={() => onClickUpdate(partnerProjects)}
           tabindex={`${store.showHelpCard ? '-1' : '0'}`}
         >
           Update

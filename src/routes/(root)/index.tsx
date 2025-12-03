@@ -46,6 +46,7 @@ export default function Home() {
   const toggleMonitor = actions.toggleMonitor;
   const toggleAirSensor = actions.toggleAirSensor;
   const setGroupLocationsIds = actions.setGroupLocationsIds;
+  const setGroups = actions.setGroups;
 
 
   const location = useLocation();
@@ -97,13 +98,13 @@ export default function Home() {
       providersArray && setProviders(providersArray);
     }
 
-    if (location.query?.groupId) {
+    if (location.query?.groupsId) {
       const params = new URLSearchParams(location.search);
       const groupsArray = params
-        .get('groupId')
+        .get('groupsId')
         ?.split(',')
-        .map((providerId) => Number(providerId));
-      groupsArray && setGroupLocationsIds(groupsArray);
+        .map((groupsId) => Number(groupsId));
+      groupsArray && setGroups(groupsArray);
     }
   });
 
@@ -128,7 +129,7 @@ export default function Home() {
     }
     
     if (groups.length > 0) {
-      searchParams.append('groupId', store.groupLocationsIds.join(','));
+      searchParams.append('groupsId', store.groups.join(','));
     }
 
     if (store.showOnlyActiveLocations == false) {
