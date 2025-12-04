@@ -319,7 +319,6 @@ async function fetchPartnerProjects() {
 
 export const getGroupLocations = GET(async (groupsId: number) => {
   'use server';
-  //const locationsIds = [2163236, 2163272, 2163334, 9478, 4400];
 
   const locationsIds = [
     4337366,

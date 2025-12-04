@@ -111,7 +111,7 @@ export default function Home() {
   createEffect(() => {
     const getProviders = createMemo(() => store.providers);
     const providers = getProviders();
-    const getGroups = createMemo(() => store.groupLocationsIds);
+    const getGroups = createMemo(() => store.groups);
     const groups = getGroups();
 
     const searchParams = new URLSearchParams();

@@ -110,6 +110,21 @@ export function PartnersCard() {
     }
   }
 
+  async function onClickReset() {
+    setGroups([]);
+    setGroupLocationsIds([]);
+
+    setPartnerProjects(
+      partnerProjects.map((o) => {
+      
+        return {
+          ...o,
+          checked: false
+        }
+      })
+    )
+  }
+
   return (
     <div class="projects-card">
       <header class="projects-card__header">
@@ -220,11 +235,18 @@ export function PartnersCard() {
           class={`btn btn-primary ${
             partnerProjects.filter(o => o.checked).length > 0 ? '' : 'btn-primary--disabled'
           }`}
-          disabled={partnerProjects.filter(o => o.checked).length === 0}
+          disabled={partnerProjects.filter(o => o.checked).length === 0}  
           onClick={async () => await onClickUpdate(partnerProjects)}
           tabindex={`${store.showHelpCard ? '-1' : '0'}`}
         >
           Update
+        </button>
+        <button
+          class="btn btn-secondary"
+          onClick={async () => await onClickReset()}
+          tabindex={`${store.showHelpCard ? '-1' : '0'}`}
+        >
+          Reset
         </button>
       </footer>
     </div>
