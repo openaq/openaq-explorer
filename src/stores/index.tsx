@@ -32,7 +32,7 @@ interface StoreParameters {
   helpContent: string;
   showPartnersCard: boolean;
   isFlipped: boolean;
-  groupLocationsIds: any[];
+  groupLocationsIds: number[];
   totalGroupLocationsIds: number;
   groups: any[];
 }
@@ -71,7 +71,7 @@ type Store = [
     setHelpContent: (content: string) => void;
     toggleShowPartnersCard: () => void;
     toggleIsFlipped: () => void;
-    setGroupLocationsIds: (groupLocationsIds: any[]) => void;
+    setGroupLocationsIds: (groupLocationsIds: number[]) => void;
     setTotalGroupLocationsIds: () => void;
     setGroups: (groups: any[]) => void;
   },

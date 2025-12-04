@@ -67,7 +67,9 @@ export function Map() {
     if (store.showOnlyActiveLocations) {
       arr.push(['==', ['get', 'active'], true]);
     }
+
     if (store.showMonitors && store.showAirSensors) {
+      
       return arr;
     } else {
       const isMonitor = calculateIsMonitor();

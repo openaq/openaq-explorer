@@ -316,6 +316,7 @@ async function fetchPartnerProjects() {
   return await res.json();
 }
 
+
 export const getGroupLocations = GET(async (groupsId: number) => {
   'use server';
   //const locationsIds = [2163236, 2163272, 2163334, 9478, 4400];
@@ -332,10 +333,8 @@ export const getGroupLocations = GET(async (groupsId: number) => {
   ];
 
   const data = [{sensorNodesIds: locationsIds}]
-
-  const results = {results: data}
   
-  return json(results, {
+  return json({results: data}, {
       headers: { 'cache-control': 'max-age=86400' },
     }
   );

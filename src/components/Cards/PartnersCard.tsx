@@ -32,10 +32,8 @@ export function PartnersCard() {
       toggleShowPartnersCard,
       setViewport,
       setBounds,
-      setMapBbox,
       toggleIsFlipped,
       setGroupLocationsIds,
-      setTotalGroupLocationsIds,
       setGroups,
     },
   ] = useStore();
@@ -64,7 +62,6 @@ export function PartnersCard() {
     height: 24,
   };
 
-  let timeout: ReturnType<typeof setTimeout>;
 
   onMount(async () => {
     const data = await getPartnerProjects();
@@ -74,12 +71,12 @@ export function PartnersCard() {
       results.map(o => {
         
         if (store.groups) {
-          const storedGroups = store.groups;
-
-          storedGroups.filter((groupId) => groupId === o.id);
-
+          const groups = store.groups;
+          console.log(groups)
+          const group = groups.filter((groupId) => groupId === o.id);
+          console.log(group)
           return {
-            ...o,
+            ...group,
             checked: true,
           }
         }
@@ -115,7 +112,7 @@ export function PartnersCard() {
     });
   }
 
-  function onClickUpdate(selectedProjects: PartnerProjectStoreDefinition[]) {
+  async function onClickUpdate(selectedProjects: PartnerProjectStoreDefinition[]) {
     /*
     const selectedIds = selectedProjects.map((p) => p.id);
     setGroups(
@@ -126,16 +123,11 @@ export function PartnersCard() {
     for (const groupsId of selectedProjects) {
       let groupIds = new Set<number>([...activeProjects().map((o) => o.id)]);
       let locationIds = new Set<number>([]);
-
-      const locationsId = getGroupLocations(groupsId.id);
-
+      const locationsIds = await getGroupLocations(groupsId.id);
       const groupIdsArray = [...groupIds]
-      const locationIdsArray = [...locationIds, locationsId]
+      locationIds.add(locationsIds.results[0].sensorNodesIds)
       setGroups(groupIdsArray);
-      setGroupLocationsIds(locationIdsArray)
-      
-      console.log(locationIdsArray);
-      console.log(groupIdsArray);
+      setGroupLocationsIds(...locationIds)
     }
   }
 
@@ -251,7 +243,7 @@ export function PartnersCard() {
             partnerProjects.filter(o => o.checked).length > 0 ? '' : 'btn-primary--disabled'
           }`}
           disabled={partnerProjects.filter(o => o.checked).length === 0}
-          onClick={() => onClickUpdate(partnerProjects)}
+          onClick={async () => await onClickUpdate(partnerProjects)}
           tabindex={`${store.showHelpCard ? '-1' : '0'}`}
         >
           Update
