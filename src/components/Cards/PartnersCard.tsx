@@ -2,7 +2,6 @@ import { useStore } from '~/stores';
 
 import { For, Show, createSignal, onMount, createEffect } from 'solid-js';
 import { getPartnerProjects, getGroupLocations } from '~/client';
-import MiniSearch from 'minisearch';
 import bbox from '@turf/bbox';
 import { createStore, produce } from 'solid-js/store';
 import ArrowLeftIcon from '~/assets/imgs/arrow_left.svg';
@@ -41,13 +40,6 @@ export function PartnersCard() {
   const [count, setCount] = createSignal();
   const [partnerProjects, setPartnerProjects] = createStore<PartnerProjectStoreDefinition[]>([]);
 
-  /*
-  const [selectedProjects, setSelectedProjects] = createStore<
-    PartnersStoreDefinition[]
-  >([]);
-  const [activeProjects, setActiveProjects] = createSignal([]);
-  */
-
   const activeProjects = () => partnerProjects.filter(o => o.checked); 
   
   const onClickClose = () => {
@@ -67,22 +59,16 @@ export function PartnersCard() {
     const data = await getPartnerProjects();
     const results = data.results;
     setCount(results.length);
+
+    const groups = store.groups;
+
     setPartnerProjects(
       results.map(o => {
-        
-        if (store.groups) {
-          const groups = store.groups;
-          console.log(groups)
-          const group = groups.filter((groupId) => groupId === o.id);
-          console.log(group)
-          return {
-            ...group,
-            checked: true,
-          }
-        }
+       const isSelected = groups.includes(o.id);
+
         return {
           ...o,
-          checked: false
+          checked: isSelected
         }
       })
     )
@@ -113,13 +99,6 @@ export function PartnersCard() {
   }
 
   async function onClickUpdate(selectedProjects: PartnerProjectStoreDefinition[]) {
-    /*
-    const selectedIds = selectedProjects.map((p) => p.id);
-    setGroups(
-      selectedIds.length === store.totalGroupLocationsIds ? [] : selectedIds
-    );
-    */
-
     for (const groupsId of selectedProjects) {
       let groupIds = new Set<number>([...activeProjects().map((o) => o.id)]);
       let locationIds = new Set<number>([]);
@@ -237,7 +216,6 @@ export function PartnersCard() {
         </div>
       </div>
       <footer class="projects-card__footer">
-        <span>{activeProjects().length}</span>
         <button
           class={`btn btn-primary ${
             partnerProjects.filter(o => o.checked).length > 0 ? '' : 'btn-primary--disabled'
