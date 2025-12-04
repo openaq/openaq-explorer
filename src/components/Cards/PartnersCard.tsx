@@ -1,9 +1,9 @@
 import { useStore } from '~/stores';
 
-import { For, Show, createSignal, onMount, createEffect } from 'solid-js';
+import { For, Show, createSignal, onMount } from 'solid-js';
 import { getPartnerProjects, getGroupLocations } from '~/client';
 import bbox from '@turf/bbox';
-import { createStore, produce } from 'solid-js/store';
+import { createStore } from 'solid-js/store';
 import ArrowLeftIcon from '~/assets/imgs/arrow_left.svg';
 import CropIcon from '~/assets/imgs/crop.svg';
 

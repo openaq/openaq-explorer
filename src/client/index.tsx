@@ -1,10 +1,8 @@
 import { json, query } from '@solidjs/router';
 import { GET } from '@solidjs/start';
-import { queryAllByAltText } from '@solidjs/testing-library';
 import dayjs from 'dayjs';
 import tz from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
-import { DetailOverviewDefinition } from '~/components/DetailOverview/types';
 import { getLocationById } from '~/db/lists';
 
 dayjs.extend(utc);
@@ -344,14 +342,16 @@ export const getGroupLocations = GET(async (groupsId: number) => {
 export const getPartnerProjects = GET(async () => {
   'use server';
 
-  const data = [{
-    name: 'Clean Air Catalyst',
-    id: 42
-  },
-   {
-    name: 'EPIC Air Quality Fund',
-    id: 1  
-    }]
+  const data = [
+    {
+      name: 'Clean Air Catalyst',
+      id: 42
+    },
+    {
+      name: 'EPIC Air Quality Fund',
+      id: 1  
+    }
+  ]
 
   const results = {results: data}
 
