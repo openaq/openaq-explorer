@@ -129,11 +129,11 @@ export function PartnersCard() {
       </header>
       <div class="projects-card__body">
         <div class="list-header">
-          {/*
+          
           <div class="select-helpers">
             <button
               class="button-reset type-link-1 projects-list-select-all"
-              onClick={() => partnerProjects(() => true, 'checked', true)}
+              onClick={() => setPartnerProjects(() => true, 'checked', true)}
               tabindex={`${store.showHelpCard ? '-1' : '0'}`}
             >
               Select All
@@ -142,14 +142,14 @@ export function PartnersCard() {
             <button
               class="button-reset type-link-1 projects-list-select-none"
               onClick={() => {
-                partnerProjects(() => true, 'checked', false);
+                setPartnerProjects(() => true, 'checked', false);
               }}
               tabindex={`${store.showHelpCard ? '-1' : '0'}`}
             >
               Select None
             </button>
           </div>
-          */}
+          
           <span>
             {activeProjects().length} of {`${count()}`} projects selected
           </span>
