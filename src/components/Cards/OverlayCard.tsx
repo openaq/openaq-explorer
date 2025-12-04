@@ -5,13 +5,11 @@ import {
 } from '../LocationMarker';
 import { useStore } from '~/stores';
 import FilterIcon from '~/assets/imgs/filter.svg';
-import TuneIcon from '~/assets/imgs/tune.svg';
 import ChevronRight from '~/assets/imgs/chevron_right.svg';
 import '~/assets/scss/components/overlay-card.scss';
 import AccessHelp from '../Help/AccessHelp';
 import pollutantsContent from '~/content/help/pollutants.md?raw';
 import { parseHelpMarkdown } from '../Cards/utils';
-import { PartnersCard } from './PartnersCard';
 const parsedPollutantsContent = parseHelpMarkdown(pollutantsContent);
 const parsedPollutantsHtml = parsedPollutantsContent.helpContent;
 const parsedPollutantsTitle = parsedPollutantsContent.helpTitle;
