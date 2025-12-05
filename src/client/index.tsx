@@ -301,11 +301,8 @@ export const getLocationLicenses = query(async (locationsId: number) => {
 
 async function fetchGroupLocations(groupsId: number) {
   'use server';
-  const url = new URL(process.env.REST_API_URL);
-  url.pathname = `/groups/${groupsId}`;
 
-  console.log('Fetching URL:', url.href);
-  const res = await fetch(url.href, {
+  const res = await fetch( `${process.env.REST_API_URL}//groups/${groupsId}`, {
     headers: {
       'Content-Type': 'application/json'
     },
