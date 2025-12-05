@@ -312,7 +312,6 @@ async function fetchGroupLocations(groupsId: number) {
   if (!res.ok) {
     throw new Error(`Failed to fetch group`);
   }
-  console.log("GROUPS", groupsId)
   return await res.json();
 }
 
@@ -321,7 +320,6 @@ export const getGroupLocations = GET(async (groupsId: number) => {
 
 
   const data = await fetchGroupLocations(groupsId);
-  console.log(data)
   return json(data, {
       headers: { 'cache-control': 'max-age=86400' },
     }

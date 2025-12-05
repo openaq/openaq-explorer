@@ -105,7 +105,6 @@ export default function Home() {
         .get('groupsId')
         ?.split(',')
         .map((groupsId) => Number(groupsId));
-      console.log("groupsarr",groupsArray)
       groupsArray && setGroups(groupsArray);
     }
   });
