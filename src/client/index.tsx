@@ -310,7 +310,8 @@ async function fetchGroupLocations(groupsId: number) {
   });
 
   if (!res.ok) {
-    throw new Error(`Failed to fetch group: ${res}`);
+    console.error(`Failed to fetch group: ${url.href} ${JSON.stringify(res)}`)
+    throw new Error(`Failed to fetch group`);
   }
   return await res.json();
 }
