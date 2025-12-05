@@ -49,7 +49,6 @@ export default function Home() {
   const setGroupLocationsIds = actions.setGroupLocationsIds;
   const setGroups = actions.setGroups;
 
-
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -117,12 +116,14 @@ export default function Home() {
     if (groups.length > 0) {
       let locationIds = new Set<number>([]);
 
-       for (const groupsId of groups) {
+      try {
         const locationsIds = await getGroupLocations(groupsId);
-        console.log("group locations",locationsIds)
-        locationIds.add(locationsIds[0].sensorNodesIds)
-        }
-        setGroupLocationsIds(...locationIds);
+        console.log('group locations', locationsIds);
+        locationIds.add(locationsIds[0].sensorNodesIds);
+      } catch (error) {
+        console.error(`Failed to fetch group ${groupsId}:`, error);
+      }
+      setGroupLocationsIds(...locationIds);
     }
 
     const searchParams = new URLSearchParams();
@@ -138,7 +139,7 @@ export default function Home() {
     if (providers.length > 0) {
       searchParams.append('provider', store.providers.join(','));
     }
-    
+
     if (groups.length > 0) {
       searchParams.append('groupsId', store.groups.join(','));
     }

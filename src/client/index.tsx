@@ -324,7 +324,6 @@ async function fetchGroupLocations(groupsId: number) {
 export const getGroupLocations = GET(async (groupsId: number) => {
   'use server';
 
-
   const data = await fetchGroupLocations(groupsId);
   return json(data, {
       headers: { 'cache-control': 'max-age=86400' },
