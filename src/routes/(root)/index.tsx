@@ -9,6 +9,7 @@ import { createEffect, createMemo, onMount, Show } from 'solid-js';
 import content from '~/content/notification.md?raw';
 import MD5 from 'crypto-js/md5';
 import { parseNotificationMarkdown } from '~/components/Cards/utils';
+import { getGroupLocations } from '~/client';
 
 export default function Home() {
   const showNotification = JSON.parse(
@@ -104,15 +105,25 @@ export default function Home() {
         .get('groupsId')
         ?.split(',')
         .map((groupsId) => Number(groupsId));
+      console.log("groupsarr",groupsArray)
       groupsArray && setGroups(groupsArray);
     }
   });
 
-  createEffect(() => {
+  createEffect(async () => {
     const getProviders = createMemo(() => store.providers);
     const providers = getProviders();
     const getGroups = createMemo(() => store.groups);
     const groups = getGroups();
+    if (groups.length > 0) {
+      let locationIds = new Set<number>([]);
+
+       for (const groupsId of groups) {
+        const locationsIds = await getGroupLocations(groupsId);
+        locationIds.add(locationsIds[0].sensorNodesIds)
+        }
+        setGroupLocationsIds(...locationIds);
+    }
 
     const searchParams = new URLSearchParams();
 

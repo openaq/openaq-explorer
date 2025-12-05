@@ -1,6 +1,6 @@
 import { useStore } from '~/stores';
 
-import { For, Show, createSignal, onMount } from 'solid-js';
+import { For, Show, createEffect, createSignal, onMount } from 'solid-js';
 import { getPartnerProjects, getGroupLocations } from '~/client';
 import bbox from '@turf/bbox';
 import { createStore } from 'solid-js/store';
@@ -40,14 +40,19 @@ export function PartnersCard() {
   const [count, setCount] = createSignal();
   const [partnerProjects, setPartnerProjects] = createStore<PartnerProjectStoreDefinition[]>([]);
 
-  const activeProjects = () => partnerProjects.filter(o => o.checked); 
-  
+  const [activePartnerProjects, setActivePartnerProjects] = createSignal([]);
+
   const onClickClose = () => {
     toggleIsFlipped();
     setTimeout(() => {
       toggleShowPartnersCard();
     }, 600);
   };
+
+    createEffect(() => {
+      setActivePartnerProjects(partnerProjects.filter((p) => p.checked));
+    });
+
 
   const svgAttributes = {
     width: 24,
@@ -98,16 +103,16 @@ export function PartnersCard() {
     });
   }
 
-  async function onClickUpdate(selectedProjects: PartnerProjectStoreDefinition[]) {
-    for (const groupsId of selectedProjects) {
-      let groupIds = new Set<number>([...activeProjects().map((o) => o.id)]);
-      let locationIds = new Set<number>([]);
-      const locationsIds = await getGroupLocations(groupsId.id);
-      const groupIdsArray = [...groupIds]
-      locationIds.add(locationsIds.results[0].sensorNodesIds)
-      setGroups(groupIdsArray);
-      setGroupLocationsIds(...locationIds)
+  async function onClickUpdate(activePartnerProjects: PartnerProjectStoreDefinition[]) {
+    const selectedIds = activePartnerProjects.map((p) => p.id);
+    setGroups(selectedIds);
+    let locationIds = new Set<number>([]);
+
+    for (const groupsId of selectedIds) {
+      const locationsIds = await getGroupLocations(groupsId);
+      locationIds.add(locationsIds[0].sensorNodesIds)
     }
+    setGroupLocationsIds(...locationIds);
   }
 
   async function onClickReset() {
@@ -166,12 +171,12 @@ export function PartnersCard() {
           </div>
           
           <span>
-            {activeProjects().length} of {`${count()}`} projects selected
+            {activePartnerProjects().length} of {`${count()}`} projects selected
           </span>
           <Show
             when={
-              activeProjects().length != count() &&
-              activeProjects().length != 0
+              activePartnerProjects().length != count() &&
+              activePartnerProjects().length != 0
             }
           >
             <button
@@ -236,7 +241,7 @@ export function PartnersCard() {
             partnerProjects.filter(o => o.checked).length > 0 ? '' : 'btn-primary--disabled'
           }`}
           disabled={partnerProjects.filter(o => o.checked).length === 0}  
-          onClick={async () => await onClickUpdate(partnerProjects)}
+          onClick={async () => await onClickUpdate(activePartnerProjects())}
           tabindex={`${store.showHelpCard ? '-1' : '0'}`}
         >
           Update

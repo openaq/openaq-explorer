@@ -296,57 +296,59 @@ export const getLocationLicenses = query(async (locationsId: number) => {
   return filteredLicenses;
 }, 'get-location-licenses-action');
 
-async function fetchPartnerProjects() {
+
+
+
+async function fetchGroupLocations(groupsId: number) {
   'use server';
-  const url = new URL(import.meta.env.VITE_API_BASE_URL);
-  url.pathname = `/v3/locations`;
-  url.search = 'limit=5';
+  const url = new URL(process.env.REST_API_URL);
+  url.pathname = `groups/${groupsId}`;
   const res = await fetch(url.href, {
     headers: {
-      'Content-Type': 'application/json',
-      'X-API-Key': `${import.meta.env.VITE_EXPLORER_API_KEY}`,
+      'Content-Type': 'application/json'
     },
   });
 
   if (!res.ok) {
-    throw new Error(`Failed to fetch location_id`);
+    throw new Error(`Failed to fetch group`);
   }
+  console.log("GROUPS", groupsId)
   return await res.json();
 }
-
 
 export const getGroupLocations = GET(async (groupsId: number) => {
   'use server';
 
-  const locationsIds = [
-    4337366,
-    4337367,
-    4337368,
-    4337369,
-    4337370,
-    4337371,
-    4337372,
-    4337373
-  ];
 
-  const data = [{sensorNodesIds: locationsIds}]
-  
-  return json({results: data}, {
+  const data = await fetchGroupLocations(groupsId);
+  console.log(data)
+  return json(data, {
       headers: { 'cache-control': 'max-age=86400' },
     }
   );
 });
 
 
+// async function fetchPartnerProjects(groupsId: number) {
+//   'use server';
+//   const url = new URL(import.meta.env.REST_API_URL);
+//   url.pathname = `groups/${groupsId}`;
+//   const res = await fetch(url.href, {
+//     headers: {
+//       'Content-Type': 'application/json'
+//     },
+//   });
+
+//   if (!res.ok) {
+//     throw new Error(`Failed to fetch group`);
+//   }
+//   return await res.json();
+// }
 
 export const getPartnerProjects = GET(async () => {
   'use server';
 
   const data = [
-    {
-      name: 'Clean Air Catalyst',
-      id: 42
-    },
     {
       name: 'EPIC Air Quality Fund',
       id: 1  
