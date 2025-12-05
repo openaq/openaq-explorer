@@ -303,6 +303,8 @@ async function fetchGroupLocations(groupsId: number) {
   'use server';
   const url = new URL(process.env.REST_API_URL);
   url.pathname = `/groups/${groupsId}`;
+
+  console.log('Fetching URL:', url.href);
   const res = await fetch(url.href, {
     headers: {
       'Content-Type': 'application/json'

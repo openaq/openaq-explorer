@@ -175,7 +175,7 @@ export class LambdaStack extends cdk.Stack {
       script-src 'self' 'unsafe-inline' 'unsafe-eval' https://plausible.io/js/script.js;
       style-src 'self' 'unsafe-inline';
       base-uri 'self';
-      connect-src 'self' https://api.geocode.earth https://basemap.openaq.org https://plausible.io https://protomaps.github.io https://tiles.openaq.org;
+      connect-src 'self' https://api.geocode.earth https://basemap.openaq.org https://plausible.io https://protomaps.github.io https://tiles.openaq.org https://unpkg.com/@mapbox/mapbox-gl-rtl-text@0.2.3/mapbox-gl-rtl-text.min.js;
       font-src 'self';
       frame-src 'none';
       img-src 'self' data:;
