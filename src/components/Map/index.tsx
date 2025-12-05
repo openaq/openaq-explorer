@@ -3,10 +3,11 @@ import MapGL, { Source, Layer, Control } from 'solid-map-gl';
 import { useMapContext } from 'solid-map-gl';
 import * as maplibre from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
+
 import { useStore } from '~/stores';
 
 import { Geocoder } from '../Geocoder';
-import { createEffect, createSignal } from 'solid-js';
+import { createEffect, createSignal, onMount } from 'solid-js';
 
 import '~/assets/scss/components/map.scss';
 import InfoIcon from '~/assets/imgs/svgs/info.svg';
@@ -35,6 +36,12 @@ function Bounds() {
 
 export function Map() {
   const [store, { setSelectedLocationsId, setViewport }] = useStore();
+
+  const mapboxGlRtlUrl = new URL('/mapbox-gl-rtl-text.js', import.meta.url);
+
+  onMount(() => {
+    maplibre.setRTLTextPlugin(mapboxGlRtlUrl.href, true);
+  });
 
   function getFeature(e: any) {
     const features = e.target.queryRenderedFeatures(e.point);
