@@ -30,6 +30,10 @@ interface StoreParameters {
   showNotificationCard: boolean;
   showHelpCard: boolean;
   helpContent: string;
+  showPartnersCard: boolean;
+  isFlipped: boolean;
+  groupLocationsIds: number[];
+  groups: any[];
 }
 
 type Store = [
@@ -64,6 +68,10 @@ type Store = [
     toggleShowNotificationCard: (value: boolean) => void;
     toggleShowHelpCard: (value: boolean) => void;
     setHelpContent: (content: string) => void;
+    toggleShowPartnersCard: () => void;
+    toggleIsFlipped: () => void;
+    setGroupLocationsIds: (groupLocationsIds: number[]) => void;
+    setGroups: (groups: any[]) => void;
   },
 ];
 
@@ -99,6 +107,10 @@ export const StoreProvider: Component<{}> = (props) => {
     showNotificationCard: false,
     showHelpCard: false,
     helpContent: '',
+    showPartnersCard: false,
+    isFlipped: false,
+    groupLocationsIds: [],
+    groups: [],
   });
 
   const store = [
@@ -205,6 +217,18 @@ export const StoreProvider: Component<{}> = (props) => {
       },
       setHelpContent(content: string) {
         setState({ helpContent: content });
+      },
+      toggleShowPartnersCard() {
+        setState({ showPartnersCard: !state.showPartnersCard });
+      },
+      toggleIsFlipped() {
+        setState({isFlipped: !state.isFlipped });
+      },
+      setGroupLocationsIds(groupLocationsIds) {
+        setState({ groupLocationsIds: groupLocationsIds })
+      },
+      setGroups(groups) {
+        setState({ groups: groups });
       },
     },
   ];

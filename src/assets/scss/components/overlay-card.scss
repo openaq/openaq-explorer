@@ -10,20 +10,34 @@
   height: calc(100vh - 80px - 80px);
   border-radius: 18px;
   overflow: hidden;
+  overflow-y: auto;
   box-shadow: 0 7px 20px #00000026;
 
   &__footer {
-    border-top: 1px solid #e8ebed;
-    padding: 24px 15px 15px;
+    border-top: 1px dashed #e8ebed;
+    padding: 8px 0 15px;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 8px;
   }
   
   .button-reset:focus {
     outline: 1px auto;
     outline: -webkit-focus-ring-color;
     outline: -webkit-focus-ring-color auto 5px;
+  }
+
+  .flip-btn {
+    border: none;
+    padding: 0px 15px;
+    background-color: transparent;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .flip-btn:hover {
+    cursor: pointer;
   }
 }
 

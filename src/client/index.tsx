@@ -1,10 +1,8 @@
 import { json, query } from '@solidjs/router';
 import { GET } from '@solidjs/start';
-import { queryAllByAltText } from '@solidjs/testing-library';
 import dayjs from 'dayjs';
 import tz from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
-import { DetailOverviewDefinition } from '~/components/DetailOverview/types';
 import { getLocationById } from '~/db/lists';
 
 dayjs.extend(utc);
@@ -297,3 +295,66 @@ export const getLocationLicenses = query(async (locationsId: number) => {
 
   return filteredLicenses;
 }, 'get-location-licenses-action');
+
+
+
+
+async function fetchGroupLocations(groupsId: number) {
+  'use server';
+  const url = new URL(process.env.REST_API_URL);
+  url.pathname = `groups/${groupsId}`;
+  const res = await fetch(url.href, {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch group`);
+  }
+  return await res.json();
+}
+
+export const getGroupLocations = GET(async (groupsId: number) => {
+  'use server';
+
+
+  const data = await fetchGroupLocations(groupsId);
+  return json(data, {
+      headers: { 'cache-control': 'max-age=86400' },
+    }
+  );
+});
+
+
+// async function fetchPartnerProjects(groupsId: number) {
+//   'use server';
+//   const url = new URL(import.meta.env.REST_API_URL);
+//   url.pathname = `groups/${groupsId}`;
+//   const res = await fetch(url.href, {
+//     headers: {
+//       'Content-Type': 'application/json'
+//     },
+//   });
+
+//   if (!res.ok) {
+//     throw new Error(`Failed to fetch group`);
+//   }
+//   return await res.json();
+// }
+
+export const getPartnerProjects = GET(async () => {
+  'use server';
+
+  const data = [
+    {
+      name: 'EPIC Air Quality Fund',
+      id: 1  
+    }
+  ]
+
+  const results = {results: data}
+
+  return json(results, {headers: {'cache-control': 'max-age=3600'}})
+  
+})

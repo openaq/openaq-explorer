@@ -9,6 +9,7 @@ import { createEffect, createMemo, onMount, Show } from 'solid-js';
 import content from '~/content/notification.md?raw';
 import MD5 from 'crypto-js/md5';
 import { parseNotificationMarkdown } from '~/components/Cards/utils';
+import { getGroupLocations } from '~/client';
 
 export default function Home() {
   const showNotification = JSON.parse(
@@ -45,6 +46,9 @@ export default function Home() {
   const toggleMapIsActive = actions.toggleMapIsActive;
   const toggleMonitor = actions.toggleMonitor;
   const toggleAirSensor = actions.toggleAirSensor;
+  const setGroupLocationsIds = actions.setGroupLocationsIds;
+  const setGroups = actions.setGroups;
+
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -94,11 +98,31 @@ export default function Home() {
         .map((providerId) => Number(providerId));
       providersArray && setProviders(providersArray);
     }
+
+    if (location.query?.groupsId) {
+      const params = new URLSearchParams(location.search);
+      const groupsArray = params
+        .get('groupsId')
+        ?.split(',')
+        .map((groupsId) => Number(groupsId));
+      groupsArray && setGroups(groupsArray);
+    }
   });
 
-  createEffect(() => {
+  createEffect(async () => {
     const getProviders = createMemo(() => store.providers);
     const providers = getProviders();
+    const getGroups = createMemo(() => store.groups);
+    const groups = getGroups();
+    if (groups.length > 0) {
+      let locationIds = new Set<number>([]);
+
+       for (const groupsId of groups) {
+        const locationsIds = await getGroupLocations(groupsId);
+        locationIds.add(locationsIds[0].sensorNodesIds)
+        }
+        setGroupLocationsIds(...locationIds);
+    }
 
     const searchParams = new URLSearchParams();
 
@@ -112,6 +136,10 @@ export default function Home() {
 
     if (providers.length > 0) {
       searchParams.append('provider', store.providers.join(','));
+    }
+    
+    if (groups.length > 0) {
+      searchParams.append('groupsId', store.groups.join(','));
     }
 
     if (store.showOnlyActiveLocations == false) {
