@@ -5,6 +5,9 @@ import tz from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import { getLocationById } from '~/db/lists';
 
+const baseUrl = process.env.REST_API_URL || 'http://localhost:8080';
+
+
 dayjs.extend(utc);
 dayjs.extend(tz);
 
@@ -302,13 +305,13 @@ export const getLocationLicenses = query(async (locationsId: number) => {
 async function fetchGroupLocations(groupsId: number) {
   'use server';
 
-  const res = await fetch(`${process.env.REST_API_URL}/groups/${groupsId}`, {
+  const res = await fetch(`${baseUrl}/groups/${groupsId}`, {
     headers: {
       'Content-Type': 'application/json'
     },
   });
 
-  console.info('Fetching:', `${process.env.REST_API_URL}/groups/${groupsId}`);
+  console.info('Fetching:', `${baseUrl}/groups/${groupsId}`);
   console.info('Status:', res.status);
 
   // if (!res.ok) {
