@@ -302,11 +302,14 @@ export const getLocationLicenses = query(async (locationsId: number) => {
 async function fetchGroupLocations(groupsId: number) {
   'use server';
 
-  const res = await fetch( `${process.env.REST_API_URL}/groups/${groupsId}`, {
+  const res = await fetch(`${process.env.REST_API_URL}/groups/${groupsId}`, {
     headers: {
       'Content-Type': 'application/json'
     },
   });
+
+  console.log('Fetching:', `${process.env.REST_API_URL}/groups/${groupsId}`);
+  console.log('Status:', res.status);
 
   // if (!res.ok) {
   //   console.error(`Failed to fetch group: ${url.href} ${JSON.stringify(res)}`)
