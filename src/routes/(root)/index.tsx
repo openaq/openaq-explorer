@@ -116,12 +116,14 @@ export default function Home() {
     if (groups.length > 0) {
       let locationIds = new Set<number>([]);
 
-      try {
-        const locationsIds = await getGroupLocations(groupsId);
-        console.log('group locations', locationsIds);
-        locationIds.add(locationsIds[0].sensorNodesIds);
-      } catch (error) {
-        console.error(`Failed to fetch group ${groupsId}:`, error);
+      for (const groupsId of groups) {
+        try {
+          const locationsIds = await getGroupLocations(groupsId);
+          console.log('group locations', locationsIds);
+          locationIds.add(locationsIds[0].sensorNodesIds);
+        } catch (error) {
+          console.error(`Failed to fetch group ${groupsId}:`, error);
+        }
       }
       setGroupLocationsIds(...locationIds);
     }
