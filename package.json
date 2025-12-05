@@ -1,9 +1,10 @@
 {
   "name": "openaq-explorer",
   "scripts": {
-    "dev": "vinxi dev",
-    "build": "vinxi build",
-    "build-node": "vinxi build --config app.config.node.ts",
+    "move": "cp node_modules/@mapbox/mapbox-gl-rtl-text/dist/mapbox-gl-rtl-text.js public/",
+    "dev": "npm run move && vinxi dev",
+    "build": "npm run move && vinxi build",
+    "build-node": "npm run move && vinxi build --config app.config.node.ts",
     "start": "node ./.output/server/index.mjs",
     "test": "vitest",
     "knip": "knip"
@@ -45,6 +46,7 @@
     "@babel/preset-env": "^7.23.6",
     "@fontsource-variable/space-grotesk": "^5.0.17",
     "@fontsource/space-grotesk": "^5.0.17",
+    "@mapbox/mapbox-gl-rtl-text": "^0.3.0",
     "@maplibre/maplibre-gl-geocoder": "^1.5.0",
     "@solidjs/meta": "^0.29.4",
     "@solidjs/router": "^0.15.3",
