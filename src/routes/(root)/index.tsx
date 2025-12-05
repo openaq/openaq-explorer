@@ -119,6 +119,7 @@ export default function Home() {
 
        for (const groupsId of groups) {
         const locationsIds = await getGroupLocations(groupsId);
+        console.log("group locations",locationsIds)
         locationIds.add(locationsIds[0].sensorNodesIds)
         }
         setGroupLocationsIds(...locationIds);
