@@ -302,7 +302,7 @@ export const getLocationLicenses = query(async (locationsId: number) => {
 async function fetchGroupLocations(groupsId: number) {
   'use server';
   const url = new URL(process.env.REST_API_URL);
-  url.pathname = `groups/${groupsId}`;
+  url.pathname = `/groups/${groupsId}`;
   const res = await fetch(url.href, {
     headers: {
       'Content-Type': 'application/json'

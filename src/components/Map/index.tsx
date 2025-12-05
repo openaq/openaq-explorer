@@ -37,10 +37,8 @@ function Bounds() {
 export function Map() {
   const [store, { setSelectedLocationsId, setViewport }] = useStore();
 
-  const mapboxGlRtlUrl = new URL('/mapbox-gl-rtl-text.js', import.meta.url);
-
   onMount(() => {
-    maplibre.setRTLTextPlugin(mapboxGlRtlUrl.href, true);
+    maplibre.setRTLTextPlugin('https://unpkg.com/@mapbox/mapbox-gl-rtl-text@0.2.3/mapbox-gl-rtl-text.min.js', true);
   });
 
   function getFeature(e: any) {
