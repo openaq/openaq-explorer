@@ -308,8 +308,8 @@ async function fetchGroupLocations(groupsId: number) {
     },
   });
 
-  console.log('Fetching:', `${process.env.REST_API_URL}/groups/${groupsId}`);
-  console.log('Status:', res.status);
+  console.info('Fetching:', `${process.env.REST_API_URL}/groups/${groupsId}`);
+  console.info('Status:', res.status);
 
   // if (!res.ok) {
   //   console.error(`Failed to fetch group: ${url.href} ${JSON.stringify(res)}`)
