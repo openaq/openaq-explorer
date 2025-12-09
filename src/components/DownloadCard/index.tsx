@@ -133,9 +133,10 @@ export function DownloadCard(props: Props) {
     e.preventDefault();
     setDownloading(true);
     const formElements = e.target.elements;
-    const tz = formElements[0].value;
-    const dateFromValue = formElements[1].value;
-    const dateToValue = formElements[2].value;
+    const rollup = formElements[0].value;
+    const tz = formElements[1].value;
+    const dateFromValue = formElements[2].value;
+    const dateToValue = formElements[3].value;
     const sensorInputs = [...formElements]
       .filter((o) => o.id.includes('checkbox-sensor'))
       .filter((o) => o.checked);
@@ -143,15 +144,18 @@ export function DownloadCard(props: Props) {
       Number(o.id.replace('checkbox-sensor-', ''))
     );
     let data = [];
+
     for (const sensorId of sensorIds) {
       const measurements = await getSensorMeasurementsDownload(
         sensorId,
+        rollup,
         dayjs(new Date(dateFromValue), props.timezone).toISOString(),
         dayjs(new Date(dateToValue), props.timezone).toISOString()
       );
       data = data.concat(measurements);
       await sleep(300);
     }
+
     const csvData = measurementsCsv(props, data);
     downloadFile(`openaq_location_${props.id}_measurments.csv`, csvData);
     setDownloading(false);
@@ -180,6 +184,13 @@ export function DownloadCard(props: Props) {
           onFormSubmit(e);
         }}
       >
+        <label for="">Data type</label>
+        <select id="select" class="date-input">
+          <option value="measurements">Measurements</option>
+          <option value="hours">Hourly averages</option>
+          <option value="days">Daily averages</option>
+          <option value="years">Yearly averages</option>
+        </select>
         <input type="hidden" name="timezone" value={props.timezone} />
         <div class="date-inputs">
           <label for="date-from-input">
