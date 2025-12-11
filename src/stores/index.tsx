@@ -78,11 +78,12 @@ type Store = [
 const StoreContext = createContext<Store>();
 
 export const StoreProvider: ParentComponent = (props) => {
-  const [state, setState] = createStore({
+  const [state, setState] = createStore<StoreParameters>({
     locationsId: undefined,
     mapParameter: 'all',
     listsId: undefined,
     listLocationsId: undefined,
+    listParameter: undefined,
     newListModalOpen: false,
     deleteListModalOpen: false,
     deleteLocationModalOpen: false,
@@ -101,6 +102,7 @@ export const StoreProvider: ParentComponent = (props) => {
     recentMeasurements: [],
     toastOpen: false,
     apiKeyRegenerateModalOpen: false,
+    passwordChangeModalOpen: false,
     listParametersId: undefined,
     bounds: [],
     mapBbox: [],
