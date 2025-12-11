@@ -1,4 +1,4 @@
-import { createContext, useContext, Component } from 'solid-js';
+import { createContext, useContext, ParentComponent } from 'solid-js';
 import { createStore } from 'solid-js/store';
 import { Viewport } from 'solid-map-gl';
 
@@ -77,7 +77,7 @@ type Store = [
 
 const StoreContext = createContext<Store>();
 
-export const StoreProvider: Component<{}> = (props) => {
+export const StoreProvider: ParentComponent = (props) => {
   const [state, setState] = createStore({
     locationsId: undefined,
     mapParameter: 'all',
