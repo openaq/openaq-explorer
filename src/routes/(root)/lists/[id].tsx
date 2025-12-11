@@ -80,7 +80,7 @@ export default function List() {
         <Show when={list()}>
           <EditListModal {...list()} />
         </Show>
-        <DeleteLocationModal listsId={id} />
+        <DeleteLocationModal listsId={+id} />
       </main>
     </>
   );
