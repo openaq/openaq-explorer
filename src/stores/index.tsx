@@ -42,8 +42,8 @@ type Store = [
     setSelectedLocationsId: (locationsId: number) => void;
     clearLocationsId: () => void;
     setSelectedMapParameter: (mapParameter: string) => void;
-    setDeleteListsId: () => void;
-    setDeleteListLocationsId: () => void;
+    setDeleteListsId: (listsId: number) => void;
+    setDeleteListLocationsId: (listLocationsId: number) => void;
     setListParametersId: (parametersId: number) => void;
     setListParameter: (parameter: string) => void;
     clearDeleteListsId: () => void;
@@ -58,10 +58,10 @@ type Store = [
     toggleAirSensor: () => void;
     toggleMapIsActive: () => void;
     setProviders: (providers: any[]) => void;
-    setRecentMeasurements: () => void;
-    addRecentMeasurements: () => void;
-    updateRecentMeasurements: (parameter: string, measurements) => void;
-    setTotalProviders: () => void;
+    setRecentMeasurements: (measurements: any) => void;
+    addRecentMeasurements: (measurements: any) => void;
+    updateRecentMeasurements: (parameter: string, measurements: any) => void;
+    setTotalProviders: (totalProviders: number) => void;
     openToast: () => void;
     setBounds: (bounds: number[]) => void;
     setMapBbox: (mapBbox: number[]) => void;
@@ -115,7 +115,7 @@ export const StoreProvider: ParentComponent = (props) => {
     groups: [],
   });
 
-  const store = [
+  const store: Store = [
     state,
     {
       setSelectedLocationsId(locationsId: number) {
@@ -165,22 +165,22 @@ export const StoreProvider: ParentComponent = (props) => {
           showOnlyActiveLocations: !state.showOnlyActiveLocations,
         });
       },
-      setProviders(providers) {
+      setProviders(providers: any) {
         setState({ providers: providers });
       },
       setTotalProviders(totalProviders: number) {
         setState({ totalProviders: totalProviders });
       },
-      setRecentMeasurements(measurements) {
+      setRecentMeasurements(measurements: any) {
         setState({ recentMeasurements: measurements });
       },
-      addRecentMeasurements(measurements) {
+      addRecentMeasurements(measurements: any) {
         setState('recentMeasurements', (prevList) => [
           ...prevList,
           measurements,
         ]);
       },
-      updateRecentMeasurements(parameter: string, measurements) {
+      updateRecentMeasurements(parameter: string, measurements: any) {
         const idx = state.recentMeasurements.findIndex(
           (p) => p.parameter == parameter
         );
@@ -226,10 +226,10 @@ export const StoreProvider: ParentComponent = (props) => {
       toggleIsFlipped() {
         setState({isFlipped: !state.isFlipped });
       },
-      setGroupLocationsIds(groupLocationsIds) {
+      setGroupLocationsIds(groupLocationsIds: any) {
         setState({ groupLocationsIds: groupLocationsIds })
       },
-      setGroups(groups) {
+      setGroups(groups: any[]) {
         setState({ groups: groups });
       },
     },
