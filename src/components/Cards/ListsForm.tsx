@@ -13,8 +13,8 @@ interface ListsFormDefinition {
 function ListToggle(props: any) {
   const [store] = useStore();
 
-  let radioOnRef: HTMLInputElement;
-  let radioOffRef: HTMLInputElement;
+  let radioOnRef!: HTMLInputElement;
+  let radioOffRef!: HTMLInputElement;
 
   const onButtonClick: JSX.EventHandler<HTMLButtonElement, Event> = (e) => {
     e.preventDefault();
