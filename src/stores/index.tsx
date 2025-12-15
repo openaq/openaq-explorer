@@ -58,8 +58,8 @@ type Store = [
     toggleAirSensor: () => void;
     toggleMapIsActive: () => void;
     setProviders: (providers: any[]) => void;
-    setRecentMeasurements: (measurements: any) => void;
-    addRecentMeasurements: (measurements: any) => void;
+    setRecentMeasurements: (measurements: any[]) => void;
+    addRecentMeasurements: (measurements: any[]) => void;
     updateRecentMeasurements: (parameter: string, measurements: any) => void;
     setTotalProviders: (totalProviders: number) => void;
     openToast: () => void;
@@ -71,7 +71,7 @@ type Store = [
     toggleShowPartnersCard: () => void;
     toggleIsFlipped: () => void;
     setGroupLocationsIds: (groupLocationsIds: number[]) => void;
-    setGroups: (groups: any[]) => void;
+    setGroups: (groups: number[]) => void;
   },
 ];
 
@@ -165,16 +165,16 @@ export const StoreProvider: ParentComponent = (props) => {
           showOnlyActiveLocations: !state.showOnlyActiveLocations,
         });
       },
-      setProviders(providers: any) {
+      setProviders(providers: any[]) {
         setState({ providers: providers });
       },
       setTotalProviders(totalProviders: number) {
         setState({ totalProviders: totalProviders });
       },
-      setRecentMeasurements(measurements: any) {
+      setRecentMeasurements(measurements: any[]) {
         setState({ recentMeasurements: measurements });
       },
-      addRecentMeasurements(measurements: any) {
+      addRecentMeasurements(measurements: any[]) {
         setState('recentMeasurements', (prevList) => [
           ...prevList,
           measurements,
@@ -226,10 +226,10 @@ export const StoreProvider: ParentComponent = (props) => {
       toggleIsFlipped() {
         setState({isFlipped: !state.isFlipped });
       },
-      setGroupLocationsIds(groupLocationsIds: any) {
+      setGroupLocationsIds(groupLocationsIds: number[]) {
         setState({ groupLocationsIds: groupLocationsIds })
       },
-      setGroups(groups: any[]) {
+      setGroups(groups: number[]) {
         setState({ groups: groups });
       },
     },
