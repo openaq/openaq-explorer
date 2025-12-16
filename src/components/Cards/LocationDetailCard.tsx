@@ -27,7 +27,16 @@ export function LocationDetailCard() {
     { clearLocationsId, setRecentMeasurements, updateRecentMeasurements },
   ] = useStore();
 
-  const [location, setLocation] = createSignal<LocationsListResponse>();
+  const [location, setLocation] = createSignal<LocationsListResponse>({
+    meta: {
+      name: '',
+      website: '',
+      page: 0,
+      limit: 0,
+      found: 0,
+    },
+    results: []
+  });
 
   createEffect(async () => {
     if (store.locationsId) {

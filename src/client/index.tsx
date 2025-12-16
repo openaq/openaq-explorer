@@ -7,7 +7,7 @@ import { getLocationById } from '~/db/lists';
 
 const baseUrl = process.env.REST_API_URL || 'http://localhost:8080';
 
-import { LocationsListResponse } from '~/db/types';
+import { LocationsListResponse, ParameterDefinition, SensorDefinition } from '~/db/types';
 
 dayjs.extend(utc);
 dayjs.extend(tz);
@@ -155,6 +155,7 @@ export const getSensorMeasurementsDownload = GET(
   }
 );
 
+/*
 interface ParameterDefinition {
   id: number;
   name: string;
@@ -167,6 +168,7 @@ interface SensorDefinition {
   name: string;
   parameter: ParameterDefinition;
 }
+*/
 
 export const getSensorRecentMeasurements = GET(
   async (sensor: SensorDefinition, timezone: string) => {
