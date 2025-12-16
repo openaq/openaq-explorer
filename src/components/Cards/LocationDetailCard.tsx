@@ -27,25 +27,15 @@ export function LocationDetailCard() {
     { clearLocationsId, setRecentMeasurements, updateRecentMeasurements },
   ] = useStore();
 
-  const [location, setLocation] = createSignal<LocationsListResponse>(/*{
-    meta: {
-      name: '',
-      website: '',
-      page: 0,
-      limit: 0,
-      found: 0,
-    },
-    results: []
-  }*/);
+  const [location, setLocation] = createSignal<LocationsListResponse>();
 
   createEffect(async () => {
     if (store.locationsId) {
       const data = await getLocation(store.locationsId);
-      setLocation(data.customBody);
-      const locationResponse = location();
-      
-      if (locationResponse) {
-        const sensors = locationResponse.results[0].sensors;
+      setLocation(data)
+      const locationResource = location()
+      if (locationResource) {
+        const sensors = locationResource.results[0].sensors;
         setRecentMeasurements([]);
         const recentMeasurement = sensors.map((o) => {
           const [series, setSeries] = createSignal([]);
@@ -63,7 +53,7 @@ export function LocationDetailCard() {
         for (const sensor of sensors) {
           const measurements = await getSensorRecentMeasurements(
             sensor,
-            locationResponse.results[0].timezone
+            locationResource.results[0].timezone
           );
           updateRecentMeasurements(
             `${sensor.parameter.displayName} ${sensor.parameter.units}`,
