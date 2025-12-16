@@ -1,4 +1,4 @@
-import { json, query } from '@solidjs/router';
+import { type CustomResponse, json, query } from '@solidjs/router';
 import { GET } from '@solidjs/start';
 import dayjs from 'dayjs';
 import tz from 'dayjs/plugin/timezone';
@@ -7,15 +7,16 @@ import { getLocationById } from '~/db/lists';
 
 const baseUrl = process.env.REST_API_URL || 'http://localhost:8080';
 
+import { LocationsListResponse } from '~/db/types';
 
 dayjs.extend(utc);
 dayjs.extend(tz);
 
-export async function fetchLocation(locationsId: number) {
+export async function fetchLocation(locationsId: number): Promise<LocationsListResponse> {
   'use server';
   const url = new URL(import.meta.env.VITE_API_BASE_URL);
   url.pathname = `/v3/locations/${locationsId}`;
-  const res = await fetch(url.href, {
+  const res  = await fetch(url.href, {
     headers: {
       'Content-Type': 'application/json',
       'X-API-Key': `${import.meta.env.VITE_EXPLORER_API_KEY}`,
@@ -205,10 +206,10 @@ export const getLocationRecentMeasurements = GET(
     const location = await fetchLocation(locationsId);
     const sensors = location.results[0].sensors;
     const measurements = [];
-    const now = dayjs(new Date(), location.timezone).toISOString();
+    const now = dayjs(new Date(), location.results[0].timezone).toISOString();
     const yesterday = dayjs(
       new Date().getTime() - 86400000,
-      location.timezone
+      location.results[0].timezone
     ).toISOString();
 
     for (const sensor of sensors) {
@@ -253,7 +254,7 @@ export const getSensorTrends = GET(
   }
 );
 
-export const getLocation = GET(async (locationsId: number) => {
+export const getLocation = GET(async (locationsId: number): Promise<CustomResponse<LocationsListResponse>> => {
   'use server';
   const data = await fetchLocation(locationsId);
   return json(data, { headers: { 'cache-control': 'max-age=60' } });

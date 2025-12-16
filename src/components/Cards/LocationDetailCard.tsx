@@ -10,6 +10,7 @@ import ArrowRightIcon from '~/assets/imgs/arrow_right.svg';
 
 import '~/assets/scss/components/location-detail-card.scss';
 import { getSessionUser } from '~/auth/session';
+import { LocationsListResponse } from '~/db/types';
 
 export function LocationDetailCard() {
   const user = createAsync(() => getSessionUser());
@@ -26,35 +27,40 @@ export function LocationDetailCard() {
     { clearLocationsId, setRecentMeasurements, updateRecentMeasurements },
   ] = useStore();
 
-  const [location, setLocation] = createSignal();
+  const [location, setLocation] = createSignal<LocationsListResponse>();
 
   createEffect(async () => {
     if (store.locationsId) {
-      setLocation(await getLocation(store.locationsId));
-      const sensors = location().results[0].sensors;
-      setRecentMeasurements([]);
-      const recentMeasurement = sensors.map((o) => {
-        const [series, setSeries] = createSignal([]);
-        const [loading, setLoading] = createSignal(true);
+      const data = await getLocation(store.locationsId);
+      setLocation(data.customBody());
+      const locationResponse = location();
+      
+      if (locationResponse) {
+        const sensors = locationResponse.results[0].sensors;
+        setRecentMeasurements([]);
+        const recentMeasurement = sensors.map((o) => {
+          const [series, setSeries] = createSignal([]);
+          const [loading, setLoading] = createSignal(true);
 
-        return {
-          parameter: `${o.parameter.displayName} ${o.parameter.units}`,
-          loading,
-          setLoading,
-          series,
-          setSeries,
-        };
-      });
-      setRecentMeasurements(recentMeasurement);
-      for (const sensor of sensors) {
-        const measurements = await getSensorRecentMeasurements(
-          sensor,
-          location().results[0].timezone
-        );
-        updateRecentMeasurements(
-          `${sensor.parameter.displayName} ${sensor.parameter.units}`,
-          measurements
-        );
+          return {
+            parameter: `${o.parameter.displayName} ${o.parameter.units}`,
+            loading,
+            setLoading,
+            series,
+            setSeries,
+          };
+        });
+        setRecentMeasurements(recentMeasurement);
+        for (const sensor of sensors) {
+          const measurements = await getSensorRecentMeasurements(
+            sensor,
+            locationResponse.results[0].timezone
+          );
+          updateRecentMeasurements(
+            `${sensor.parameter.displayName} ${sensor.parameter.units}`,
+            measurements
+          );
+        }
       }
     }
   });
@@ -135,7 +141,7 @@ export function LocationDetailCard() {
                     {parameter.series().length ? (
                       <Sparkline
                         series={parameter.series()}
-                        timezone={location()?.timezone}
+                        timezone={location()?.results[0]?.timezone}
                         width={78}
                         height={14}
                         margin={{
