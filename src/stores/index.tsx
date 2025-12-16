@@ -57,7 +57,7 @@ type Store = [
     toggleMonitor: () => void;
     toggleAirSensor: () => void;
     toggleMapIsActive: () => void;
-    setProviders: (providers: any[]) => void;
+    setProviders: (providers: number[]) => void;
     setRecentMeasurements: (measurements: any[]) => void;
     addRecentMeasurements: (measurements: any[]) => void;
     updateRecentMeasurements: (parameter: string, measurements: any) => void;
@@ -165,7 +165,7 @@ export const StoreProvider: ParentComponent = (props) => {
           showOnlyActiveLocations: !state.showOnlyActiveLocations,
         });
       },
-      setProviders(providers: any[]) {
+      setProviders(providers: number[]) {
         setState({ providers: providers });
       },
       setTotalProviders(totalProviders: number) {
