@@ -64,6 +64,9 @@ export function LocationDetailCard() {
     }
   });
 
+  const datetimeLast = () => location()?.results?.[0].datetimeLast?.local;
+  const datetimeFirst = () => location()?.results?.[0].datetimeFirst?.local;
+
   return (
     <div
       class={`location-detail-card ${
@@ -113,17 +116,13 @@ export function LocationDetailCard() {
           <span class="type-subtitle-3">Reporting</span>
           <div class="reporting-cell">
             <span class="type-body-1">
-              {location()?.results?.[0].datetimeLast
-                ? `Updated ${timeFromNow(
-                    location()?.results?.[0].datetimeLast?.local
-                  )}`
+              {datetimeLast()
+                ? `Updated ${timeFromNow(datetimeLast()!)}`
                 : 'No measurements'}
             </span>
             <span class="type-body-4">
-              {location()?.results?.[0].datetimeFirst
-                ? `Reporting since ${since(
-                    location()?.results?.[0].datetimeFirst?.local
-                  )}`
+              {datetimeFirst()
+                ? `Reporting since ${since(datetimeFirst()!)}`
                 : 'No measurements'}
             </span>
           </div>
