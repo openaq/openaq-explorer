@@ -12,36 +12,6 @@ export interface ListDefinition {
   bbox: number[][];
 }
 
-/*
-export interface SensorDefinition {
-  id: number;
-  name: string;
-  parameter: ParameterDefinition;
-}
-
-export interface ParameterDefinition {
-  id: number;
-  name: string;
-  units: string;
-  valueLast: number;
-  displayName: string;
-  datetimeLast: string;
-}
-*/
-
-/*
-export interface LocationListItemDefinition {
-  id: number;
-  name: string;
-  country: string;
-  timezone: string;
-  isMonitor: boolean;
-  provider: string;
-  sensors: SensorDefinition[];
-  parameterIds: number[];
-}
-*/
-
 export interface CreateListDefinition {
   create_list: number;
 }
@@ -176,8 +146,6 @@ export interface DatetimeLastDefinition {
   utc: number;
   local: string;
 }
-
-
 
 // ------------------------------------------------------------------------
 

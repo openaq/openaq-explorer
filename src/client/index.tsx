@@ -155,21 +155,6 @@ export const getSensorMeasurementsDownload = GET(
   }
 );
 
-/*
-interface ParameterDefinition {
-  id: number;
-  name: string;
-  units: string;
-  displayName: string;
-}
-
-interface SensorDefinition {
-  id: number;
-  name: string;
-  parameter: ParameterDefinition;
-}
-*/
-
 export const getSensorRecentMeasurements = GET(
   async (sensor: SensorDefinition, timezone: string) => {
     'use server';
