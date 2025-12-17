@@ -1,4 +1,4 @@
-import { createContext, useContext, Component } from 'solid-js';
+import { createContext, useContext, ParentComponent } from 'solid-js';
 import { createStore } from 'solid-js/store';
 import { Viewport } from 'solid-map-gl';
 
@@ -42,8 +42,8 @@ type Store = [
     setSelectedLocationsId: (locationsId: number) => void;
     clearLocationsId: () => void;
     setSelectedMapParameter: (mapParameter: string) => void;
-    setDeleteListsId: () => void;
-    setDeleteListLocationsId: () => void;
+    setDeleteListsId: (listsId: number) => void;
+    setDeleteListLocationsId: (listLocationsId: number) => void;
     setListParametersId: (parametersId: number) => void;
     setListParameter: (parameter: string) => void;
     clearDeleteListsId: () => void;
@@ -57,11 +57,11 @@ type Store = [
     toggleMonitor: () => void;
     toggleAirSensor: () => void;
     toggleMapIsActive: () => void;
-    setProviders: (providers: any[]) => void;
-    setRecentMeasurements: () => void;
-    addRecentMeasurements: () => void;
-    updateRecentMeasurements: (parameter: string, measurements) => void;
-    setTotalProviders: () => void;
+    setProviders: (providers: number[]) => void;
+    setRecentMeasurements: (measurements: any[]) => void;
+    addRecentMeasurements: (measurements: any[]) => void;
+    updateRecentMeasurements: (parameter: string, measurements: any) => void;
+    setTotalProviders: (totalProviders: number) => void;
     openToast: () => void;
     setBounds: (bounds: number[]) => void;
     setMapBbox: (mapBbox: number[]) => void;
@@ -71,18 +71,19 @@ type Store = [
     toggleShowPartnersCard: () => void;
     toggleIsFlipped: () => void;
     setGroupLocationsIds: (groupLocationsIds: number[]) => void;
-    setGroups: (groups: any[]) => void;
+    setGroups: (groups: number[]) => void;
   },
 ];
 
 const StoreContext = createContext<Store>();
 
-export const StoreProvider: Component<{}> = (props) => {
-  const [state, setState] = createStore({
+export const StoreProvider: ParentComponent = (props) => {
+  const [state, setState] = createStore<StoreParameters>({
     locationsId: undefined,
     mapParameter: 'all',
     listsId: undefined,
     listLocationsId: undefined,
+    listParameter: undefined,
     newListModalOpen: false,
     deleteListModalOpen: false,
     deleteLocationModalOpen: false,
@@ -101,6 +102,7 @@ export const StoreProvider: Component<{}> = (props) => {
     recentMeasurements: [],
     toastOpen: false,
     apiKeyRegenerateModalOpen: false,
+    passwordChangeModalOpen: false,
     listParametersId: undefined,
     bounds: [],
     mapBbox: [],
@@ -113,7 +115,7 @@ export const StoreProvider: Component<{}> = (props) => {
     groups: [],
   });
 
-  const store = [
+  const store: Store = [
     state,
     {
       setSelectedLocationsId(locationsId: number) {
@@ -163,22 +165,22 @@ export const StoreProvider: Component<{}> = (props) => {
           showOnlyActiveLocations: !state.showOnlyActiveLocations,
         });
       },
-      setProviders(providers) {
+      setProviders(providers: number[]) {
         setState({ providers: providers });
       },
       setTotalProviders(totalProviders: number) {
         setState({ totalProviders: totalProviders });
       },
-      setRecentMeasurements(measurements) {
+      setRecentMeasurements(measurements: any[]) {
         setState({ recentMeasurements: measurements });
       },
-      addRecentMeasurements(measurements) {
+      addRecentMeasurements(measurements: any[]) {
         setState('recentMeasurements', (prevList) => [
           ...prevList,
           measurements,
         ]);
       },
-      updateRecentMeasurements(parameter: string, measurements) {
+      updateRecentMeasurements(parameter: string, measurements: any) {
         const idx = state.recentMeasurements.findIndex(
           (p) => p.parameter == parameter
         );
@@ -224,10 +226,10 @@ export const StoreProvider: Component<{}> = (props) => {
       toggleIsFlipped() {
         setState({isFlipped: !state.isFlipped });
       },
-      setGroupLocationsIds(groupLocationsIds) {
+      setGroupLocationsIds(groupLocationsIds: number[]) {
         setState({ groupLocationsIds: groupLocationsIds })
       },
-      setGroups(groups) {
+      setGroups(groups: number[]) {
         setState({ groups: groups });
       },
     },

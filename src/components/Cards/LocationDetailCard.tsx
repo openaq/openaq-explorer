@@ -10,6 +10,7 @@ import ArrowRightIcon from '~/assets/imgs/arrow_right.svg';
 
 import '~/assets/scss/components/location-detail-card.scss';
 import { getSessionUser } from '~/auth/session';
+import { LocationsListResponse } from '~/db/types';
 
 export function LocationDetailCard() {
   const user = createAsync(() => getSessionUser());
@@ -26,38 +27,46 @@ export function LocationDetailCard() {
     { clearLocationsId, setRecentMeasurements, updateRecentMeasurements },
   ] = useStore();
 
-  const [location, setLocation] = createSignal();
+  const [location, setLocation] = createSignal<LocationsListResponse>();
 
   createEffect(async () => {
     if (store.locationsId) {
-      setLocation(await getLocation(store.locationsId));
-      const sensors = location().results[0].sensors;
-      setRecentMeasurements([]);
-      const recentMeasurement = sensors.map((o) => {
-        const [series, setSeries] = createSignal([]);
-        const [loading, setLoading] = createSignal(true);
+      const data = await getLocation(store.locationsId);
+      setLocation(data)
+      const locationResource = location()
+      if (locationResource) {
+        const sensors = locationResource.results[0].sensors;
+        setRecentMeasurements([]);
+        const recentMeasurement = sensors.map((o) => {
+          const [series, setSeries] = createSignal([]);
+          const [loading, setLoading] = createSignal(true);
 
-        return {
-          parameter: `${o.parameter.displayName} ${o.parameter.units}`,
-          loading,
-          setLoading,
-          series,
-          setSeries,
-        };
-      });
-      setRecentMeasurements(recentMeasurement);
-      for (const sensor of sensors) {
-        const measurements = await getSensorRecentMeasurements(
-          sensor,
-          location().results[0].timezone
-        );
-        updateRecentMeasurements(
-          `${sensor.parameter.displayName} ${sensor.parameter.units}`,
-          measurements
-        );
+          return {
+            parameter: `${o.parameter.displayName} ${o.parameter.units}`,
+            loading,
+            setLoading,
+            series,
+            setSeries,
+          };
+        });
+        setRecentMeasurements(recentMeasurement);
+        for (const sensor of sensors) {
+          const measurements = await getSensorRecentMeasurements(
+            sensor,
+            locationResource.results[0].timezone
+          );
+          updateRecentMeasurements(
+            `${sensor.parameter.displayName} ${sensor.parameter.units}`,
+            measurements
+          );
+        }
       }
     }
   });
+
+  const datetimeLast = () => location()?.results?.[0].datetimeLast?.local;
+  const datetimeFirst = () => location()?.results?.[0].datetimeFirst?.local;
+  const locationTimezone = () => location()?.results[0]?.timezone ?? 'Etc/GMT';
 
   return (
     <div
@@ -108,17 +117,13 @@ export function LocationDetailCard() {
           <span class="type-subtitle-3">Reporting</span>
           <div class="reporting-cell">
             <span class="type-body-1">
-              {location()?.results?.[0].datetimeLast
-                ? `Updated ${timeFromNow(
-                    location()?.results?.[0].datetimeLast?.local
-                  )}`
+              {datetimeLast()
+                ? `Updated ${timeFromNow(datetimeLast()!)}`
                 : 'No measurements'}
             </span>
             <span class="type-body-4">
-              {location()?.results?.[0].datetimeFirst
-                ? `Reporting since ${since(
-                    location()?.results?.[0].datetimeFirst?.local
-                  )}`
+              {datetimeFirst()
+                ? `Reporting since ${since(datetimeFirst()!)}`
                 : 'No measurements'}
             </span>
           </div>
@@ -135,7 +140,7 @@ export function LocationDetailCard() {
                     {parameter.series().length ? (
                       <Sparkline
                         series={parameter.series()}
-                        timezone={location()?.timezone}
+                        timezone={locationTimezone()}
                         width={78}
                         height={14}
                         margin={{
