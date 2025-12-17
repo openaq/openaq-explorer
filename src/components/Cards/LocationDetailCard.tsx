@@ -66,6 +66,7 @@ export function LocationDetailCard() {
 
   const datetimeLast = () => location()?.results?.[0].datetimeLast?.local;
   const datetimeFirst = () => location()?.results?.[0].datetimeFirst?.local;
+  const locationTimezone = () => location()?.results[0]?.timezone ?? 'Etc/GMT';
 
   return (
     <div
@@ -139,7 +140,7 @@ export function LocationDetailCard() {
                     {parameter.series().length ? (
                       <Sparkline
                         series={parameter.series()}
-                        timezone={location()?.results[0]?.timezone}
+                        timezone={locationTimezone()}
                         width={78}
                         height={14}
                         margin={{
