@@ -32,7 +32,7 @@ jobs:
                 VITE_GEOCODE_URL: ${{ secrets.VITE_GEOCODE_URL }}
                 VITE_GEOCDE_API_KEY: ${{ secrets.VITE_GEOCDE_API_KEY }}
                 VITE_ENV: 'prod'
-                VITE_SHOW_NOTIFICATION: true
+                VITE_SHOW_NOTIFICATION: false
                 VITE_REGISTRATION_DISABLED: false
 
             - name: Configure aws credentials
