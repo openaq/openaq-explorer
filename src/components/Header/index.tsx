@@ -12,6 +12,7 @@ import LogoutIcon from '~/assets/imgs/logout.svg';
 import MenuIcon from '~/assets/imgs/menu.svg';
 import OpenAQIcon from '~/assets/imgs/logo.svg';
 import ListsIcon from '~/assets/imgs/lists.svg';
+import ExternalLinkIcon from '~/assets/imgs/external-link.svg';
 
 const svgHeightWidth = {
   width: 24,
@@ -90,14 +91,10 @@ export function Header(props: Props) {
     <header class="header">
       <div class="header-contents">
         <nav class="nav">
-          <A
-            href="https://openaq.org"
-            class="header-logo"
-            aria-label="openaq"
-          >
-            <OpenAQIcon 
-              height={40} 
-              width={72} 
+          <A href="https://openaq.org" class="header-logo" aria-label="openaq">
+            <OpenAQIcon
+              height={40}
+              width={72}
               role="img"
               aria-label="openaq logo"
             />
@@ -111,9 +108,9 @@ export function Header(props: Props) {
                 setOpen(!open());
               }}
             >
-              <MenuIcon 
-                {...svgHeightWidth} 
-                {...svgColor} 
+              <MenuIcon
+                {...svgHeightWidth}
+                {...svgColor}
                 role="img"
                 aria-label="menu"
               />
@@ -151,43 +148,30 @@ export function Header(props: Props) {
             </li>
             <li class="dropdown">
               <A
-                href="https://openaq.org/developers/platform-overview/"
+                href="https://openaq.org/platform/"
                 aria-haspopup="true"
                 class="nav__item"
               >
-                Developers
+                Platform
               </A>
               <ul class="submenu" aria-label="submenu">
                 <li class="submenu__item">
                   <A
-                    class={`$"nav__item" api-overview-nav`}
-                    href="https://openaq.org/developers/platform-overview/"
+                    class="nav__item"
+                    href="https://openaq.org/platform/roadmap"
                   >
-                    Platform Overview
+                    Roadmap
                   </A>
                 </li>
                 <li class="submenu__item">
                   <A
-                    class={`$"nav__item" documentation-nav js-header-docs-link`}
+                    class="nav__item documentation-nav js-header-docs-link"
                     href="https://docs.openaq.org"
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
-                    Developer Documentation
-                  </A>
-                </li>
-                <li class="submenu__item">
-                  <A
-                    class={`$"nav__item" dev-use-case-nav`}
-                    href="https://openaq.org/use-cases/developer/"
-                  >
-                    Developer Use Cases
-                  </A>
-                </li>
-                <li class="submenu__item">
-                  <A
-                    class={`$"nav__item" help-nav`}
-                    href="https://openaq.org/developers/help/"
-                  >
-                    Help
+                    Documentation and user guides
+                    <ExternalLinkIcon width={18} height={18}  />
                   </A>
                 </li>
               </ul>
@@ -203,7 +187,7 @@ export function Header(props: Props) {
               <ul class="submenu" aria-label="submenu">
                 <li class="submenu__item">
                   <A
-                    class={`$"nav__item" about-nav`}
+                    class="nav__item about-nav"
                     href="https://openaq.org/about/"
                   >
                     About Us
@@ -211,7 +195,7 @@ export function Header(props: Props) {
                 </li>
                 <li class="submenu__item">
                   <A
-                    class={`$"nav__item" initiatives-nav`}
+                    class="nav__item initiatives-nav"
                     href="https://openaq.org/about/initiatives/"
                   >
                     Initiatives
@@ -219,20 +203,26 @@ export function Header(props: Props) {
                 </li>
                 <li class="submenu__item">
                   <A
-                    class={`$"nav__item"  people-nav`}
+                    class="nav__item people-nav"
                     href="https://openaq.org/about/people/"
                   >
                     People
                   </A>
                 </li>
                 <li class="submenu__item">
-                  <A class="nav__item" href="https://openaq.org/about/blog">
+                  <A
+                    class="nav__item"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href="https://openaq.org/about/blog"
+                  >
                     Blog
+                    <ExternalLinkIcon width={18} height={18} />
                   </A>
                 </li>
                 <li class="submenu__item">
                   <A
-                    class={`$"nav__item" use-cases-nav`}
+                    class="nav__item use-cases-nav"
                     href="https://openaq.org/use-cases/"
                   >
                     Use Cases
@@ -240,7 +230,7 @@ export function Header(props: Props) {
                 </li>
                 <li class="submenu__item">
                   <A
-                    class={`$"nav__item" reporting-nav`}
+                    class="nav__item reporting-nav"
                     href="https://openaq.org/about/legal/"
                   >
                     Legal & Policies
@@ -293,11 +283,19 @@ export function Header(props: Props) {
                 href="/account"
                 class="type-body-3 text-smoke-120 settings-link"
               >
-                <SettingsIcon {...svgHeightWidth} {...svgColor} aria-hidden="true" />
+                <SettingsIcon
+                  {...svgHeightWidth}
+                  {...svgColor}
+                  aria-hidden="true"
+                />
                 <span>Settings</span>
               </A>
               <form action={logout} method="post" class="logout-form">
-                <LogoutIcon {...svgHeightWidth} {...svgColor} aria-hidden="true" />
+                <LogoutIcon
+                  {...svgHeightWidth}
+                  {...svgColor}
+                  aria-hidden="true"
+                />
                 <input
                   type="hidden"
                   name="redirect"

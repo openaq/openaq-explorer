@@ -37,6 +37,7 @@
     padding: 8px 0;
     margin: 0 12px;
 
+
     &--active {
       color: variables.$sky100;
       border-bottom: variables.$ocean100 solid 2px;
@@ -82,6 +83,7 @@
   list-style: none;
   margin: 0;
   padding-left: 0;
+  padding-bottom: 10px;
   width: 320px;
   background-color: white;
   visibility: hidden;
@@ -107,6 +109,18 @@
   &__item {
     height: 24px;
     margin: 12px;
+
+
+    a {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    
+    svg {
+      flex-shrink: 0;
+      vertical-align: middle;
+    }
+  }
   }
 }
 
