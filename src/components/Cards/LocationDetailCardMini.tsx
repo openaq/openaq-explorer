@@ -9,6 +9,7 @@ import ChevronRightIcon from '~/assets/imgs/chevron_right.svg';
 
 import '~/assets/scss/components/location-detail-card-mini.scss';
 import { getSessionUser } from '~/auth/session';
+import { LocationsListResponse } from '~/db/types';
 
 export function LocationDetailCardMini() {
   const svgAttributes = {
@@ -22,13 +23,17 @@ export function LocationDetailCardMini() {
 
   const [store, { clearLocationsId }] = useStore();
 
-  const [location, setLocation] = createSignal();
+  const [location, setLocation] = createSignal<LocationsListResponse>();
 
   createEffect(async () => {
     if (store.locationsId) {
-      setLocation(await getLocation(store.locationsId));
+      const data = await getLocation(store.locationsId);
+      setLocation(data);
     }
   });
+
+  const datetimeLast = () => location()?.results?.[0].datetimeLast?.local;
+  const datetimeFirst = () => location()?.results?.[0].datetimeFirst?.local;
 
   return (
     <div
@@ -84,17 +89,13 @@ export function LocationDetailCardMini() {
           <span class="type-subtitle-3">Reporting</span>
           <div class="reporting-cell">
             <span class="type-body-1">
-              {location()?.results?.[0].datetimeLast
-                ? `Updated ${timeFromNow(
-                    location()?.results?.[0].datetimeFirst?.local
-                  )}`
+              {datetimeLast()
+                ? `Updated ${timeFromNow(datetimeLast()!)}`
                 : 'No measurements'}
             </span>
             <span class="type-body-4">
-              {location()?.results?.[0].datetimeLast
-                ? `Reporting since ${since(
-                    location()?.results?.[0].datetimeFirst?.local
-                  )}`
+              {datetimeLast()
+                ? `Reporting since ${since(datetimeFirst()!)}`
                 : 'No measurements'}
             </span>
           </div>
