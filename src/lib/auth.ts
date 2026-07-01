@@ -1,4 +1,6 @@
 import crypto from 'crypto';
+import { createHmac } from "node:crypto";
+
 import { promisify } from 'util';
 import { customAlphabet } from 'nanoid';
 import { disposableDomains } from '~/data/auth';
@@ -114,4 +116,23 @@ export function isValidEmailDomain(email: string): boolean {
     return false;
   }
   return true;
+}
+
+const HMAC_SECRET = import.meta.env.VITE_HMAC_SECRET;
+
+export function signTimestamp(timestamp: number) {
+  const signature = createHmac("sha256", HMAC_SECRET).update(String(timestamp)).digest("hex");
+  return `${timestamp}.${signature}`;
+}
+
+export function verifyTimestamp(signed: string) {
+  const [timestamp, signature] = signed.split(".");
+  const expectedSignature = createHmac("sha256", HMAC_SECRET).update(timestamp).digest("hex");
+
+  if (signature !== expectedSignature) {
+    return false;
+  }
+
+  const elapsed = Date.now() - Number(timestamp);
+  return elapsed >= 2000;
 }

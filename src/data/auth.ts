@@ -287,6 +287,7 @@ export const disposableDomains: Set<string> = new Set<string>([
   'adresse.infos.st',
   'adroh.com',
   'adsd.org',
+  'adprite.com',
   'adubiz.info',
   'adult-work.info',
   'advantagewe.us',

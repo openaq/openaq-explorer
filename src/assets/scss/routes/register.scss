@@ -18,6 +18,12 @@
       gap: 8px;
     }
 
+    .hp-input {
+      position: absolute;
+      left: -9999px;
+      top: -9999px;
+    }
+
     .form-element-row {
       display: flex;
       margin: 9px 0;

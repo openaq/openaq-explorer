@@ -1,6 +1,6 @@
 import { clearSession, getSessionUser, setSession } from './session';
 import { db, UserResponse } from '~/client/backend';
-import { encode, isValidEmailDomain, verifyPassword } from '~/lib/auth';
+import { encode, isValidEmailDomain, signTimestamp, verifyPassword, verifyTimestamp } from '~/lib/auth';
 
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -54,9 +54,15 @@ export const register = action(async (formData: FormData) => {
   const ipAddress = ips[0] || '0.0.0.0';
   const fullName = String(formData.get('fullname'));
   const emailAddress = String(formData.get('email-address'));
+  const emailAddressVerify = formData.get('verify-email-address') as string | null;
+  const startTime = formData.get('form-start') as string | null;
   const password = String(formData.get('password'));
   const passwordConfirm = String(formData.get('password-confirm'));
   const forwardParams = String(formData.get('forwardParams')) || '';
+  if (emailAddressVerify?.trim() || !startTime || !verifyTimestamp(startTime)) {
+    console.info(`bot registration attempt: ${emailAddress}`);
+    throw redirect(`/verify-email?email=${emailAddress}`);
+  }
   if (
     typeof emailAddress !== 'string' ||
     typeof fullName !== 'string' ||
@@ -328,3 +334,8 @@ export const forgotPassword = action(async (formData: FormData) => {
   }
   throw redirect('/login');
 }, 'forgot-password-action');
+
+export const getFormToken = async () => {
+  'use server';
+  return signTimestamp(Date.now());
+};
