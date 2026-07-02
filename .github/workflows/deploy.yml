@@ -51,7 +51,7 @@ jobs:
             
             - name: Install CDK
               run: |
-                  pnpm install -g aws-cdk@2.260.0
+                  pnpm install -g aws-cdk@2.1027.0
 
 
             - name: Deploy stack
