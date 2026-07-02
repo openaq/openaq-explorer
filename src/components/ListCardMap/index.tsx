@@ -1,6 +1,6 @@
 import MapGL, { Layer, Source, Viewport } from 'solid-map-gl';
 import * as maplibre from 'maplibre-gl';
-import { createSignal, Show } from 'solid-js';
+import { createSignal, onMount, Show } from 'solid-js';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import destination from '@turf/destination';
 import '~/assets/scss/components/list-card-map.scss';
@@ -25,6 +25,10 @@ export function ListCardMap(props: DetailMapDefinition) {
   const [viewport] = createSignal({
     bounds: bounds(props.bbox),
   } as Viewport);
+
+  onMount(() => {
+    maplibre.setRTLTextPlugin('https://unpkg.com/@mapbox/mapbox-gl-rtl-text@0.2.3/mapbox-gl-rtl-text.min.js', true);
+  });
 
   return (
     <div class="list-card-map-container">

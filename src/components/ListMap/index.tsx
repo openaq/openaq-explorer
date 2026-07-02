@@ -1,6 +1,6 @@
 import MapGL, { Source, Layer, Control, Viewport } from 'solid-map-gl';
 import * as maplibre from 'maplibre-gl';
-import { createSignal } from 'solid-js';
+import { createSignal, onMount } from 'solid-js';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
 import destination from '@turf/destination';
@@ -49,6 +49,13 @@ export function ListMap(props: ListMapDefinition) {
     setSelectedLocationsId(locationsId);
     return features[0].geometry.coordinates;
   }
+
+  onMount(() => {
+    maplibre.setRTLTextPlugin(
+      'https://unpkg.com/@mapbox/mapbox-gl-rtl-text@0.2.3/mapbox-gl-rtl-text.min.js',
+      true
+    );
+  });
 
   return (
     <MapGL
