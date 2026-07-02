@@ -34,6 +34,7 @@ interface StoreParameters {
   isFlipped: boolean;
   groupLocationsIds: number[];
   groups: any[];
+  language: string;
 }
 
 type Store = [
@@ -72,6 +73,7 @@ type Store = [
     toggleIsFlipped: () => void;
     setGroupLocationsIds: (groupLocationsIds: number[]) => void;
     setGroups: (groups: any[]) => void;
+    setLanguage: (language: string) => void; 
   },
 ];
 
@@ -111,6 +113,7 @@ export const StoreProvider: Component<{}> = (props) => {
     isFlipped: false,
     groupLocationsIds: [],
     groups: [],
+    language: typeof navigator !== 'undefined' ? navigator.language.split('-')[0] : 'en',
   });
 
   const store = [
@@ -229,6 +232,9 @@ export const StoreProvider: Component<{}> = (props) => {
       },
       setGroups(groups) {
         setState({ groups: groups });
+      },
+      setLanguage(language: string) {
+        setState({ language: language });
       },
     },
   ];

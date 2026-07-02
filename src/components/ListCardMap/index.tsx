@@ -4,6 +4,7 @@ import { createSignal, onMount, Show } from 'solid-js';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import destination from '@turf/destination';
 import '~/assets/scss/components/list-card-map.scss';
+import { Diplomat } from '../Diplomat';
 
 interface Coordinates {
   latitude: number;
@@ -44,6 +45,7 @@ export function ListCardMap(props: DetailMapDefinition) {
         }}
         viewport={viewport()}
       >
+        <Diplomat />
         <Show when={props.sensorNodesIds.length > 0}>
           <Source
             source={{

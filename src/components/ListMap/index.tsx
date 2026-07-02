@@ -7,6 +7,7 @@ import destination from '@turf/destination';
 import { useStore } from '~/stores';
 
 import '~/assets/scss/components/list-map.scss';
+import { Diplomat } from '../Diplomat';
 
 interface ListDefinition {
   listsId: number;
@@ -80,6 +81,7 @@ export function ListMap(props: ListMapDefinition) {
         locations: (e) => (e.target.getCanvas().style.cursor = ''),
       }}
     >
+      <Diplomat />
       <Source
         source={{
           id: 'locations',

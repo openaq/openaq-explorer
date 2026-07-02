@@ -7,7 +7,8 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import { useStore } from '~/stores';
 
 import { Geocoder } from '../Geocoder';
-import { createEffect, createSignal, onMount } from 'solid-js';
+import { Diplomat } from '../Diplomat'
+import { createEffect, onMount } from 'solid-js';
 
 import '~/assets/scss/components/map.scss';
 import InfoIcon from '~/assets/imgs/svgs/info.svg';
@@ -123,6 +124,7 @@ export function Map() {
           position="bottom-left"
           options={{ showCompass: false, showZoom: true }}
         />
+        <Diplomat />
         <Source
           source={{
             id: 'locations',
