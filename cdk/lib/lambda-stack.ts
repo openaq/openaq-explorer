@@ -69,7 +69,7 @@ export class LambdaStack extends cdk.Stack {
         code: lambda.Code.fromAsset('../.output'),
         handler: 'server/index.handler',
         memorySize: 512,
-        runtime: lambda.Runtime.NODEJS_20_X,
+        runtime: lambda.Runtime.NODEJS_24_X,
         architecture: lambda.Architecture.ARM_64,
         vpc: vpc,
         allowPublicSubnet: true,
@@ -140,13 +140,6 @@ export class LambdaStack extends cdk.Stack {
     const apiUrl = `https://${apiGateway.httpApiId}.execute-api.${this.region}.amazonaws.com`;
 
     const originUrl = cdk.Fn.select(2, cdk.Fn.split('/', apiUrl));
-
-    const originAccessIdentity = new cloudfront.OriginAccessIdentity(
-      this,
-      `${id}explorerOriginAccessIdentity`
-    );
-
-    bucket.grantRead(originAccessIdentity);
 
     const distributionOriginRequestPolicy =
       new cloudfront.OriginRequestPolicy(
@@ -257,35 +250,25 @@ export class LambdaStack extends cdk.Stack {
         },
         additionalBehaviors: {
           '/_build/*': {
-            origin: new cdk.aws_cloudfront_origins.S3Origin(bucket, {
-              originAccessIdentity: originAccessIdentity,
-            }),
+            origin: cdk.aws_cloudfront_origins.S3BucketOrigin.withOriginAccessControl(bucket),
             allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
           },
           '/images/*': {
-            origin: new cdk.aws_cloudfront_origins.S3Origin(bucket, {
-              originAccessIdentity: originAccessIdentity,
-            }),
+            origin: cdk.aws_cloudfront_origins.S3BucketOrigin.withOriginAccessControl(bucket),
             allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
           },
           '/svgs/*': {
-            origin: new cdk.aws_cloudfront_origins.S3Origin(bucket, {
-              originAccessIdentity: originAccessIdentity,
-            }),
+            origin: cdk.aws_cloudfront_origins.S3BucketOrigin.withOriginAccessControl(bucket),
             allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
           },
           '/favicon.ico': {
-            origin: new cdk.aws_cloudfront_origins.S3Origin(bucket, {
-              originAccessIdentity: originAccessIdentity,
-            }),
+            origin: cdk.aws_cloudfront_origins.S3BucketOrigin.withOriginAccessControl(bucket),
             allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
           },
           '/favicon.svg': {
-            origin: new cdk.aws_cloudfront_origins.S3Origin(bucket, {
-              originAccessIdentity: originAccessIdentity,
-            }),
+            origin: cdk.aws_cloudfront_origins.S3BucketOrigin.withOriginAccessControl(bucket),
             allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
-          },
+          }
         },
       }
     );
