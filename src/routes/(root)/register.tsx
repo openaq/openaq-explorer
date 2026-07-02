@@ -12,16 +12,18 @@ import { evaluatePassword } from '~/lib/password';
 
 import '~/assets/scss/routes/register.scss';
 import { Score } from '@zxcvbn-ts/core/dist/types';
-import { redirectIfLoggedIn, register } from '~/auth/user';
+import { getFormToken, redirectIfLoggedIn, register } from '~/auth/user';
 
 export const route = {
   load() {
     void redirectIfLoggedIn();
+    void getFormToken();
   },
 };
 
 export default function Register() {
   createAsync(() => redirectIfLoggedIn());
+  const formToken = createAsync(() => getFormToken());
 
   const [searchParams] = useSearchParams();
 
@@ -92,7 +94,10 @@ export default function Register() {
               value={searchParams.redirect ?? '/'}
             />
             <div class="form-element">
-              <label for="full-name-register" class="type-subtitle-3 text-sky-120">
+              <label
+                for="full-name-register"
+                class="type-subtitle-3 text-sky-120"
+              >
                 Full Name
               </label>
               <input
@@ -106,7 +111,10 @@ export default function Register() {
               />
             </div>
             <div class="form-element">
-              <label for="email-address-register" class="type-subtitle-3 text-sky-120">
+              <label
+                for="email-address-register"
+                class="type-subtitle-3 text-sky-120"
+              >
                 Email address
               </label>
               <input
@@ -120,8 +128,29 @@ export default function Register() {
                 required
               />
             </div>
+            <div class="form-element hp-input" aria-hidden="true">
+              <label for="verify-email-address">Verify Email Address</label>
+              <input
+                type="text"
+                class="text-input"
+                id="verify-email-address"
+                name="verify-email-address"
+                tabindex="-1"
+                autocomplete="off"
+              />
+            </div>
+            <div class="form-element hp-input" aria-hidden="true">
+              <input
+                type="hidden"
+                name="form-start"
+                value={formToken() ?? ''}
+              />
+            </div>
             <div class="form-element">
-              <label for="password-register" class="type-subtitle-3 text-sky-120">
+              <label
+                for="password-register"
+                class="type-subtitle-3 text-sky-120"
+              >
                 Password (mininum 8 characters)
               </label>
               <input
