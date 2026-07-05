@@ -4,6 +4,7 @@
   "bin": {
     "cdk": "bin/cdk.js"
   },
+  "packageManager": "pnpm@11.9.0",
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",

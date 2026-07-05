@@ -9,6 +9,7 @@
     "knip": "knip"
   },
   "type": "module",
+  "packageManager": "pnpm@11.9.0",
   "devDependencies": {
     "@babel/preset-typescript": "^7.23.3",
     "@eslint/js": "^9.15.0",

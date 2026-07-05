@@ -1,1 +1,1 @@
-{}
+{ allowBuilds: { unrs-resolver: true } }
