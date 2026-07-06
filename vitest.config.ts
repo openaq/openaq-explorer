@@ -7,7 +7,9 @@ import { defineConfig } from "vitest/config"
 
 export default defineConfig({
   plugins: [solid(), solidSvg()],
-
+  optimizeDeps: {
+    include: ['mapbox-gl'],
+  },
   test: {
     globals: true,
     environment: 'jsdom',

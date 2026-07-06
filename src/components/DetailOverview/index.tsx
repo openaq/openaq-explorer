@@ -1,10 +1,12 @@
 import { For, Show } from 'solid-js';
+import { clientOnly } from '@solidjs/start';
 import { A, createAsync, useLocation } from '@solidjs/router';
 
 import { timeFromNow, since } from '~/lib/utils';
 import { ListsForm } from '~/components/Cards/ListsForm';
 
-import { DetailMap } from '~/components/DetailMap';
+const DetailMap = clientOnly(() => import('~/components/DetailMap'));
+
 import { SensorType } from './SensorType';
 
 import '~/assets/scss/components/detail-overview.scss';
@@ -97,7 +99,7 @@ export function DetailOverview(props: DetailOverviewDefinition) {
       </div>
       <div class="detail-overview__body">
         <div class="location-map">
-          <DetailMap coordinates={props.coordinates} />
+            <DetailMap coordinates={props.coordinates} />
         </div>
         <div class="divider"> </div>
         <div class="location-characteristics">

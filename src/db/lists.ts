@@ -175,6 +175,10 @@ export const getLocationById = query(async (locationsId: number) => {
       'X-API-Key': `${import.meta.env.VITE_EXPLORER_API_KEY}`,
     },
   });
+
+  if (!res.ok) {
+    return null;
+  }
   const data = await res.json();
   return data.results[0];
 }, 'get-location-by-id-action');

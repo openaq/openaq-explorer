@@ -2,6 +2,11 @@ import { defineConfig } from '@solidjs/start/config';
 import { configDefaults } from 'vitest/config';
 import autoprefixer from 'autoprefixer';
 import solidSvg from 'vite-plugin-solid-svg';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 
 export default defineConfig({
   server: {
@@ -13,6 +18,17 @@ export default defineConfig({
     plugins: [
       solidSvg()
     ],
+        resolve: {
+      alias: {
+        'mapbox-gl/dist/mapbox-gl.css': path.resolve(
+          __dirname,
+          'src/styles/shims/empty.css'
+        ),
+      },
+    },
+    optimizeDeps: {
+      include: ['mapbox-gl'],
+    },
     css: {
       postcss: {
         plugins: [autoprefixer({})],

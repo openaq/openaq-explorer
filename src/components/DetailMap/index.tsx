@@ -24,7 +24,8 @@ function bounds(coordinates: number[]) {
   return [...sw.geometry.coordinates, ...ne.geometry.coordinates];
 }
 
-export function DetailMap(props: DetailMapDefinition) {
+function DetailMap(props: DetailMapDefinition) {
+
   const [viewport, setViewport] = createSignal({
     center: [
       props.coordinates?.longitude,
@@ -73,3 +74,4 @@ export function DetailMap(props: DetailMapDefinition) {
     </div>
   );
 }
+export default DetailMap;
