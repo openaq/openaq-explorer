@@ -1,7 +1,7 @@
-import MapGL, { Control, Marker, Viewport } from 'solid-map-gl';
 import * as maplibre from 'maplibre-gl';
-import { createSignal } from 'solid-js';
+import { createEffect, createSignal, onCleanup, onMount, Show } from 'solid-js';
 import destination from '@turf/destination';
+import 'maplibre-gl/dist/maplibre-gl.css';
 
 import '~/assets/scss/components/detail-map.scss';
 
@@ -15,63 +15,82 @@ interface DetailMapDefinition {
 }
 
 function bounds(coordinates: number[]) {
-  const sw = destination(coordinates, 20, -135, {
-    units: 'kilometers',
-  });
-  const ne = destination(coordinates, 20, 45, {
-    units: 'kilometers',
-  });
-  return [...sw.geometry.coordinates, ...ne.geometry.coordinates];
+  const sw = destination(coordinates, 20, -135, { units: 'kilometers' });
+  const ne = destination(coordinates, 20, 45, { units: 'kilometers' });
+  return [
+    ...sw.geometry.coordinates,
+    ...ne.geometry.coordinates,
+  ] as [number, number, number, number];
 }
 
 function DetailMap(props: DetailMapDefinition) {
+  let containerRef: HTMLDivElement | undefined;
+  let map: maplibre.Map | undefined;
+  let marker: maplibre.Marker | undefined;
 
-  const [viewport, setViewport] = createSignal({
-    center: [
-      props.coordinates?.longitude,
-      props.coordinates?.latitude,
-    ],
-    zoom: 14,
-  } as Viewport);
+  const [mapReady, setMapReady] = createSignal(false);
+
+  const hasValidCoords = () =>
+    typeof props.coordinates?.longitude === 'number' &&
+    typeof props.coordinates?.latitude === 'number' &&
+    !Number.isNaN(props.coordinates.longitude) &&
+    !Number.isNaN(props.coordinates.latitude);
+
+  onMount(() => {
+    if (!hasValidCoords() || !containerRef) return;
+
+    const { longitude, latitude } = props.coordinates;
+
+    map = new maplibre.Map({
+      container: containerRef,
+      style: import.meta.env.VITE_MAP_STYLE,
+      center: [longitude, latitude],
+      zoom: 14,
+      maxZoom: 16,
+      touchZoomRotate: true,
+      dragRotate: true,
+      maxBounds: bounds([longitude, latitude]),
+    });
+
+    map.addControl(new maplibre.ScaleControl(), 'bottom-left');
+    map.addControl(
+      new maplibre.NavigationControl({ showCompass: false, showZoom: true }),
+      'top-left'
+    );
+
+    const markerEl = document.createElement('div');
+    markerEl.innerHTML = `<p>Location</p>${latitude} N ${longitude} E`;
+
+    marker = new maplibre.Marker({ color: '#656565', scale: 1.5 })
+      .setLngLat([longitude, latitude])
+      .setPopup(new maplibre.Popup().setDOMContent(markerEl))
+      .addTo(map);
+
+    map.on('load', () => setMapReady(true));
+  });
+
+  createEffect(() => {
+    if (!map || !mapReady() || !hasValidCoords()) return;
+
+    const { longitude, latitude } = props.coordinates;
+
+    map.setMaxBounds(bounds([longitude, latitude]));
+    map.jumpTo({ center: [longitude, latitude] });
+    marker?.setLngLat([longitude, latitude]);
+  });
+
+  onCleanup(() => {
+    marker?.remove();
+    map?.remove();
+  });
 
   return (
-    <div class='detail-map-container'>
-      <MapGL
-        class='detail-map'
-        mapLib={maplibre}
-        options={{
-          accessToken: import.meta.env.VITE_MAPBOX_ACCESS_TOKEN,
-          style: import.meta.env.VITE_MAP_STYLE,
-          touchZoomRotate: true,
-          dragRotate: true,
-          maxZoom: 16,
-          maxBounds: bounds([
-            props.coordinates?.longitude,
-            props.coordinates?.latitude,
-          ]),
-        }}
-        viewport={viewport()}
-        onViewportChange={(e) => {
-          return setViewport(e);
-        }}
-      >
-        <Control type="scale" position="bottom-left" />
-        <Control
-          type="navigation"
-          position="top-left"
-          options={{ showCompass: false, showZoom: true }}
-        />
-        <Marker
-          lngLat={[
-            props.coordinates?.longitude,
-            props.coordinates?.latitude,
-          ]}
-          options={{ color: '#1E64AB', scale: 1.5 }}
-        >
-          {`<p>Location</p>${props.coordinates?.latitude} N ${props.coordinates?.longitude} E`}
-        </Marker>
-      </MapGL>
+    <div class="detail-map-container">
+      <Show when={hasValidCoords()}>
+        <div ref={containerRef} class="detail-map" />
+      </Show>
     </div>
   );
 }
+
 export default DetailMap;

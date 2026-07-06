@@ -18,14 +18,6 @@ export default defineConfig({
     plugins: [
       solidSvg()
     ],
-        resolve: {
-      alias: {
-        'mapbox-gl/dist/mapbox-gl.css': path.resolve(
-          __dirname,
-          'src/styles/shims/empty.css'
-        ),
-      },
-    },
     optimizeDeps: {
       include: ['mapbox-gl'],
     },

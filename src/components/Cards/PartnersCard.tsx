@@ -111,13 +111,13 @@ export function PartnersCard() {
     for (const groupsId of selectedIds) {
       try {
         const locationsIds = await getGroupLocations(groupsId);
-        locationIds.add(locationsIds[0].sensorNodesIds)
+        locationIds.add(locationsIds[0].sensorNodesIds);
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
-
     }
-    setGroupLocationsIds(...locationIds);
+
+    setGroupLocationsIds(Array.from(locationIds));
   }
 
   async function onClickReset() {

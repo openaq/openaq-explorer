@@ -1,32 +1,41 @@
-import { useMapContext } from 'solid-map-gl';
 import { onMount } from 'solid-js';
+import * as maplibre from 'maplibre-gl';
 
-import MaplibreGeocoder from '@maplibre/maplibre-gl-geocoder';
+import MaplibreGeocoder, {
+  type MaplibreGeocoderApi,
+  type MaplibreGeocoderFeatureResults,
+} from '@maplibre/maplibre-gl-geocoder';
 import '@maplibre/maplibre-gl-geocoder/dist/maplibre-gl-geocoder.css';
 
 async function sendRequest(text: string) {
   const url = new URL(import.meta.env.VITE_GEOCODE_URL);
   url.search = `?api_key=${
-    import.meta.env.VITE_GEOCDE_API_KEY
+    import.meta.env.VITE_GEOCODE_API_KEY
   }&layers=coarse&text=${text}`;
   const res = await fetch(url.href);
   const data = await res.json();
   return data;
 }
 
-export const Geocoder = () => {
-  const [ctx] = useMapContext();
+interface GeocoderProps {
+  map: maplibre.Map;
+}
 
+
+
+export const Geocoder = (props: GeocoderProps) => {
   onMount(() => {
-    const GeoApi = {
-      forwardGeocode: async (config) => {
+    const GeoApi: MaplibreGeocoderApi = {
+      forwardGeocode: async (
+        config
+      ): Promise<MaplibreGeocoderFeatureResults> => {
         try {
           const geojson = await sendRequest(config.query);
           const features = geojson.features.map((o) => {
             return {
-              type: 'Feature',
+              type: 'Feature' as const,
               geometry: {
-                type: 'Point',
+                type: 'Point' as const,
                 coordinates: o.geometry.coordinates,
               },
               id: `${o.properties.source}.${o.properties.id}`,
@@ -39,20 +48,26 @@ export const Geocoder = () => {
           return {
             type: 'FeatureCollection',
             query: [config.query],
-            features: features,
+            features,
           };
         } catch (e) {
           console.error(`Failed to forwardGeocode with error: ${e}`);
+          return {
+            type: 'FeatureCollection',
+            query: [config.query],
+            features: [],
+          };
         }
       },
     };
+
     const geocoder = new MaplibreGeocoder(GeoApi, {
       marker: false,
       showResultsWhileTyping: true,
       zoom: 10,
       debounceSearch: 300,
     });
-    ctx.map.addControl(geocoder, 'top-left');
+    props.map.addControl(geocoder, 'top-left');
   });
 
   return <></>;

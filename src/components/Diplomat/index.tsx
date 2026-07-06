@@ -1,10 +1,13 @@
 import { createEffect, onCleanup, onMount } from 'solid-js';
-import { useMapContext } from 'solid-map-gl';
+import * as maplibre from 'maplibre-gl';
 import { useStore } from '~/stores';
 import * as MaplibreDiplomat from '@americana/diplomat';
 
-export function Diplomat() {
-  const [ctx] = useMapContext();
+interface DiplomatProps {
+  map: maplibre.Map;
+}
+
+export function Diplomat(props: DiplomatProps) {
   const [store, { setLanguage }] = useStore();
 
   onMount(() => {
@@ -22,26 +25,26 @@ export function Diplomat() {
   });
 
   createEffect(() => {
-    const mapInstance = ctx.map;
-    if (!mapInstance) return;
+    const map = props.map;
+    if (!map) return;
 
     const targetLocales = store.language ? [store.language] : ['en'];
     const currentLang = store.language || 'en';
 
     const applyLocalization = () => {
-      MaplibreDiplomat.localizeStyle(mapInstance, targetLocales);
+      MaplibreDiplomat.localizeStyle(map, targetLocales);
 
-      mapInstance.setLayoutProperty(
+      map.setLayoutProperty(
         'places_country',
         'text-field',
         `{name:${currentLang}}`
       );
     };
 
-    if (mapInstance.isStyleLoaded()) {
+    if (map.isStyleLoaded()) {
       applyLocalization();
     } else {
-      mapInstance.once('styledata', applyLocalization);
+      map.once('styledata', applyLocalization);
     }
   });
 
