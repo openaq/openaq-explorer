@@ -129,12 +129,12 @@ export default function Register() {
               />
             </div>
             <div class="form-element hp-input" aria-hidden="true">
-              <label for="verify-email-address">Verify Email Address</label>
+              <label for="hp-input-1">hp-input-1</label>
               <input
                 type="text"
                 class="text-input"
-                id="verify-email-address"
-                name="verify-email-address"
+                id="hp-input-1"
+                name="hp-input-1"
                 tabindex="-1"
                 autocomplete="off"
               />
