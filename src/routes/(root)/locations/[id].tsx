@@ -13,6 +13,7 @@ import { getSessionUser } from '~/auth/session';
 import { getLocationLicenses } from '~/client';
 import { NotFoundMessage } from '~/components/NotFoundMessage/NotFoundMessage';
 import InfoIcon from '~/assets/imgs/svgs/info.svg';
+import { InactiveAccountWarning } from '../account';
 
 export const route = {
   preload: ({ params }: { params: Params }) => {
@@ -75,7 +76,12 @@ export default function Location() {
                   <h3 class="heading">Download</h3>
                 </header>
                 <Show when={user()?.usersId} fallback={<NotLoggedInFallback />}>
-                  <DownloadCard {...location()} />
+                  <Show when={!user()?.isActive}>
+                    <InactiveAccountWarning />
+                  </Show>
+                  <Show when={user()?.isActive}>
+                    <DownloadCard {...location()} />
+                  </Show>
                 </Show>
               </section>
             </Show>

@@ -16,7 +16,7 @@ function copyApiKey(token: string) {
   navigator.clipboard.writeText(token);
 }
 
-function InactiveAccountWarning() {
+export function InactiveAccountWarning() {
   return (
     <span class="inactive-account-warning">
       🚫 API usage for this account has been temporarily suspended due to
