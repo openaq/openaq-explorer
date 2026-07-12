@@ -76,12 +76,7 @@ export default function Location() {
                   <h3 class="heading">Download</h3>
                 </header>
                 <Show when={user()?.usersId} fallback={<NotLoggedInFallback />}>
-                  <Show when={!user()?.isActive}>
-                    <InactiveAccountWarning />
-                  </Show>
-                  <Show when={user()?.isActive}>
                     <DownloadCard {...location()} />
-                  </Show>
                 </Show>
               </section>
             </Show>
