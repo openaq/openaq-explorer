@@ -136,3 +136,56 @@ export function verifyTimestamp(signed: string) {
   const elapsed = Date.now() - Number(timestamp);
   return elapsed >= 2000;
 }
+
+const DOT_INSENSITIVE_DOMAINS = new Set(['gmail.com']);
+
+const PLUS_ADDRESSING_DOMAINS = new Set([
+  'gmail.com',
+  'outlook.com',
+  'yahoo.com',
+  'ymail.com',
+  'icloud.com',
+  'me.com',
+  'mac.com',
+  'proton.me',
+  'fastmail.com',
+]);
+
+const DOMAIN_ALIASES: Record<string, string> = {
+  'googlemail.com': 'gmail.com',
+  'hotmail.com': 'outlook.com',
+  'hotmail.co.uk': 'outlook.com',
+  'live.com': 'outlook.com',
+  'msn.com': 'outlook.com',
+  'protonmail.com': 'proton.me',
+  'pm.me': 'proton.me',
+  'ymail.com': 'yahoo.com',
+  'me.com': 'icloud.com',
+  'mac.com': 'icloud.com',
+};
+
+export function normalizeEmail(email: string): string {
+  const trimmed = email.trim().toLowerCase();
+  const atIndex = trimmed.lastIndexOf('@');
+  if (atIndex === -1) return trimmed;
+
+  let local = trimmed.slice(0, atIndex);
+  let domain = trimmed.slice(atIndex + 1);
+
+  if (DOMAIN_ALIASES[domain]) {
+    domain = DOMAIN_ALIASES[domain];
+  }
+
+  if (PLUS_ADDRESSING_DOMAINS.has(domain)) {
+    const plusIndex = local.indexOf('+');
+    if (plusIndex !== -1) {
+      local = local.slice(0, plusIndex);
+    }
+  }
+
+  if (DOT_INSENSITIVE_DOMAINS.has(domain)) {
+    local = local.replace(/\./g, '');
+  }
+
+  return `${local}@${domain}`;
+}

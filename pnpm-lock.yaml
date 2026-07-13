@@ -207,6 +207,9 @@ importers:
       typescript-eslint:
         specifier: ^8.16.0
         version: 8.62.1(eslint@9.39.4(jiti@2.7.0))(typescript@5.9.3)
+      vite-plugin-solid:
+        specifier: ^2.11.12
+        version: 2.11.12(@testing-library/jest-dom@6.9.1)(solid-js@1.9.13)(vite@6.4.3(@types/node@22.20.0)(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.101.0)(terser@5.48.0)(yaml@2.9.0))
       vite-plugin-solid-svg:
         specifier: ^0.8.1
         version: 0.8.1(solid-js@1.9.13)(vite@6.4.3(@types/node@22.20.0)(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.101.0)(terser@5.48.0)(yaml@2.9.0))
