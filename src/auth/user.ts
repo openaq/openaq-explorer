@@ -45,6 +45,18 @@ export const getLoggedInUser = query(async () => {
   }
 }, 'get-logged-in-user');
 
+
+export async function getUserAccountStatus() {
+  "use server";
+  const session = await getSessionUser();
+  if (!session?.usersId) return null;
+  const res = await db.getUserById(session.usersId);
+  const records = (await res.json()) as UserResponse;
+  if (records.length === 0) return null;
+  const user = records[0];
+  return user ? { isActive: user.isActive } : null;
+}
+
 export const register = action(async (formData: FormData) => {
   'use server';
 

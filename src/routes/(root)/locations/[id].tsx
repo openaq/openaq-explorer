@@ -14,6 +14,7 @@ import { getLocationLicenses } from '~/client';
 import { NotFoundMessage } from '~/components/NotFoundMessage/NotFoundMessage';
 import InfoIcon from '~/assets/imgs/svgs/info.svg';
 import { InactiveAccountWarning } from '../account';
+import { getUserAccountStatus } from '~/auth/user';
 
 export const route = {
   preload: ({ params }: { params: Params }) => {
@@ -42,6 +43,10 @@ export default function Location() {
   );
 
   const licenses = createAsync(() => getLocationLicenses(Number(id)), {
+    deferStream: true,
+  });
+
+  const accountStatus = createAsync(() => getUserAccountStatus(), {
     deferStream: true,
   });
 
@@ -75,8 +80,13 @@ export default function Location() {
                 <header class="download-card__header">
                   <h3 class="heading">Download</h3>
                 </header>
-                <Show when={user()?.usersId} fallback={<NotLoggedInFallback />}>
+               <Show when={user()?.usersId} fallback={<NotLoggedInFallback />}>
+                  <Show
+                    when={accountStatus()?.isActive}
+                    fallback={<InactiveAccountWarning />}
+                  >
                     <DownloadCard {...location()} />
+                  </Show>
                 </Show>
               </section>
             </Show>

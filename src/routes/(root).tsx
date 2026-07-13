@@ -6,6 +6,7 @@ import {
 import { getSessionUser, SessionData } from '~/auth/session';
 import { type ParentProps } from 'solid-js';
 import { Header } from '~/components/Header';
+import { getUserAccountStatus } from '~/auth/user';
 
 export const route: RouteDefinition = {
   preload: () => {
@@ -15,12 +16,12 @@ export const route: RouteDefinition = {
 
 export default function Layout(props: ParentProps) {
   const user = createAsync(() => getSessionUser());
+  const accountStatus = createAsync(() => getUserAccountStatus(), { deferStream: true });
+
 
   return (
     <>
-      <Header
-        user={user as AccessorWithLatest<SessionData | undefined | null>}
-      />
+      <Header user={user as AccessorWithLatest<SessionData | undefined | null>} accountStatus={accountStatus} />
       <div>{props.children}</div>
     </>
   );

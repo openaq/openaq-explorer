@@ -7,6 +7,7 @@ import '~/assets/scss/components/header.scss';
 import { SessionData } from '~/auth/session';
 import { logout } from '~/auth/user';
 import AccountIcon from '~/assets/imgs/account.svg';
+import AccountErrorIcon from '~/assets/imgs/account_error.svg';
 import SettingsIcon from '~/assets/imgs/settings.svg';
 import LogoutIcon from '~/assets/imgs/logout.svg';
 import MenuIcon from '~/assets/imgs/menu.svg';
@@ -22,7 +23,17 @@ const svgColor = {
   fill: '#33a3a1',
 };
 
-function Account() {
+interface AccountStatus {
+  isActive: boolean;
+}
+
+interface AccountProps {
+  accountStatus?: AccessorWithLatest<AccountStatus | undefined | null>;
+}
+
+
+
+function Account(props: AccountProps) {
   const [accountDropdownOpen, setAccountDropdownOpen] = createSignal(false);
   const location = useLocation();
   const pathname = createMemo(() => location.pathname);
@@ -35,15 +46,25 @@ function Account() {
     setAccountDropdownOpen(!accountDropdownOpen());
   };
 
+  const isActive = createMemo(() => !!props.accountStatus?.()?.isActive);
+
   return (
     <div class={`account-dropdown ${accountDropdownOpen() ? 'open' : ''}`}>
       <A href="/account" onClick={toggleDropdown}>
-        <AccountIcon
-          class="account-icon"
-          width={28}
-          height={28}
-          {...svgColor}
-        />
+        {isActive() ? (
+          <AccountIcon
+            class="account-icon"
+            width={28}
+            height={28}
+            {...svgColor}
+          />
+        ) : (
+          <AccountErrorIcon
+            class="account-icon"
+            width={28}
+            height={28}
+          />
+        )}
       </A>
       <ul
         class={`account-submenu ${accountDropdownOpen() ? 'show' : ''}`}
@@ -79,6 +100,8 @@ function Account() {
 
 interface Props {
   user?: AccessorWithLatest<SessionData | undefined | null>;
+  accountStatus?: AccessorWithLatest<AccountStatus | undefined | null>;
+
 }
 
 export function Header(props: Props) {
@@ -286,13 +309,18 @@ export function Header(props: Props) {
           ) : (
             ''
           )}
-          {props.user?.()?.usersId ? <Account /> : ''}
+          {props.user?.()?.usersId ? (
+            <Account accountStatus={props.accountStatus} />
+          ) : (
+            ''
+          )}
           {props.user?.()?.usersId ? (
             <div class="mobile-account-actions">
               <A
                 href="/account"
                 class="type-body-3 text-smoke-120 settings-link"
               >
+
                 <SettingsIcon {...svgHeightWidth} {...svgColor} aria-hidden="true" />
                 <span>Settings</span>
               </A>
