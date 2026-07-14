@@ -6,6 +6,7 @@
     "build-node": "vinxi build --config app.config.node.ts",
     "start": "node ./.output/server/index.mjs",
     "test": "vitest",
+    "sync-domains": "node ./scripts/sync-domain-list.js",
     "knip": "knip"
   },
   "type": "module",
