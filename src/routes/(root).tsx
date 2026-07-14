@@ -16,12 +16,21 @@ export const route: RouteDefinition = {
 
 export default function Layout(props: ParentProps) {
   const user = createAsync(() => getSessionUser());
-  const accountStatus = createAsync(() => getUserAccountStatus(), { deferStream: true });
-
+  const accountStatus = createAsync(
+    () => {
+      const u = user();
+      if (!u?.usersId) return Promise.resolve(null);
+      return getUserAccountStatus();
+    },
+    { deferStream: true }
+  );
 
   return (
     <>
-      <Header user={user as AccessorWithLatest<SessionData | undefined | null>} accountStatus={accountStatus} />
+      <Header
+        user={user as AccessorWithLatest<SessionData | undefined | null>}
+        accountStatus={accountStatus}
+      />
       <div>{props.children}</div>
     </>
   );
