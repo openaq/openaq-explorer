@@ -46,11 +46,9 @@ export const getLoggedInUser = query(async () => {
 }, 'get-logged-in-user');
 
 
-export async function getUserAccountStatus() {
+export async function getUserAccountStatus(usersId: number) {
   "use server";
-  const session = await getSessionUser();
-  if (!session?.usersId) return null;
-  const res = await db.getUserById(session.usersId);
+  const res = await db.getUserById(usersId);
   const records = (await res.json()) as UserResponse;
   if (records.length === 0) return null;
   const user = records[0];
@@ -153,7 +151,7 @@ export const login = action(async (formData: FormData) => {
     }
     const user = rows[0];
     if (!user.isVerified) {
-      throw redirect('/verify-email');
+      throw redirect('/verify-email', { revalidate: getSessionData.key });
     }
     const isCorrectPassword = await verifyPassword(password, user.passwordHash);
     if (!isCorrectPassword) {
@@ -166,14 +164,14 @@ export const login = action(async (formData: FormData) => {
     return err as Error;
   }
   throw redirect(redirectTo ?? '/', {
-    revalidate: [getSessionUser.key, getLoggedInUser.key],
+    revalidate: [getSessionUser.key, getLoggedInUser.key, getSessionData.key],
   });
 }, 'login-action');
 
 export const logout = action(async () => {
   'use server';
   await clearSession();
-  return revalidate([getSessionUser.key, getLoggedInUser.key]);
+  return revalidate([getSessionUser.key, getLoggedInUser.key, getSessionData.key]);
 }, 'logout-action');
 
 export const sendVerificationEmail = async (usersId: number) => {
@@ -351,3 +349,10 @@ export const getFormToken = async () => {
   'use server';
   return signTimestamp(Date.now());
 };
+
+export const getSessionData = query(async () => {
+  const u = await getSessionUser();
+  if (!u?.usersId) return { user: u, accountStatus: null };
+  const accountStatus = await getUserAccountStatus(u.usersId);
+  return { user: u, accountStatus };
+}, 'session-data');

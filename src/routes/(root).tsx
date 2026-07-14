@@ -1,35 +1,54 @@
 import {
   AccessorWithLatest,
   createAsync,
+  revalidate,
   RouteDefinition,
+  useSubmission,
 } from '@solidjs/router';
-import { getSessionUser, SessionData } from '~/auth/session';
-import { type ParentProps } from 'solid-js';
+import { SessionData } from '~/auth/session';
+import { createEffect, type ParentProps } from 'solid-js';
 import { Header } from '~/components/Header';
-import { getUserAccountStatus } from '~/auth/user';
+import { getSessionData, login, logout } from '~/auth/user';
 
 export const route: RouteDefinition = {
   preload: () => {
-    return getSessionUser();
+    return getSessionData();
   },
 };
 
+interface AccountStatus {
+  isActive: boolean;
+}
+
 export default function Layout(props: ParentProps) {
-  const user = createAsync(() => getSessionUser());
-  const accountStatus = createAsync(
-    () => {
-      const u = user();
-      if (!u?.usersId) return Promise.resolve(null);
-      return getUserAccountStatus();
-    },
-    { deferStream: true }
-  );
+
+  const sessionData = createAsync(() => getSessionData());
+
+  const user = () => sessionData()?.user;
+  const accountStatus = () => sessionData()?.accountStatus;
+
+  const loginSubmission = useSubmission(login);
+  const logoutSubmission = useSubmission(logout);
+
+  createEffect(() => {
+    if (loginSubmission.result !== undefined || loginSubmission.pending === false) {
+      if (!loginSubmission.pending && loginSubmission.input) {
+        revalidate(getSessionData.key);
+      }
+    }
+  });
+
+  createEffect(() => {
+    if (!logoutSubmission.pending && logoutSubmission.input) {
+      revalidate(getSessionData.key);
+    }
+  });
 
   return (
     <>
       <Header
         user={user as AccessorWithLatest<SessionData | undefined | null>}
-        accountStatus={accountStatus}
+        accountStatus={accountStatus as AccessorWithLatest<AccountStatus | undefined | null>}
       />
       <div>{props.children}</div>
     </>
