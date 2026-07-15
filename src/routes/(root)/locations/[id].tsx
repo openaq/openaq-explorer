@@ -46,7 +46,7 @@ export default function Location() {
     deferStream: true,
   });
 
-  const accountStatus = createAsync(() => getUserAccountStatus(), {
+  const accountStatus = createAsync(() => getUserAccountStatus(user()?.usersId), {
     deferStream: true,
   });
 
