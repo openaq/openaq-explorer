@@ -1,4 +1,6 @@
-import * as maplibre from 'maplibre-gl';
+import {Map as MapGL, setRTLTextPlugin,setWorkerUrl, NavigationControl } from 'maplibre-gl';
+import type {  MapMouseEvent } from 'maplibre-gl';
+import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url';
 import { createEffect, createSignal, onCleanup, onMount, Show } from 'solid-js';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
@@ -7,6 +9,8 @@ import { useStore } from '~/stores';
 
 import '~/assets/scss/components/list-map.scss';
 import { Diplomat } from '../Diplomat';
+
+setWorkerUrl(maplibreWorkerUrl);
 
 interface ListDefinition {
   listsId: number;
@@ -45,9 +49,9 @@ export function ListMap(props: ListMapDefinition) {
   const [store, { setSelectedLocationsId }] = useStore();
 
   let containerRef: HTMLDivElement | undefined;
-  let map: maplibre.Map | undefined;
+  let map: MapGL | undefined;
 
-  const [mapInstance, setMapInstance] = createSignal<maplibre.Map>();
+  const [mapInstance, setMapInstance] = createSignal<MapGL>();
 
   const hasValidBbox = () =>
     Array.isArray(props.list.bbox) &&
@@ -61,7 +65,7 @@ export function ListMap(props: ListMapDefinition) {
         !Number.isNaN(pair[1])
     );
 
-  function getFeature(e: maplibre.MapMouseEvent) {
+  function getFeature(e: MapMouseEvent) {
     const features = map!.queryRenderedFeatures(e.point);
     const locationsId = features[0].properties?.locations_id;
     setSelectedLocationsId(locationsId);
@@ -69,14 +73,14 @@ export function ListMap(props: ListMapDefinition) {
   }
 
   onMount(() => {
-    maplibre.setRTLTextPlugin(
+    setRTLTextPlugin(
       'https://unpkg.com/@mapbox/mapbox-gl-rtl-text@0.2.3/mapbox-gl-rtl-text.min.js',
       true
     );
 
     if (!containerRef) return;
 
-    map = new maplibre.Map({
+    map = new MapGL({
       container: containerRef,
       style: import.meta.env.VITE_MAP_STYLE,
       ...(hasValidBbox() ? { bounds: bounds(props.list.bbox) } : {}),
@@ -105,7 +109,7 @@ export function ListMap(props: ListMapDefinition) {
     });
 
     map.addControl(
-      new maplibre.NavigationControl({ showCompass: false, showZoom: true }),
+      new NavigationControl({ showCompass: false, showZoom: true }),
       'bottom-left'
     );
 
