@@ -1,9 +1,13 @@
-import * as maplibre from 'maplibre-gl';
+import {Map as MapGL, setRTLTextPlugin,setWorkerUrl } from 'maplibre-gl';
+import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url';
 import { createEffect, createSignal, onCleanup, onMount, Show } from 'solid-js';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import destination from '@turf/destination';
 import '~/assets/scss/components/list-card-map.scss';
 import { Diplomat } from '../Diplomat';
+
+
+setWorkerUrl(maplibreWorkerUrl);
 
 interface ListCardMapDefinition {
   bbox: number[][];
@@ -23,9 +27,9 @@ const SOURCE_ID = 'locations';
 
 export function ListCardMap(props: ListCardMapDefinition) {
   let containerRef: HTMLDivElement | undefined;
-  let map: maplibre.Map | undefined;
+  let map: MapGL | undefined;
 
-  const [mapInstance, setMapInstance] = createSignal<maplibre.Map>();
+  const [mapInstance, setMapInstance] = createSignal<MapGL>();
 
   const hasValidBbox = () =>
     Array.isArray(props.bbox) &&
@@ -40,7 +44,7 @@ export function ListCardMap(props: ListCardMapDefinition) {
     );
 
   onMount(() => {
-    maplibre.setRTLTextPlugin(
+    setRTLTextPlugin(
       'https://unpkg.com/@mapbox/mapbox-gl-rtl-text@0.2.3/mapbox-gl-rtl-text.min.js',
       true
     );
@@ -49,7 +53,7 @@ export function ListCardMap(props: ListCardMapDefinition) {
 
     const mapBounds = bounds(props.bbox);
 
-    map = new maplibre.Map({
+    map = new MapGL({
       container: containerRef,
       style: import.meta.env.VITE_MAP_STYLE,
       bounds: mapBounds,
@@ -104,7 +108,6 @@ export function ListCardMap(props: ListCardMapDefinition) {
     });
   });
 
-  // Reactive: sensorNodesIds changes after initial mount
   createEffect(() => {
     const m = mapInstance();
     const ids = props.sensorNodesIds;
@@ -154,7 +157,6 @@ export function ListCardMap(props: ListCardMapDefinition) {
       return;
     }
 
-    // Source/layer already exist — just update the expressions with new ids
     if (m.getLayer('locations')) {
       m.setPaintProperty('locations', 'circle-color', [
         'case',
@@ -171,7 +173,6 @@ export function ListCardMap(props: ListCardMapDefinition) {
     }
   });
 
-  // Reactive: bbox changes after initial mount
   createEffect(() => {
     const m = mapInstance();
     if (!m || !hasValidBbox()) return;

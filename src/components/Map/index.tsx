@@ -1,5 +1,8 @@
 /* eslint-disable solid/style-prop */
-import * as maplibre from 'maplibre-gl';
+import {Map as MapGL,AttributionControl, setRTLTextPlugin,setWorkerUrl, NavigationControl, ScaleControl} from 'maplibre-gl';
+import type {  MapMouseEvent } from 'maplibre-gl';
+import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url';
+
 import { createEffect, createSignal, onCleanup, onMount, Show } from 'solid-js';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
@@ -9,6 +12,9 @@ import { Diplomat } from '../Diplomat';
 
 import '~/assets/scss/components/map.scss';
 import InfoIcon from '~/assets/imgs/svgs/info.svg';
+
+
+setWorkerUrl(maplibreWorkerUrl);
 
 function calculateFlyToDuration(zoom: number) {
   return 2500 / (zoom / 5);
@@ -20,15 +26,16 @@ export function Map() {
   const [store, { setSelectedLocationsId, setViewport }] = useStore();
 
   let containerRef: HTMLDivElement | undefined;
-  let map: maplibre.Map | undefined;
+  let map: MapGL | undefined;
 
-  const [mapInstance, setMapInstance] = createSignal<maplibre.Map>();
+  const [mapInstance, setMapInstance] = createSignal<MapGL>();
 
   const calculateIsMonitor = (): boolean => {
     if (!store.showMonitors && store.showAirSensors) return false;
     if (store.showMonitors && !store.showAirSensors) return true;
     return false;
   };
+
 
   const setVisibility = () => {
     const arr: any[] = ['all'];
@@ -58,7 +65,7 @@ export function Map() {
     return arr;
   };
 
-  function getFeature(e: maplibre.MapMouseEvent) {
+  function getFeature(e: MapMouseEvent) {
     const features = map!.queryRenderedFeatures(e.point);
     const locationsId = features[0].properties?.locations_id;
     setSelectedLocationsId(locationsId);
@@ -66,14 +73,14 @@ export function Map() {
   }
 
   onMount(() => {
-    maplibre.setRTLTextPlugin(
+    setRTLTextPlugin(
       'https://unpkg.com/@mapbox/mapbox-gl-rtl-text@0.2.3/mapbox-gl-rtl-text.min.js',
       true
     );
 
     if (!containerRef) return;
 
-    map = new maplibre.Map({
+    map = new MapGL({
       container: containerRef,
       style: import.meta.env.VITE_MAP_STYLE,
       center: store.viewport.center,
@@ -86,16 +93,16 @@ export function Map() {
       attributionControl: false,
     });
 
-    map.addControl(new maplibre.ScaleControl(), 'bottom-left');
+    map.addControl(new ScaleControl(), 'bottom-left');
     map.addControl(
-      new maplibre.AttributionControl({
+      new AttributionControl({
         customAttribution:
           '© <a href="https://geocode.earth">Geocode Earth</a>, Powered by <a href="https://protomaps.com">Protomaps</a>',
       }),
       'bottom-right'
     );
     map.addControl(
-      new maplibre.NavigationControl({ showCompass: false, showZoom: true }),
+      new NavigationControl({ showCompass: false, showZoom: true }),
       'bottom-left'
     );
 
@@ -105,6 +112,11 @@ export function Map() {
         zoom: map!.getZoom(),
       });
     });
+
+
+map.on('error', (e) => {
+  console.error('MapLibre error:', e.error);
+});
 
     map.on('mouseover', 'locations', () => {
       map!.getCanvas().style.cursor = 'pointer';
@@ -125,6 +137,8 @@ export function Map() {
     });
 
     map.on('load', () => {
+  console.log('MAP LOAD FIRED');
+      
       map!.addSource(SOURCE_ID, {
         type: 'vector',
         tiles: [

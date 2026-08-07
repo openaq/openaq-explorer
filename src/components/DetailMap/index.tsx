@@ -1,9 +1,14 @@
-import * as maplibre from 'maplibre-gl';
+
+import {Map as MapGL,Marker, Popup, setRTLTextPlugin, setWorkerUrl, NavigationControl, ScaleControl} from 'maplibre-gl';
+import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url';
+
 import { createEffect, createSignal, onCleanup, onMount, Show } from 'solid-js';
 import destination from '@turf/destination';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
 import '~/assets/scss/components/detail-map.scss';
+
+setWorkerUrl(maplibreWorkerUrl);
 
 interface Coordinates {
   latitude: number;
@@ -25,8 +30,8 @@ function bounds(coordinates: number[]) {
 
 function DetailMap(props: DetailMapDefinition) {
   let containerRef: HTMLDivElement | undefined;
-  let map: maplibre.Map | undefined;
-  let marker: maplibre.Marker | undefined;
+  let map: MapGL | undefined;
+  let marker: Marker | undefined;
 
   const [mapReady, setMapReady] = createSignal(false);
 
@@ -39,9 +44,14 @@ function DetailMap(props: DetailMapDefinition) {
   onMount(() => {
     if (!hasValidCoords() || !containerRef) return;
 
+    setRTLTextPlugin(
+      'https://unpkg.com/@mapbox/mapbox-gl-rtl-text@0.2.3/mapbox-gl-rtl-text.min.js',
+      true
+    );
+    
     const { longitude, latitude } = props.coordinates;
 
-    map = new maplibre.Map({
+    map = new MapGL({
       container: containerRef,
       style: import.meta.env.VITE_MAP_STYLE,
       center: [longitude, latitude],
@@ -52,18 +62,18 @@ function DetailMap(props: DetailMapDefinition) {
       maxBounds: bounds([longitude, latitude]),
     });
 
-    map.addControl(new maplibre.ScaleControl(), 'bottom-left');
+    map.addControl(new ScaleControl(), 'bottom-left');
     map.addControl(
-      new maplibre.NavigationControl({ showCompass: false, showZoom: true }),
+      new NavigationControl({ showCompass: false, showZoom: true }),
       'top-left'
     );
 
     const markerEl = document.createElement('div');
     markerEl.innerHTML = `<p>Location</p>${latitude} N ${longitude} E`;
 
-    marker = new maplibre.Marker({ color: '#656565', scale: 1.5 })
+    marker = new Marker({ color: '#656565', scale: 1.5 })
       .setLngLat([longitude, latitude])
-      .setPopup(new maplibre.Popup().setDOMContent(markerEl))
+      .setPopup(new Popup().setDOMContent(markerEl))
       .addTo(map);
 
     map.on('load', () => setMapReady(true));
