@@ -1,6 +1,4 @@
-import { type RequestMiddleware } from '@solidjs/start/middleware';
-import { FetchEvent } from '@solidjs/start/server';
-import { getHeader } from 'vinxi/http';
+import type { FetchEvent } from '@solidjs/start/server';
 
 function getHost(url: string) {
   try {
@@ -11,47 +9,34 @@ function getHost(url: string) {
 }
 
 function verifyRequestOrigin(origin: string, allowedDomains: string[]) {
-  if (!origin || allowedDomains.length === 0) return false;
+  if (!origin || allowedDomains.length === 0) {
+    return false;
+  }
   const originHost = getHost(origin);
-
-  if (!originHost) return false;
-
+  if (!originHost) {
+    return false;
+  }
   for (const domain of allowedDomains) {
-    let host: string | null;
-    if (domain.startsWith('http://') || domain.startsWith('https://')) {
-      host = getHost(domain);
-    } else {
-      host = getHost('https://' + domain);
+    const host = domain.startsWith('http://') || domain.startsWith('https://')
+      ? getHost(domain)
+      : getHost('https://' + domain);
+    if (originHost === host) {
+      return true;
     }
-    if (originHost === host) return true;
   }
   return false;
 }
 
-function crsfCheck(event: FetchEvent) {
-  if (event.request.method !== 'GET') {
-    const originHeader =
-      (getHeader(event.nativeEvent, 'Origin') ||
-        getHeader(event.nativeEvent, 'Referrer')) ??
-      null;
-    const hostHeader = getHeader(event.nativeEvent, 'Host') ?? null;
-
-    if (
-      !originHeader ||
-      !hostHeader ||
-      !verifyRequestOrigin(originHeader, [hostHeader])
-    ) {
-      console.info(`Invalid origin request: ${originHeader} ${hostHeader}`);
-      throw new Error('Invalid origin');
-    }
-  }
-}
-
-export const csrfProtection: RequestMiddleware = async (event) => {
-  try {
-    crsfCheck(event);
-  } catch {
-    event.nativeEvent.respondWith(new Response(null, { status: 403 }));
+export function csrfProtection(event: FetchEvent): Response | void {
+  if (event.request.method === 'GET') {
     return;
   }
-};
+  const originHeader =
+    event.request.headers.get('Origin') || event.request.headers.get('Referer');
+  const hostHeader = event.request.headers.get('Host');
+
+  if (!originHeader || !hostHeader || !verifyRequestOrigin(originHeader, [hostHeader])) {
+    console.info(`Invalid origin request: ${originHeader} ${hostHeader}`);
+    return new Response(null, { status: 403 });
+  }
+}

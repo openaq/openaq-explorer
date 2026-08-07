@@ -107,7 +107,7 @@ export function DetailOverview(props: DetailOverviewDefinition) {
           <table class="characteristics-table">
             <tbody>
               <tr>
-                <td>Type</td>{' '}
+                <td>Type</td>
                 <td>
                   <SensorType {...props} />
                   <p class="type-body-2">

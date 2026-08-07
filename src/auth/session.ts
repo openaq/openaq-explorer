@@ -1,5 +1,5 @@
 import { query } from '@solidjs/router';
-import { SessionConfig, useSession } from 'vinxi/http';
+import { useSession } from "@solidjs/start/http";
 
 export interface SessionData {
   usersId: number | undefined | null;
@@ -31,7 +31,7 @@ export async function setSession(usersId: number, maxAge: number) {
   const session = await getSession();
 
   await session.update((user: SessionData) => ((user.usersId = usersId), user));
-  await session.update((d: SessionConfig) => {
+  await session.update((d) => {
     d.maxAge = maxAge;
   });
 }
