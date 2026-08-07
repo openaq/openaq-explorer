@@ -65,7 +65,6 @@
     "@zxcvbn-ts/language-common": "^2.0.1",
     "@zxcvbn-ts/language-en": "^2.1.0",
     "babel-jest": "^29.7.0",
-    "crypto-js": "^4.2.0",
     "d3": "^7.8.5",
     "dayjs": "^1.11.10",
     "events": "^3.3.0",
