@@ -7,6 +7,7 @@ import { useLocation, useNavigate } from '@solidjs/router';
 import { useStore } from '~/stores';
 import { createEffect, createMemo, onMount, Show } from 'solid-js';
 import content from '~/content/notification.md?raw';
+import { hash } from 'node:crypto';
 import MD5 from 'crypto-js/md5';
 import { parseNotificationMarkdown } from '~/components/Cards/utils';
 import { getGroupLocations } from '~/client';
@@ -20,7 +21,7 @@ export default function Home() {
     () => import('~/components/Cards/NotificationCard')
   );
   const HelpCard = clientOnly(() => import('~/components/Cards/HelpCard'));
-  const hashedContent = MD5(content).toString();
+  const hashedContent = hash('md5', content, 'hex');
   const dismissedKey = `${hashedContent}-notificationDismissed`;
 
   const parsedContent = parseNotificationMarkdown(content);
@@ -119,7 +120,6 @@ export default function Home() {
       for (const groupsId of groups) {
         try {
           const locationsIds = await getGroupLocations(groupsId);
-          console.log('group locations', locationsIds);
           locationIds.add(locationsIds[0].sensorNodesIds);
         } catch (error) {
           console.error(`Failed to fetch group ${groupsId}:`, error);
