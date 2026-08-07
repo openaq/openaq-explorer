@@ -18,8 +18,11 @@ export default defineConfig({
     plugins: [
       solidSvg()
     ],
+    ssr: {
+      noExternal: ['maplibre-gl'],
+    },
     optimizeDeps: {
-      include: ['mapbox-gl'],
+      exclude: ['maplibre-gl'],
     },
     css: {
       postcss: {
