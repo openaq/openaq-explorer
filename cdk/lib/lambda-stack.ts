@@ -164,7 +164,7 @@ export class LambdaStack extends cdk.Stack {
       font-src 'self';
       frame-src 'none';
       img-src 'self' data:;
-      worker-src blob:;`;
+      worker-src 'self';`;
 
     cspString = cspString
       .split('\n')

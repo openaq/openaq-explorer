@@ -1,5 +1,5 @@
 import {Map as MapGL, setRTLTextPlugin,setWorkerUrl } from 'maplibre-gl';
-import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url';
+import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
 import { createEffect, createSignal, onCleanup, onMount, Show } from 'solid-js';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import destination from '@turf/destination';
