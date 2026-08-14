@@ -25,8 +25,11 @@ export default defineConfig({
     inlineDynamicImports: true,
   },
   assetsInclude: ['**/*.md'],
+  ssr: {
+    noExternal: ['maplibre-gl'],
+  },
   optimizeDeps: {
-    include: ['mapbox-gl'],
+    exclude: ['maplibre-gl'],
   },
   css: {
     postcss: {
