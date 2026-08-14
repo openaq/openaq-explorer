@@ -1,6 +1,6 @@
 
 import {Map as MapGL,Marker, Popup, setRTLTextPlugin, setWorkerUrl, NavigationControl, ScaleControl} from 'maplibre-gl';
-import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url';
+import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
 
 import { createEffect, createSignal, onCleanup, onMount, Show } from 'solid-js';
 import destination from '@turf/destination';
