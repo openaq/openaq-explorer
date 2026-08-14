@@ -310,14 +310,6 @@ async function fetchGroupLocations(groupsId: number) {
       'Content-Type': 'application/json'
     },
   });
-
-  console.info('Fetching:', `${baseUrl}/groups/${groupsId}`);
-  console.info('Status:', res.status);
-
-  // if (!res.ok) {
-  //   console.error(`Failed to fetch group: ${url.href} ${JSON.stringify(res)}`)
-  //   throw new Error(`Failed to fetch group`);
-  // }
   return await res.json();
 }
 
@@ -331,22 +323,6 @@ export const getGroupLocations = GET(async (groupsId: number) => {
   );
 });
 
-
-// async function fetchPartnerProjects(groupsId: number) {
-//   'use server';
-//   const url = new URL(import.meta.env.REST_API_URL);
-//   url.pathname = `groups/${groupsId}`;
-//   const res = await fetch(url.href, {
-//     headers: {
-//       'Content-Type': 'application/json'
-//     },
-//   });
-
-//   if (!res.ok) {
-//     throw new Error(`Failed to fetch group`);
-//   }
-//   return await res.json();
-// }
 
 export const getPartnerProjects = GET(async () => {
   'use server';

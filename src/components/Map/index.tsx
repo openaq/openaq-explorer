@@ -53,6 +53,7 @@ export function Map() {
         ['literal', store.groupLocationsIds],
       ]);
     }
+    console.log("GL",store.groupLocationsIds);
     if (store.showOnlyActiveLocations) {
       arr.push(['==', ['get', 'active'], true]);
     }
@@ -138,8 +139,6 @@ map.on('error', (e) => {
     });
 
     map.on('load', () => {
-  console.log('MAP LOAD FIRED');
-      
       map!.addSource(SOURCE_ID, {
         type: 'vector',
         tiles: [
