@@ -7,8 +7,7 @@ import { useLocation, useNavigate } from '@solidjs/router';
 import { useStore } from '~/stores';
 import { createEffect, createMemo, onMount, Show } from 'solid-js';
 import content from '~/content/notification.md?raw';
-import { hash } from 'node:crypto';
-import MD5 from 'crypto-js/md5';
+import { md5 } from 'js-md5';
 import { parseNotificationMarkdown } from '~/components/Cards/utils';
 import { getGroupLocations } from '~/client';
 
@@ -21,7 +20,7 @@ export default function Home() {
     () => import('~/components/Cards/NotificationCard')
   );
   const HelpCard = clientOnly(() => import('~/components/Cards/HelpCard'));
-  const hashedContent = hash('md5', content, 'hex');
+  const hashedContent = md5(content);
   const dismissedKey = `${hashedContent}-notificationDismissed`;
 
   const parsedContent = parseNotificationMarkdown(content);
