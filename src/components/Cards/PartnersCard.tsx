@@ -110,8 +110,10 @@ export function PartnersCard() {
 
     for (const groupsId of selectedIds) {
       try {
-        const locationsIds = await getGroupLocations(groupsId);
-        locationIds.add(locationsIds[0].sensorNodesIds);
+        const results = await getGroupLocations(groupsId);
+        for (const r of results) {
+          for (const id of r.sensorNodesIds) locationIds.add(id);
+        }
       } catch (error) {
         console.error(error);
       }

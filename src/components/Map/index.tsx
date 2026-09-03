@@ -32,8 +32,12 @@ export function Map() {
   const [mapInstance, setMapInstance] = createSignal<MapGL>();
 
   const calculateIsMonitor = (): boolean => {
-    if (!store.showMonitors && store.showAirSensors) return false;
-    if (store.showMonitors && !store.showAirSensors) return true;
+    if (!store.showMonitors && store.showAirSensors) {
+      return false;
+    }
+    if (store.showMonitors && !store.showAirSensors) {
+      return true;
+    }
     return false;
   };
 
@@ -53,7 +57,6 @@ export function Map() {
         ['literal', store.groupLocationsIds],
       ]);
     }
-    console.log("GL",store.groupLocationsIds);
     if (store.showOnlyActiveLocations) {
       arr.push(['==', ['get', 'active'], true]);
     }
@@ -95,7 +98,13 @@ export function Map() {
       attributionControl: false,
     });
 
+    setViewport({
+      center: map.getCenter().toArray() as [number, number],
+      zoom: map.getZoom(),
+    });
+
     map.addControl(new ScaleControl(), 'bottom-left');
+
     map.addControl(
       new AttributionControl({
         customAttribution:
@@ -116,13 +125,14 @@ export function Map() {
     });
 
 
-map.on('error', (e) => {
-  console.error('MapLibre error:', e.error);
-});
+    map.on('error', (e) => {
+      console.error('MapLibre error:', e.error);
+    });
 
     map.on('mouseover', 'locations', () => {
       map!.getCanvas().style.cursor = 'pointer';
     });
+
     map.on('mouseleave', 'locations', () => {
       map!.getCanvas().style.cursor = '';
     });
