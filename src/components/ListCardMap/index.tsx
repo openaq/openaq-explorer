@@ -1,4 +1,4 @@
-import {Map as MapGL, setRTLTextPlugin,setWorkerUrl } from 'maplibre-gl';
+import {Map as MapGL, setWorkerUrl } from 'maplibre-gl';
 import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
 import { createEffect, createSignal, onCleanup, onMount, Show } from 'solid-js';
 import 'maplibre-gl/dist/maplibre-gl.css';
@@ -44,10 +44,6 @@ export function ListCardMap(props: ListCardMapDefinition) {
     );
 
   onMount(() => {
-    setRTLTextPlugin(
-      'https://unpkg.com/@mapbox/mapbox-gl-rtl-text@0.2.3/mapbox-gl-rtl-text.min.js',
-      true
-    );
 
     if (!hasValidBbox() || !containerRef) return;
 

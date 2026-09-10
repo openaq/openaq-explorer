@@ -1,5 +1,5 @@
 /* eslint-disable solid/style-prop */
-import {Map as MapGL,AttributionControl, setRTLTextPlugin,setWorkerUrl, NavigationControl, ScaleControl} from 'maplibre-gl';
+import {Map as MapGL,AttributionControl, setWorkerUrl, NavigationControl, ScaleControl} from 'maplibre-gl';
 import type {  MapMouseEvent } from 'maplibre-gl';
 
 import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
@@ -78,10 +78,6 @@ export function Map() {
   }
 
   onMount(() => {
-    setRTLTextPlugin(
-      'https://unpkg.com/@mapbox/mapbox-gl-rtl-text@0.2.3/mapbox-gl-rtl-text.min.js',
-      true
-    );
 
     if (!containerRef) return;
 
