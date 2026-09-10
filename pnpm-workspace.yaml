@@ -1,6 +1,8 @@
 allowBuilds:
   '@parcel/watcher': true
   esbuild: true
+minimumReleaseAgeExclude:
+  - maplibre-gl@6.9.0
 onlyBuiltDependencies:
   - '@parcel/watcher'
   - esbuild
