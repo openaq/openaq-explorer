@@ -128,7 +128,7 @@ export class LambdaStack extends cdk.Stack {
         originRequestPolicyName: `${id}ExplorerSolidStartOriginRequestPolicy`,
         queryStringBehavior: cloudfront.OriginRequestQueryStringBehavior.all(),
         cookieBehavior: cloudfront.OriginRequestCookieBehavior.all(),
-        headerBehavior: cloudfront.OriginRequestHeaderBehavior.all(),
+        headerBehavior: cloudfront.OriginRequestHeaderBehavior.denyList('host'),
       }
     );
 
