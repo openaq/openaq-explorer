@@ -240,3 +240,5 @@ export function ListMap(props: ListMapDefinition) {
     </div>
   );
 }
+
+export default ListMap;

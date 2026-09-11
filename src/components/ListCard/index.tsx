@@ -1,6 +1,7 @@
 import { A } from '@solidjs/router';
 import { useStore } from '~/stores';
-import { ListCardMap } from '~/components/ListCardMap';
+import { clientOnly } from '@solidjs/start';
+const Map = clientOnly(() => import('~/components/ListCardMap'));
 import DeleteForeverIcon from '~/assets/imgs/delete_forever.svg';
 
 import '~/assets/scss/components/list-card.scss';

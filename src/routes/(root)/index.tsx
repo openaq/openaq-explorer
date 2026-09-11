@@ -1,7 +1,7 @@
-import { Map } from '~/components/Map';
+import { clientOnly } from '@solidjs/start';
+const Map = clientOnly(() => import('~/components/Map'));
 import { LocationDetailCard } from '~/components/Cards/LocationDetailCard';
 import { FlipCard } from '~/components/Cards/FlipCard';
-import { clientOnly } from '@solidjs/start';
 import '~/assets/scss/routes/index.scss';
 import { useLocation, useNavigate } from '@solidjs/router';
 import { useStore } from '~/stores';

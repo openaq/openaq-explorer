@@ -1,5 +1,6 @@
 import { For, Show, createEffect, createSignal } from 'solid-js';
-import { ListMap } from '~/components/ListMap';
+import { clientOnly } from '@solidjs/start';
+const ListMap = clientOnly(() => import('~/components/ListMap'));
 import { LocationList } from '~/components/LocationList';
 import { LocationDetailCardMini } from '~/components/Cards/LocationDetailCardMini';
 import { useStore } from '~/stores';

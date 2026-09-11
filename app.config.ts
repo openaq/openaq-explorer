@@ -2,25 +2,22 @@ import { defineConfig } from '@solidjs/start/config';
 import { configDefaults } from 'vitest/config';
 import autoprefixer from 'autoprefixer';
 import solidSvg from 'vite-plugin-solid-svg';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
 
 export default defineConfig({
   server: {
     preset: 'aws-lambda',
     inlineDynamicImports: true,
+    esbuild: {
+      options: {
+        target: 'es2022',
+      },
+    },
   },
   vite: {
     assetsInclude: ['**/*.md'],
     plugins: [
       solidSvg()
     ],
-    ssr: {
-      noExternal: ['maplibre-gl'],
-    },
     optimizeDeps: {
       exclude: ['maplibre-gl'],
     },

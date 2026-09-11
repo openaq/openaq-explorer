@@ -58,8 +58,8 @@ export class LambdaStack extends cdk.Stack {
 
     const lambdaFunction = new lambda.Function(this, `${id}-explorer-lambda`, {
       description: `lambda function explorer solid start ${id}`,
-      code: lambda.Code.fromAsset('../.output'),
-      handler: 'server/index.handler',
+      code: lambda.Code.fromAsset('../.output/server'),
+      handler: 'index.handler',
       memorySize: 512,
       runtime: lambda.Runtime.NODEJS_24_X,
       architecture: lambda.Architecture.ARM_64,
@@ -84,6 +84,7 @@ export class LambdaStack extends cdk.Stack {
       {
         sources: [aws_s3_deployment.Source.asset('../.output/public')],
         destinationBucket: bucket,
+        memoryLimit: 512
       }
     );
 
@@ -93,26 +94,12 @@ export class LambdaStack extends cdk.Stack {
       certificateArn
     );
 
-    const apiGatewayDomainName = new DomainName(
-      this,
-      `${id}-explorer-http-api-domain`,
-      {
-        domainName: domainName,
-        certificate: certificate,
-        endpointType: EndpointType.REGIONAL,
-        securityPolicy: SecurityPolicy.TLS_1_2,
-      }
-    );
-
     const apiGateway = new cdk.aws_apigatewayv2.HttpApi(
       this,
       `${id}-explorerHttpApi`,
       {
         description: `Connects the httpapiCloudFront distribution with the Lambda function to make it publicly available.`,
         corsPreflight: undefined,
-        defaultDomainMapping: {
-          domainName: apiGatewayDomainName,
-        },
       }
     );
 

@@ -188,3 +188,6 @@ export function ListCardMap(props: ListCardMapDefinition) {
     </div>
   );
 }
+
+
+export default ListCardMap;
