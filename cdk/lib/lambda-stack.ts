@@ -94,14 +94,29 @@ export class LambdaStack extends cdk.Stack {
       certificateArn
     );
 
+
+    const apiGatewayDomainName = new DomainName(
+      this,
+      `${id}-explorer-http-api-domain`,
+      {
+        domainName: domainName,
+        certificate: certificate,
+        endpointType: EndpointType.REGIONAL,
+        securityPolicy: SecurityPolicy.TLS_1_2,
+      }
+    );
+
     const apiGateway = new cdk.aws_apigatewayv2.HttpApi(
       this,
       `${id}-explorerHttpApi`,
       {
+        defaultDomainMapping: { domainName: apiGatewayDomainName },
+        disableExecuteApiEndpoint: true,
         description: `Connects the httpapiCloudFront distribution with the Lambda function to make it publicly available.`,
         corsPreflight: undefined,
-      }
-    );
+
+      });
+
 
     apiGateway.addRoutes({
       integration: new HttpLambdaIntegration(
@@ -128,7 +143,7 @@ export class LambdaStack extends cdk.Stack {
         originRequestPolicyName: `${id}ExplorerSolidStartOriginRequestPolicy`,
         queryStringBehavior: cloudfront.OriginRequestQueryStringBehavior.all(),
         cookieBehavior: cloudfront.OriginRequestCookieBehavior.all(),
-        headerBehavior: cloudfront.OriginRequestHeaderBehavior.denyList('host'),
+        headerBehavior: cloudfront.OriginRequestHeaderBehavior.all(),
       }
     );
 
@@ -225,12 +240,15 @@ export class LambdaStack extends cdk.Stack {
           viewerProtocolPolicy:
             cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
           responseHeadersPolicy: responseHeadersPolicy,
-          origin: new cdk.aws_cloudfront_origins.HttpOrigin(originUrl, {
-            connectionAttempts: 2,
-            connectionTimeout: cdk.Duration.seconds(2),
-            readTimeout: cdk.Duration.seconds(10),
-            protocolPolicy: OriginProtocolPolicy.HTTPS_ONLY,
-          }),
+          origin: new cdk.aws_cloudfront_origins.HttpOrigin(
+            apiGatewayDomainName.regionalDomainName,
+            {
+              connectionAttempts: 2,
+              connectionTimeout: cdk.Duration.seconds(2),
+              readTimeout: cdk.Duration.seconds(10),
+              protocolPolicy: OriginProtocolPolicy.HTTPS_ONLY,
+            }
+          ),
         },
         additionalBehaviors: {
           '/_build/*': {
