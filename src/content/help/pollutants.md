@@ -18,13 +18,12 @@ The OpenAQ database currently ingests the following pollutant data, with a focus
 - NO<sub>x</sub> - Nitrogen oxides
 - **SO₂ - Sulfur dioxide gas**
 - CH₄ - Methane gas
-- CO₂ - Carbon dioxide gas
 
 ### Units of measurement
 
 Measurements of pollutants are reported in a variety of units depending on how the data is reported from the original data provider. The most common units found in the dataset are:
 
-- ppb (parts per million)
+- ppm (parts per million)
 - µg/m³ (micrograms per cubic meter)
 
 Units are not normalized in the OpenAQ system, with the exception of converting ppb (parts per billion) to ppm (parts per million). Volume units are not converted to mass units, nor vice versa; they are served as originally reported.
