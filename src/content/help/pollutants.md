@@ -24,6 +24,5 @@ The OpenAQ database currently ingests the following pollutant data, with a focus
 Measurements of pollutants are reported in a variety of units depending on how the data is reported from the original data provider. The most common units found in the dataset are:
 
 - ppm (parts per million)
+- ppb (parts per billion)
 - µg/m³ (micrograms per cubic meter)
-
-Units are not normalized in the OpenAQ system, with the exception of converting ppb (parts per billion) to ppm (parts per million). Volume units are not converted to mass units, nor vice versa; they are served as originally reported.
